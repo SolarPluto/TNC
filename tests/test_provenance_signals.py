@@ -4,6 +4,7 @@ from tnc.provenance.signals import (
     extract_explicit_citations,
     extract_named_sources,
     has_explicit_citation,
+    measure_provenance_signals,
     named_source_overlap,
     paragraph_similarity,
     quote_overlap,
@@ -35,7 +36,6 @@ def test_identical_paragraphs_have_full_similarity():
             "Officials said five people were injured.",
         )
     ]
-
     target = [
         make_span(
             "target-001",
@@ -43,9 +43,7 @@ def test_identical_paragraphs_have_full_similarity():
         )
     ]
 
-    score = paragraph_similarity(source, target)
-
-    assert score == 1.0
+    assert paragraph_similarity(source, target) == 1.0
 
 
 def test_different_paragraphs_have_lower_similarity():
@@ -55,7 +53,6 @@ def test_different_paragraphs_have_lower_similarity():
             "Officials said five people were injured.",
         )
     ]
-
     target = [
         make_span(
             "target-001",
@@ -75,7 +72,6 @@ def test_best_matching_target_paragraph_is_used():
             "Emergency crews responded shortly after 7 a.m.",
         )
     ]
-
     target = [
         make_span(
             "target-001",
@@ -87,9 +83,7 @@ def test_best_matching_target_paragraph_is_used():
         ),
     ]
 
-    score = paragraph_similarity(source, target)
-
-    assert score == 1.0
+    assert paragraph_similarity(source, target) == 1.0
 
 
 def test_non_paragraph_spans_are_ignored():
@@ -100,7 +94,6 @@ def test_non_paragraph_spans_are_ignored():
             SpanType.HEADING,
         )
     ]
-
     target = [
         make_span(
             "target-heading",
@@ -109,15 +102,11 @@ def test_non_paragraph_spans_are_ignored():
         )
     ]
 
-    score = paragraph_similarity(source, target)
-
-    assert score == 0.0
+    assert paragraph_similarity(source, target) == 0.0
 
 
 def test_empty_paragraph_set_returns_zero():
-    score = paragraph_similarity([], [])
-
-    assert score == 0.0
+    assert paragraph_similarity([], []) == 0.0
 
 
 def test_identical_quotes_have_full_overlap():
@@ -128,7 +117,6 @@ def test_identical_quotes_have_full_overlap():
             SpanType.QUOTE,
         )
     ]
-
     target = [
         make_span(
             "target-quote",
@@ -137,9 +125,7 @@ def test_identical_quotes_have_full_overlap():
         )
     ]
 
-    score = quote_overlap(source, target)
-
-    assert score == 1.0
+    assert quote_overlap(source, target) == 1.0
 
 
 def test_different_quotes_have_lower_overlap():
@@ -150,7 +136,6 @@ def test_different_quotes_have_lower_overlap():
             SpanType.QUOTE,
         )
     ]
-
     target = [
         make_span(
             "target-quote",
@@ -177,7 +162,6 @@ def test_quote_overlap_is_symmetric():
             SpanType.QUOTE,
         ),
     ]
-
     target = [
         make_span(
             "target-quote",
@@ -201,7 +185,6 @@ def test_non_quote_spans_are_ignored_for_quote_overlap():
             SpanType.PARAGRAPH,
         )
     ]
-
     target = [
         make_span(
             "target-paragraph",
@@ -210,15 +193,11 @@ def test_non_quote_spans_are_ignored_for_quote_overlap():
         )
     ]
 
-    score = quote_overlap(source, target)
-
-    assert score == 0.0
+    assert quote_overlap(source, target) == 0.0
 
 
 def test_empty_quote_set_returns_zero():
-    score = quote_overlap([], [])
-
-    assert score == 0.0
+    assert quote_overlap([], []) == 0.0
 
 
 def test_extract_named_source_before_attribution_verb():
@@ -259,9 +238,7 @@ def test_named_source_extraction_ignores_text_without_attribution():
         )
     ]
 
-    names = extract_named_sources(spans)
-
-    assert names == set()
+    assert extract_named_sources(spans) == set()
 
 
 def test_identical_named_source_sets_have_full_overlap():
@@ -271,7 +248,6 @@ def test_identical_named_source_sets_have_full_overlap():
             "Maria Lopez said crews were still assessing the damage.",
         )
     ]
-
     target = [
         make_span(
             "target-001",
@@ -279,9 +255,7 @@ def test_identical_named_source_sets_have_full_overlap():
         )
     ]
 
-    score = named_source_overlap(source, target)
-
-    assert score == 1.0
+    assert named_source_overlap(source, target) == 1.0
 
 
 def test_partial_named_source_overlap_uses_jaccard_similarity():
@@ -295,7 +269,6 @@ def test_partial_named_source_overlap_uses_jaccard_similarity():
             "Daniel Reed confirmed inspectors had arrived.",
         ),
     ]
-
     target = [
         make_span(
             "target-001",
@@ -307,9 +280,7 @@ def test_partial_named_source_overlap_uses_jaccard_similarity():
         ),
     ]
 
-    score = named_source_overlap(source, target)
-
-    assert score == 1 / 3
+    assert named_source_overlap(source, target) == 1 / 3
 
 
 def test_named_source_overlap_is_symmetric():
@@ -323,7 +294,6 @@ def test_named_source_overlap_is_symmetric():
             "Daniel Reed confirmed inspectors had arrived.",
         ),
     ]
-
     target = [
         make_span(
             "target-001",
@@ -331,10 +301,10 @@ def test_named_source_overlap_is_symmetric():
         )
     ]
 
-    forward = named_source_overlap(source, target)
-    reverse = named_source_overlap(target, source)
-
-    assert forward == reverse
+    assert named_source_overlap(source, target) == named_source_overlap(
+        target,
+        source,
+    )
 
 
 def test_named_source_overlap_returns_zero_without_sources():
@@ -344,7 +314,6 @@ def test_named_source_overlap_returns_zero_without_sources():
             "The bridge remained closed throughout the afternoon.",
         )
     ]
-
     target = [
         make_span(
             "target-001",
@@ -352,9 +321,7 @@ def test_named_source_overlap_returns_zero_without_sources():
         )
     ]
 
-    score = named_source_overlap(source, target)
-
-    assert score == 0.0
+    assert named_source_overlap(source, target) == 0.0
 
 
 def test_extract_explicit_citation_from_according_to():
@@ -403,3 +370,82 @@ def test_has_explicit_citation_returns_false_without_citation():
     ]
 
     assert has_explicit_citation(spans, "Reuters") is False
+
+
+def test_measure_provenance_signals_builds_signal_model():
+    source = [
+        make_span(
+            "source-paragraph",
+            "Maria Lopez said five people were injured.",
+        ),
+        make_span(
+            "source-quote",
+            "We are still assessing the situation.",
+            SpanType.QUOTE,
+        ),
+    ]
+
+    target = [
+        make_span(
+            "target-paragraph",
+            "Maria Lopez said five people were injured.",
+        ),
+        make_span(
+            "target-quote",
+            "We are still assessing the situation.",
+            SpanType.QUOTE,
+        ),
+    ]
+
+    signals = measure_provenance_signals(
+        source_spans=source,
+        target_spans=target,
+        source_name="Reuters",
+        source_published_before_target=True,
+    )
+
+    assert signals.paragraph_similarity == 1.0
+    assert signals.quote_overlap == 1.0
+    assert signals.named_source_overlap == 1.0
+    assert signals.explicit_citation is False
+    assert signals.source_published_before_target is True
+
+
+def test_measure_provenance_signals_detects_explicit_citation():
+    source = [
+        make_span(
+            "source-paragraph",
+            "Officials closed the bridge.",
+        )
+    ]
+
+    target = [
+        make_span(
+            "target-paragraph",
+            "According to Reuters, officials closed the bridge.",
+        )
+    ]
+
+    signals = measure_provenance_signals(
+        source_spans=source,
+        target_spans=target,
+        source_name="Reuters",
+        source_published_before_target=True,
+    )
+
+    assert signals.explicit_citation is True
+
+
+def test_measure_provenance_signals_preserves_unknown_time_order():
+    signals = measure_provenance_signals(
+        source_spans=[],
+        target_spans=[],
+        source_name="Reuters",
+        source_published_before_target=None,
+    )
+
+    assert signals.paragraph_similarity == 0.0
+    assert signals.quote_overlap == 0.0
+    assert signals.named_source_overlap == 0.0
+    assert signals.explicit_citation is False
+    assert signals.source_published_before_target is None

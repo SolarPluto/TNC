@@ -1,6 +1,7 @@
 import re
 from difflib import SequenceMatcher
 
+from tnc.provenance.models import ProvenanceSignals
 from tnc.spans.models import SourceSpan, SpanType
 
 
@@ -208,3 +209,38 @@ def has_explicit_citation(
     citations = extract_explicit_citations(target_spans)
 
     return normalized_source_name in citations
+
+
+def measure_provenance_signals(
+    *,
+    source_spans: list[SourceSpan],
+    target_spans: list[SourceSpan],
+    source_name: str,
+    source_published_before_target: bool | None,
+) -> ProvenanceSignals:
+    """
+    Measure the deterministic v0.1 provenance signals for two documents.
+
+    Measurements are returned without making any provenance judgment.
+    Classification remains the responsibility of the provenance classifier.
+    """
+
+    return ProvenanceSignals(
+        paragraph_similarity=paragraph_similarity(
+            source_spans,
+            target_spans,
+        ),
+        quote_overlap=quote_overlap(
+            source_spans,
+            target_spans,
+        ),
+        named_source_overlap=named_source_overlap(
+            source_spans,
+            target_spans,
+        ),
+        explicit_citation=has_explicit_citation(
+            target_spans,
+            source_name,
+        ),
+        source_published_before_target=source_published_before_target,
+    )
