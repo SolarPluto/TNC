@@ -17,6 +17,12 @@ class EvidenceAvailability(BaseModel):
     available_from: datetime
 
 
+class TemporalIntegrityError(ValueError):
+    """
+    Raised when replay input violates TIB temporal integrity rules.
+    """
+
+
 def transition_has_future_evidence(
     transition: ClaimStateTransition,
     evidence_availability: dict[str, EvidenceAvailability],
@@ -41,17 +47,46 @@ def transition_has_future_evidence(
     return False
 
 
+def validate_replay_temporal_integrity(
+    transitions: list[ClaimStateTransition],
+    evidence_availability: dict[str, EvidenceAvailability],
+) -> None:
+    """
+    Reject replay input containing future-evidence violations.
+    """
+
+    for transition in transitions:
+        if transition_has_future_evidence(
+            transition,
+            evidence_availability,
+        ):
+            raise TemporalIntegrityError(
+                "Transition relies on evidence that was not yet available: "
+                f"{transition.transition_id}"
+            )
+
+
 def replay_snapshots(
     event_id: str,
     timestamps: list[datetime],
     transitions: list[ClaimStateTransition],
+    evidence_availability: dict[str, EvidenceAvailability] | None = None,
 ) -> tuple[Snapshot, ...]:
     """
     Reconstruct TNC's epistemic state across historical timestamps.
 
     Each snapshot is built independently using only transitions visible
     at or before that timestamp.
+
+    When evidence availability is supplied, replay fails closed if any
+    transition relies on evidence from the future.
     """
+
+    if evidence_availability is not None:
+        validate_replay_temporal_integrity(
+            transitions,
+            evidence_availability,
+        )
 
     ordered_timestamps = sorted(timestamps)
 

@@ -1,7 +1,10 @@
 from datetime import datetime, timezone
 
+import pytest
+
 from tnc.spans.replay import (
     EvidenceAvailability,
+    TemporalIntegrityError,
     replay_snapshots,
     transition_has_future_evidence,
 )
@@ -138,6 +141,8 @@ def test_replay_does_not_leak_future_confirmation_backward():
 
     assert later.state == ClaimState.OFFICIALLY_CONFIRMED
     assert "future-version:span:1" in later.evidence_span_ids
+
+
 def test_transition_detects_future_evidence():
     transition = make_transition(
         transition_id="transition-001",
@@ -190,3 +195,73 @@ def test_transition_accepts_evidence_available_before_transition():
         transition,
         evidence_availability,
     )
+
+
+def test_replay_rejects_future_evidence():
+    transition = make_transition(
+        transition_id="transition-001",
+        assertion_id="assertion-001",
+        from_state=None,
+        to_state=ClaimState.FIRST_REPORTED,
+        occurred_at=datetime(
+            2026, 1, 1, 10, 0, tzinfo=timezone.utc
+        ),
+        evidence_span_ids=("version-001:span:1",),
+    )
+
+    evidence_availability = {
+        "version-001:span:1": EvidenceAvailability(
+            span_id="version-001:span:1",
+            available_from=datetime(
+                2026, 1, 1, 10, 30, tzinfo=timezone.utc
+            ),
+        )
+    }
+
+    with pytest.raises(TemporalIntegrityError):
+        replay_snapshots(
+            event_id="event-001",
+            timestamps=[
+                datetime(
+                    2026, 1, 1, 10, 15, tzinfo=timezone.utc
+                )
+            ],
+            transitions=[transition],
+            evidence_availability=evidence_availability,
+        )
+
+
+def test_replay_accepts_temporally_valid_evidence():
+    transition = make_transition(
+        transition_id="transition-001",
+        assertion_id="assertion-001",
+        from_state=None,
+        to_state=ClaimState.FIRST_REPORTED,
+        occurred_at=datetime(
+            2026, 1, 1, 10, 30, tzinfo=timezone.utc
+        ),
+        evidence_span_ids=("version-001:span:1",),
+    )
+
+    evidence_availability = {
+        "version-001:span:1": EvidenceAvailability(
+            span_id="version-001:span:1",
+            available_from=datetime(
+                2026, 1, 1, 10, 0, tzinfo=timezone.utc
+            ),
+        )
+    }
+
+    snapshots = replay_snapshots(
+        event_id="event-001",
+        timestamps=[
+            datetime(
+                2026, 1, 1, 10, 45, tzinfo=timezone.utc
+            )
+        ],
+        transitions=[transition],
+        evidence_availability=evidence_availability,
+    )
+
+    assert len(snapshots) == 1
+    assert snapshots[0].claims[0].state == ClaimState.FIRST_REPORTED
