@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from tnc.provenance.signals import paragraph_similarity
+from tnc.provenance.signals import paragraph_similarity, quote_overlap
 from tnc.spans.models import SourceSpan, SpanType
 
 
@@ -109,5 +109,106 @@ def test_non_paragraph_spans_are_ignored():
 
 def test_empty_paragraph_set_returns_zero():
     score = paragraph_similarity([], [])
+
+    assert score == 0.0
+
+
+def test_identical_quotes_have_full_overlap():
+    source = [
+        make_span(
+            "source-quote",
+            "We are still assessing the situation.",
+            SpanType.QUOTE,
+        )
+    ]
+
+    target = [
+        make_span(
+            "target-quote",
+            "We are still assessing the situation.",
+            SpanType.QUOTE,
+        )
+    ]
+
+    score = quote_overlap(source, target)
+
+    assert score == 1.0
+
+
+def test_different_quotes_have_lower_overlap():
+    source = [
+        make_span(
+            "source-quote",
+            "We are still assessing the situation.",
+            SpanType.QUOTE,
+        )
+    ]
+
+    target = [
+        make_span(
+            "target-quote",
+            "The bridge will reopen after inspectors finish their work.",
+            SpanType.QUOTE,
+        )
+    ]
+
+    score = quote_overlap(source, target)
+
+    assert 0.0 <= score < 1.0
+
+
+def test_quote_overlap_is_symmetric():
+    source = [
+        make_span(
+            "source-quote-1",
+            "We are still assessing the situation.",
+            SpanType.QUOTE,
+        ),
+        make_span(
+            "source-quote-2",
+            "Crews will remain on scene throughout the day.",
+            SpanType.QUOTE,
+        ),
+    ]
+
+    target = [
+        make_span(
+            "target-quote",
+            "We are still assessing the situation.",
+            SpanType.QUOTE,
+        )
+    ]
+
+    forward = quote_overlap(source, target)
+    reverse = quote_overlap(target, source)
+
+    assert forward == reverse
+    assert 0.0 < forward < 1.0
+
+
+def test_non_quote_spans_are_ignored_for_quote_overlap():
+    source = [
+        make_span(
+            "source-paragraph",
+            "We are still assessing the situation.",
+            SpanType.PARAGRAPH,
+        )
+    ]
+
+    target = [
+        make_span(
+            "target-paragraph",
+            "We are still assessing the situation.",
+            SpanType.PARAGRAPH,
+        )
+    ]
+
+    score = quote_overlap(source, target)
+
+    assert score == 0.0
+
+
+def test_empty_quote_set_returns_zero():
+    score = quote_overlap([], [])
 
     assert score == 0.0
