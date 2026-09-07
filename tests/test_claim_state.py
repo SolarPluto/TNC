@@ -6,6 +6,7 @@ from pydantic import ValidationError
 from tnc.spans.state import (
     ClaimState,
     ClaimStateTransition,
+    claim_state_at,
     current_claim_state,
 )
 
@@ -161,3 +162,111 @@ def test_historical_transitions_remain_available():
     assert len(transitions) == 2
     assert transitions[0].to_state == ClaimState.FIRST_REPORTED
     assert transitions[1].to_state == ClaimState.CORRECTED
+
+
+
+
+def test_claim_state_at_returns_state_visible_at_timestamp():
+
+
+
+        
+
+
+
+    transitions = [
+        make_transition(
+            transition_id="transition-001",
+            assertion_id="assertion-001",
+            from_state=None,
+            to_state=ClaimState.FIRST_REPORTED,
+            occurred_at=datetime(
+                2026, 1, 1, 10, 0, tzinfo=timezone.utc
+            ),
+        ),
+        make_transition(
+            transition_id="transition-002",
+            assertion_id="assertion-001",
+            from_state=ClaimState.FIRST_REPORTED,
+            to_state=ClaimState.REPEATED,
+            occurred_at=datetime(
+                2026, 1, 1, 10, 15, tzinfo=timezone.utc
+            ),
+        ),
+        make_transition(
+            transition_id="transition-003",
+            assertion_id="assertion-001",
+            from_state=ClaimState.REPEATED,
+            to_state=ClaimState.OFFICIALLY_CONFIRMED,
+            occurred_at=datetime(
+                2026, 1, 1, 11, 0, tzinfo=timezone.utc
+            ),
+        ),
+    ]
+
+    state = claim_state_at(
+        transitions=transitions,
+        assertion_id="assertion-001",
+        timestamp=datetime(
+            2026, 1, 1, 10, 30, tzinfo=timezone.utc
+        ),
+    )
+
+    assert state == ClaimState.REPEATED
+
+
+def test_claim_state_at_returns_none_before_first_transition():
+    transitions = [
+        make_transition(
+            transition_id="transition-001",
+            assertion_id="assertion-001",
+            from_state=None,
+            to_state=ClaimState.FIRST_REPORTED,
+            occurred_at=datetime(
+                2026, 1, 1, 10, 0, tzinfo=timezone.utc
+            ),
+        )
+    ]
+
+    state = claim_state_at(
+        transitions=transitions,
+        assertion_id="assertion-001",
+        timestamp=datetime(
+            2026, 1, 1, 9, 59, tzinfo=timezone.utc
+        ),
+    )
+
+    assert state is None
+
+
+def test_future_confirmation_does_not_leak_into_earlier_state():
+    transitions = [
+        make_transition(
+            transition_id="transition-001",
+            assertion_id="assertion-001",
+            from_state=None,
+            to_state=ClaimState.FIRST_REPORTED,
+            occurred_at=datetime(
+                2026, 1, 1, 10, 0, tzinfo=timezone.utc
+            ),
+        ),
+        make_transition(
+            transition_id="transition-002",
+            assertion_id="assertion-001",
+            from_state=ClaimState.FIRST_REPORTED,
+            to_state=ClaimState.OFFICIALLY_CONFIRMED,
+            occurred_at=datetime(
+                2026, 1, 1, 11, 0, tzinfo=timezone.utc
+            ),
+        ),
+    ]
+
+    earlier_state = claim_state_at(
+        transitions=transitions,
+        assertion_id="assertion-001",
+        timestamp=datetime(
+            2026, 1, 1, 10, 30, tzinfo=timezone.utc
+        ),
+    )
+
+    assert earlier_state == ClaimState.FIRST_REPORTED

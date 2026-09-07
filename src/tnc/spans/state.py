@@ -34,6 +34,38 @@ class ClaimStateTransition(BaseModel):
     rationale: str | None = None
 
 
+def claim_state_at(
+    transitions: list[ClaimStateTransition],
+    assertion_id: str,
+    timestamp: datetime,
+) -> ClaimState | None:
+    """
+    Reconstruct the claim state visible at an arbitrary historical timestamp.
+
+    Only transitions that occurred at or before the requested timestamp are
+    eligible. Later transitions must never leak backward into historical state.
+    """
+
+    eligible = [
+        transition
+        for transition in transitions
+        if (
+            transition.assertion_id == assertion_id
+            and transition.occurred_at <= timestamp
+        )
+    ]
+
+    if not eligible:
+        return None
+
+    latest = max(
+        eligible,
+        key=lambda transition: transition.occurred_at,
+    )
+
+    return latest.to_state
+
+
 def current_claim_state(
     transitions: list[ClaimStateTransition],
     assertion_id: str,
