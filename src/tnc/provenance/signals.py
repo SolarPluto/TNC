@@ -1,6 +1,14 @@
+import re
 from difflib import SequenceMatcher
 
 from tnc.spans.models import SourceSpan, SpanType
+
+
+ATTRIBUTION_PATTERN = re.compile(
+    r"\b(?:said|says|told|according to|reported|stated|announced|"
+    r"confirmed|wrote|added|warned|explained)\b",
+    re.IGNORECASE,
+)
 
 
 def _text_similarity(source_text: str, target_text: str) -> float:
@@ -74,9 +82,7 @@ def quote_overlap(
     Only quote spans are compared.
 
     The score is symmetric: source-to-target and target-to-source
-    best-match similarities are averaged. This prevents a document
-    containing one copied quote from receiving a perfect overlap score
-    against a document containing many additional quotes.
+    best-match similarities are averaged.
 
     Returns 0.0 if either document has no quote spans.
     """
@@ -107,3 +113,68 @@ def quote_overlap(
     )
 
     return (source_to_target + target_to_source) / 2
+
+
+def extract_named_sources(spans: list[SourceSpan]) -> set[str]:
+    """
+    Extract conservative named-source candidates from attribution language.
+
+    This v0.1 heuristic looks for capitalized names immediately before
+    attribution verbs such as "said", "reported", or "confirmed".
+
+    It is intentionally narrow. Missing a source is preferable to
+    inventing one.
+    """
+
+    named_sources: set[str] = set()
+
+    for span in spans:
+        text = span.normalized_text
+
+        for match in ATTRIBUTION_PATTERN.finditer(text):
+            prefix = text[:match.start()].strip()
+
+            candidate_match = re.search(
+                r"([A-Z][A-Za-z.'-]*(?:\s+[A-Z][A-Za-z.'-]*){0,4})"
+                r"(?:\s*,[^,]{1,80},)?\s*$",
+                prefix,
+            )
+
+            if candidate_match is None:
+                continue
+
+            candidate = candidate_match.group(1).strip()
+
+            if candidate:
+                named_sources.add(candidate.casefold())
+
+    return named_sources
+
+
+def named_source_overlap(
+    source_spans: list[SourceSpan],
+    target_spans: list[SourceSpan],
+) -> float:
+    """
+    Measure overlap between deterministically extracted named sources.
+
+    Uses Jaccard similarity:
+
+        intersection / union
+
+    A score of 1.0 means both documents contain the same extracted
+    named-source set. A score of 0.0 means no extracted sources overlap.
+
+    Returns 0.0 when either document has no extracted named sources.
+    """
+
+    source_names = extract_named_sources(source_spans)
+    target_names = extract_named_sources(target_spans)
+
+    if not source_names or not target_names:
+        return 0.0
+
+    intersection = source_names & target_names
+    union = source_names | target_names
+
+    return len(intersection) / len(union)

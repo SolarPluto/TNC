@@ -1,6 +1,11 @@
 from datetime import datetime, timezone
 
-from tnc.provenance.signals import paragraph_similarity, quote_overlap
+from tnc.provenance.signals import (
+    extract_named_sources,
+    named_source_overlap,
+    paragraph_similarity,
+    quote_overlap,
+)
 from tnc.spans.models import SourceSpan, SpanType
 
 
@@ -210,5 +215,141 @@ def test_non_quote_spans_are_ignored_for_quote_overlap():
 
 def test_empty_quote_set_returns_zero():
     score = quote_overlap([], [])
+
+    assert score == 0.0
+
+
+def test_extract_named_source_before_attribution_verb():
+    spans = [
+        make_span(
+            "source-001",
+            "Fire Chief Maria Lopez said crews were still assessing the damage.",
+        )
+    ]
+
+    names = extract_named_sources(spans)
+
+    assert "fire chief maria lopez" in names
+
+
+def test_extract_multiple_named_sources():
+    spans = [
+        make_span(
+            "source-001",
+            "Maria Lopez said the bridge would remain closed.",
+        ),
+        make_span(
+            "source-002",
+            "Daniel Reed confirmed inspectors had arrived.",
+        ),
+    ]
+
+    names = extract_named_sources(spans)
+
+    assert names == {"maria lopez", "daniel reed"}
+
+
+def test_named_source_extraction_ignores_text_without_attribution():
+    spans = [
+        make_span(
+            "source-001",
+            "Maria Lopez arrived at the scene shortly after noon.",
+        )
+    ]
+
+    names = extract_named_sources(spans)
+
+    assert names == set()
+
+
+def test_identical_named_source_sets_have_full_overlap():
+    source = [
+        make_span(
+            "source-001",
+            "Maria Lopez said crews were still assessing the damage.",
+        )
+    ]
+
+    target = [
+        make_span(
+            "target-001",
+            "Maria Lopez said the bridge would remain closed.",
+        )
+    ]
+
+    score = named_source_overlap(source, target)
+
+    assert score == 1.0
+
+
+def test_partial_named_source_overlap_uses_jaccard_similarity():
+    source = [
+        make_span(
+            "source-001",
+            "Maria Lopez said crews were still assessing the damage.",
+        ),
+        make_span(
+            "source-002",
+            "Daniel Reed confirmed inspectors had arrived.",
+        ),
+    ]
+
+    target = [
+        make_span(
+            "target-001",
+            "Maria Lopez said the bridge would remain closed.",
+        ),
+        make_span(
+            "target-002",
+            "Priya Shah reported traffic was being diverted.",
+        ),
+    ]
+
+    score = named_source_overlap(source, target)
+
+    assert score == 1 / 3
+
+
+def test_named_source_overlap_is_symmetric():
+    source = [
+        make_span(
+            "source-001",
+            "Maria Lopez said crews were still assessing the damage.",
+        ),
+        make_span(
+            "source-002",
+            "Daniel Reed confirmed inspectors had arrived.",
+        ),
+    ]
+
+    target = [
+        make_span(
+            "target-001",
+            "Maria Lopez said the bridge would remain closed.",
+        )
+    ]
+
+    forward = named_source_overlap(source, target)
+    reverse = named_source_overlap(target, source)
+
+    assert forward == reverse
+
+
+def test_named_source_overlap_returns_zero_without_sources():
+    source = [
+        make_span(
+            "source-001",
+            "The bridge remained closed throughout the afternoon.",
+        )
+    ]
+
+    target = [
+        make_span(
+            "target-001",
+            "Inspectors examined the damaged structure.",
+        )
+    ]
+
+    score = named_source_overlap(source, target)
 
     assert score == 0.0
