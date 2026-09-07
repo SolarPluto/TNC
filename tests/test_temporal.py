@@ -101,3 +101,23 @@ def test_select_spans_respects_availability_window():
         [span],
         datetime(2026, 1, 1, 11, 0, tzinfo=timezone.utc),
     ) == []
+
+
+def test_future_span_does_not_leak_into_earlier_timestamp():
+    early_span = make_span(
+        "span-early",
+        available_from=datetime(2026, 1, 1, 10, 0, tzinfo=timezone.utc),
+    )
+
+    future_span = make_span(
+        "span-future",
+        available_from=datetime(2026, 1, 1, 11, 0, tzinfo=timezone.utc),
+    )
+
+    visible = select_spans_at(
+        [early_span, future_span],
+        datetime(2026, 1, 1, 10, 30, tzinfo=timezone.utc),
+    )
+
+    assert visible == [early_span]
+    assert future_span not in visible
