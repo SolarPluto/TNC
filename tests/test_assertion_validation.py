@@ -1,12 +1,16 @@
 from datetime import datetime, timezone
 
 from tnc.spans.assertions import (
+    Assertion,
     AssertionCandidate,
     AssertionType,
     EpistemicOperator,
 )
 from tnc.spans.models import SourceSpan, SpanType
-from tnc.spans.validation import validate_assertion_candidate
+from tnc.spans.validation import (
+    admit_assertion_candidate,
+    validate_assertion_candidate,
+)
 
 
 def make_span(
@@ -131,6 +135,7 @@ def test_verbatim_support_can_span_multiple_referenced_spans():
     result = validate_assertion_candidate(assertion, spans)
 
     assert result.valid is True
+    assert result.errors == ()
 
 
 def test_empty_verbatim_support_entry_fails_validation():
@@ -175,3 +180,41 @@ def test_validator_can_report_multiple_errors():
     assert len(result.errors) == 2
     assert "Verbatim support not found" in result.errors[0]
     assert "Verbatim support not found" in result.errors[1]
+
+
+def test_valid_candidate_is_admitted_as_canonical_assertion():
+    spans = [
+        make_span(
+            "version-001:span:1",
+            "Officials reported that five people were injured.",
+        )
+    ]
+
+    candidate = make_assertion()
+
+    admitted = admit_assertion_candidate(candidate, spans)
+
+    assert isinstance(admitted, Assertion)
+    assert admitted.assertion_id == candidate.assertion_id
+    assert admitted.span_ids == ("version-001:span:1",)
+    assert admitted.verbatim_support == (
+        "Officials reported that five people were injured.",
+    )
+    assert not hasattr(admitted, "extraction_confidence")
+
+
+def test_invalid_candidate_is_not_admitted():
+    spans = [
+        make_span(
+            "version-001:span:1",
+            "Officials reported that five people were injured.",
+        )
+    ]
+
+    candidate = make_assertion(
+        span_ids=["version-001:span:999"],
+    )
+
+    admitted = admit_assertion_candidate(candidate, spans)
+
+    assert admitted is None

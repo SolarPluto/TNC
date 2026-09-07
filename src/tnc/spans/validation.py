@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from tnc.spans.assertions import AssertionCandidate
+from tnc.spans.assertions import Assertion, AssertionCandidate
 from tnc.spans.models import SourceSpan
 
 
@@ -75,4 +75,39 @@ def validate_assertion_candidate(
     return AssertionValidationResult(
         valid=not errors,
         errors=tuple(errors),
+    )
+
+
+def admit_assertion_candidate(
+    assertion: AssertionCandidate,
+    spans: list[SourceSpan],
+) -> Assertion | None:
+    """
+    Admit a candidate into canonical assertion state only if validation passes.
+
+    The candidate layer may contain model-generated proposals.
+    The canonical layer only receives deterministically validated assertions.
+    """
+
+    validation = validate_assertion_candidate(
+        assertion,
+        spans,
+    )
+
+    if not validation.valid:
+        return None
+
+    return Assertion(
+        assertion_id=assertion.assertion_id,
+        span_ids=tuple(assertion.span_ids),
+        subject=assertion.subject,
+        predicate=assertion.predicate,
+        object=assertion.object,
+        assertion_type=assertion.assertion_type,
+        epistemic_operator=assertion.epistemic_operator,
+        speaker=assertion.speaker,
+        attribution_chain=tuple(assertion.attribution_chain),
+        certainty_signal=assertion.certainty_signal,
+        temporal_scope=assertion.temporal_scope,
+        verbatim_support=tuple(assertion.verbatim_support),
     )
