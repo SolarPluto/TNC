@@ -10,6 +10,21 @@ ATTRIBUTION_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+EXPLICIT_CITATION_PATTERNS = (
+    re.compile(
+        r"\baccording to\s+(?P<source>[A-Z][A-Za-z0-9&.' -]{1,80})",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?P<source>[A-Z][A-Za-z0-9&.' -]{1,80})\s+reported\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\breported by\s+(?P<source>[A-Z][A-Za-z0-9&.' -]{1,80})",
+        re.IGNORECASE,
+    ),
+)
+
 
 def _text_similarity(source_text: str, target_text: str) -> float:
     return SequenceMatcher(
@@ -47,11 +62,6 @@ def paragraph_similarity(
     Measure deterministic paragraph-level similarity between two documents.
 
     Only paragraph spans are compared.
-
-    For each source paragraph, find the most similar target paragraph.
-    Return the average of those best-match scores.
-
-    Returns 0.0 if either document has no paragraph spans.
     """
 
     source_paragraphs = [
@@ -79,12 +89,7 @@ def quote_overlap(
     """
     Measure deterministic quote overlap between two documents.
 
-    Only quote spans are compared.
-
-    The score is symmetric: source-to-target and target-to-source
-    best-match similarities are averaged.
-
-    Returns 0.0 if either document has no quote spans.
+    The score is symmetric.
     """
 
     source_quotes = [
@@ -118,12 +123,6 @@ def quote_overlap(
 def extract_named_sources(spans: list[SourceSpan]) -> set[str]:
     """
     Extract conservative named-source candidates from attribution language.
-
-    This v0.1 heuristic looks for capitalized names immediately before
-    attribution verbs such as "said", "reported", or "confirmed".
-
-    It is intentionally narrow. Missing a source is preferable to
-    inventing one.
     """
 
     named_sources: set[str] = set()
@@ -156,16 +155,7 @@ def named_source_overlap(
     target_spans: list[SourceSpan],
 ) -> float:
     """
-    Measure overlap between deterministically extracted named sources.
-
-    Uses Jaccard similarity:
-
-        intersection / union
-
-    A score of 1.0 means both documents contain the same extracted
-    named-source set. A score of 0.0 means no extracted sources overlap.
-
-    Returns 0.0 when either document has no extracted named sources.
+    Measure Jaccard overlap between extracted named sources.
     """
 
     source_names = extract_named_sources(source_spans)
@@ -178,3 +168,43 @@ def named_source_overlap(
     union = source_names | target_names
 
     return len(intersection) / len(union)
+
+
+def extract_explicit_citations(spans: list[SourceSpan]) -> set[str]:
+    """
+    Extract explicitly named cited sources from article text.
+
+    This deliberately recognizes only direct textual attribution.
+    It does not infer hidden or indirect sourcing.
+    """
+
+    citations: set[str] = set()
+
+    for span in spans:
+        text = span.normalized_text
+
+        for pattern in EXPLICIT_CITATION_PATTERNS:
+            for match in pattern.finditer(text):
+                source = match.group("source").strip(" ,.;:")
+                if source:
+                    citations.add(source.casefold())
+
+    return citations
+
+
+def has_explicit_citation(
+    target_spans: list[SourceSpan],
+    source_name: str,
+) -> bool:
+    """
+    Return True when the target explicitly cites the supplied source name.
+    """
+
+    normalized_source_name = source_name.strip().casefold()
+
+    if not normalized_source_name:
+        return False
+
+    citations = extract_explicit_citations(target_spans)
+
+    return normalized_source_name in citations

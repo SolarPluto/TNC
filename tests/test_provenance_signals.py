@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
 
 from tnc.provenance.signals import (
+    extract_explicit_citations,
     extract_named_sources,
+    has_explicit_citation,
     named_source_overlap,
     paragraph_similarity,
     quote_overlap,
@@ -353,3 +355,51 @@ def test_named_source_overlap_returns_zero_without_sources():
     score = named_source_overlap(source, target)
 
     assert score == 0.0
+
+
+def test_extract_explicit_citation_from_according_to():
+    spans = [
+        make_span(
+            "target-001",
+            "According to Reuters, five people were injured.",
+        )
+    ]
+
+    citations = extract_explicit_citations(spans)
+
+    assert "reuters" in citations
+
+
+def test_extract_explicit_citation_from_reported_phrase():
+    spans = [
+        make_span(
+            "target-001",
+            "The Associated Press reported five people were injured.",
+        )
+    ]
+
+    citations = extract_explicit_citations(spans)
+
+    assert "the associated press" in citations
+
+
+def test_has_explicit_citation_matches_case_insensitively():
+    spans = [
+        make_span(
+            "target-001",
+            "According to Reuters, officials closed the bridge.",
+        )
+    ]
+
+    assert has_explicit_citation(spans, "REUTERS") is True
+
+
+def test_has_explicit_citation_returns_false_without_citation():
+    spans = [
+        make_span(
+            "target-001",
+            "Officials closed the bridge shortly after 7 a.m.",
+        )
+    ]
+
+    assert has_explicit_citation(spans, "Reuters") is False
