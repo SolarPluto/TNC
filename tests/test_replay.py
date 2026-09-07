@@ -1,6 +1,10 @@
 from datetime import datetime, timezone
 
-from tnc.spans.replay import replay_snapshots
+from tnc.spans.replay import (
+    EvidenceAvailability,
+    replay_snapshots,
+    transition_has_future_evidence,
+)
 from tnc.spans.state import ClaimState, ClaimStateTransition
 
 
@@ -134,3 +138,55 @@ def test_replay_does_not_leak_future_confirmation_backward():
 
     assert later.state == ClaimState.OFFICIALLY_CONFIRMED
     assert "future-version:span:1" in later.evidence_span_ids
+def test_transition_detects_future_evidence():
+    transition = make_transition(
+        transition_id="transition-001",
+        assertion_id="assertion-001",
+        from_state=None,
+        to_state=ClaimState.FIRST_REPORTED,
+        occurred_at=datetime(
+            2026, 1, 1, 10, 0, tzinfo=timezone.utc
+        ),
+        evidence_span_ids=("version-001:span:1",),
+    )
+
+    evidence_availability = {
+        "version-001:span:1": EvidenceAvailability(
+            span_id="version-001:span:1",
+            available_from=datetime(
+                2026, 1, 1, 10, 30, tzinfo=timezone.utc
+            ),
+        )
+    }
+
+    assert transition_has_future_evidence(
+        transition,
+        evidence_availability,
+    )
+
+
+def test_transition_accepts_evidence_available_before_transition():
+    transition = make_transition(
+        transition_id="transition-001",
+        assertion_id="assertion-001",
+        from_state=None,
+        to_state=ClaimState.FIRST_REPORTED,
+        occurred_at=datetime(
+            2026, 1, 1, 10, 30, tzinfo=timezone.utc
+        ),
+        evidence_span_ids=("version-001:span:1",),
+    )
+
+    evidence_availability = {
+        "version-001:span:1": EvidenceAvailability(
+            span_id="version-001:span:1",
+            available_from=datetime(
+                2026, 1, 1, 10, 0, tzinfo=timezone.utc
+            ),
+        )
+    }
+
+    assert not transition_has_future_evidence(
+        transition,
+        evidence_availability,
+    )
