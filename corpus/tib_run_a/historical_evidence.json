@@ -12,10 +12,28 @@
     "supports": [
       "A materially related Tim Talley / Associated Press report containing the early 51-death estimate, preliminary EF-4 finding, and more-than-120-hospital-patients claim was publicly published by this time."
     ],
+    
+      "does_not_establish": [
+  "That the exact frozen MPR document bytes existed at this time.",
+  "The historical_available_from value for the frozen MPR source."
+]
+},
+  {
+    "observation_id": "obs-002",
+    "source_id": "mpr-ap-early",
+    "evidence_type": "contemporaneous_wire_update_chain",
+    "evidence_url": "https://www.fultonsun.com/news/2013/may/20/large-tornado-hits-oklahoma-city-area/",
+    "published_time_text": "May 20, 2013; body preserves AP coverage labeled 3:49 p.m., 4:14 p.m., 8:34 p.m., and 11:19 p.m.",
+    "supports": [
+      "A single Associated Press reporting lineage was updated repeatedly during May 20, 2013.",
+      "The page body explicitly labels earlier coverage at 3:49 p.m., an update at 4:14 p.m., a version at 8:34 p.m. updating an earlier version, and an update at 11:19 p.m.",
+      "Repeated publication of this AP material must not be treated as independent corroboration merely because it appears at another publisher."
+    ],
     "does_not_establish": [
-      "That the exact frozen MPR document bytes existed at this time.",
+      "That the exact frozen MPR document bytes existed at any of these times.",
+      "That each timestamp corresponds to a complete recoverable historical document version.",
       "The historical_available_from value for the frozen MPR source."
     ]
-  }
+}
 ]
 }
