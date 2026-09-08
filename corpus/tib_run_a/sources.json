@@ -1,0 +1,76 @@
+{
+  "corpus_id": "tib-run-a-moore-2013",
+  "event_id": "moore-tornado-2013-05-20",
+  "status": "acquisition_plan",
+  "research_date": "2026-09-08",
+  "news_window_local_dates": ["2013-05-20", "2013-05-22"],
+  "event_timezone": "America/Chicago",
+  "sources": [
+    {
+      "source_id": "mpr-ap-early",
+      "url": "https://www.mprnews.org/story/2013/05/20/huge-tornado-hits-oklahoma-city-suburb-kills-51",
+      "publisher": "MPR News",
+      "credited_origin": "Associated Press; Tim Talley",
+      "role": "early_report",
+      "historical_available_from": null,
+      "archive_capture_url": null,
+      "body_hash": null,
+      "status": "candidate"
+    },
+    {
+      "source_id": "cbs-ap-early",
+      "url": "https://www.cbsnews.com/news/at-least-51-dead-after-massive-okla-tornado/",
+      "publisher": "CBS News",
+      "credited_origin": "CBS/AP",
+      "role": "shared_wire_origin_comparison",
+      "historical_available_from": null,
+      "archive_capture_url": null,
+      "body_hash": null,
+      "status": "candidate"
+    },
+    {
+      "source_id": "cbs-ap-correction",
+      "url": "https://www.cbsnews.com/news/oklahoma-tornado-leaves-dozens-dead-including-many-children/",
+      "publisher": "CBS News",
+      "credited_origin": "CBS/AP",
+      "role": "correction_report",
+      "historical_available_from": null,
+      "archive_capture_url": null,
+      "body_hash": null,
+      "status": "candidate"
+    },
+    {
+      "source_id": "abc-correction",
+      "url": "https://abcnews.com/US/oklahoma-tornado-deaths-revised-24-including-children/story?id=19222656",
+      "publisher": "ABC News",
+      "credited_origin": "ABC News; verify full byline during acquisition",
+      "role": "cross_publisher_shared_authority_comparison",
+      "historical_available_from": null,
+      "archive_capture_url": null,
+      "body_hash": null,
+      "status": "candidate"
+    },
+    {
+      "source_id": "cbs-ap-status",
+      "url": "https://www.cbsnews.com/news/oklahoma-tornado-victim-search-efforts-winding-down/",
+      "publisher": "CBS News",
+      "credited_origin": "CBS/AP",
+      "role": "rescue_status_followup",
+      "historical_available_from": null,
+      "archive_capture_url": null,
+      "body_hash": null,
+      "status": "candidate"
+    },
+    {
+      "source_id": "nws-retrospective",
+      "url": "https://www.weather.gov/oun/events-20130520",
+      "publisher": "National Weather Service Norman",
+      "credited_origin": "National Weather Service",
+      "role": "retrospective_ground_truth_only",
+      "historical_available_from": null,
+      "archive_capture_url": null,
+      "body_hash": null,
+      "status": "candidate"
+    }
+  ]
+}
