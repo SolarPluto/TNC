@@ -31,7 +31,7 @@ def test_fetch_url_preserves_exact_response_bytes():
     assert artifact.retrieved_at.tzinfo is not None
 
 
-def test_fetch_and_store_persists_exact_response_bytes(tmp_path):
+def test_fetch_and_store_persists_artifact_and_manifest(tmp_path):
     body = b"<html><body>Stored report.</body></html>"
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -45,7 +45,7 @@ def test_fetch_and_store_persists_exact_response_bytes(tmp_path):
     transport = httpx.MockTransport(handler)
 
     with httpx.Client(transport=transport) as client:
-        artifact = fetch_and_store(
+        artifact, manifest_entry = fetch_and_store(
             "https://example.com/story",
             storage_root=tmp_path,
             client=client,
@@ -55,4 +55,11 @@ def test_fetch_and_store_persists_exact_response_bytes(tmp_path):
 
     assert stored_path.exists()
     assert stored_path.read_bytes() == body
-    assert artifact.body == body
+
+    assert manifest_entry.requested_url == "https://example.com/story"
+    assert manifest_entry.final_url == "https://example.com/story"
+    assert manifest_entry.status_code == 200
+    assert manifest_entry.content_type == "text/html; charset=utf-8"
+    assert manifest_entry.body_hash == artifact.body_hash
+    assert manifest_entry.retrieved_at == artifact.retrieved_at
+    assert manifest_entry.storage_path == str(stored_path)
