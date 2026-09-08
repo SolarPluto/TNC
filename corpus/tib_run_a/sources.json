@@ -58,8 +58,8 @@
       "role": "rescue_status_followup",
       "historical_available_from": null,
       "archive_capture_url": null,
-      "body_hash": null,
-      "status": "candidate"
+      "body_hash": "cae2264fa41ca27eab64e4fc810216b431dcdb8509435f681ea3ea331ff96bb0",
+"status": "frozen_live"
     },
     {
       "source_id": "nws-retrospective",
