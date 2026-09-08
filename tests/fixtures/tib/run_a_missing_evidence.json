@@ -1,0 +1,22 @@
+{
+  "fixture_id": "tib-run-a-missing-evidence-001",
+  "event_id": "run-a-event-001",
+  "description": "Adversarial Run A fixture containing a missing-evidence-coordinate violation.",
+  "spans": [],
+  "transitions": [
+    {
+      "transition_id": "transition-missing-evidence",
+      "assertion_id": "assertion-001",
+      "from_state": null,
+      "to_state": "first_reported",
+      "occurred_at": "2026-01-01T10:00:00Z",
+      "evidence_span_ids": [
+        "missing-version:span:1"
+      ],
+      "rationale": "Invalid transition deliberately referencing a SourceSpan that does not exist."
+    }
+  ],
+  "replay_timestamps": [
+    "2026-01-01T10:30:00Z"
+  ]
+}

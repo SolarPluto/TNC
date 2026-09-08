@@ -117,3 +117,49 @@ def test_run_a_rejects_future_evidence():
             transitions=transitions,
             evidence_availability=evidence_availability_from_spans(spans),
         )
+def test_run_a_rejects_missing_evidence_coordinates():
+    fixture_path = Path(
+        "tests/fixtures/tib/run_a_missing_evidence.json"
+    )
+    fixture = json.loads(
+        fixture_path.read_text(encoding="utf-8")
+    )
+
+    spans = [
+        SourceSpan(
+            **{
+                **span,
+                "available_from": parse_timestamp(span["available_from"]),
+            }
+        )
+        for span in fixture["spans"]
+    ]
+
+    transitions = [
+        ClaimStateTransition(
+            **{
+                **transition,
+                "to_state": ClaimState(transition["to_state"]),
+                "from_state": (
+                    ClaimState(transition["from_state"])
+                    if transition["from_state"] is not None
+                    else None
+                ),
+                "occurred_at": parse_timestamp(transition["occurred_at"]),
+            }
+        )
+        for transition in fixture["transitions"]
+    ]
+
+    timestamps = [
+        parse_timestamp(value)
+        for value in fixture["replay_timestamps"]
+    ]
+
+    with pytest.raises(TemporalIntegrityError):
+        replay_snapshots(
+            event_id=fixture["event_id"],
+            timestamps=timestamps,
+            transitions=transitions,
+            evidence_availability=evidence_availability_from_spans(spans),
+        )
