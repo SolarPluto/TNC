@@ -1,0 +1,61 @@
+{
+  "fixture_id": "tib-run-a-001",
+  "event_id": "run-a-event-001",
+  "description": "Controlled physical-crisis replay fixture for temporal integrity testing.",
+  "spans": [
+    {
+      "span_id": "version-001:span:1",
+      "document_version_id": "version-001",
+      "ordinal": 0,
+      "span_type": "paragraph",
+      "raw_text": "Agency A reported 14 injuries.",
+      "normalized_text": "Agency A reported 14 injuries.",
+      "available_from": "2026-01-01T09:30:00Z",
+      "content_hash": "run-a-span-001"
+    },
+    {
+      "span_id": "version-002:span:1",
+      "document_version_id": "version-002",
+      "ordinal": 0,
+      "span_type": "paragraph",
+      "raw_text": "Officials confirmed that 14 people were injured.",
+      "normalized_text": "Officials confirmed that 14 people were injured.",
+      "available_from": "2026-01-01T11:00:00Z",
+      "content_hash": "run-a-span-002"
+    }
+  ],
+  "transitions": [
+    {
+      "transition_id": "transition-001",
+      "assertion_id": "assertion-001",
+      "from_state": null,
+      "to_state": "first_reported",
+      "occurred_at": "2026-01-01T10:00:00Z",
+      "evidence_span_ids": [
+        "version-001:span:1"
+      ],
+      "rationale": "Initial sourced report."
+    },
+    {
+      "transition_id": "transition-002",
+      "assertion_id": "assertion-001",
+      "from_state": "first_reported",
+      "to_state": "officially_confirmed",
+      "occurred_at": "2026-01-01T11:15:00Z",
+      "evidence_span_ids": [
+        "version-002:span:1"
+      ],
+      "rationale": "Later official confirmation."
+    }
+  ],
+  "replay_timestamps": [
+    "2026-01-01T09:45:00Z",
+    "2026-01-01T10:30:00Z",
+    "2026-01-01T11:30:00Z"
+  ],
+  "expected_states": [
+    null,
+    "first_reported",
+    "officially_confirmed"
+  ]
+}
