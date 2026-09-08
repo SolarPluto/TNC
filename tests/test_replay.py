@@ -2,9 +2,11 @@ from datetime import datetime, timezone
 
 import pytest
 
+from tnc.spans.models import SourceSpan, SpanType
 from tnc.spans.replay import (
     EvidenceAvailability,
     TemporalIntegrityError,
+    evidence_availability_from_spans,
     replay_snapshots,
     transition_has_future_evidence,
     transition_has_missing_evidence,
@@ -307,3 +309,23 @@ def test_replay_rejects_missing_evidence_coordinates():
             transitions=[transition],
             evidence_availability={},
         )
+def test_evidence_availability_is_derived_from_source_spans():
+    available_from = datetime(
+        2026, 1, 1, 9, 30, tzinfo=timezone.utc
+    )
+
+    span = SourceSpan(
+        span_id="version-001:span:1",
+        document_version_id="version-001",
+        ordinal=0,
+        span_type=SpanType.PARAGRAPH,
+        raw_text="Agency A reported 14 injuries.",
+        normalized_text="Agency A reported 14 injuries.",
+        available_from=available_from,
+        content_hash="hash-001",
+    )
+
+    availability = evidence_availability_from_spans([span])
+
+    assert availability["version-001:span:1"].span_id == span.span_id
+    assert availability["version-001:span:1"].available_from == available_from

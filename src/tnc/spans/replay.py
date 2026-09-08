@@ -1,6 +1,13 @@
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
+from tnc.spans.models import SourceSpan
+from tnc.spans.snapshot import Snapshot, build_snapshot
+from tnc.spans.state import ClaimStateTransition
 
 from tnc.spans.snapshot import Snapshot, build_snapshot
 from tnc.spans.state import ClaimStateTransition
@@ -15,6 +22,23 @@ class EvidenceAvailability(BaseModel):
 
     span_id: str
     available_from: datetime
+def evidence_availability_from_spans(
+    spans: list[SourceSpan],
+) -> dict[str, EvidenceAvailability]:
+    """
+    Build replay evidence availability from canonical SourceSpan coordinates.
+
+    SourceSpan.available_from is the authoritative timestamp used by replay.
+    """
+
+    return {
+        span.span_id: EvidenceAvailability(
+            span_id=span.span_id,
+            available_from=span.available_from,
+        )
+        for span in spans
+    }
+
 
 
 class TemporalIntegrityError(ValueError):
