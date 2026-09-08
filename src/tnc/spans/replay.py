@@ -23,6 +23,21 @@ class TemporalIntegrityError(ValueError):
     """
 
 
+def transition_has_missing_evidence(
+    transition: ClaimStateTransition,
+    evidence_availability: dict[str, EvidenceAvailability],
+) -> bool:
+    """
+    Return True when a transition references evidence with no availability
+    record.
+    """
+
+    return any(
+        span_id not in evidence_availability
+        for span_id in transition.evidence_span_ids
+    )
+
+
 def transition_has_future_evidence(
     transition: ClaimStateTransition,
     evidence_availability: dict[str, EvidenceAvailability],
@@ -30,9 +45,6 @@ def transition_has_future_evidence(
     """
     Return True when a transition relies on evidence that became available
     after the transition itself occurred.
-
-    Unknown evidence IDs are not treated as future evidence here; a separate
-    provenance-completeness check can handle missing coordinates.
     """
 
     for span_id in transition.evidence_span_ids:
@@ -52,10 +64,19 @@ def validate_replay_temporal_integrity(
     evidence_availability: dict[str, EvidenceAvailability],
 ) -> None:
     """
-    Reject replay input containing future-evidence violations.
+    Reject replay input with missing or future evidence coordinates.
     """
 
     for transition in transitions:
+        if transition_has_missing_evidence(
+            transition,
+            evidence_availability,
+        ):
+            raise TemporalIntegrityError(
+                "Transition references evidence with no availability record: "
+                f"{transition.transition_id}"
+            )
+
         if transition_has_future_evidence(
             transition,
             evidence_availability,
@@ -79,7 +100,7 @@ def replay_snapshots(
     at or before that timestamp.
 
     When evidence availability is supplied, replay fails closed if any
-    transition relies on evidence from the future.
+    transition lacks evidence coordinates or relies on future evidence.
     """
 
     if evidence_availability is not None:

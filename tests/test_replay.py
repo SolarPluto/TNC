@@ -7,6 +7,7 @@ from tnc.spans.replay import (
     TemporalIntegrityError,
     replay_snapshots,
     transition_has_future_evidence,
+    transition_has_missing_evidence,
 )
 from tnc.spans.state import ClaimState, ClaimStateTransition
 
@@ -265,3 +266,44 @@ def test_replay_accepts_temporally_valid_evidence():
 
     assert len(snapshots) == 1
     assert snapshots[0].claims[0].state == ClaimState.FIRST_REPORTED
+def test_transition_detects_missing_evidence():
+    transition = make_transition(
+        transition_id="transition-001",
+        assertion_id="assertion-001",
+        from_state=None,
+        to_state=ClaimState.FIRST_REPORTED,
+        occurred_at=datetime(
+            2026, 1, 1, 10, 0, tzinfo=timezone.utc
+        ),
+        evidence_span_ids=("missing-version:span:1",),
+    )
+
+    assert transition_has_missing_evidence(
+        transition,
+        evidence_availability={},
+    )
+
+
+def test_replay_rejects_missing_evidence_coordinates():
+    transition = make_transition(
+        transition_id="transition-001",
+        assertion_id="assertion-001",
+        from_state=None,
+        to_state=ClaimState.FIRST_REPORTED,
+        occurred_at=datetime(
+            2026, 1, 1, 10, 0, tzinfo=timezone.utc
+        ),
+        evidence_span_ids=("missing-version:span:1",),
+    )
+
+    with pytest.raises(TemporalIntegrityError):
+        replay_snapshots(
+            event_id="event-001",
+            timestamps=[
+                datetime(
+                    2026, 1, 1, 10, 30, tzinfo=timezone.utc
+                )
+            ],
+            transitions=[transition],
+            evidence_availability={},
+        )
