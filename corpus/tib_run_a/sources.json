@@ -47,8 +47,8 @@
       "role": "cross_publisher_shared_authority_comparison",
       "historical_available_from": null,
       "archive_capture_url": null,
-      "body_hash": null,
-      "status": "candidate"
+      "body_hash": "a4c4100c7c2af0e994b1bcea7e234615c19d845dfaaf7df5b9dd193dc89e9f00",
+"status": "frozen_live"
     },
     {
       "source_id": "cbs-ap-status",
