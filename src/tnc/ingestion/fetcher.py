@@ -5,7 +5,7 @@ from uuid import uuid4
 import httpx
 
 from tnc.ingestion.artifacts import FetchArtifact
-from tnc.ingestion.manifest import CorpusManifestEntry
+from tnc.ingestion.manifest import CorpusManifestEntry, append_manifest_entry
 from tnc.ingestion.storage import store_artifact
 
 
@@ -56,6 +56,7 @@ def fetch_and_store(
     url: str,
     *,
     storage_root: Path,
+    manifest_path: Path | None = None,
     client: httpx.Client | None = None,
 ) -> tuple[FetchArtifact, CorpusManifestEntry]:
     owns_client = client is None
@@ -83,6 +84,9 @@ def fetch_and_store(
             body_hash=artifact.body_hash,
             storage_path=str(stored_path),
         )
+
+        if manifest_path is not None:
+            append_manifest_entry(manifest_path, manifest_entry)
 
         return artifact, manifest_entry
     finally:
