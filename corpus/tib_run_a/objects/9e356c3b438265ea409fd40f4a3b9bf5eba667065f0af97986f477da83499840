@@ -1,0 +1,2686 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+<title>The Tornado Outbreak of May 20, 2013</title>
+<meta name="DC.title" content="The Tornado Outbreak of May 20, 2013" />
+<meta name="DC.description" content="The Tornado Outbreak of May 20, 2013" />
+<meta name="DC.creator" content="US Department of Commerce, NOAA, National Weather Service" />
+<meta name="DC.date.created" scheme="ISO8601" content="May 20th 2023 4:38 PM" />
+<meta name="DC.language" scheme="DCTERMS.RFC1766" content="EN-US" />
+<meta name="DC.keywords" content="violent tornado, killer tornado, May 20, 2013, tornado outbreak, Oklahoma, Moore, Newcastle, Oklahoma City" />
+<meta name="DC.publisher" content="NOAA's National Weather Service" />
+<meta name="DC.contributor" content="National Weather Service" />
+<meta name="DC.rights" content="/disclaimer.php" />
+<meta name="rating" content="General" />
+<meta name="robots" content="index,follow" />
+
+
+        <link href="/css/weatherstyle.css" rel="stylesheet" type="text/css" />
+        <link href="/css/template.css" rel="stylesheet" type="text/css" />
+        <link href="/css/myfcst.css" rel="stylesheet" type="text/css" />
+        <link href="/css/ForecastSearch.css" rel="stylesheet" type="text/css" />
+        <link href="/css/pointforecast.css" rel="stylesheet" type="text/css" />
+        <link href="/css/jqueryui10_3_1custom/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="/js/jquery-1.10.2.min.js"></script>        <script type="text/javascript" src="/js/jquery-ui-1.10.3.custom.min.js"></script>        <script type="text/javascript" src="/js/jquery.hoverIntent.minified.js"></script>        <script type="text/javascript" src="/js/ForecastSearch.js"></script>        <script type="text/javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=DOC&sub-agency=NOAA&yt=true&pga4=G-736JJ6NL0V"></script>        <script type="text/javascript" src="/js/topNavMenu.js"></script>        <script type="text/javascript" src="/js/NidsESRI.js"></script>        <script type="text/javascript" src="/js/nwsexit.js"></script>
+
+
+        <link href="/css/widgets.css" rel="stylesheet" type="text/css" />
+        <link href="/css/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+        
+        <script type="text/javascript" src="/js/widgets.js"></script>
+        <script type="text/javascript" src="/js/jquery.cycle2.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.colorbox-min.js"></script>
+        <script type="text/javascript" src="/js/nwsexit.js"></script>
+        
+<script>
+$(document).ready(function() {
+  $('img.nocache').each(function () {
+      var $this = $(this);
+      $this.attr('src', noCache($this.attr('src')));
+  });
+});
+function noCache(url) {
+  return url + (url.indexOf('?') >= 0 ? '&nocache=' : '?') + $.now();
+}
+</script>
+
+    </head>
+    <body> 
+        
+
+        <div class="header">
+    <div class="header-content">
+        <a href="https://www.weather.gov" class="header-nws"><img src="/bundles/templating/images/header/header.png" alt="National Weather Service"/></a>
+        <a href="http://www.commerce.gov" class="header-doc"><img src="/bundles/templating/images/header/header_doc.png" alt="United States Department of Commerce"/></a>
+        <a href="http://www.noaa.gov" class="header-noaa" title="National Oceanic and Atmospheric Administration"></a>
+    </div>
+    <div style="clear:both"></div>
+</div>
+<div class="header-shadow">
+    <div class="header-shadow-content"></div>
+</div>
+<script>
+    var domains = {
+        weather: "https://www.weather.gov",
+        forecast: "https://forecast.weather.gov",
+        airquality: "https://airquality.weather.gov",
+        aviation: "https://aviationweather.gov",
+        water: "https://water.weather.gov",
+        graphical: "https://graphical.weather.gov",
+        api: "https://api.weather.gov",
+        radar: "https://radar.weather.gov",
+        esriGeocode: "https://geocode.arcgis.com"
+    }
+</script>
+
+
+        <div class="center">
+
+            <div class="content">
+    <div class="topnav">
+        <ul id="topnav">
+            <li>
+                <script type="text/javascript">
+                    function goBack() {
+                        if (document.referrer.toLowerCase().indexOf("weather.gov") != -1) {
+                            history.back();
+                        } else {
+                            document.location.href = "https://www.weather.gov";
+                        }
+                    }
+                </script>
+                <div class="topMenuNavList home">
+                    <a href="#" onclick="goBack();">HOME</a>
+                </div>
+            </li>
+                            <li>
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/forecastmaps/">FORECAST</a>
+                    </div>
+                                                                        <div style="opacity: 0;" class="sub">
+                                <ul>
+                                                                            <li>
+                                            <a href="https://www.weather.gov">Local</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://digital.weather.gov">Graphical</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://aviationweather.gov">Aviation</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/marine/">Marine</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://water.noaa.gov">Rivers and Lakes</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.nhc.noaa.gov">Hurricanes</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.spc.noaa.gov">Severe Weather</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/fire/">Fire Weather</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://gml.noaa.gov/grad/solcalc/">Sunrise/Sunset</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.cpc.ncep.noaa.gov">Long Range Forecasts</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.cpc.ncep.noaa.gov">Climate Prediction</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.swpc.noaa.gov">Space Weather</a>
+                                        </li>
+                                                                    </ul>
+                            </div>
+                                                            </li>
+                            <li>
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/wrh/climate">PAST WEATHER</a>
+                    </div>
+                                                                        <div style="opacity: 0;" class="sub">
+                                <ul>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/wrh/climate">Past Weather</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://gml.noaa.gov/grad/solcalc/">Astronomical Data</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.climate.gov/maps-data/dataset/past-weather-zip-code-data-table">Certified Weather Data</a>
+                                        </li>
+                                                                    </ul>
+                            </div>
+                                                            </li>
+                            <li>
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/safety/">SAFETY</a>
+                    </div>
+                                                                                </li>
+                            <li>
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/informationcenter">INFORMATION</a>
+                    </div>
+                                                                        <div style="opacity: 0;" class="sub">
+                                <ul>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/wrn/wea">Wireless Emergency Alerts</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/wrn/">Weather-Ready Nation</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/owlie/publication_brochures">Brochures</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/coop/">Cooperative Observers</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/briefing/">Daily Briefing</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/hazstat">Damage/Fatality/Injury Statistics</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="http://mag.ncep.noaa.gov">Forecast Models</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/gis/">GIS Data Portal</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/nwr">NOAA Weather Radio</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/publications/">Publications</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/skywarn/">SKYWARN Storm Spotters</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/stormready">StormReady</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/tsunamiready/">TsunamiReady</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/notification/">Service Change Notices</a>
+                                        </li>
+                                                                    </ul>
+                            </div>
+                                                            </li>
+                            <li>
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/education/">EDUCATION</a>
+                    </div>
+                                                                                </li>
+                            <li>
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/news">NEWS</a>
+                    </div>
+                                                                                </li>
+                            <li>
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/search/">SEARCH</a>
+                    </div>
+                                            <div style="opacity: 0;" class="sub">
+                            <ul class="no-links">
+                            <li><!-- Begin search code -->
+                                <div id="site-search">
+                                    <form method="get" action="https://search.usa.gov/search" style="margin-bottom: 0; margin-top: 0;">
+                                        <input type="hidden" name="v:project" value="firstgov" />
+                                        <label for="query">Search For</label>
+                                        <input type="text" name="query" id="query" size="12" />
+                                        <input type="submit" value="Go" />
+                                        <p>
+                                            <input type="radio" name="affiliate" checked="checked" value="nws.noaa.gov" id="nws" />
+                                            <label for="nws" class="search-scope">NWS</label>
+                                            <input type="radio" name="affiliate" value="noaa.gov" id="noaa" />
+                                            <label for="noaa" class="search-scope">All NOAA</label>
+                                        </p>
+                                    </form>
+                                </div>
+                            </li>
+                            </ul>
+                        </div>
+                                    </li>
+                            <li class="last">
+                    <div class="topMenuNavList section-link">
+                        <a href="https://www.weather.gov/about/">ABOUT</a>
+                    </div>
+                                                                        <div style="opacity: 0;" class="sub">
+                                <ul>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/about/">About NWS</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/organization">Organization</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://sites.google.com/a/noaa.gov/nws-insider/">For NWS Employees</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/ncep/">National Centers</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.noaa.gov/nws-careers">Careers</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/contact">Contact Us</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://forecast.weather.gov/glossary.php">Glossary</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.weather.gov/socialmedia">Social Media</a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://www.noaa.gov/NWStransformation">NWS Transformation</a>
+                                        </li>
+                                                                    </ul>
+                            </div>
+                                                            </li>
+                    </ul>
+    </div>
+</div>
+
+
+            <div class="center-content">
+                <div id="zipcity_news">
+                    <div class="one-sixth-first">
+    <div id="forecast-lookup">
+        <form name="getForecast" id="getForecast" action="https://forecast.weather.gov/zipcity.php" method="get">
+            <label for="inputstring">Local forecast by <br />"City, St" or ZIP code</label>
+            <input id="inputstring" name="inputstring" type="text" value="Enter location ..." onclick="this.value=''" />
+            <input name="btnSearch" id="btnSearch" type="submit" value="Go" />
+            <div id="txtError">
+                <div id="errorNoResults" style="display:none;">Sorry, the location you searched for was not found. Please try another search.</div>
+                <div id="errorMultipleResults" style="display:none">Multiple locations were found. Please select one of the following:</div>
+                <div id="errorChoices" style="display:none"></div>
+                <input id="btnCloseError" type="button" value="Close" style="display:none" />
+            </div>
+            <div id="txtHelp"><a style="text-decoration: underline;" href="javascript:void(window.open('https://www.weather.gov/ForecastSearchHelp.html','locsearchhelp','status=0,toolbar=0,location=0,menubar=0,directories=0,resizable=1,scrollbars=1,height=500,width=530').focus());">Location Help</a></div>
+        </form>
+    </div>
+</div>
+
+                        <div class="five-sixth-last">
+                    <style type="text/css">
+                #topnews.important {
+                    background-color: #d2d2d2;
+                    height: 100%;
+                    margin-bottom: 5px;
+                    position: relative;
+                }
+
+                #topnews .icon {
+                    display: none;
+                }
+
+                #topnews.important .icon {
+                    background-color: #135997;
+                    display: table-cell;
+                    height: 100%;
+                    text-align: center;
+                    vertical-align: middle;
+                    width: 80px;
+                }
+
+                #topnews.important .body {
+                    color: #141414;
+                    display: table-cell;
+                    padding: 10px;
+                }
+            </style>
+            <div id="topnews">
+                <div class="icon"><img src="/bundles/templating/images/top_news/important.png"></div>
+                <div class="body">
+                    <h1 style="font-size: 11pt;">Hurricane Lowell to Impact Kauai; Heat Continues in the South-Central U.S.</h1>
+                    <p>
+                        Hurricane Lowell is forecast to pass west of Kauai today. Impacts such as high surf and heavy rain could impact all of the islands. A Hurricane Warning is in effect for Kauai, Niihau and the surrounding coastal waters. Sweltering heat remains across the South-Central Plains and Lower/Middle Mississippi Valley, as well as in the Southwest this week with limited nighttime relief. 
+                                                                            <a href="http://www.wpc.ncep.noaa.gov/discussions/hpcdiscussions.php?disc=pmdspd" target="_blank">Read More &gt;</a>
+                                            </p>
+                </div>
+            </div>
+            </div>
+
+                </div>
+                <div class="full-width-bordertop">
+                    <div class="div-full">
+
+                        <!-- area for the myforecast widget and wwamap data -->
+                        <div class="one-sixth-first" id="sidebar">
+                            <script type="text/javascript" src="/js/jquery-cookie.js"></script>
+<script type="text/javascript" src="/js/MyForecastWidget.js"></script>
+<div id="myfcst-widget">
+    <div id="myfcst">
+        <form id='myfcst-form' action='/widgets/MyForecastWidget.php'>
+            <span id="myfcst-title">Customize Your <strong>Weather.gov</strong></span>
+            <div id="myfcst-input-block">
+                <input type="text" name="myfcst-location-input" id="myfcst-location-input" value="City, ST" />
+                <label for="myfcst-location-input">Enter Your City, ST or ZIP Code</label><br />
+                <input type="checkbox" name="myfcst-remember" id="myfcst-remember" />
+                <label for="myfcst-remember">Remember Me</label>
+            </div>
+            <div class="myfcst-footer">
+                <input type="submit" value="Get Weather" id="myfcst-submit" />
+                <p class="myfcst-policy"><a href="/privacy.php">Privacy Policy</a></p>
+            </div>
+        </form>
+        <div id="myfcst-fcst"></div>
+        <div id="myfcst-multi-result"></div>
+        <div id="myfcst-loading">LOADING...</div>
+    </div>
+</div>
+
+                            
+                        </div><!-- end of <div class="one-sixth-first"> -->
+
+                        <div class="five-sixth-first" id="pagebody">
+                            <div class="div-full breadcrumb">
+    <div class="sitename">
+        <p class="sitename-name">Norman, OK</p>
+        <p class="sitename-class">Weather Forecast Office</p>
+    </div>
+    <div class="location">
+        <h1 class='location-pagetitle'>The Tornado Outbreak of May 20, 2013</h1>
+        <div class='location-breadcrumb'>
+            <a href="https://www.weather.gov">Weather.gov</a>
+                                                &gt; <a href="https://www.weather.gov/oun">Norman, OK</a>
+                                &gt; The Tornado Outbreak of May 20, 2013
+                    </div>
+    </div>
+</div>
+
+                            <div class="div-full">
+    <div class="subMenuNav">
+        <ul id="subMenuNav">
+                            <li>
+                    <div class="subMenuNavList section-link">
+                        <a href="/crh/outlooks?sid=oun">Current Hazards</a>
+                    </div>
+                                            <div class="sub">
+                            <ul>
+                                                                    <li>
+                                        <a href="/oun/"> Briefing Page</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/oun/ReportSevereWeather"> Submit a Storm Report</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="http://www.weather.gov/crh/outlooks?sid=oun"> Outlooks</a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                                    </li>
+                            <li>
+                    <div class="subMenuNavList section-link">
+                        <a href="/oun/currentconditions">Current Conditions</a>
+                    </div>
+                                            <div class="sub">
+                            <ul>
+                                                                    <li>
+                                        <a href="http://water.noaa.gov/precip/"> Observed Precipitation</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.star.nesdis.noaa.gov/GOES/"> Satellite</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/wrh/hazards?obs=true&amp;boundaries=true&amp;wfo=oun"> Surface Observations</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/currentconditions"> Upper Air Data</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.mesonet.org/weather/station-plots/current-conditions"> Oklahoma Mesonet</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.mesonet.ttu.edu/"> West Texas Mesonet</a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                                    </li>
+                            <li>
+                    <div class="subMenuNavList section-link">
+                        <a href="https://radar.weather.gov">Radar</a>
+                    </div>
+                                            <div class="sub">
+                            <ul>
+                                                                    <li>
+                                        <a href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJsb2NhbCIsImNlbnRlciI6Wy05Ny4yNzgsMzUuMzMzXSwiem9vbSI6OCwiZmlsdGVyIjoiV1NSLTg4RCIsImxheWVyIjoiYnJlZl9yYXciLCJzdGF0aW9uIjoiS1RMWCIsInRyYW5zcGFyZW50Ijp0cnVlLCJhbGVydHNPdmVybGF5Ijp0cnVlLCJzdGF0aW9uSWNvbnNPdmVybGF5Ijp0cnVlfSwiYmFzZSI6InN0YW5kYXJkIiwiY291bnR5IjpmYWxzZSwiY3dhIjpmYWxzZSwic3RhdGUiOmZhbHNlLCJtZW51Ijp0cnVlLCJzaG9ydEZ1c2VkT25seSI6dHJ1ZX0%3D#/"> Local Enhanced Radar (Central Oklahoma-KTLX)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/radarliteloop?radarid=KTLX"> Local Standard Radar (KTLX-low bandwidth)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJsb2NhbCIsImNlbnRlciI6Wy05OC45NzcsMzQuMzYyXSwiem9vbSI6OCwiZmlsdGVyIjoiV1NSLTg4RCIsImxheWVyIjoiYnJlZl9yYXciLCJzdGF0aW9uIjoiS0ZEUiIsInRyYW5zcGFyZW50Ijp0cnVlLCJhbGVydHNPdmVybGF5Ijp0cnVlLCJzdGF0aW9uSWNvbnNPdmVybGF5Ijp0cnVlfSwiYmFzZSI6InN0YW5kYXJkIiwiY291bnR5IjpmYWxzZSwiY3dhIjpmYWxzZSwic3RhdGUiOmZhbHNlLCJtZW51Ijp0cnVlLCJzaG9ydEZ1c2VkT25seSI6dHJ1ZX0%3D#/"> Local Enhanced Radar (Southwest OK/Western North TX-KFDR)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/radarliteloop?radarid=KFDR"> Local Standard Radar (KFDR-low bandwidth)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJsb2NhbCIsImNlbnRlciI6Wy05OC4xMjcsMzYuNzQxXSwiem9vbSI6OCwiZmlsdGVyIjoiV1NSLTg4RCIsImxheWVyIjoiYnJlZl9yYXciLCJzdGF0aW9uIjoiS1ZOWCIsInRyYW5zcGFyZW50Ijp0cnVlLCJhbGVydHNPdmVybGF5Ijp0cnVlLCJzdGF0aW9uSWNvbnNPdmVybGF5Ijp0cnVlfSwiYmFzZSI6InN0YW5kYXJkIiwiY291bnR5IjpmYWxzZSwiY3dhIjpmYWxzZSwic3RhdGUiOmZhbHNlLCJtZW51Ijp0cnVlLCJzaG9ydEZ1c2VkT25seSI6dHJ1ZX0%3D#/"> Local Enhanced Radar (Northern OK-KVNX)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/radarliteloop?radarid=KVNX"> Local Standard Radar (KVNX-low bandwidth)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/radar_lite?region=southplains&amp;loop=true"> Regional Standard Radar (low bandwidth)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/radar_lite?region=conus-large&amp;loop=true"> National Standard Radar (low bandwidth)</a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                                    </li>
+                            <li>
+                    <div class="subMenuNavList section-link">
+                        <a href="#">Forecasts</a>
+                    </div>
+                                            <div class="sub">
+                            <ul>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/crh/pqpf?sid=oun"> Probabilistic Precipitation</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="http://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=AFD&amp;format=CI&amp;version=1&amp;glossary=1"> Forecaster&#039;s Discussion</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/fireweather"> Fire</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="http://forecast.weather.gov/gridpoint.php?site=oun&amp;TypeDefault=graphical"> Hourly View</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="http://graphical.weather.gov/sectors/oun.php"> Graphical</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://spot.weather.gov/?wfo=oun&amp;lat=35&amp;lon=-98&amp;zoom=7"> Submit a Spot Forecast</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/localforecasts"> Local Forecast Information</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/aviation"> Aviation Weather</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.airnow.gov/state/?name=oklahoma"> Air Quality</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.wpc.ncep.noaa.gov/wwd/wssi/wssi.php?id=oun"> Winter Weather</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/srh/tropical?office=oun"> Tropical</a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                                    </li>
+                            <li>
+                    <div class="subMenuNavList section-link">
+                        <a href="https://water.noaa.gov/wfo/oun">Rivers and Lakes</a>
+                    </div>
+                                            <div class="sub">
+                            <ul>
+                                                                    <li>
+                                        <a href="https://water.noaa.gov"> *New* National Water Prediction Service (NWPS)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://water.noaa.gov/wfo/OUN"> *New* NWPS - Local View</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://owrb.ok.gov/supply/drought/Lake_Levels_files/Monthly%20Reservoir%20Storage.pdf"> OK Reservoir Conditions</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="http://waterdatafortexas.org/reservoirs/statewide"> TX Reservoir Conditions</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.swt-wc.usace.army.mil/Daily_Morning_Reservoir_Report.pdf"> USACE Tulsa Lake Conditions</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/hydro_nwpsmonitor"> NWPS Hydrograph Monitor Page</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/hydro_lakemonitor"> NWPS Lake Monitor Page</a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                                    </li>
+                            <li>
+                    <div class="subMenuNavList section-link">
+                        <a href="https://weather.gov/wrh/Climate?wfo=oun">Climate and Past Weather</a>
+                    </div>
+                                            <div class="sub">
+                            <ul>
+                                                                    <li>
+                                        <a href="http://www.cpc.ncep.noaa.gov/"> Climate Prediction</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="http://www.drought.gov/drought/"> Drought</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/climate"> National</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/oun/climate-records"> Averages and Records for OKC, Wichita Falls &amp; Lawton</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/climate"> NWS Norman Climate Resources</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/climate-drought"> Drought (Local)</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/wrh/climate?wfo=oun"> More Local</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/tornadodata"> Tornado Database</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/stormdata"> Storm Data</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/events"> Significant Weather Events</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/wxhistory"> Daily Weather History</a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                                    </li>
+                            <li>
+                    <div class="subMenuNavList section-link">
+                        <a href="/">Local Programs</a>
+                    </div>
+                                            <div class="sub">
+                            <ul>
+                                                                    <li>
+                                        <a href="/oun/radio"> All Hazards Weather Radio</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/skywarn"> Skywarn Storm Spotters</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="https://www.weather.gov/stormready/"> StormReady</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/office"> About Our Office</a>
+                                    </li>
+                                                                    <li>
+                                        <a href="/oun/faq"> F.A.Q.</a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                                    </li>
+                    </ul>
+    </div>
+</div>
+
+
+                            
+                            
+                            
+                            <div class="div-full">
+<div class="cms-content"><!-- BEGINNING OF CMS LOCAL WEB PAGE CODE -->
+<link href="/source/oun/css/standard.css" media="all" rel="stylesheet" type="text/css" />
+<link href="/source/oun/css/tornadotable.css" media="all" rel="stylesheet" type="text/css" />
+<link href="/source/oun/css/stormphoto.css" media="all" rel="stylesheet" type="text/css" />
+<link href="/source/oun/css/damagephoto.css" media="all" rel="stylesheet" type="text/css" />
+<link href="/source/oun/css/chronology.css" media="all" rel="stylesheet" type="text/css" /><!--  CR Storm Summary Creator --><!--  Version 10, Apr 1 2018   --><!--  Todd Rieck, Kevin Skow, Andrea Schoettmer -->
+<style type="text/css">/* Styling for images that are designed to be enlarged via jquery script */
+img.magnify {
+	background-color:#ffffff;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000;
+	padding: 4px;
+	-webkit-box-shadow: 0 0 6px rgba(132, 132, 132, .75);
+	-moz-box-shadow: 0 0 6px rgba(132, 132, 132, .75);
+	box-shadow: 0 0 6px rgba(132, 132, 132, .75);
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+img.magnify:hover {
+	-webkit-box-shadow: 0 0 0px rgba(132, 132, 132, .75);
+	-moz-box-shadow: 0 0 0px rgba(132, 132, 132, .75);
+	box-shadow: 0 0 0px rgba(132, 132, 132, .75);
+}
+
+/* Size and font for tab section titles */
+.title {
+	font-size: 20px;
+	font-family: Arial, Geneva, sans-serif;
+}
+</style>
+<!-- CODE FOR STRIPPING OUT TOP AND SIDE BARS. DO NOT MODIFY. --><script>
+$(document).ready(function(){
+	//	$('.subMenuNav').hide();  // removes the WFO level menus - optional
+	$('#myfcst-widget').hide();
+	$('.full-width-border').css('border-top', 'white');
+	$('.partial-width-borderbottom').css('border-bottom', 'white');
+	$('.five-sixth-first').css({
+		'width' : '100%',
+    	        'padding-right': '0px',
+    	        'padding-left': '0px'
+	});
+});
+
+</script><!--END CODE FOR STRIPPING OUT TOP AND SIDE BARS.--><!--CODE FOR TOGGLING KEY FOR MAPS. DO NOT MODIFY.--><script>
+$(document).ready(function(){
+	$("button").click(function(){
+		$("#mapkey").toggle();
+	});
+});
+</script><!--END CODE FOR TOGGLING MAP KEY-->
+<div class="cms-content"><script type='text/javascript'>
+   "use strict";  
+
+// script below will allow to select the initial display tab by id, not by number
+//$('input[name="first"]:checked').val();
+
+     $(document).ready(function(){
+	    
+	    $.fn.tabIndex = function () {
+	     //  return $(this).parent().find(this).index() - 1; 
+	    	return $(this).parent().find(this).index();
+	    };
+	    $.fn.selectTabByID = function (tabID) {
+	        $(this).tabs("option", "active", $('#' + tabID).tabIndex());
+	    };
+	   // $.fn.selectTabByIndex = function (tabIndex) {
+	   //     $(this).tabs("option", "active", tabIndex);
+	  //  };
+
+	  // script below checks variable - if none forces the top listed tab for opened tab
+	var firsttab = "summary"; 
+	if (firsttab == null) {
+		 $("#tabs").tabs();
+	}
+	else {
+		$("#tabs").tabs();
+		 $("#tabs").selectTabByID(firsttab);
+	}
+	
+	
+//   $("#tabs").tabs();
+ //  $("#tabs").selectTabByID('rain');
+ // $("#tabs").selectTabByID(firsttab);
+ //  $("#tabs").tabs("select", firsttab);
+   
+});
+          
+         
+</script><!-- END CODE FOR SETTING ORDER OF TABS BY ID. -->
+<style type="text/css">input[type="radio"]:checked ~ .tab {
+  display: block; 
+}
+</style>
+</div>
+<link crossorigin="" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" rel="stylesheet" /><script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script><!-- Load Esri Leaflet from CDN --><script src="https://unpkg.com/esri-leaflet@3.0.10/dist/esri-leaflet.js"></script><script src="https://unpkg.com/esri-leaflet-vector@4.0.1/dist/esri-leaflet-vector.js"></script><script>
+    const apiKey = "AAPK83660b845dbb4923885d8f96d408eacdDThGjy7hlGYusvqQLqdy9vXGDKGvIOsoAn7lxrvlWh8Vq_XgkdYxdoP9qPFTHdL3"
+$(document).ready(function(){
+var map = L.map('map').setView([35.321372,-97.523915],12);
+const basemapLayers = {
+        Imagery: L.esri.Vector.vectorBasemapLayer("ArcGIS:Imagery", { apiKey: apiKey }).addTo(map),
+        Streets: L.esri.Vector.vectorBasemapLayer("ArcGIS:Streets", { apiKey: apiKey }),
+
+        Navigation: L.esri.Vector.vectorBasemapLayer("ArcGIS:Navigation", { apiKey: apiKey }),
+        Topographic: L.esri.Vector.vectorBasemapLayer("ArcGIS:Topographic", { apiKey: apiKey }),
+        "Light Gray": L.esri.Vector.vectorBasemapLayer("ArcGIS:LightGray", { apiKey: apiKey }),
+        "Dark gray": L.esri.Vector.vectorBasemapLayer("ArcGIS:DarkGray", { apiKey: apiKey }),
+        "Streets Relief": L.esri.Vector.vectorBasemapLayer("ArcGIS:StreetsRelief", { apiKey: apiKey })
+
+      };
+
+var datdata = L.esri.dynamicMapLayer({
+url: 'https://services.dat.noaa.gov/arcgis/rest/services/nws_damageassessmenttoolkit/DamageViewer/MapServer',
+                layers: [2],
+                format: 'png32',
+                f:"image",
+                opacity: 0.6,
+                transparent: true,
+                updateWhenIdle: true,
+                updateWhenZooming: true,
+                disableCache:true,
+                from: new Date('05/20/2013 00:00'),
+                to: new Date('05/20/2013 23:59')
+});
+datdata.addTo(map);
+L.control.layers(basemapLayers, null, { collapsed: false }).addTo(map);
+});
+</script>
+<div id="tabs" style="width: 950px;">
+<ul>
+	<li><strong><a href="#summary">Summary</a></strong></li>
+	<li><strong><a href="#fastfacts">Fast Facts</a></strong></li>
+	<li><strong><a href="#idss">Decision Support</a></strong></li>
+	<li><strong><a href="#ef5">EF-5</a></strong></li>
+	<li><strong><a href="#timeline">Timeline</a></strong></li>
+	<li><strong><a href="#tornadodata">Tornado Data</a></strong></li>
+	<li><strong><a href="#stormdata">Storm Data</a></strong></li>
+	<li><strong><a href="#radar">Radar</a></strong></li>
+	<li><strong><a href="#satellite">Satellite</a></strong></li>
+	<li><strong><a href="#multimedia">Multimedia</a></strong></li>
+	<li><strong><a href="#damage">Damage</a></strong></li>
+</ul>
+<!--  this div class is used to style any links within the tabbed interface properly. 
+           Tabs breaks the page CSS for links -->
+
+<div class="links">
+<div id="summary">
+<h2 class="section">Summary</h2>
+
+<div>&nbsp;</div>
+
+<p align="left">A tornado outbreak occurred during the afternoon and evening hours of the May 20, 2013, and was the last day of a three-day stretch of significant severe weather from May 18-20, 2013. This event also produced the most deadly and devastating tornado of the year for Oklahoma and the the United States.</p>
+
+<p align="left">Several supercell thunderstorms developed during early afternoon of May 20th along a dryline in central Oklahoma. One of these storms developed near Chickasha and rapidly intensified, producing a tornado which touched down at 2:56 PM CDT on the west side of Newcastle. The tornado became violent within minutes, then tracked east-northeastward across the city of Moore and parts of south Oklahoma City for about 40 minutes before finally dissipating near Lake Stanley Draper. The tornado caused catastrophic damage in these areas, and was given a maximum rating of EF-5. The tornado claimed 24 lives, injured scores of people, and caused billions of dollars in damage.</p>
+
+<p align="left">Several other tornadoes also occurred in Stephens and Lincoln Counties during the afternoon of May 20. In addition to the tornadoes, large hail and damaging winds caused damage in many areas.</p>
+<!-- <p align="left">Below is a map with the preliminary damage path of the Newcastle-Moore-South OKC tornado. Contours delineate the extent of EF-0 (light blue), EF-1 (green), EF-2 (yellow), EF-3 (orange), EF-4 (red), and EF-5 (purple) damage from the survey.</p> -->
+
+<div id="map" style="height: 450px; width: 900px; border-width: 1px; border-style: solid;">&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody>
+		<tr>
+			<td class="stormphoto100" colspan="2"><img alt="Newcastle/Moore EF-5 Tornado Photo Courtesy of Jenny Hamar" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/tornadoes/20130520-moore-hamar.jpg" style="width: 900px; height: 675px; border-width: 1px; border-style: solid;" /></td>
+		</tr>
+		<tr>
+			<td class="stormtopleft100" colspan="2"><strong>This photo was taken around 3:00 pm CDT on May 20, 2013 from Carrington Lane in the Carrington Place addition in northwest Norman, which is located between 36th Ave NW and 48th Ave NW, and south of Franklin Road. The view is looking northwest towards the corner of Franklin Road and 48th Ave NW. This photo was provided courtesy of Jenny Hamar.</strong></td>
+		</tr>
+	</tbody>
+</table>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Local Storm Reports and Warning Polygons Map for May 20-21, 2013 Severe Weather and Tornado Outbreak in the NWS Norman Forecast Area" class="magnify" data-magnifyby="1.4" src="/images/oun/wxevents/20130520/maps/20130520-polygons-reports.png" style="height: 900px; width: 900px; border-width: 1px; border-style: solid;" title="Local Storm Reports and Warning Polygons Map for May 20-21 Severe Weather and Tornado Outbreak in the NWS Norman Forecast Area" /><br />
+<strong>Local Storm Reports and Warning Polygons Map for May 20-21, 2013<br />
+Severe Weather and Tornado Outbreak in the NWS Norman Forecast Area</strong></div>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="fastfacts">
+<h2 class="section">Fast Facts</h2>
+
+<ul>
+	<li>A rating of <strong>EF-5</strong> has been given to the tornado that affected the Newcastle, south OKC, and Moore areas in McClain and Cleveland Counties.</li>
+	<br />
+	<li>The tornado had a path length of approximately 14 miles and was on the ground for approximately 40 minutes from 2:56 PM - 3.35 PM CDT.</li>
+	<br />
+	<li>The preliminary maximum path width is 1.1 miles.</li>
+</ul>
+<style type="text/css">td.titlemost {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #eeeeee;
+	font-weight: bold;
+	color: #000000;
+	font-size: 100%;
+	width: 50%;
+}
+td.yearmost {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #ccffff;
+	font-weight: bold;
+	color: #000000;
+	font-size: 100%;
+	width: 50%;
+}
+td.totalmost {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #ccffcc;
+	font-weight: bold;
+	color: #000000;
+	font-size: 100%;
+	width: 50%;
+}
+td.yearhighlight {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #ffff99;
+	font-weight: bold;
+	color: #000000;
+	font-size: 100%;
+	width: 50%;
+}
+td.totalhighlight {
+	text-align: center;
+	vertical-align: middle;
+	background-color: #ffff99;
+	font-weight: bold;
+	color: #000000;
+	font-size: 100%;
+	width: 50%;
+}
+</style>
+<div>&nbsp;</div>
+
+<h2 class="section">Most Tornadoes to Occur on Any May 20th in Oklahoma (1950-Present)</h2>
+
+<div>&nbsp;</div>
+
+<table border="1" cellpadding="0" cellspacing="0" width="300">
+	<tbody>
+		<tr class="data">
+			<td class="titlemost">Year</td>
+			<td class="titlemost">Total</td>
+		</tr>
+		<tr class="data">
+			<td class="yearmost"><a class="textlink" href="/oun/tornadodata-ok-2019" target="_blank">2019</a></td>
+			<td class="totalmost">25</td>
+		</tr>
+		<tr class="data">
+			<td class="yearhighlight"><a class="textlink" href="/oun/tornadodata-ok-2013" target="_blank">2013</a></td>
+			<td class="totalhighlight">15</td>
+		</tr>
+		<tr class="data">
+			<td class="yearmost"><a class="textlink" href="/oun/tornadodata-ok-1977" target="_blank">1977</a></td>
+			<td class="totalmost">14</td>
+		</tr>
+		<tr class="data">
+			<td class="yearmost"><a class="textlink" href="/oun/tornadodata-ok-2001" target="_blank">2001</a></td>
+			<td class="totalmost">12</td>
+		</tr>
+		<tr class="data">
+			<td class="yearmost"><a class="textlink" href="/oun/tornadodata-ok-1957" target="_blank">1957</a></td>
+			<td class="totalmost">11</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>&nbsp;</div>
+
+<h2 class="section">GIS Data</h2>
+
+<ul>
+	<li><a class="textlink" href="/source/oun/wxevents/20130520/gis/20130520-storm_survey_pathonly.kml" target="_blank">KML file for the Newcastle-Moore tornado damage path only </a></li>
+</ul>
+
+<h2 class="section">Severe Weather Safety Information</h2>
+
+<ul>
+	<li><a class="textlink" href="/oun/safety-overpass" target="_blank">Highway Overpasses as Tornado Shelters: Fallout From the 3 May 1999 Oklahoma/Kansas Violent Tornado Outbreak</a></li>
+</ul>
+
+<h2 class="section">Web Pages and Reports Related to the May 20, 2013 Event</h2>
+
+<ul>
+	<li><span style="color: #ff0000; font-weight: bold;">NEW!</span>&nbsp;<a class="textlink" href="https://storymaps.arcgis.com/stories/8b60d1b8144048fbb26610ed0c47c5a8" target="_blank">NWS Norman StoryMap for the May 20, 2013 Tornado Outbreak</a></li>
+	<br />
+	<li><span style="color: #ff0000; font-weight: bold;">NEW!</span>&nbsp;<a class="textlink" href="https://www.youtube.com/watch?v=5jz-ITCsiz4" target="_blank">NWS Norman Roundtable: Remembering the 2013 Tornadoes (YouTube)</a></li>
+	<br />
+	<li><a class="textlink" href="/media/publications/assessments/13oklahoma_tornadoes.pdf" target="_blank">NWS Service Assessment: May 2013 Tornadoes and Flash Flooding</a></li>
+	<br />
+	<li><a class="textlink" href="https://doi.org/10.6028/NIST.sp.1164" target="_blank">NIST SP 1164, Preliminary Reconnaissance Report - Newcastle-Moore Tornado (NIST)</a></li>
+	<br />
+	<li><a class="textlink" href="https://www.fema.gov/sites/default/files/2020-07/tornado-report_moore-oklahoma_2013.pdf" target="_blank">Formal Observation Report Tornado: Moore, Oklahoma, May 20, 2013 Safe Room Performance, Observations, and Conclusions (FEMA)</a></li>
+	<br />
+	<li><a class="textlink" href="/media/oun/wxevents/20130520/products_presentation.pdf" target="_blank">A 20-slide presentation of the Event Timeline for the Newcastle-Moore tornado including NWS forecasts and warnings, as well as social media info from Twitter and Facebook</a></li>
+	<br />
+	<li><a class="textlink" href="/images/oun/wxevents/20130520/radar/ktlx-moore-loop.gif" onclick="window.open(this.href,'20130520timeline','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=805,height=575,status'); return false">View the Radar Timeline of the Newcastle-Moore Tornado</a></li>
+	<br />
+	<li><a class="textlink" href="/images/oun/wxevents/20130520/radar/newcastle-moore-ref.gif" onclick="window.open(this.href,'20130520ref','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=805,height=575,status'); return false">Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013</a></li>
+	<br />
+	<li><a class="textlink" href="/images/oun/wxevents/20130520/radar/newcastle-moore-srv.gif" onclick="window.open(this.href,'20130520srv','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=805,height=575,status'); return false">Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013</a></li>
+	<br />
+	<li><a class="textlink" href="https://oklahoma.gov/oem/emergencies-and-disasters/2013/20130518-severe-weather-events.html" target="_blank">Oklahoma Department of Emergency Management Situation Update web page for severe weather events occurring from May 18-June 2, 2013</a></li>
+	<br />
+	<li><a class="textlink" href="https://www.spc.noaa.gov/climo/reports/130520_rpts.html" target="_blank">Storm Prediction Center Storm Report for May 20, 2013</a></li>
+	<br />
+	<li><a class="textlink" href="http://www.spc.noaa.gov/exper/archive/event.php?date=20130520" target="_blank">SPC Severe Weather Event Review for May 20, 2013</a></li>
+	<br />
+	<li><a class="textlink" href="/media/oun/stormdata/oun201305.pdf" target="_blank">NWS Norman storm data report for May 2013</a></li>
+	<li><a class="textlink" href="/media/tsa/stormdata/tsamay13.pdf" target="_blank">NWS Tulsa storm data report for May 2013</a></li>
+</ul>
+
+<h2 class="section">Research Articles and Publications Related to the May 20, 2013 Event</h2>
+
+<ul>
+	<li><a class="textlink" href="https://journals.ametsoc.org/view/journals/wefo/29/5/waf-d-14-00039_1.xml" target="_blank">20 May 2013 Moore, Oklahoma, Tornado: Damage Survey and Analysis (WEFO)</a></li>
+	<br />
+	<li><a class="textlink" href="https://journals.ametsoc.org/view/journals/mwre/143/7/mwr-d-14-00357.1.xml" target="_blank">High-Temporal Resolution Polarimetric X-Band Doppler Radar Observations of the 20 May 2013 Moore, Oklahoma, Tornado (MWR)</a></li>
+</ul>
+
+<h2 class="section">Tornado Data and Information</h2>
+
+<ul>
+	<li><a class="textlink" href="https://www.spc.noaa.gov/faq/tornado/f5torns.html" target="_blank">List of F5/EF5 Tornadoes in the United State Since 1950 (Storm Prediction Center)</a></li>
+	<br />
+	<li><a class="textlink" href="/oun/tornadodata-okc" target="_blank">Comprehensive List of Tornadoes in Oklahoma City since 1890</a>.</li>
+	<br />
+	<li><a class="textlink" href="/oun/tornadodata-ok-costliest" target="_blank">Top Ten Costliest Oklahoma Tornadoes (1950-Present)</a></li>
+	<li><a class="textlink" href="/oun/tornadodata-ok-deadliest" target="_blank">Top Ten Deadliest Oklahoma Tornadoes (1875-Present)</a></li>
+	<li><a class="textlink" href="/oun/tornadodata-ok-f5tornadoes" target="_blank">Quick List of F5 Tornadoes in Oklahoma (1905-Present)</a></li>
+	<li><a class="textlink" href="/oun/tornadodata-ok-violent" target="_blank">Detailed List of Violent Tornadoes in Oklahoma (1950-Present)</a></li>
+	<li><a class="textlink" href="/oun/tornadodata-ok-killer" target="_blank">Detailed List of Killer Tornadoes in Oklahoma (1950-Present)</a></li>
+	<br />
+	<li><a class="textlink" href="/oun/tornadodata-county-ok-cleveland" target="_blank">Cleveland County, OK Tornadoes (1875-Present)</a></li>
+	<li><a class="textlink" href="/oun/tornadodata-county-ok-mcclain" target="_blank">McClain County, OK Tornadoes (1875-Present)</a></li>
+	<br />
+	<li><a class="textlink" href="/oun/tornadodata-city-ok-moore" target="_blank">Tornadoes that have occurred in or near Moore, OK (1875-Present)</a></li>
+</ul>
+
+<ul>
+	<li><a class="textlink" href="/oun/events-19981004" target="_blank">The October 4, 1998 Tornado Outbreak</a> Twenty-eight tornadoes occurred in central and eastern Oklahoma, including an F2 tornado which damaged parts of Moore. It was the largest autumnal outbreak of tornadoes ever recorded in Oklahoma.</li>
+	<br />
+	<li><a class="textlink" href="/oun/events-19990503" target="_blank">The May 3, 1999 Tornado Outbreak</a> This outbreak included nearly 60 tornadoes in central Oklahoma. It was the largest tornado outbreak ever recorded in Oklahoma. The first F5 tornado ever to hit a the Oklahoma City metro area killed 36 people and tore through parts of Newcastle, south OKC and Moore, OK. The damage total was estimated at $1 billion. Two F4 tornadoes also ravaged parts of Kingfisher and Logan counties.</li>
+	<br />
+	<li><a class="textlink" href="/oun/events-20030508" target="_blank">Oklahoma City Area Tornadoes of May 8, 2003</a> The central United States experienced a record-breaking week of tornadoes from May 4 through May 10, 2003, when nearly 400 tornadoes occurred in 19 states and caused 42 deaths during the seven days. Included in this total were the tornadoes which hit the southern Oklahoma City metropolitan area on May 8, 2003 including an F4 tornado which tore through parts of Moore, Oklahoma City and Choctaw.</li>
+	<br />
+	<li><a class="textlink" href="/oun/events-20100510" target="_blank">The May 10, 2010 Tornado Outbreak</a> This outbreak produced 35 tornadoes in the NWS Norman forecast area alone, and a total of 55 tornadoes in Oklahoma. Two EF4 tornadoes struck the Oklahoma City metro area including Moore, killing 3 people and injuring over 80 others.</li>
+</ul>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="idss">
+<h2 class="section">Decision Support</h2>
+
+<div>&nbsp;</div>
+
+<p align="left">Immediately after the Moore EF-5 event, the city of Moore and Cleveland county emergency management officials quickly set up an Incident Command (IC) Post in the parking lot of the Warren Theater.&nbsp; The NWS office was in immediate contact with the Moore IC using the 800 mHZ radio providing continuious weather updates and forecasts. The following day (Tuesday May 21st), the NWS office provided a forecaster on site at the Moore IC, which was then moved to the Fire Station on SW 19th.&nbsp; The Moore IC was staffed with a NWS meteorologist from Tuesday - Saturday, providing on site weather support to the Incident Commanders and First Responders.&nbsp; The following meteorolgists took turns serving the IC, Lead Forecaster Scott Curl, General Forecaster Bruce Thoren, and Lead Forecaster Michael Scotten.&nbsp; These meteorologists were the liaison between the meteorologists at the forecast office and the IC.&nbsp; They staffed the IC for 12 hour shifts from 7am to 7pm.&nbsp; Here are some of the photos they collected during there time at the Command Post.</p>
+
+<p align="left">Checkout the Incident Command Structure <strong><a class="textlink" href="/media/oun/wxevents/20130520/ICSOrganization.pdf" target="_blank">here</a></strong>, courtesy of FEMA.</p>
+
+<div align="center" style="font-weight: bold;"><img alt="Command Post Wednesday, May 22nd. (Photo by Bruce Thoren, NWS)" class="magnify" data-magnifyby="2.0" src="/images/oun/wxevents/20130520/bruce_command.jpg" style="border-width: 1px; border-style: solid; width: 900px; height: 672px;" /><br />
+Command Post Wednesday, May 22nd. (Photo by Bruce Thoren, NWS)</div>
+
+<div>&nbsp;</div>
+
+<div align="center" style="font-weight: bold;"><img alt="Command Post on Thursday May 23rd. (Photo by Michael Scotten, NWS)" class="magnify" data-magnifyby="2.0" src="/images/oun/wxevents/20130520/Image1MooreIncidentCommand.jpg" style="border-width: 1px; border-style: solid; width: 900px; height: 676px;" /><br />
+Command Post on Thursday May 23rd. (Photo by Michael Scotten, NWS)</div>
+
+<div>&nbsp;</div>
+
+<div align="center" style="font-weight: bold;"><img alt="Mobile version of the NWS Advanced Weather Interactive Processing System II (AWIPS II). (Photo by Michael Scotten, NWS)" class="magnify" data-magnifyby="2.0" src="/images/oun/wxevents/20130520/awips2_mobile.jpg" style="border-width: 1px; border-style: solid; width: 900px; height: 676px;" /><br />
+Mobile version of the NWS Advanced Weather Interactive Processing System II (AWIPS II).<br />
+(Photo by Michael Scotten, NWS)</div>
+
+<div>&nbsp;</div>
+
+<div align="center" style="font-weight: bold;"><img alt="Incident Command Post Thursday May 23rd. (Photo by Michael Scotten, NWS)" class="magnify" data-magnifyby="2.0" src="/images/oun/wxevents/20130520/Image2MooreIncidentCommand.jpg" style="border-width: 1px; border-style: solid; width: 900px; height: 676px;" /><br />
+Incident Command Post Thursday May 23rd. (Photo by Michael Scotten, NWS)</div>
+
+<div>&nbsp;</div>
+
+<div align="center" style="font-weight: bold;"><img alt="Sample Activity Log for the Incident Meteorologist (Photo by Michael Scotten, NWS)" src="/images/oun/wxevents/20130520/moore_activitylog.jpg" style="border-width: 1px; border-style: solid; width: 600px; height: 800px;" /><br />
+Sample Activity Log for the Incident Meteorologist (Photo by Michael Scotten, NWS)</div>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="ef5">
+<h2 class="section">The May 20, 2013 Newcastle-South Oklahoma City-Moore EF-5 Tornado</h2>
+
+<div>&nbsp;</div>
+
+<p align="center" class="synopsis"><img alt="Photo of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado was provided courtesy of Gabe Garfield." class="magnify" data-magnifyby="1.3" src="/images/oun/wxevents/20130520/photos/tornadoes/20130520-moore-garfield2.jpg" style="border-width: 1px; border-style: solid; margin-top: 5px; margin-bottom: 5px; width: 900px; height: 600px;" /><br />
+<strong>Photo of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado was provided courtesy of Gabe Garfield.</strong></p>
+
+<h2 class="section">Damage Path Maps</h2>
+
+<div>&nbsp;</div>
+
+<p>Below are images with the preliminary damage path of the Newcastle-South OKC-Moore EF-5 Tornado. Contours delineate the extent of EF-0 (light blue), EF-1 (green), EF-2 (yellow), EF-3 (orange), and EF-4 (red), and EF-5 (magenta) damage from the survey.</p>
+
+<div>&nbsp;</div>
+
+<div align="left"><img alt="EF Scale Damage Contours of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado" class="magnify" data-magnifyby="2.0" src="/images/oun/wxevents/20130520/maps/20130520-ef5-tornado-path.jpg" style="border-width: 1px; border-style: solid; width: 900px; height: 514px;" title="EF Scale Damage Contours of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado" /></div>
+
+<div>&nbsp;</div>
+
+<div align="left"><img alt="EF Scale Damage Contours of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado" class="magnify" data-magnifyby="2.0" src="/images/oun/wxevents/20130520/maps/20130520-ef5-tornado-sat-path.jpg" style="border-width: 1px; border-style: solid; width: 900px; height: 592px;" title="EF Scale Damage Contours of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado" /></div>
+
+<div>&nbsp;</div>
+
+<h2 class="section">Overview</h2>
+
+<div>&nbsp;</div>
+
+<p align="left">A tornado outbreak occurred during the afternoon and evening hours of the May 20, 2013. Several tornadoes occurred from central Oklahoma down through south central Oklahoma near the Red River. The strongest tornado touched down near Newcastle and traveled through Moore and south Oklahoma City. This tornado caused catastrophic damage in these areas, with a maximum rating of EF-5. The tornado claimed 24 lives and caused billions of dollars in damage. In addition to the tornadoes, large hail and damaging winds cause damage in many areas.</p>
+
+<p align="left">The violent Newcastle-South OKC-Moore tornado was first observed at 1:56 PM CST (2:56 PM CDT) developing about one-half mile south of Oklahoma State Highway 37 in northwest Newcastle to the east of Rockwell Avenue. EF-4 damage was observed soon after the tornado crossed State Highway 37. The tornado continued to expand in size as it approached the Canadian River and moved into Cleveland County.</p>
+
+<p align="left">The tornado then moved into Cleveland County at 2:04 PM CST from McClain County as it moved northeast across the Canadian River near U.S. Interstate Highway 44. The tornado then turned more east and then east-northeast after crossing I-44. Violent EF-4 damage was again observed as it began to move into progressively higher density residential areas approaching May Avenue.</p>
+
+<p align="left">The center of the large tornado path passed near SW 149th Street and Western Avenue. After crossing Western Avenue, numerous buildings were destroyed and horses killed at Orr Family Farm. Two storage tanks estimated to weigh approximately 10 tons were lifted from Orr Family Farm and landed about one-half mile east.</p>
+
+<p align="left">Moving east, the tornado destroyed much of Briarwood Elementary School, where the NWS storm survey team rated damage as EF-5. Despite the destruction of this elementary school during school hours, no fatalities occurred at the school. As the tornado continued to move east and east-northeast, it moved through much more densely populated suburban neighborhoods of southwest Oklahoma City and Moore where violent destruction was widespread.</p>
+
+<p align="left">The width of EF-4 and greater damage was up to 250 yards wide as the tornado moved through neighborhoods east of Western Avenue. The first two fatalities occurred in a house in the neighborhood just east of Briarwood Elementary, with another fatality in a house as the tornado approached Santa Fe Avenue.</p>
+
+<p align="left">After crossing Santa Fe Avenue, the tornado moved through more suburban neighborhoods and toward Plaza Towers Elementary School. Damage to the school was extensive and seven children were killed when a wall collapsed at the school. Nine other people were killed in eight different neighborhood homes within one-quarter mile of Plaza Towers Elementary, most occurring just south of the school.</p>
+
+<p align="left">The tornado turned northeast as it approached Telephone Road, made a loop near the intersection of Telephone Road and 4th Street, then moved southeast crossing the interstate. Three people were killed when a convenience store along Telephone Road was destroyed. Crossing Telephone Road, the tornado inflicted significant damage to the Moore Medical Center, a post office and numerous businesses along Telephone Road and U.S. Interstate Highway 35.</p>
+
+<p align="left">Although the tornado was more narrow after crossing I-35, it continued to produce EF-4 damage in neighborhoods east of the interstate as it curved east and then again east-northeast. One fatality occurred at a business just east of the interstate, and one final fatality occurred in a home between Eastern Avenue and Bryant Avenue. Consistent EF-4 damage continued until the tornado passed SE 4th Street just east of Bryant Avenue.</p>
+
+<p align="left">Moving east from Bryant Avenue, the tornado continued to produce EF-2 damage with isolated EF-4 damage noted. The density of housing also decreased east of Bryant as the tornado moved east and east-northeast before dissipating at 2:35 PM CST east of Air Depot Blvd. between SE 119th Street and SE 134th Street in southeast Oklahoma City. Overall, over 300 homes experienced EF-4/EF-5 damage along the tornado path.</p>
+
+<div>&nbsp;</div>
+<!-- <h2 class="section">EF Scale Map</h2>
+
+<div>&nbsp;</div>
+
+<p align="left">Below is a map with the preliminary damage path of the Newcastle-Moore-South OKC tornado. Contours delineate the extent of EF-0 (light blue), EF-1 (green), EF-2 (yellow), EF-3 (orange), EF-4 (red), and EF-5 (purple) damage from the survey.</p>
+
+<div id="map" style="height: 400px; width: 780px; border-width: 1px; border-style: solid;">&nbsp;</div>
+
+<div>&nbsp;</div> -->
+
+<h2 class="section">Radar Imagery</h2>
+
+<div>&nbsp;</div>
+
+<h2 class="section">Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5 Tornado</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5" src="/images/oun/wxevents/20130520/radar/ktlx-moore-loop.gif" style="border-width: 1px; border-style: solid; width: 900px; height: 634px;" /></div>
+
+<div>&nbsp;</div>
+
+<h2 class="section">Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013" src="/images/oun/wxevents/20130520/radar/newcastle-moore-ref.gif" style="border-width: 1px; border-style: solid; width: 900px; height: 628px;" /></div>
+
+<div>&nbsp;</div>
+
+<h2 class="section">Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013" src="/images/oun/wxevents/20130520/radar/newcastle-moore-srv.gif" style="border-width: 1px; border-style: solid; width: 900px; height: 628px;" /></div>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="timeline">
+<h2 class="section">Event Timeline</h2>
+
+<div>&nbsp;</div>
+
+<table border="1" cellpadding="0" cellspacing="0" class="chronfill" width="900">
+	<tbody>
+		<tr>
+			<td class="timeheader">TIME</td>
+			<td class="infoheader" colspan="2">INFORMATION</td>
+			<td class="timeheader">TIME</td>
+			<td class="infoheader" colspan="2">INFORMATION</td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:48 AM</td>
+			<td class="graphicast2"><img alt="Graphicast" src="/images/oun/wxevents/chronology/icons/graphicast.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="graphicast"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/248am.jpg" onclick="window.open(this.href,'graphicastmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=1280,height=900,status'); return false">Graphicast</a></td>
+			<td class="eventtime">2:39 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336566903143288832">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">5:00 AM</td>
+			<td class="hwoprod2"><img alt="HWO" src="/images/oun/wxevents/chronology/icons/hwoprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="hwoprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=HWOOUN&amp;e=201305201000">Hazardous Weather Outlook</a></td>
+			<td class="eventtime">2:40 PM</td>
+			<td class="torprod2"><img alt="TOR" src="/images/oun/wxevents/chronology/icons/torprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="torprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=TOROUN&amp;e=201305201940">Tornado Warning</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">5:21 AM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/photo.php?fbid=570120419675556&amp;set=a.189768787710723.38125.189527004401568&amp;type=1&amp;relevant_count=1">Facebook</a></td>
+			<td class="eventtime">2:41 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336567340282032128">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">5:34 AM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336429675008122881">Twitter</a></td>
+			<td class="eventtime">2:45 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570310266323238">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">7:50 AM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336463945219047424">Twitter</a></td>
+			<td class="eventtime">2:46 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336568616914927616">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">7:52 AM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570171213003810">Facebook</a></td>
+			<td class="eventtime">2:47 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat11.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">8:13 AM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/photo.php?fbid=570177773003154&amp;set=a.189768787710723.38125.189527004401568&amp;type=1&amp;relevant_count=1">Facebook</a></td>
+			<td class="eventtime">2:47 PM</td>
+			<td class="svsprod2"><img alt="SVS" src="/images/oun/wxevents/chronology/icons/svsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVSOUN&amp;e=201305201947">Severe Weather Statement</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">8:51 AM</td>
+			<td class="graphicast2"><img alt="Graphicast" src="/images/oun/wxevents/chronology/icons/graphicast.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="graphicast"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/851am.jpg" onclick="window.open(this.href,'graphicastmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=1280,height=900,status'); return false">Graphicast</a></td>
+			<td class="eventtime">2:51 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570311759656422">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">9:47 AM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336493478823469056">Twitter</a></td>
+			<td class="eventtime">2:52 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336570159751909376">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">10:15 AM</td>
+			<td class="hwoprod2"><img alt="HWO" src="/images/oun/wxevents/chronology/icons/hwoprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="hwoprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=HWOOUN&amp;e=201305201515">Hazardous Weather Outlook</a></td>
+			<td class="eventtime">2:53 PM</td>
+			<td class="svsprod2"><img alt="SVS" src="/images/oun/wxevents/chronology/icons/svsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVSOUN&amp;e=201305201953">Severe Weather Statement</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">10:27 AM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336503414961864705">Twitter</a></td>
+			<td class="eventtime">2:56 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336571087901048832">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">10:29 AM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat1.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+			<td class="eventtime">2:56 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat12.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">11:08 AM</td>
+			<td class="graphicast2"><img alt="Graphicast" src="/images/oun/wxevents/chronology/icons/graphicast.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="graphicast"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/1108am.jpg" onclick="window.open(this.href,'graphicastmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=1280,height=900,status'); return false">Graphicast</a></td>
+			<td class="eventtime">2:56 PM</td>
+			<td class="svsprod2"><img alt="SVS" src="/images/oun/wxevents/chronology/icons/svsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVSOUN&amp;e=201305201956">Severe Weather Statement</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">11:17 AM</td>
+			<td class="graphicast2"><img alt="Graphicast" src="/images/oun/wxevents/chronology/icons/graphicast.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="graphicast"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/1117am.jpg" onclick="window.open(this.href,'graphicastmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=1280,height=900,status'); return false">Graphicast</a></td>
+			<td class="eventtime">2:57 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336571518807064576">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">11:23 AM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336517613922439168">Twitter</a></td>
+			<td class="eventtime">3:00 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat13.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">11:23 AM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570245179663080">Facebook</a></td>
+			<td class="eventtime">3:00 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336572151270371328">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">11:31 AM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat2.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+			<td class="eventtime">3:01 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat13.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">11:52 AM</td>
+			<td class="pnsprod2"><img alt="PNS" src="/images/oun/wxevents/chronology/icons/pnsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="pnsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=PNSOUN&amp;e=201305201652">PNS - Safety Guidelines</a></td>
+			<td class="eventtime">3:01 PM</td>
+			<td class="torprod2"><img alt="TOR" src="/images/oun/wxevents/chronology/icons/torprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="torprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=TOROUN&amp;e=201305202001">Tornado Warning</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">12:07 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat3.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+			<td class="eventtime">3:01 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336572377527898113">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">12:08 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336528916959338497">Twitter</a></td>
+			<td class="eventtime">3:02 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570315236322741">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">12:30 PM</td>
+			<td class="hwoprod2"><img alt="HWO" src="/images/oun/wxevents/chronology/icons/hwoprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="hwoprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=HWOOUN&amp;e=201305201730">Hazardous Weather Outlook</a></td>
+			<td class="eventtime">3:03 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336572830160408576">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">12:30 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336534465075613696">Twitter</a></td>
+			<td class="eventtime">3:04 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336573124042702848">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">12:31 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570272016327063">Facebook</a></td>
+			<td class="eventtime">3:05 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570316159655982">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">12:58 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336541525985079297">Twitter</a></td>
+			<td class="eventtime">3:09 PM</td>
+			<td class="svsprod2"><img alt="SVS" src="/images/oun/wxevents/chronology/icons/svsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVSOUN&amp;e=201305202009">Severe Weather Statement</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">1:04 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat4.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+			<td class="eventtime">3:14 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336575644685180929">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">1:20 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336547086478745603">Twitter</a></td>
+			<td class="eventtime">3:16 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/photo.php?fbid=570319496322315&amp;set=a.189768787710723.38125.189527004401568&amp;type=1&amp;relevant_count=1">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">1:23 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336547621957160962">Twitter</a></td>
+			<td class="eventtime">3:19 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570320669655531">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">1:30 PM</td>
+			<td class="graphicast2"><img alt="Graphicast" src="/images/oun/wxevents/chronology/icons/graphicast.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="graphicast"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/130pm.jpg" onclick="window.open(this.href,'graphicastmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=1280,height=900,status'); return false">Graphicast</a></td>
+			<td class="eventtime">3:19 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336576816896700417">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">1:50 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336554466717339649">Twitter</a></td>
+			<td class="eventtime">3:21 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336577325221179392">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">1:58 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336556494642364418">Twitter</a></td>
+			<td class="eventtime">3:21 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570321192988812">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:03 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat7.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+			<td class="eventtime">3:22 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336577791833276416">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:09 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336559357393268736">Twitter</a></td>
+			<td class="eventtime">3:23 PM</td>
+			<td class="svsprod2"><img alt="SVS" src="/images/oun/wxevents/chronology/icons/svsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVSOUN&amp;e=201305202023">Severe Weather Statement</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:11 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat8.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+			<td class="eventtime">3:26 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336578678181990400">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:11 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570301619657436">Facebook</a></td>
+			<td class="eventtime">3:29 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336579547308892160">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:12 PM</td>
+			<td class="svrprod2"><img alt="SVR" src="/images/oun/wxevents/chronology/icons/svrprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svrprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVROUN&amp;e=201305201912">Severe Thunderstorm Warning</a></td>
+			<td class="eventtime">3:32 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/photo.php?fbid=570323946321870&amp;set=a.189768787710723.38125.189527004401568&amp;type=1&amp;relevant_count=1">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:13 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336560264432463872">Twitter</a></td>
+			<td class="eventtime">3:33 PM</td>
+			<td class="svsprod2"><img alt="SVS" src="/images/oun/wxevents/chronology/icons/svsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVSOUN&amp;e=201305202033">Severe Weather Statement</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:23 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570304712990460">Facebook</a></td>
+			<td class="eventtime">3:34 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336580634107580416">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:24 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336563113778356227">Twitter</a></td>
+			<td class="eventtime">3:35 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336580857580101632">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:26 PM</td>
+			<td class="svsprod2"><img alt="SVS" src="/images/oun/wxevents/chronology/icons/svsprod.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="svsprod"><a class="textlink" href="https://mesonet.agron.iastate.edu/wx/afos/p.php?pil=SVSOUN&amp;e=201305201926">Severe Weather Statement</a></td>
+			<td class="eventtime">3:37 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336581345398640641">Twitter</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:31 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570306766323588">Facebook</a></td>
+			<td class="eventtime">3:39 PM</td>
+			<td class="facebook2"><img alt="Facebook" src="/images/oun/wxevents/chronology/icons/facebook.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="facebook"><a class="textlink" href="https://www.facebook.com/189527004401568/posts/570326212988310">Facebook</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:31 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336565520369328128">Twitter</a></td>
+			<td class="eventtime">3:39 PM</td>
+			<td class="nwschat2"><img alt="NWSChat" src="/images/oun/wxevents/chronology/icons/nwschat.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="nwschat"><a class="textlink" href="/images/oun/wxevents/20130520/chronology/chat14.JPG" onclick="window.open(this.href,'nwschatmap','resizable=yes,location=no,menubar=no,scrollbars=no,status=no,toolbar=no,fullscreen=no,dependent=no,width=545,height=50,status'); return false">NWSChat</a></td>
+		</tr>
+		<tr>
+			<td class="eventtime">2:34 PM</td>
+			<td class="twitter2"><img alt="Twitter" src="/images/oun/wxevents/chronology/icons/twitter.jpg" style="border-width: 0px; border-style: solid; margin: 0px; width: 30px; height: 30px;" /></td>
+			<td class="twitter"><a class="textlink" href="https://twitter.com/NWSNorman/status/336565520369328128">Twitter</a></td>
+			<td class="eventtime">&nbsp;</td>
+			<td class="nwschat2">&nbsp;</td>
+			<td class="nwschat">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="tornadodata">
+<h2 class="section">Tornado Data</h2>
+
+<div>&nbsp;</div>
+
+<p align="left">Surveys conducted by crews in the NWS Norman and NWS Tulsa forecast areas revealed that 15 tornadoes occurred during the afternoon and evening of May 20, 2013. A total of 5 tornadoes occurred in the NWS Norman forecast area in McClain, Cleveland, Lincoln,&nbsp; Stephens, and Coal Counties in central and southern Oklahoma. A total of 10 tornadoes occurred in the NWS Tulsa forecast area in Osage, Washington, Rogers, Ottawa, Adair, and Le Flore Counties in eastern Oklahoma.</p>
+
+<table border="2" cellpadding="5" cellspacing="0" class="bodytable" width="100%">
+	<tbody>
+		<tr class="data">
+			<th class="tornadodataheader" width="5%">#</th>
+			<th class="tornadodataheader" width="10%">Date</th>
+			<th class="tornadodataheader" width="10%">Time<br />
+			(CST)</th>
+			<th class="tornadodataheader" width="5%">Path<br />
+			Length<br />
+			(miles)</th>
+			<th class="tornadodataheader" width="5%">Path<br />
+			Width<br />
+			(yards)</th>
+			<th class="tornadodataheader" width="5%">F-Scale</th>
+			<th class="tornadodataheader" width="5%">Killed</th>
+			<th class="tornadodataheader" width="5%">Injured</th>
+			<th class="tornadodataheader" width="15%">County</th>
+			<th class="tornadodataheader" width="35%">Path</th>
+		</tr>
+		<tr class="data">
+			<th class="topcen">1</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1356-1435</td>
+			<td class="topcen">14</td>
+			<td class="topcen">1900</td>
+			<th class="ef5">EF5</th>
+			<th class="topcen">24</th>
+			<th class="topcen">212</th>
+			<td class="torcounty">McClain/ Cleveland</td>
+			<td class="torpath">Newcastle (3 NW US-277/SH-130) - 3 WNW Stanley Draper Lake Dam</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">2</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1358-1401</td>
+			<td class="topcen">1</td>
+			<td class="topcen">30</td>
+			<th class="ef0">EF0</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Stephens</td>
+			<td class="torpath">7 SSE Marlow</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">3</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1407-1422</td>
+			<td class="topcen">4</td>
+			<td class="topcen">200</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Stephens</td>
+			<td class="torpath">4 SSE Marlow - 4 W Bray</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">4</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1451-1505</td>
+			<td class="topcen">6.5</td>
+			<td class="topcen">500</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Osage/ Washington</td>
+			<td class="torpath">4.5 S Avant - 5.3 W Vera</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">5</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1521-1530</td>
+			<td class="topcen">4.5</td>
+			<td class="topcen">400</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Washington</td>
+			<td class="torpath">3 SSE - 5 E Ramona</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">6</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1533-1547</td>
+			<td class="topcen">6</td>
+			<td class="topcen">500</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Washington/ Rogers</td>
+			<td class="torpath">5.6 ENE Ramona - 3.9 NNW Talala</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">7</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1540-1542</td>
+			<td class="topcen">1.2</td>
+			<td class="topcen">100</td>
+			<th class="ef0">EF0</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Lincoln</td>
+			<td class="torpath">6 NE Meeker - 3.1 SSE Sparks</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">8</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1725-1740</td>
+			<td class="topcen">10</td>
+			<td class="topcen">800</td>
+			<th class="ef2">EF2</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Ottawa</td>
+			<td class="torpath">3.6 SW Ottawa - 3.9 ENE Wyandotte</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">9</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1732-1743</td>
+			<td class="topcen">9</td>
+			<td class="topcen">600</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Ottawa/ Newton MO</td>
+			<td class="torpath">2.4 WNW Wyandotte - 1 SSW Seneca MO</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">10</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1732-1734</td>
+			<td class="topcen">2</td>
+			<td class="topcen">150</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Adair</td>
+			<td class="torpath">2 SE Proctor - 1.9 WNW Christie</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">11</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1735-1737</td>
+			<td class="topcen">2.5</td>
+			<td class="topcen">300</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Adair</td>
+			<td class="torpath">1.7 WSW - 1.3 N Christie</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">12</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1740-1747</td>
+			<td class="topcen">8</td>
+			<td class="topcen">500</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Adair/ Washington AR</td>
+			<td class="torpath">1.2 NE Addielee OK - 2.2 NNW Cincinnati AR</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">13</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1749-1757</td>
+			<td class="topcen">6</td>
+			<td class="topcen">250</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Coal</td>
+			<td class="torpath">4 WSW - 2 E Lehigh</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">14</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1933-1934</td>
+			<td class="topcen">0.7</td>
+			<td class="topcen">260</td>
+			<th class="ef0">EF0</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Le Flore</td>
+			<td class="torpath">2.1 S - 1.8 SSE Milton</td>
+		</tr>
+		<tr class="data">
+			<th class="topcen">15</th>
+			<td class="tordate">05/20/2013</td>
+			<td class="tortime">1944-1955</td>
+			<td class="topcen">8.5</td>
+			<td class="topcen">500</td>
+			<th class="ef1">EF1</th>
+			<td class="topcen">0</td>
+			<td class="topcen">0</td>
+			<td class="torcounty">Le Flore</td>
+			<td class="torpath">0.7 ENE Neff - 1.8 S Rock Island</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="stormdata">
+<h2 class="section">Storm Data</h2>
+
+<div>&nbsp;</div>
+
+<div align="left" style="font-size: 10pt;">The official NWS Norman storm data report for May 2013 is available <a class="textlink" href="/media/oun/stormdata/oun201305.pdf" target="_blank">here</a>.</div>
+
+<div align="left" style="font-size: 10pt;">The official NWS Tulsa storm data report for May 2013 is available <a class="textlink" href="/media/tsa/stormdata/tsamay13.pdf" target="_blank">here</a>.</div>
+
+<div>&nbsp;</div>
+
+<h2 align="left" class="section">Preliminary Storm Reports on May 20, 2013 Compiled by the Storm Prediction Center</h2>
+
+<div>&nbsp;</div>
+
+<div align="left"><a class="textlink" href="https://www.spc.noaa.gov/climo/reports/130520_rpts.html" target="_blank"><img alt="Preliminary Storm Reports for 5/20/2013 Compiled by the Storm Prediction Center" src="https://www.spc.noaa.gov/climo/reports/130520_rpts.gif" style="border-width: 2px; border-style: solid; width: 644px; height: 488px;" title="Preliminary Storm Reports for 5/20/2013 Compiled by the Storm Prediction Center" /></a><br />
+<strong><a class="textlink" href="https://www.spc.noaa.gov/climo/reports/130520_rpts.html" target="_blank">Preliminary Storm Reports for 5/20/2013 Compiled by the Storm Prediction Center</a></strong></div>
+
+<div>&nbsp;</div>
+
+<h2 align="left" class="section">Preliminary Storm Reports on May 20, 2013 from NWS Norman</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Local Storm Reports Map for May 20-21, 2013 Severe Weather and Tornado Outbreak in the NWS Norman Forecast Area" class="magnify" data-magnifyby="1.4" src="/images/oun/wxevents/20130520/maps/20130520-reports.png" style="height: 900px; width: 900px; border-width: 1px; border-style: solid;" title="Local Storm Reports Map for May 20-21, 2013 Severe Weather and Tornado Outbreak in the NWS Norman Forecast Area" /><br />
+<strong>Local Storm Reports Map for May 20-21, 2013 Severe Weather and Tornado Outbreak in the NWS Norman Forecast Area</strong></div>
+
+<div>&nbsp;</div>
+
+<div align="left">
+<table border="0">
+	<tbody>
+		<tr>
+			<td align="left">
+			<pre>
+PRELIMINARY LOCAL STORM REPORT...CORRECTED
+NATIONAL WEATHER SERVICE NORMAN OK
+858 PM CDT WED MAY 22 2013
+
+..TIME...   ...EVENT...      ...CITY LOCATION...     ...LAT.LON...
+..DATE...   ....MAG....      ..COUNTY LOCATION..ST.. ...SOURCE....
+            ..REMARKS..
+
+0154 PM     HAIL             6 N MARLOW              34.73N 97.96W 
+05/20/2013  E1.75 INCH       GRADY              OK   PUBLIC          
+
+0156 PM     HAIL             1 S RUSH SPRINGS        34.76N 97.96W 
+05/20/2013  E1.00 INCH       GRADY              OK   EMERGENCY MNGR  
+
+0202 PM     HAIL             6 W DUNCAN              34.52N 98.07W 
+05/20/2013  E1.00 INCH       STEPHENS           OK   AMATEUR RADIO   
+
+0215 PM     HAIL             1 W SHEPPARD AFB        33.98N 98.52W 
+05/20/2013  E1.25 INCH       WICHITA            TX   TRAINED SPOTTER 
+
+0220 PM     HAIL             SHEPPARD AFB            33.98N 98.50W 
+05/20/2013  E1.75 INCH       WICHITA            TX   TRAINED SPOTTER 
+
+0227 PM     HAIL             YUKON                   35.51N 97.75W 
+05/20/2013  E3.25 INCH       CANADIAN           OK   NEWSPAPER       
+
+0228 PM     HAIL             WILL ROGERS AIRPORT     35.39N 97.60W 
+05/20/2013  E1.00 INCH       OKLAHOMA           OK   NWS EMPLOYEE    
+
+0256 PM     TORNADO          NEWCASTLE               35.25N 97.60W 
+05/20/2013                   MCCLAIN            OK   BROADCAST MEDIA 
+
+            LIFTED AROUND 336 PM. ESTIMATED PATH LENGTH OF 20 MILES 
+            THRU NEWCASTLE, MOORE, AND SOUTH OKC. PRELIMINARY DAMAGE 
+            RATING OF AT LEAST EF4.
+
+0306 PM     HAIL             3 NNW MOORE             35.38N 97.50W 
+05/20/2013  E2.50 INCH       OKLAHOMA           OK   TRAINED SPOTTER 
+
+0412 PM     HAIL             WILL ROGERS AIRPORT     35.39N 97.60W 
+05/20/2013  M2.00 INCH       OKLAHOMA           OK   OFFICIAL NWS OBS
+
+0415 PM     HAIL             WAURIKA                 34.17N 98.00W 
+05/20/2013  E1.00 INCH       JEFFERSON          OK   PUBLIC          
+
+0430 PM     TORNADO          1 W MEEKER              35.50N 96.91W 
+05/20/2013                   LINCOLN            OK   BROADCAST MEDIA 
+
+            REPORTED BY KWTV
+
+0436 PM     HAIL             WHITEBEAD               34.77N 97.30W 
+05/20/2013  E1.75 INCH       GARVIN             OK   AMATEUR RADIO   
+
+0440 PM     HAIL             WICHITA FALLS           33.91N 98.50W 
+05/20/2013  E1.75 INCH       WICHITA            TX   PUBLIC          
+
+0445 PM     HAIL             CORNISH                 34.16N 97.60W 
+05/20/2013  E2.50 INCH       JEFFERSON          OK   PUBLIC          
+
+0452 PM     HAIL             6 W STRATFORD           34.80N 97.07W 
+05/20/2013  E1.75 INCH       GARVIN             OK   PUBLIC          
+
+0453 PM     HAIL             WICHITA FALLS           33.91N 98.50W 
+05/20/2013  E1.75 INCH       WICHITA            TX   PUBLIC          
+
+            5 MILES WEST OF FISHER RD
+
+0543 PM     HAIL             2 SSE TURNER FALLS      34.40N 97.14W 
+05/20/2013  E1.00 INCH       MURRAY             OK   EMERGENCY MNGR  
+
+0545 PM     TSTM WND DMG     GENE AUTRY              34.28N 97.04W 
+05/20/2013                   CARTER             OK   EMERGENCY MNGR  
+
+            EM REPORTS ROOF BLOWN OFF OF OLD GENE AUTRY GYM.
+
+0630 PM     HAIL             HENRIETTA               33.82N 98.19W 
+05/20/2013  E1.00 INCH       CLAY               TX   AMATEUR RADIO   
+
+0639 PM     TSTM WND GST     2 WNW WAPANUCKA         34.38N 96.46W 
+05/20/2013  M80.00 MPH       JOHNSTON           OK   TRAINED SPOTTER 
+
+            SPOTTER REPORTED TREE BRANCHES DOWN IN AREA
+
+0800 PM     TSTM WND DMG     1 W DURANT              33.99N 96.39W 
+05/20/2013                   BRYAN              OK   EMERGENCY MNGR  
+
+            EMERGENCY MANAGEMENT REPORTS TREES DOWN AND POWER LINE 
+            DOWN IN WESTERN DURANT.
+
+0805 PM     TSTM WND GST     7 WNW ARDMORE           34.21N 97.24W 
+05/20/2013  M62.00 MPH       CARTER             OK   MESONET         
+
+0824 PM     HAIL             MARIETTA                33.93N 97.12W 
+05/20/2013  E1.00 INCH       LOVE               OK   EMERGENCY MNGR  
+
+0909 PM     HAIL             4 S LITTLE CITY         34.02N 96.62W 
+05/20/2013  E2.75 INCH       MARSHALL           OK   PUBLIC          
+
+0958 PM     HAIL             7 NNW DURANT            34.08N 96.42W 
+05/20/2013  E1.00 INCH       BRYAN              OK   EMERGENCY MNGR  
+
+            AT INTERSECTION OF SH-22 AND ALBERT PIKE ROAD
+
+1025 PM     HAIL             GERONIMO                34.48N 98.38W 
+05/20/2013  E1.75 INCH       COMANCHE           OK   FIRE DEPT/RESCUE
+
+1025 PM     HAIL             2 SW GERONIMO           34.46N 98.41W 
+05/20/2013  E1.25 INCH       COMANCHE           OK   TRAINED SPOTTER 
+
+1126 PM     HAIL             DUNCAN                  34.52N 97.97W 
+05/20/2013  E1.25 INCH       STEPHENS           OK   LAW ENFORCEMENT 
+
+            AT STEPHENS COUNTY FAIRGROUNDS
+
+1127 PM     HAIL             WYNNEWOOD               34.64N 97.16W 
+05/20/2013  E1.00 INCH       GARVIN             OK   PUBLIC          
+
+            PUBLIC REPORTED HAIL COVERING GROUND...DIMES TO QUARTERS.
+
+
+1134 PM     HAIL             EMPIRE CITY             34.46N 98.04W 
+05/20/2013  E1.75 INCH       STEPHENS           OK   BROADCAST MEDIA 
+
+            FROM KSWO
+
+1226 AM     HAIL             ADA                     34.78N 96.66W 
+05/21/2013  E1.00 INCH       PONTOTOC           OK   BROADCAST MEDIA 
+
+1230 AM     HAIL             ADA                     34.78N 96.66W 
+05/21/2013  E1.25 INCH       PONTOTOC           OK   PUBLIC          
+
+0400 AM     HAIL             1 E PURCELL             35.01N 97.35W 
+05/21/2013  E1.00 INCH       MCCLAIN            OK   NWS EMPLOYEE    
+
+0517 AM     TSTM WND GST     2 W CYRIL               34.90N 98.24W 
+05/21/2013  M77.00 MPH       CADDO              OK   AMATEUR RADIO   
+
+0520 AM     TSTM WND DMG     CYRIL                   34.90N 98.20W 
+05/21/2013                   CADDO              OK   EMERGENCY MNGR  
+
+            TREE DAMAGE AND POWERLINES DOWN.
+
+0525 AM     HAIL             CYRIL                   34.90N 98.20W 
+05/21/2013  M1.00 INCH       CADDO              OK   AMATEUR RADIO   
+
+0526 AM     TSTM WND DMG     CEMENT                  34.94N 98.14W 
+05/21/2013                   CADDO              OK   AMATEUR RADIO   
+
+            ROOF OFF OF BUILDING BY HIGHWAY 277...BLOCKING ROADWAY.
+
+0546 AM     HAIL             NINNEKAH                34.95N 97.92W 
+05/21/2013  E1.75 INCH       GRADY              OK   TRAINED SPOTTER 
+
+0549 AM     TSTM WND DMG     CEMENT                  34.94N 98.14W 
+05/21/2013                   CADDO              OK   AMATEUR RADIO   
+
+            TREES AND POWER LINES DOWN
+
+0550 AM     TSTM WND GST     2 NNW NINNEKAH          34.98N 97.93W 
+05/21/2013  M60.00 MPH       GRADY              OK   MESONET         
+
+0953 AM     HAIL             REED                    34.90N 99.68W 
+05/21/2013  E1.00 INCH       GREER              OK   EMERGENCY MNGR  
+
+1000 AM     HAIL             6 N MANGUM              34.97N 99.50W 
+05/21/2013  E1.75 INCH       GREER              OK   EMERGENCY MNGR  
+
+1016 AM     HAIL             1 S LONE WOLF           34.98N 99.25W 
+05/21/2013  E1.75 INCH       KIOWA              OK   AMATEUR RADIO   
+
+1017 AM     HAIL             GRANITE                 34.96N 99.38W 
+05/21/2013  E1.25 INCH       GREER              OK   PUBLIC          
+
+1019 AM     HAIL             LONE WOLF               34.99N 99.25W 
+05/21/2013  E1.75 INCH       KIOWA              OK   AMATEUR RADIO   
+
+1114 AM     HAIL             EAKLY                   35.31N 98.56W 
+05/21/2013  E1.75 INCH       CADDO              OK   AMATEUR RADIO   
+
+1120 AM     HAIL             BINGER                  35.31N 98.34W 
+05/21/2013  E1.75 INCH       CADDO              OK   AMATEUR RADIO   
+
+1140 AM     HAIL             2 E NILES               35.43N 98.21W 
+05/21/2013  E1.50 INCH       CANADIAN           OK   PUBLIC          
+
+0208 PM     FLASH FLOOD      ATOKA                   34.38N 96.13W 
+05/21/2013                   ATOKA              OK   PUBLIC          
+
+            900 BLK OF W 6TH STREET AND 700 BLK OF E 6TH STREET 
+            CLOSED DUE TO FLOODING. VIA PUBLIC WORKS
+
+0225 PM     FLASH FLOOD      7 NE COALGATE           34.61N 96.13W 
+05/21/2013                   COAL               OK   EMERGENCY MNGR  
+
+            WATER OVER ROADWAY HWY 37 AT KEEL CREEK BRIDGE
+
+
+&amp;&amp;
+
+$$
+
+JPIKE</pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<hr /></div>
+
+<div id="radar">
+<h2 class="section">Radar Imagery</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Regional Radar Reflectivity Loop with Watch and Warning Polygons from 2:00 pm CDT on May 20, 2013 to 2:00 am CDT on May 21, 2013 and Created Via the ISU Iowa Environmental Mesonet Website" class="magnify" data-magnifyby="1.4" src="/images/oun/wxevents/20130520/radar/20130520-radar-iemcow.gif" style="height: 648px; width: 900px; border-width: 1px; border-style: solid;" title="Regional Radar Reflectivity Loop with Watch and Warning Polygons from 2:00 pm CDT on May 20, 2013 to 2:00 am CDT on May 21, 2013 and Created Via the ISU Iowa Environmental Mesonet Website" /><br />
+<strong>Regional Radar Reflectivity Loop with Watch and Warning Polygons from 1:50 pm CDT on May 20, 2013<br />
+to 2:00 am CDT on May 21, 2013&nbsp;Created Via the <a class="textlink" href="https://mesonet.agron.iastate.edu/" target="_blank">ISU Iowa Environmental Mesonet website</a></strong></div>
+
+<div>&nbsp;</div>
+
+<h2 class="section">Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5 Tornado</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5" src="/images/oun/wxevents/20130520/radar/ktlx-moore-loop.gif" style="border-width: 1px; border-style: solid; width: 900px; height: 634px;" /></div>
+
+<div>&nbsp;</div>
+
+<h2 class="section">Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013" src="/images/oun/wxevents/20130520/radar/newcastle-moore-ref.gif" style="border-width: 1px; border-style: solid; width: 900px; height: 628px;" /></div>
+
+<div>&nbsp;</div>
+
+<h2 class="section">Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013</h2>
+
+<div>&nbsp;</div>
+
+<div align="center"><img alt="Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013" src="/images/oun/wxevents/20130520/radar/newcastle-moore-srv.gif" style="border-width: 1px; border-style: solid; width: 900px; height: 628px;" /></div>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="satellite">
+<h2 class="section">Satellite Imagery</h2>
+
+<div>&nbsp;</div>
+
+<h2 align="left" class="section">Visible Satellite Imagery</h2>
+
+<div>&nbsp;</div>
+
+<div align="left" style="width: 100%;"><img alt="Visible Satellite Imagery" class="magnify" data-magnifyby="2.1" src="/images/oun/wxevents/20130520/satellite/1350v1_20130521-Moore-GOES.png" style="border-width: 1px; border-style: solid; width: 900px; height: 507px; float: left;" /></div>
+
+<div align="left" style="width: 100%; font-weight: bold;">The above image shows three discrete anvil shields associated with supercell thunderstorms. The northern-most storm was the one that spawned the Newcastle-Moore EF-5 tornado. The second likely produced the tornadoes near Marlow and Bray.</div>
+
+<div>&nbsp;</div>
+
+<div align="left" style="width: 100%;"><img alt="Visible Satellite Imagery" class="magnify" data-magnifyby="1.2" src="/images/oun/wxevents/20130520/satellite/May20_SatLoop.gif" style="border-width: 1px; border-style: solid; height: 900px; width: 900px; float: left;" /></div>
+
+<div align="center" style="width: 100%; font-weight: bold;">The satellite loop above shows how rapidly supercells formed during the afternoon of May 20, 2013.</div>
+
+<div>&nbsp;</div>
+
+<div align="left" style="width: 100%;"><img alt="Visible Satellite Imagery" class="magnify" data-magnifyby="1.2" src="/images/oun/wxevents/20130520/satellite/20130520-satellite-vis-wfo.gif" style="border-width: 1px; border-style: solid; height: 720px; width: 900px; float: left;" /></div>
+
+<div align="center" style="width: 100%; font-weight: bold;">The satellite loop above shows rapid supercell growth during the afternoon of May 20, 2013.</div>
+
+<div>&nbsp;</div>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="475" src="https://www.youtube.com/embed/mNYO5n3aQp4" title="YouTube video player" width="900"></iframe>
+
+<div align="center" style="width: 100%; font-weight: bold;">Satellite Loop from the NOAA Visualizations YouTube Channel</div>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="multimedia">
+<h2 class="section">Storm Multimedia</h2>
+
+<div>&nbsp;</div>
+
+<h2 align="left" class="section">Tornado Photos</h2>
+
+<div>&nbsp;</div>
+
+<h2 align="left" class="section">Newcastle/Moore EF-5 Tornado</h2>
+
+<div>&nbsp;</div>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody>
+		<tr>
+			<td class="stormphoto50"><img alt="Newcastle/Moore EF-5 Tornado Photo Courtesy of Gabe Garfield" class="magnify" data-magnifyby="2.6" src="/images/oun/wxevents/20130520/photos/tornadoes/20130520-moore-garfield1.jpg" style="width: 450px; height: 300px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto50"><img alt="Newcastle/Moore EF-5 Tornado Photo Courtesy of Gabe Garfield" class="magnify" data-magnifyby="2.6" src="/images/oun/wxevents/20130520/photos/tornadoes/20130520-moore-garfield2.jpg" style="width: 450px; height: 300px; border-width: 1px; border-style: solid;" /></td>
+		</tr>
+		<tr>
+			<td class="stormphoto100" colspan="2">From Indian Hills Road looking North - Photos courtesy of Gabriel Garfield</td>
+		</tr>
+		<tr>
+			<td class="stormphoto100" colspan="2"><img alt="Newcastle/Moore EF-5 Tornado Photo Courtesy of Jenny Hamar" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/tornadoes/20130520-moore-hamar.jpg" style="width: 900px; height: 675px; border-width: 1px; border-style: solid;" /></td>
+		</tr>
+		<tr>
+			<td class="stormtopleft100" colspan="2"><strong>This photo was taken around 3:00 pm CDT on May 20, 2013 from Carrington Lane in the Carrington Place addition in northwest Norman, which is located between 36th Ave NW and 48th Ave NW, and south of Franklin Road. The view is looking northwest towards the corner of Franklin Road and 48th Ave NW. This photo was provided courtesy of Jenny Hamar.</strong></td>
+		</tr>
+	</tbody>
+</table>
+
+<div>&nbsp;</div>
+
+<h2 align="left" class="section">Operations Photos</h2>
+
+<div>&nbsp;</div>
+
+<h2 align="left" class="section">National Weather Service Photos from May 20, 2013</h2>
+
+<div>&nbsp;</div>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody>
+		<tr>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/DSC_6826_Moore_touchdown.jpg" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/Forrest.png" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/group.png" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+		</tr>
+		<tr>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/Jon1.png" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/jon2.png" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/Photo-2013-05-27-125758PM.jpg" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+		</tr>
+		<tr>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/Photo-2013-05-27-125803PM.jpg" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/Photo-2013-05-27-125811PM.jpg" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/Photo-2013-05-27-125818PM.jpg" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+		</tr>
+		<tr>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/rick.png" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/ryan.png" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+			<td class="stormphoto33"><img alt="May 20, 2013 NWS Norman Office Operations Photo" class="magnify" data-magnifyby="3.5" src="/images/oun/wxevents/20130520/photos/operations/scott.png" style="width: 300px; height: 171px; border-width: 1px; border-style: solid;" /></td>
+		</tr>
+	</tbody>
+</table>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+
+<div id="damage">
+<h2 class="section">Damage Photos</h2>
+
+<div>&nbsp;</div>
+
+<p align="left"><strong>The following photos show damage produced by the May 20, 2013 EF-5 tornado. These photos were taken by NWS meteorologist Doug Speheger during a damage survey of the Moore, OK area on May 21, 2013.</strong></p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking N at professional building at SW6/Classen" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2302-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking N at professional building at SW6/Classen" /><br />
+			Looking N at professional building at SW6/Classen</td>
+			<td class="stormphoto50"><img alt="Looking SW at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2304-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SW at Plaza Towers Elementary" /><br />
+			Looking SW at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking at damage at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2305-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking at damage at Plaza Towers Elementary" /><br />
+			Looking at damage at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="Looking SE at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2307-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at Plaza Towers Elementary" /><br />
+			Looking SE at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SW at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2308-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SW at Plaza Towers Elementary" /><br />
+			Looking SW at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2310-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2311-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2313-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2314-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of Briarwood Elementary School" /><br />
+			View of Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_2315-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of Briarwood Elementary School" /><br />
+			View of Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SSW at near Tinker Federal Credit Union and Warren Theatre" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9286-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SSW near Tinker Federal Credit Union and Warren Theatre" /><br />
+			Looking SSW at Tinker Federal Credit Union &amp; Warren Theatre</td>
+			<td class="stormphoto50"><img alt="Looking ENE at background: Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9287-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking ENE at background: Moore Medical Center" /><br />
+			Looking ENE at background: Moore Medical Center</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SW at Tinker Federal Credit Union" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9288-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SW at Tinker Federal Credit Union" /><br />
+			Looking SW at Tinker Federal Credit Union</td>
+			<td class="stormphoto50"><img alt="Looking S at west side of Tinker Federal Credit Union" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9289-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking S at west side of Tinker Federal Credit Union" /><br />
+			Looking S at west side of Tinker Federal Credit Union</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking S at west side of Tinker Federal Credit Union" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9290-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking S at west side of Tinker Federal Credit Union" /><br />
+			Looking S at west side of Tinker Federal Credit Union</td>
+			<td class="stormphoto50"><img alt="Looking NW at background: Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9291-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NW at background: Moore Medical Center" /><br />
+			Looking NW at background: Moore Medical Center</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SE at west side of Tinker Federal Credit Union" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9292-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at west side of Tinker Federal Credit Union" /><br />
+			Looking SE at west side of Tinker Federal Credit Union</td>
+			<td class="stormphoto50"><img alt="Looking NW at background: Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9293-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NW at background: Moore Medical Center" /><br />
+			Looking NW at background: Moore Medical Center</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking S at west side of Tinker Federal Credit Union" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9294-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking S at west side of Tinker Federal Credit Union" /><br />
+			Looking S at west side of Tinker Federal Credit Union</td>
+			<td class="stormphoto50"><img alt="Looking SE at west side of Tinker Federal Credit Union" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9295-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at west side of Tinker Federal Credit Union" /><br />
+			Looking SE at west side of Tinker Federal Credit Union</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9296-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+			<td class="stormphoto50"><img alt="Looking at Tinker Federal Credit Union" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9297-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking at Tinker Federal Credit Union" /><br />
+			Looking at Tinker Federal Credit Union</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking NW at west side of TFCU; Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9298-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NW at west side of TFCU; Moore Medical Center" /><br />
+			Looking NW at west side of TFCU; Moore Medical Center</td>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9301-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SSE at AMF Moore Lanes" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9302-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SSE at AMF Moore Lanes" /><br />
+			Looking SSE at AMF Moore Lanes</td>
+			<td class="stormphoto50"><img alt="Looking NW at Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9303-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NW at Moore Medical Center" /><br />
+			Looking NW at Moore Medical Center</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking NNW at Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9304-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NNW at Moore Medical Center" /><br />
+			Looking NNW at Moore Medical Center</td>
+			<td class="stormphoto50"><img alt="Looking N at Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9305-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking N at Moore Medical Center" /><br />
+			Looking N at Moore Medical Center</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking NW at Moore Medical Center" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9306-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NW at Moore Medical Center" /><br />
+			Looking NW at Moore Medical Center</td>
+			<td class="stormphoto50"><img alt="Looking N at professional building at SW6/Classen" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9307-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking N at professional building at SW6/Classen" /><br />
+			Looking NW at professional building at SW6/Classen</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking NNW at professional building at SW6/Classen" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9308-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NNW at professional building at SW6/Classen" /><br />
+			Looking NW at professional building at SW6/Classen</td>
+			<td class="stormphoto50"><img alt="Looking NW at professional building at SW6/Classen" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9309-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking NW at professional building at SW6/Classen" /><br />
+			Looking NW at professional building at SW6/Classen</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SE at 7-11 at SW4/Telephone" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9310-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at 7-11 at SW4/Telephone" /><br />
+			Looking SE at 7-11 at SW4/Telephone</td>
+			<td class="stormphoto50"><img alt="Looking SE at 7-11 at SW4/Telephone" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9311-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at 7-11 at SW4/Telephone" /><br />
+			Looking SE at 7-11 at SW4/Telephone</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking S at 7-11 at SW4/Telephone" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9312-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking S at 7-11 at SW4/Telephone" /><br />
+			Looking S at 7-11 at SW4/Telephone</td>
+			<td class="stormphoto50"><img alt="Looking W at 7-11 at SW4/Telephone" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9313-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking W at 7-11 at SW4/Telephone" /><br />
+			Looking W at 7-11 at SW4/Telephone</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SE at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9314-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at Plaza Towers Elementary" /><br />
+			Looking SE at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="Looking ESE at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9315-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking ESE at Plaza Towers Elementary" /><br />
+			Looking ESE at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SSW at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9316-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SSW at Plaza Towers Elementary" /><br />
+			Looking SSW at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="Looking SW at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9317-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SW at Plaza Towers Elementary" /><br />
+			Looking SW at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking S at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9318-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking S at Plaza Towers Elementary" /><br />
+			Looking S at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="Looking SW at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9319-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SW at Plaza Towers Elementary" /><br />
+			Looking SW at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking SE at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9320-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at Plaza Towers Elementary" /><br />
+			Looking SE at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="Looking SE at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9321-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking SE at Plaza Towers Elementary" /><br />
+			Looking SE at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking ESE at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9322-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking ESE at Plaza Towers Elementary" /><br />
+			Looking ESE at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="Looking at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9323-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking at Plaza Towers Elementary" /><br />
+			Looking at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="Looking WSW at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9324-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking WSW at Plaza Towers Elementary" /><br />
+			Looking WSW at Plaza Towers Elementary</td>
+			<td class="stormphoto50"><img alt="Looking WSW at Plaza Towers Elementary" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9325-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="Looking WSW at Plaza Towers Elementary" /><br />
+			Looking WSW at Plaza Towers Elementary</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9326-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9327-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9331-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9332-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9333-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9334-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9335-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9336-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9337-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9338-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9339-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9340-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9341-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9342-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9343-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9344-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9345-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9346-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9347-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9348-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9349-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9350-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9351-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9352-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Briarwood Elementary School" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9354-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Briarwood Elementary School" /><br />
+			View of damage at Briarwood Elementary School</td>
+			<td class="stormphoto50"><img alt="View of damage at Orr Family Farm" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9355-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Orr Family Farm" /><br />
+			View of damage at Orr Family Farm</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Orr Family Farm" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9356-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Orr Family Farm" /><br />
+			View of damage at Orr Family Farm</td>
+			<td class="stormphoto50"><img alt="View of damage at Orr Family Farm" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9358-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Orr Family Farm" /><br />
+			View of damage at Orr Family Farm&gt;</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Orr Family Farm" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9360-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Orr Family Farm" /><br />
+			View of damage at Orr Family Farm</td>
+			<td class="stormphoto50"><img alt="View of damage at Orr Family Farm" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9361-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Orr Family Farm" /><br />
+			View of damage at Orr Family Farm</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of damage at Orr Family Farm" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9362-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Orr Family Farm" /><br />
+			View of damage at Orr Family Farm</td>
+			<td class="stormphoto50"><img alt="View of damage at Orr Family Farm" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9363-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of damage at Orr Family Farm" /><br />
+			View of damage at Orr Family Farm</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9364-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9365-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+		</tr>
+		<tr>
+			<td class="stormphoto50"><img alt="View of tornado damage" class="magnify" data-magnifyby="1.8" src="/images/oun/wxevents/20130520/photos/damage/IMG_9366-800.jpg" style="border-width: 1px; border-style: solid; width: 450px; height: 338px;" title="View of tornado damage" /><br />
+			View of tornado damage</td>
+			<td class="stormphoto50">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>&nbsp;</div>
+
+<hr /></div>
+<!-- -- these divs are needed to close out the top feature ----></div>
+</div>
+<!--  End of HTML...Javascripting follows below. Section to include script for Damage Map. Also Section for expanding images -->
+
+<p><!-- ************** PASTE Interactive Damage Map JAVASCRIPT *****************************
+*******************          in place of the          ***********************************					
+*******************       ENTIRE string of lines      *********************************** --></p>
+<!--CODE FOR EXPANDING IMAGES. DO NOT MODIFY.--><script type="text/javascript">
+
+/* jQuery Image Magnify script v1.1
+* This notice must stay intact for usage 
+* Author: Dynamic Drive at https://www.dynamicdrive.com/
+* Visit https://www.dynamicdrive.com/ for full source code
+*/
+
+jQuery.imageMagnify={
+	dsettings: {
+		magnifyby: 4, //default increase factor of enlarged image (was set to 3 originally)
+		duration: 500, //default duration of animation, in millisec
+		imgopacity: 0.2 //opacify of original image when enlarged image overlays it
+ 	},
+	zIndexcounter: 100,
+
+	refreshoffsets:function($window, $target, warpshell){
+		var $offsets=$target.offset()
+		var winattrs={x:$window.scrollLeft(), y:$window.scrollTop(), w:$window.width(), h:$window.height()}
+		warpshell.attrs.x=$offsets.left //update x position of original image relative to page
+		warpshell.attrs.y=$offsets.top
+		warpshell.newattrs.x=winattrs.x+winattrs.w/2-warpshell.newattrs.w/2
+		warpshell.newattrs.y=winattrs.y+winattrs.h/2-warpshell.newattrs.h/2
+		if (warpshell.newattrs.x<winattrs.x+5){ //no space to the left?
+			warpshell.newattrs.x=winattrs.x+5	
+		}
+		else if (warpshell.newattrs.x+warpshell.newattrs.w > winattrs.x+winattrs.w){//no space to the right?
+			warpshell.newattrs.x=winattrs.x+5
+		}
+		if (warpshell.newattrs.y<winattrs.y+5){ //no space at the top?
+			warpshell.newattrs.y=winattrs.y+5
+		}
+	},
+
+	magnify:function($, $target, options){
+		var setting={} //create blank object to store combined settings
+		var setting=jQuery.extend(setting, this.dsettings, options)
+		var attrs=(options.thumbdimensions)? {w:options.thumbdimensions[0], h:options.thumbdimensions[1]} : {w:$target.outerWidth(), h:$target.outerHeight()}
+		var newattrs={}
+		newattrs.w=(setting.magnifyto)? setting.magnifyto : Math.round(attrs.w*setting.magnifyby)
+		newattrs.h=(setting.magnifyto)? Math.round(attrs.h*newattrs.w/attrs.w) : Math.round(attrs.h*setting.magnifyby)
+		if ($target.data('imgshell')){
+			$target.data('imgshell').$clone.remove()
+			$target.css({opacity:1}).unbind('click.magnify')
+		}	
+		var $clone=$target.clone().css({position:'absolute', left:0, top:0, visibility:'hidden', border:'1px solid gray', cursor:'pointer'}).appendTo(document.body)
+		$clone.data('$relatedtarget', $target) //save $target image this enlarged image is associated with
+		$target.data('imgshell', {$clone:$clone, attrs:attrs, newattrs:newattrs})
+		$target.bind('click.magnify', function(e){ //action when original image is clicked on
+			var $this=$(this).css({opacity:setting.imgopacity})
+			var imageinfo=$this.data('imgshell')
+			jQuery.imageMagnify.refreshoffsets($(window), $this, imageinfo) //refresh offset positions of original and warped images
+			var $clone=imageinfo.$clone
+			$clone.stop().css({zIndex:++jQuery.imageMagnify.zIndexcounter, left:imageinfo.attrs.x, top:imageinfo.attrs.y, width:imageinfo.attrs.w, height:imageinfo.attrs.h, opacity:0, visibility:'visible', display:'block'})
+			.animate({opacity:1, left:imageinfo.newattrs.x, top:imageinfo.newattrs.y, width:imageinfo.newattrs.w, height:imageinfo.newattrs.h}, setting.duration,
+			function(){ //callback function after warping is complete
+				//none added		
+			}) //end animate
+		}) //end click
+		$clone.click(function(e){ //action when magnified image is clicked on
+			var $this=$(this)
+			var imageinfo=$this.data('$relatedtarget').data('imgshell')
+			jQuery.imageMagnify.refreshoffsets($(window), $this.data('$relatedtarget'), imageinfo) //refresh offset positions of original and warped images
+			$this.stop().animate({opacity:0, left:imageinfo.attrs.x, top:imageinfo.attrs.y, width:imageinfo.attrs.w, height:imageinfo.attrs.h},  setting.duration,
+			function(){
+				$this.hide()
+				$this.data('$relatedtarget').css({opacity:1}) //reveal original image
+			}) //end animate
+		}) //end click
+	}
+};
+
+jQuery.fn.imageMagnify=function(options){
+	var $=jQuery
+	return this.each(function(){ //return jQuery obj
+		var $imgref=$(this)
+		if (this.tagName!="IMG")
+			return true //skip to next matched element
+		if (parseInt($imgref.css('width'))>0 && parseInt($imgref.css('height'))>0 || options.thumbdimensions){ //if image has explicit width/height attrs defined
+			jQuery.imageMagnify.magnify($, $imgref, options)
+		}
+		else if (this.complete){ //account for IE not firing image.onload
+			jQuery.imageMagnify.magnify($, $imgref, options)
+		}
+		else{
+			$(this).bind('load', function(){
+				jQuery.imageMagnify.magnify($, $imgref, options)
+			})
+		}
+	})
+};
+
+jQuery.fn.applyMagnifier=function(options){ //dynamic version of imageMagnify() to apply magnify effect to an image dynamically
+	var $=jQuery
+	return this.each(function(){ //return jQuery obj
+		var $imgref=$(this)
+		if (this.tagName!="IMG")
+			return true //skip to next matched element
+		
+	})	
+
+};
+
+
+//** The following applies the magnify effect to images with class="magnify" and optional "data-magnifyby" and "data-magnifyduration" attrs
+//** It also looks for links with attr rel="magnify[targetimageid]" and makes them togglers for that image
+
+jQuery(document).ready(function($){
+	var $targets=$('.magnify')
+	$targets.each(function(i){
+		var $target=$(this)
+		var options={}
+		if ($target.attr('data-magnifyto'))
+			options.magnifyto=parseFloat($target.attr('data-magnifyto'))
+		if ($target.attr('data-magnifyby'))
+			options.magnifyby=parseFloat($target.attr('data-magnifyby'))
+		if ($target.attr('data-magnifyduration'))
+			options.duration=parseInt($target.attr('data-magnifyduration'))
+		$target.imageMagnify(options)
+	})
+	var $triggers=$('a[rel^="magnify["]')
+	$triggers.each(function(i){
+		var $trigger=$(this)
+		var targetid=$trigger.attr('rel').match(/\[.+\]/)[0].replace(/[\[\]']/g, '') //parse 'id' from rel='magnify[id]'
+		$trigger.data('magnifyimageid', targetid)
+		$trigger.click(function(e){
+			$('#'+$(this).data('magnifyimageid')).trigger('click.magnify')
+			e.preventDefault()
+		})
+	})
+})
+
+</script><!--END CODE FOR EXPANDING IMAGES.--><!-- END OF CMS LOCAL WEB PAGE CODE -->
+</div>
+</div>
+<div style="clear:both"></div>
+                        </div>
+
+                    </div><!-- end of <div class="partial-width-borderbottom"> -->
+   
+                </div><!-- <div class="full-width-border"> -->
+           
+                <!-- area for features, frontpage thumbs, and custom page -->
+                
+                
+                <!-- end of <div class="partial-width-borderbottom feature-block"> -->
+                
+                <div class="full-width-bordertop">
+                    <div class="full-width-first communication-links">
+        <div class ="one-sixth-first divs">
+        <div class="myforecast-current">
+            <a style="text-decoration:none;" href="http://www.twitter.com/NWSNorman" target="_blank">
+                <img src="/bundles/templating/images/social/x.png" width="16" alt="Follow us on X" height="16" />&nbsp;&nbsp;Follow us on X
+            </a>
+        </div>
+    </div>
+        <div class ="one-sixth-first divs">
+        <div class="myforecast-current">
+            <a style="text-decoration:none;" href="http://www.facebook.com/NWSNorman" target="_blank">
+                <img src="/bundles/templating/images/social/facebook.png" width="16" alt="Follow us on Facebook" height="16" />&nbsp;&nbsp;Follow us on Facebook
+            </a>
+        </div>
+    </div>
+        <div class ="one-sixth-first divs">
+        <div class="myforecast-current">
+            <a style="text-decoration:none;" href="http://www.youtube.com/NWSNorman" target="_blank">
+                <img src="/bundles/templating/images/social/youtube.png" width="16" alt="Follow us on YouTube" height="16" />&nbsp;&nbsp;Follow us on YouTube
+            </a>
+        </div>
+    </div>
+    <div class ="one-half-last nopad">
+        <span class="txt-rt myforecast-current">
+            <div class="myforecast-current">
+                <a href="/rss_page.php?site_name=oun" target="_blank" style="text-decoration:none;font-size:11px;">
+                    <img src="/bundles/templating/images/social/rss.png" width="16" height="16" alt="OUN RSS Feed" />&nbsp;&nbsp;OUN RSS Feed
+                </a>
+            </div>
+        </span>
+    </div>
+</div>
+<div style="clear:both;"></div>
+
+
+                </div>
+
+
+                <div style="clear:both;"></div>
+
+            </div><!-- <div class="center-content"> -->
+
+        </div><!-- end of <div class="center"> -->
+
+        <!-- sitemap area -->
+        <div class="footer">
+            <style type="text/css">
+    .footer-column-head a:link, .footer-column-head a:visited {
+        color: #ED7A08;
+    }
+</style>
+<div class="footer-content">
+            <div class="footer-column" style="padding:10px 10px;">
+                                                            <p>
+                        <span class="footer-column-head">
+                            <a href="/oun/">Current Hazards</a>
+                        </span><br />
+                                                    <a href="/oun/hazards">Local</a><br />
+                                                    <a href="/crh/outlooks?sid=oun#.V9MD_E0rJpg">Nationwide</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=LSR">Local Storm Reports</a><br />
+                                            </p>
+                                    <p>
+                        <span class="footer-column-head">
+                            <a href="/oun/currentconditions">Current Conditions</a>
+                        </span><br />
+                                                    <a href="/oun/currentconditions">More Observations</a><br />
+                                                    <a href="/oun/currentconditions">Surface Maps</a><br />
+                                                    <a href="/oun/currentconditions">Upper Air Maps</a><br />
+                                                    <a href="http://water.weather.gov/ahps2/index.php?wfo=oun">Rivers and Lakes</a><br />
+                                                    <a href="/oun/currentconditions">Satellite Imagery</a><br />
+                                            </p>
+                                    </div>
+            <div class="footer-column" style="padding:10px 10px;">
+                                                            <p>
+                        <span class="footer-column-head">
+                            <a href="/oun/">Forecasts</a>
+                        </span><br />
+                                                    <a href="http://digital.weather.gov/">Graphical Forecasts</a><br />
+                                                    <a href="https://www.airnow.gov/state/?name=oklahoma">Air Quality</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=AFD">Forecast Discussion</a><br />
+                                                    <a href="/oun/fireweather">Fire Weather</a><br />
+                                                    <a href="https://www.wpc.ncep.noaa.gov/wwd/wssi/wssi.php?id=oun">Winter Weather</a><br />
+                                                    <a href="/oun/aviation">Aviation Weather</a><br />
+                                                    <a href="https://spot.weather.gov/?wfo=oun&amp;lat=35&amp;lon=-98&amp;zoom=7">Submit a Spot Forecast</a><br />
+                                            </p>
+                                    </div>
+            <div class="footer-column" style="padding:10px 10px;">
+                                                            <p>
+                        <span class="footer-column-head">
+                            <a href="/oun/">Warnings and Other Products</a>
+                        </span><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=FFW">Flash Flood Warnings</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=NPW">Non Precipitation Warnings</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=SVR">Severe Thunderstorm Warnings</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=WSW">Winter Weather Warnings</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=TOR">Tornado Warnings</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=FLW">Flood Warnings</a><br />
+                                                    <a href="https://forecast.weather.gov/product.php?site=NWS&amp;issuedby=OUN&amp;product=SPS">Special Weather Statements</a><br />
+                                            </p>
+                                    </div>
+            <div class="footer-column" style="padding:10px 10px;">
+                                                            <p>
+                        <span class="footer-column-head">
+                            <a href="/oun/">Climate and Past Weather</a>
+                        </span><br />
+                                                    <a href="/oun/stormdata">Storm Data</a><br />
+                                                    <a href="/oun/wxhistory">Daily Weather History</a><br />
+                                                    <a href="/oun/events">Significant Weather Events</a><br />
+                                                    <a href="/wrh/climate?wfo=oun">Local Climate Data</a><br />
+                                                    <a href="/oun/tornadodata">Tornado Database</a><br />
+                                                    <a href="/oun/climate-records">Averages and Records</a><br />
+                                            </p>
+                                    </div>
+            <div class="footer-column" style="padding:10px 10px;">
+                                                            <p>
+                        <span class="footer-column-head">
+                            <a href="/safety">Weather Safety</a>
+                        </span><br />
+                                                    <a href="/safety/thunderstorm">Severe Weather Safety</a><br />
+                                                    <a href="/safety/flood">Flood/Flash Flood Safety</a><br />
+                                                    <a href="/safety/heat">Summer Weather Safety</a><br />
+                                                    <a href="/safety/wildfire">Wildfire Safety</a><br />
+                                                    <a href="/safety/winter">Winter Weather Safety</a><br />
+                                            </p>
+                                    <p>
+                        <span class="footer-column-head">
+                            <a href="/oun/">Special Programs</a>
+                        </span><br />
+                                                    <a href="/stormready">StormReady</a><br />
+                                                    <a href="/oun/skywarn">Skywarn Storm Spotters</a><br />
+                                                    <a href="/oun/spottertalk">Storm Spotter Training</a><br />
+                                                    <a href="/oun/cocorahs">CoCoRaHS</a><br />
+                                                    <a href="/oun/radio">Weather Radio</a><br />
+                                            </p>
+                                    </div>
+            <div class="footer-column" style="padding:10px 10px;">
+                                                            <p>
+                        <span class="footer-column-head">
+                            <a href="/oun/">About Us</a>
+                        </span><br />
+                                                    <a href="/oun/office">About Our Office</a><br />
+                                                    <a href="/oun/faq">FAQ</a><br />
+                                                    <a href="http://www.ou.edu/content/nwc/visit/tours.html">Tours</a><br />
+                                            </p>
+                                    </div>
+    </div>
+
+        </div><!-- end of <div class="footer"> -->
+
+        <!-- legal footer area -->
+        <div class="footer-legal">
+            <div class="footer-legal">
+    <div class="footer-legal-content">
+
+        <div class="one-sixth-first" id="footer_legal_gov">
+            <a href="http://www.usa.gov"><img src="/bundles/templating/images/footer/usa_gov.png" alt="usa.gov" width="110" height="30" /></a>
+        </div>
+
+        <div class="one-half-first" id="footer_legal_info">
+            <p>
+                <a href="http://www.commerce.gov">US Dept of Commerce</a><br />
+                <a href="http://www.noaa.gov">National Oceanic and Atmospheric Administration</a><br />
+                <a href="https://www.weather.gov">National Weather Service</a><br />
+                Norman, OK<br />                National Weather Center<br />
+                120 David L. Boren Blvd. Suite 2400<br />                Norman, OK 73072
+                <br />(405) 325-3816<br />
+                <br /><a href="mailto:nws.norman@noaa.gov">Comments? Questions? Please Contact Us.</a>
+            </p>
+        </div>
+
+        <div class="one-third-last" id="footer_required_links">
+            <div class="div-half">
+                <a href="https://www.weather.gov/disclaimer">Disclaimer</a><br />
+                <a href="http://www.cio.noaa.gov/services_programs/info_quality.html">Information Quality</a><br />
+                <a href="https://www.weather.gov/help">Help</a><br />
+                <a href="/glossary">Glossary</a>
+            </div>
+
+            <div class="div-half">
+                <a href="https://www.weather.gov/privacy">Privacy Policy</a><br />
+                <a href="https://www.noaa.gov/foia-freedom-of-information-act">Freedom of Information Act (FOIA)</a><br />
+                <a href="https://www.weather.gov/about">About Us</a><br />
+                <a href="https://www.weather.gov/careers">Career Opportunities</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div><!-- end of <div class="footer-legal"> -->
+
+        <script type="text/javascript" src="//www.weather.gov/js/govshutdown.js"></script>
+    </body>
+</html>

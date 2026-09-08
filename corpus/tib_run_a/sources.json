@@ -69,8 +69,8 @@
       "role": "retrospective_ground_truth_only",
       "historical_available_from": null,
       "archive_capture_url": null,
-      "body_hash": null,
-      "status": "candidate"
+      "body_hash": "9e356c3b438265ea409fd40f4a3b9bf5eba667065f0af97986f477da83499840",
+"status": "frozen_live"
     }
   ]
 }
