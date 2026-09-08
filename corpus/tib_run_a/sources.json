@@ -14,8 +14,8 @@
       "role": "early_report",
       "historical_available_from": null,
       "archive_capture_url": null,
-      "body_hash": null,
-      "status": "candidate"
+      "body_hash": "542607b75d87b2be33810bc444ea3a6b01fe420d91b8c15dcc37f77ba72ae525",
+"status": "frozen_live"
     },
     {
       "source_id": "cbs-ap-early",
