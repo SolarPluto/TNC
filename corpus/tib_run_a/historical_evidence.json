@@ -51,6 +51,23 @@
      "Which of the displayed timestamp signals should be treated as canonical historical availability.",
      "A historical_available_from value for the frozen CBS correction source."
    ]
+ },
+ {
+   "observation_id": "obs-004",
+   "source_id": "abc-correction",
+   "evidence_type": "publisher_displayed_historical_timestamp",
+   "evidence_url": "https://abcnews.com/US/oklahoma-tornado-deaths-revised-24-including-children/story?id=19222656",
+   "published_time_text": "Structured metadata exposes datePublished 2013-05-21T06:54:04.000Z and dateModified 2013-05-22T10:36:42.000Z.",
+   "supports": [
+     "The current frozen ABC correction page explicitly presents a May 21, 2013 publication timestamp and a May 22, 2013 modification timestamp.",
+     "The page headline and description preserve the correction from an earlier 51-death estimate to 24 deaths.",
+     "ABC attribution to the medical examiner represents another publication of the correction but does not by itself establish an independent underlying factual source."
+   ],
+   "does_not_establish": [
+     "That the exact frozen ABC document bytes were observable at either structured timestamp.",
+     "That the May 21 publication timestamp identifies the exact moment the corrected 24-death claim first became available.",
+     "A historical_available_from value for the frozen ABC correction source."
+   ]
  }
 ]
 }
