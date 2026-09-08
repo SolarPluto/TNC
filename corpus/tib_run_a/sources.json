@@ -25,8 +25,8 @@
       "role": "shared_wire_origin_comparison",
       "historical_available_from": null,
       "archive_capture_url": null,
-      "body_hash": null,
-      "status": "candidate"
+      "body_hash": "7d3fd4d11470ee0e8b9694ef95faf1ee16ab6151e64cfac2ff342244c2c4af53",
+"status": "frozen_live"
     },
     {
       "source_id": "cbs-ap-correction",
