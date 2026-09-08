@@ -1,9 +1,11 @@
 from datetime import datetime, timezone
+from pathlib import Path
 from uuid import uuid4
 
 import httpx
 
 from tnc.ingestion.artifacts import FetchArtifact
+from tnc.ingestion.storage import store_artifact
 
 
 def fetch_url(
@@ -33,3 +35,22 @@ def fetch_url(
     finally:
         if owns_client:
             client.close()
+
+
+def fetch_and_store(
+    url: str,
+    *,
+    storage_root: Path,
+    client: httpx.Client | None = None,
+) -> FetchArtifact:
+    artifact = fetch_url(
+        url,
+        client=client,
+    )
+
+    store_artifact(
+        storage_root,
+        artifact,
+    )
+
+    return artifact
