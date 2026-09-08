@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1",
+  "event_id": "tib_run_a_moore_2013",
+  "purpose": "Historical evidence observations used to reconstruct source availability without backdating current live captures.",
+  "observations": [
+  {
+    "observation_id": "obs-001",
+    "source_id": "mpr-ap-early",
+    "evidence_type": "contemporaneous_wire_copy",
+    "evidence_url": "https://www.shawlocal.com/daily-journal/archive/2013/05/20/huge-tornado-hits-oklahoma-city-suburb-kills-51/",
+    "published_time_text": "May 20, 2013 at 3:40 pm CDT",
+    "supports": [
+      "A materially related Tim Talley / Associated Press report containing the early 51-death estimate, preliminary EF-4 finding, and more-than-120-hospital-patients claim was publicly published by this time."
+    ],
+    "does_not_establish": [
+      "That the exact frozen MPR document bytes existed at this time.",
+      "The historical_available_from value for the frozen MPR source."
+    ]
+  }
+]
+}
