@@ -34,6 +34,23 @@
       "That each timestamp corresponds to a complete recoverable historical document version.",
       "The historical_available_from value for the frozen MPR source."
     ]
-}
+},
+ {
+   "observation_id": "obs-003",
+   "source_id": "cbs-ap-correction",
+   "evidence_type": "publisher_displayed_historical_timestamp",
+   "evidence_url": "https://www.cbsnews.com/news/oklahoma-tornado-leaves-dozens-dead-including-many-children/",
+   "published_time_text": "Structured metadata exposes 2013-05-21T15:05:04-0400; article body says Updated 3:04 p.m. ET.",
+   "supports": [
+     "The current frozen CBS/AP correction page explicitly presents a May 21, 2013 historical timestamp and correction state.",
+     "The page records the downward revision to 24 deaths and separately preserves the earlier 51-death estimate.",
+     "The one-minute difference between structured metadata and body update text must be preserved as an unresolved timestamp discrepancy."
+   ],
+   "does_not_establish": [
+     "That the exact frozen CBS document bytes were observable at 3:04 or 3:05 p.m. EDT on May 21, 2013.",
+     "Which of the displayed timestamp signals should be treated as canonical historical availability.",
+     "A historical_available_from value for the frozen CBS correction source."
+   ]
+ }
 ]
 }
