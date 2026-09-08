@@ -36,8 +36,8 @@
       "role": "correction_report",
       "historical_available_from": null,
       "archive_capture_url": null,
-      "body_hash": null,
-      "status": "candidate"
+      "body_hash": "78a9a32f42c2adb5f4f9ab978394d4a3eac8c816eb40df73cb279bf83f318438",
+"status": "frozen_live"
     },
     {
       "source_id": "abc-correction",
