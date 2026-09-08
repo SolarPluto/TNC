@@ -329,3 +329,47 @@ def test_evidence_availability_is_derived_from_source_spans():
 
     assert availability["version-001:span:1"].span_id == span.span_id
     assert availability["version-001:span:1"].available_from == available_from
+
+def test_replay_uses_source_span_availability_end_to_end():
+    span = SourceSpan(
+        span_id="version-001:span:1",
+        document_version_id="version-001",
+        ordinal=0,
+        span_type=SpanType.PARAGRAPH,
+        raw_text="Agency A reported 14 injuries.",
+        normalized_text="Agency A reported 14 injuries.",
+        available_from=datetime(
+            2026, 1, 1, 9, 30, tzinfo=timezone.utc
+        ),
+        content_hash="hash-001",
+    )
+
+    transition = make_transition(
+        transition_id="transition-001",
+        assertion_id="assertion-001",
+        from_state=None,
+        to_state=ClaimState.FIRST_REPORTED,
+        occurred_at=datetime(
+            2026, 1, 1, 10, 0, tzinfo=timezone.utc
+        ),
+        evidence_span_ids=(span.span_id,),
+    )
+
+    evidence_availability = evidence_availability_from_spans([span])
+
+    snapshots = replay_snapshots(
+        event_id="event-001",
+        timestamps=[
+            datetime(
+                2026, 1, 1, 10, 30, tzinfo=timezone.utc
+            )
+        ],
+        transitions=[transition],
+        evidence_availability=evidence_availability,
+    )
+
+    assert len(snapshots) == 1
+    assert len(snapshots[0].claims) == 1
+    assert snapshots[0].claims[0].assertion_id == "assertion-001"
+    assert snapshots[0].claims[0].state == ClaimState.FIRST_REPORTED
+    assert snapshots[0].claims[0].evidence_span_ids == (span.span_id,) 
