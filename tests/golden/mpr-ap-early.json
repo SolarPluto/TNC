@@ -1,0 +1,323 @@
+{
+  "format_version": 1,
+  "source_id": "mpr-ap-early",
+  "body_hash": "542607b75d87b2be33810bc444ea3a6b01fe420d91b8c15dcc37f77ba72ae525",
+  "span_count": 45,
+  "spans": [
+    {
+      "ordinal": 0,
+      "span_type": "heading",
+      "raw_text": "Huge tornado hits Oklahoma City suburb, kills 51",
+      "normalized_text": "Huge tornado hits Oklahoma City suburb, kills 51",
+      "content_hash": "36cb6344362a915d5b2e60ae1816a7e649d7d7353cfa35a791c221e017585799"
+    },
+    {
+      "ordinal": 1,
+      "span_type": "caption",
+      "raw_text": "A woman carries her child through a field near the collapsed Plaza Towers Elementary School in Moore, Okla., Monday, May 20, 2013. A tornado as much as a mile (1.6 kilometers) wide with winds up to 200 mph roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods, setting buildings on fire and landing a direct blow on an elementary school. AP Photo/Sue Ogrocki",
+      "normalized_text": "A woman carries her child through a field near the collapsed Plaza Towers Elementary School in Moore, Okla., Monday, May 20, 2013. A tornado as much as a mile (1.6 kilometers) wide with winds up to 200 mph roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods, setting buildings on fire and landing a direct blow on an elementary school. AP Photo/Sue Ogrocki",
+      "content_hash": "e57c68e918acc95e365011b0d750de4a03d462b9b1f5857cce9889154762e2fd"
+    },
+    {
+      "ordinal": 2,
+      "span_type": "paragraph",
+      "raw_text": "By TIM TALLEY Associated Press",
+      "normalized_text": "By TIM TALLEY Associated Press",
+      "content_hash": "b64675c2532c28b68d28e9985651d8ed9c9e7785ab8c3129b1e03e8873776c0f"
+    },
+    {
+      "ordinal": 3,
+      "span_type": "paragraph",
+      "raw_text": "MOORE, Okla. (AP) -- A monstrous tornado at least a half-mile wide roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods and destroying an elementary school with a direct blow as children and teachers huddled against winds up to 200 mph. At least 51 people were killed, including at least 20 children, and officials said the death toll was expected to rise.",
+      "normalized_text": "MOORE, Okla. (AP) -- A monstrous tornado at least a half-mile wide roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods and destroying an elementary school with a direct blow as children and teachers huddled against winds up to 200 mph. At least 51 people were killed, including at least 20 children, and officials said the death toll was expected to rise.",
+      "content_hash": "f10624ff3aa94876ffa380c5e4f786be9613b3d519e3295bc249425376f7d2f4"
+    },
+    {
+      "ordinal": 4,
+      "span_type": "paragraph",
+      "raw_text": "The storm laid waste to scores of buildings in Moore, a community of 41,000 people about 10 miles south of the city. Block after block lay in ruins. Homes were crushed into piles of broken wood. Cars and trucks were left crumpled on the roadside.",
+      "normalized_text": "The storm laid waste to scores of buildings in Moore, a community of 41,000 people about 10 miles south of the city. Block after block lay in ruins. Homes were crushed into piles of broken wood. Cars and trucks were left crumpled on the roadside.",
+      "content_hash": "8d4b9d8645467a8e276a83d8e300e058533ba44b80907b05bd04febaf81736b0"
+    },
+    {
+      "ordinal": 5,
+      "span_type": "paragraph",
+      "raw_text": "The National Weather Service issued an initial finding that the tornado was an EF-4 on the enhanced Fujita scale, the second most-powerful type of twister.",
+      "normalized_text": "The National Weather Service issued an initial finding that the tornado was an EF-4 on the enhanced Fujita scale, the second most-powerful type of twister.",
+      "content_hash": "20cbcb9820aadd072995c3b2dd3e9651fe748002b302e3e7a319cd843d888454"
+    },
+    {
+      "ordinal": 6,
+      "span_type": "caption",
+      "raw_text": "A child calls to his father after being pulled from the rubble of the Tower Plaza Elementary School following a tornado in Moore, Okla., Monday, May 20, 2013. A tornado as much as a mile wide with winds up to 200 mph roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods, setting buildings on fire and landing a direct blow on an elementary school. AP Photo/Sue Ogrocki",
+      "normalized_text": "A child calls to his father after being pulled from the rubble of the Tower Plaza Elementary School following a tornado in Moore, Okla., Monday, May 20, 2013. A tornado as much as a mile wide with winds up to 200 mph roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods, setting buildings on fire and landing a direct blow on an elementary school. AP Photo/Sue Ogrocki",
+      "content_hash": "943900d01f43f45a605a3af6c5d54d99c2b4f493d166beaddef01f2076abf008"
+    },
+    {
+      "ordinal": 7,
+      "span_type": "paragraph",
+      "raw_text": "More than 120 people were being treated at hospitals, including about 50 children. And search-and-rescue efforts were to continue throughout the night.",
+      "normalized_text": "More than 120 people were being treated at hospitals, including about 50 children. And search-and-rescue efforts were to continue throughout the night.",
+      "content_hash": "ec8014f4a5008b3747e204a7ded1505ad6bad63a51023cadb781270c2931c306"
+    },
+    {
+      "ordinal": 8,
+      "span_type": "paragraph",
+      "raw_text": "Tiffany Thronesberry said she heard from her mother, Barbara Jarrell, shortly after the tornado.",
+      "normalized_text": "Tiffany Thronesberry said she heard from her mother, Barbara Jarrell, shortly after the tornado.",
+      "content_hash": "f43dc9d2f8cb414b14997f87aba960fe909afb9683cec598c383f3cc97f06bde"
+    },
+    {
+      "ordinal": 9,
+      "span_type": "paragraph",
+      "raw_text": "\"I got a phone call from her screaming, `Help! Help! I can't breathe. My house is on top of me!\"' Thronesberry said.",
+      "normalized_text": "\"I got a phone call from her screaming, `Help! Help! I can't breathe. My house is on top of me!\"' Thronesberry said.",
+      "content_hash": "dd96d49e564cc03712fd7c3d96c6dbd8b9b8d43dc1ced73f6fa411016443e2f6"
+    },
+    {
+      "ordinal": 10,
+      "span_type": "paragraph",
+      "raw_text": "Thronesberry hurried to her mother's house, where first responders had already pulled her out. Her mother was hospitalized for treatment of cuts and bruises.",
+      "normalized_text": "Thronesberry hurried to her mother's house, where first responders had already pulled her out. Her mother was hospitalized for treatment of cuts and bruises.",
+      "content_hash": "535fedd20033108a4f69843b7d92237ea3b88b76ba3de4ee52c827521f91a579"
+    },
+    {
+      "ordinal": 11,
+      "span_type": "paragraph",
+      "raw_text": "Rescuers launched a desperate rescue effort at the school, pulling children from heaps of debris and carrying them to a triage center.",
+      "normalized_text": "Rescuers launched a desperate rescue effort at the school, pulling children from heaps of debris and carrying them to a triage center.",
+      "content_hash": "8cd93f3a624f774db50723acac3401c440a92406342c36986786d29d97cb3662"
+    },
+    {
+      "ordinal": 12,
+      "span_type": "paragraph",
+      "raw_text": "Oklahoma Gov. Mary Fallin deployed 80 National Guard members to assist with rescue operations and activated extra highway patrol officers.",
+      "normalized_text": "Oklahoma Gov. Mary Fallin deployed 80 National Guard members to assist with rescue operations and activated extra highway patrol officers.",
+      "content_hash": "a4607d359376adca384d1f205c170b75bbf502a5ea10a5ede24c93a4e3ee1f67"
+    },
+    {
+      "ordinal": 13,
+      "span_type": "caption",
+      "raw_text": "A child is carried from the rubble of the Plaza Towers Elementary School following a tornado in Moore, Okla., Monday, May 20, 2013. A tornado as much as a mile wide with winds up to 200 mph roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods, setting buildings on fire and landing a direct blow on an elementary school. AP Photo/Sue Ogrocki",
+      "normalized_text": "A child is carried from the rubble of the Plaza Towers Elementary School following a tornado in Moore, Okla., Monday, May 20, 2013. A tornado as much as a mile wide with winds up to 200 mph roared through the Oklahoma City suburbs Monday, flattening entire neighborhoods, setting buildings on fire and landing a direct blow on an elementary school. AP Photo/Sue Ogrocki",
+      "content_hash": "fdb93b0acaa0ab02c289d9a93caa99ad599d1a05f44fb598d1e8223e91b502bb"
+    },
+    {
+      "ordinal": 14,
+      "span_type": "paragraph",
+      "raw_text": "Fallin also spoke with President Barack Obama, who declared a major disaster and ordered federal aid to supplement state and local recovery efforts.",
+      "normalized_text": "Fallin also spoke with President Barack Obama, who declared a major disaster and ordered federal aid to supplement state and local recovery efforts.",
+      "content_hash": "a2a0fbc6ce6c6e1dd452bacb41cec2b625ad4367b99385089e75898154fa4d16"
+    },
+    {
+      "ordinal": 15,
+      "span_type": "paragraph",
+      "raw_text": "Many land lines to stricken areas were down, and cellphone networks were congested. The storm was so massive that it will take time to establish communications between rescuers and state officials, the governor said.",
+      "normalized_text": "Many land lines to stricken areas were down, and cellphone networks were congested. The storm was so massive that it will take time to establish communications between rescuers and state officials, the governor said.",
+      "content_hash": "153970c01219f85d9d61ce82e399d3db0c3968acd24ae7fc11f08bb788711812"
+    },
+    {
+      "ordinal": 16,
+      "span_type": "paragraph",
+      "raw_text": "In video of the storm, the dark funnel cloud could be seen marching slowly across the green landscape. As it churned through the community, the twister scattered shards of wood, awnings and glass all over the streets.",
+      "normalized_text": "In video of the storm, the dark funnel cloud could be seen marching slowly across the green landscape. As it churned through the community, the twister scattered shards of wood, awnings and glass all over the streets.",
+      "content_hash": "324b18dfe8d7610b7a537fa30487f02ed3f702c93c55ef215fe2cd134c825297"
+    },
+    {
+      "ordinal": 17,
+      "span_type": "paragraph",
+      "raw_text": "Chris Calvert saw the menacing tornado from about a mile away.",
+      "normalized_text": "Chris Calvert saw the menacing tornado from about a mile away.",
+      "content_hash": "e6f5ed6d0566c65ac0fe898e71defd6f28b5ef733cba7fc9cb8f43fa41cfc8be"
+    },
+    {
+      "ordinal": 18,
+      "span_type": "paragraph",
+      "raw_text": "\"I was close enough to hear it,\" he said. \"It was just a low roar, and you could see the debris, like pieces of shingles and insulation and stuff like that, rotating around it.\"",
+      "normalized_text": "\"I was close enough to hear it,\" he said. \"It was just a low roar, and you could see the debris, like pieces of shingles and insulation and stuff like that, rotating around it.\"",
+      "content_hash": "5689a9189727d00da0ea81a65404abe36eb9da236105436990e7591e332b3d13"
+    },
+    {
+      "ordinal": 19,
+      "span_type": "paragraph",
+      "raw_text": "Even though his subdivision is a mile from the tornado's path, it was still covered with debris. He found a picture of a small girl on Santa Claus' lap in his yard.",
+      "normalized_text": "Even though his subdivision is a mile from the tornado's path, it was still covered with debris. He found a picture of a small girl on Santa Claus' lap in his yard.",
+      "content_hash": "a973ea87ea6958fa62b6a808eeb6fde30d6a54390f28f5f6e53557c49193da65"
+    },
+    {
+      "ordinal": 20,
+      "span_type": "paragraph",
+      "raw_text": "Volunteers and first responders raced to search the debris for survivors.",
+      "normalized_text": "Volunteers and first responders raced to search the debris for survivors.",
+      "content_hash": "0be0a8d73dcb9f340c7220562baf069949d2d3a3ec770012f8b43dcc61fabe91"
+    },
+    {
+      "ordinal": 21,
+      "span_type": "paragraph",
+      "raw_text": "At Plaza Towers Elementary School, the storm tore off the roof, knocked down walls and turned the playground into a mass of twisted plastic and metal.",
+      "normalized_text": "At Plaza Towers Elementary School, the storm tore off the roof, knocked down walls and turned the playground into a mass of twisted plastic and metal.",
+      "content_hash": "5286f8048ded2eec2ac73b7eb558a8643ed946499cd1d04e8ccbd0dd84682bac"
+    },
+    {
+      "ordinal": 22,
+      "span_type": "paragraph",
+      "raw_text": "Children from the school were among the dead, but several students were pulled alive from the rubble. Rescue workers passed the survivors down a human chain to the triage center in the parking lot.",
+      "normalized_text": "Children from the school were among the dead, but several students were pulled alive from the rubble. Rescue workers passed the survivors down a human chain to the triage center in the parking lot.",
+      "content_hash": "f12a6fdcf9b84bd2399b15c48ef2400769572311722519098503f19ad4965b0a"
+    },
+    {
+      "ordinal": 23,
+      "span_type": "paragraph",
+      "raw_text": "James Rushing, who lives across the street from the school, heard reports of the approaching twister and ran to the school, where his 5-year-old foster son, Aiden, attends classes. Rushing believed he would be safer there.",
+      "normalized_text": "James Rushing, who lives across the street from the school, heard reports of the approaching twister and ran to the school, where his 5-year-old foster son, Aiden, attends classes. Rushing believed he would be safer there.",
+      "content_hash": "505c01dc3262cd3d3d32163a973cade6df9dc3a53a6c2fd5e7aef28b5bed3c06"
+    },
+    {
+      "ordinal": 24,
+      "span_type": "paragraph",
+      "raw_text": "\"About two minutes after I got there, the school started coming apart,\" he said.",
+      "normalized_text": "\"About two minutes after I got there, the school started coming apart,\" he said.",
+      "content_hash": "6e2bd2611dba02a7741682879f8388d83129e39de64a77c36768b9e022c0d781"
+    },
+    {
+      "ordinal": 25,
+      "span_type": "paragraph",
+      "raw_text": "The students were sent into the restroom.",
+      "normalized_text": "The students were sent into the restroom.",
+      "content_hash": "d846bbc63cb76e04276db389a5a3f4b119db12b95d4a476b9290014ea24cf4db"
+    },
+    {
+      "ordinal": 26,
+      "span_type": "paragraph",
+      "raw_text": "A man with a megaphone stood near a Catholic church Monday evening and called out the names of surviving children. Parents waited nearby, hoping to hear their sons' and daughters' names.",
+      "normalized_text": "A man with a megaphone stood near a Catholic church Monday evening and called out the names of surviving children. Parents waited nearby, hoping to hear their sons' and daughters' names.",
+      "content_hash": "cdeccd34fe60ef2c18e04317e11d190bc12dc3d069e1e721c48c644d58f3ee24"
+    },
+    {
+      "ordinal": 27,
+      "span_type": "paragraph",
+      "raw_text": "Don Denton hadn't heard from his two sons since the tornado hit the town, but the man who has endured six back surgeries and walks with a severe limp said he walked about two miles as he searched for them.",
+      "normalized_text": "Don Denton hadn't heard from his two sons since the tornado hit the town, but the man who has endured six back surgeries and walks with a severe limp said he walked about two miles as he searched for them.",
+      "content_hash": "47ccacbff055f5d81bbec3b6c5371676c4634697b3b3ea21e7524890d1bd392a"
+    },
+    {
+      "ordinal": 28,
+      "span_type": "paragraph",
+      "raw_text": "As reports of the storm came in, Denton's 16-year-old texted him, telling him to call.",
+      "normalized_text": "As reports of the storm came in, Denton's 16-year-old texted him, telling him to call.",
+      "content_hash": "f4a3ae18658b6ec3cc363937306b946f815b93bc561b2b20625442669b90ed69"
+    },
+    {
+      "ordinal": 29,
+      "span_type": "paragraph",
+      "raw_text": "\"I was trying to call him, and I couldn't get through,\" Denton said.",
+      "normalized_text": "\"I was trying to call him, and I couldn't get through,\" Denton said.",
+      "content_hash": "8810420fb59e1116c337962f081cb477523aeedf62e4ac1f644823405b384bc7"
+    },
+    {
+      "ordinal": 30,
+      "span_type": "paragraph",
+      "raw_text": "Eventually, Denton said, his sons spotted him in the crowd. They were fine, but upset to hear that their grandparents' home was destroyed.",
+      "normalized_text": "Eventually, Denton said, his sons spotted him in the crowd. They were fine, but upset to hear that their grandparents' home was destroyed.",
+      "content_hash": "d0c10215813ee1b86d766a829e3baaff5a4ae591f3139ed0b9c5f9d03a780a59"
+    },
+    {
+      "ordinal": 31,
+      "span_type": "paragraph",
+      "raw_text": "As dusk began to fall, heavy equipment was rolled up to the school, and emergency workers wearing yellow crawled among the ruins, searching for survivors.",
+      "normalized_text": "As dusk began to fall, heavy equipment was rolled up to the school, and emergency workers wearing yellow crawled among the ruins, searching for survivors.",
+      "content_hash": "e3b48dd75396e8274cd903c2f2394fc50e9f68ed4460862b74d35b8042e7b7c5"
+    },
+    {
+      "ordinal": 32,
+      "span_type": "paragraph",
+      "raw_text": "Because the ground was muddy, bulldozers and front-end loaders were getting stuck. Crews used jackhammers and sledgehammers to tear away concrete, and chunks were being thrown to the side as the workers dug.",
+      "normalized_text": "Because the ground was muddy, bulldozers and front-end loaders were getting stuck. Crews used jackhammers and sledgehammers to tear away concrete, and chunks were being thrown to the side as the workers dug.",
+      "content_hash": "44428fb16c5a2a4edee4faf4ce20c46aaacdc6b1dbdc67cc7c1696409f6ba18a"
+    },
+    {
+      "ordinal": 33,
+      "span_type": "paragraph",
+      "raw_text": "Douglas Sherman drove two blocks from his home to help.",
+      "normalized_text": "Douglas Sherman drove two blocks from his home to help.",
+      "content_hash": "20447da158f2c78ec20d6b73beffc05dd27efea9837320aaa6bcfd15c1a58027"
+    },
+    {
+      "ordinal": 34,
+      "span_type": "paragraph",
+      "raw_text": "\"Just having those kids trapped in that school, that really turns the table on a lot of things,\" he said.",
+      "normalized_text": "\"Just having those kids trapped in that school, that really turns the table on a lot of things,\" he said.",
+      "content_hash": "064e63b8b93791e3be840e3865a5302802e41bbb56127802009b318c6a3f16eb"
+    },
+    {
+      "ordinal": 35,
+      "span_type": "paragraph",
+      "raw_text": "A map provided by the National Weather Service showed that the storm began west of Newcastle and crossed the Canadian River into Oklahoma City's rural far southwestern side about 3 p.m. When it reached Moore, the twister cut a path through the center of town before lifting back into the sky at Lake Stanley Draper.",
+      "normalized_text": "A map provided by the National Weather Service showed that the storm began west of Newcastle and crossed the Canadian River into Oklahoma City's rural far southwestern side about 3 p.m. When it reached Moore, the twister cut a path through the center of town before lifting back into the sky at Lake Stanley Draper.",
+      "content_hash": "08b335b46062e2e4a50d751fe34fe7694ddbc1b13b93f046a8dd9e6729395b4b"
+    },
+    {
+      "ordinal": 36,
+      "span_type": "paragraph",
+      "raw_text": "Oklahoma City Police Capt. Dexter Nelson said downed power lines and open gas lines posed a risk in the aftermath of the system.",
+      "normalized_text": "Oklahoma City Police Capt. Dexter Nelson said downed power lines and open gas lines posed a risk in the aftermath of the system.",
+      "content_hash": "5b9f807b34e1683d5ffb14d692f4bd10760a5e284e5873561b14e7939c8fa26d"
+    },
+    {
+      "ordinal": 37,
+      "span_type": "paragraph",
+      "raw_text": "Monday's powerful tornado loosely followed the path of a killer twister that slammed the region in May 1999.",
+      "normalized_text": "Monday's powerful tornado loosely followed the path of a killer twister that slammed the region in May 1999.",
+      "content_hash": "8939501db1cb5d8cd885675f6ad0517d82c12b3875608a79d3a03b47fc9b65d3"
+    },
+    {
+      "ordinal": 38,
+      "span_type": "paragraph",
+      "raw_text": "The weather service estimated that Monday's tornado was at least a half-mile wide. The 1999 storm had winds clocked at 300 mph.",
+      "normalized_text": "The weather service estimated that Monday's tornado was at least a half-mile wide. The 1999 storm had winds clocked at 300 mph.",
+      "content_hash": "8c1b4e8f0da53042cb785b486761ce328f444d897262c52f6370d474aaa5596c"
+    },
+    {
+      "ordinal": 39,
+      "span_type": "paragraph",
+      "raw_text": "Kelsey Angle, a weather service meteorologist in Kansas City, Mo., said it's unusual for two such powerful tornadoes to track roughly the same path.",
+      "normalized_text": "Kelsey Angle, a weather service meteorologist in Kansas City, Mo., said it's unusual for two such powerful tornadoes to track roughly the same path.",
+      "content_hash": "3ee06c23e328c6451f235b9a9d32129b7d13b50b78ae8d7b29b3be778f6899e7"
+    },
+    {
+      "ordinal": 40,
+      "span_type": "paragraph",
+      "raw_text": "It was the fourth tornado to hit Moore since 1998. A twister also struck in 2003.",
+      "normalized_text": "It was the fourth tornado to hit Moore since 1998. A twister also struck in 2003.",
+      "content_hash": "18ca7a8e4cc5ff2a53f7168948d766bbf47add1830aef978dbc5c0eee1cf61be"
+    },
+    {
+      "ordinal": 41,
+      "span_type": "paragraph",
+      "raw_text": "Monday's devastation in Oklahoma came almost exactly two years after an enormous twister ripped through the city of Joplin, Mo., killing 158 people and injuring hundreds more.",
+      "normalized_text": "Monday's devastation in Oklahoma came almost exactly two years after an enormous twister ripped through the city of Joplin, Mo., killing 158 people and injuring hundreds more.",
+      "content_hash": "c663bb8ccdd45244f7585e38343528e48d424e9b8774fed3916b4c248f1672aa"
+    },
+    {
+      "ordinal": 42,
+      "span_type": "paragraph",
+      "raw_text": "That May 22, 2011, tornado was the deadliest in the United States since modern tornado record keeping began in 1950, according to the National Oceanic and Atmospheric Administration. Before Joplin, the deadliest modern tornado was June 1953 in Flint, Mich., when 116 people died.",
+      "normalized_text": "That May 22, 2011, tornado was the deadliest in the United States since modern tornado record keeping began in 1950, according to the National Oceanic and Atmospheric Administration. Before Joplin, the deadliest modern tornado was June 1953 in Flint, Mich., when 116 people died.",
+      "content_hash": "05ba500b65b3fb5ac4df0876ebc8bf69c972e8fe69bab19c52e7113540a194c0"
+    },
+    {
+      "ordinal": 43,
+      "span_type": "quote",
+      "raw_text": "DEADLIEST US TORNADOES SINCE 1900 A list of the 10 deadliest tornadoes in the United States since 1900: • 695 deaths. March 18, 1925, in Missouri, Illinois and Indiana. • 216 deaths. April 5, 1936, in Tupelo, Miss. • 203 deaths. April 6, 1936, in Gainesville, Ga. • 181 deaths. April 9, 1947, in Woodward, Okla. • 158 deaths. May 22, 2011, in Joplin, Mo. • 143 deaths. April 24, 1908, in Amite, La., and Purvis, Miss. • 116 deaths. June 8, 1953, in Flint, Mich. • 114 deaths. May 11, 1953 in Waco, Texas. • 114 deaths. May 18, 1902 in Goliad, Texas. • 103 deaths. March 23, 1913, in Omaha, Neb. Source: National Oceanic and Atmospheric Administration ",
+      "normalized_text": "DEADLIEST US TORNADOES SINCE 1900 A list of the 10 deadliest tornadoes in the United States since 1900: • 695 deaths. March 18, 1925, in Missouri, Illinois and Indiana. • 216 deaths. April 5, 1936, in Tupelo, Miss. • 203 deaths. April 6, 1936, in Gainesville, Ga. • 181 deaths. April 9, 1947, in Woodward, Okla. • 158 deaths. May 22, 2011, in Joplin, Mo. • 143 deaths. April 24, 1908, in Amite, La., and Purvis, Miss. • 116 deaths. June 8, 1953, in Flint, Mich. • 114 deaths. May 11, 1953 in Waco, Texas. • 114 deaths. May 18, 1902 in Goliad, Texas. • 103 deaths. March 23, 1913, in Omaha, Neb. Source: National Oceanic and Atmospheric Administration",
+      "content_hash": "f316fa3f0ee325fe5caf3fac9ef4313032217e30565fd7a8f57895e50a11344c"
+    },
+    {
+      "ordinal": 44,
+      "span_type": "paragraph",
+      "raw_text": " Associated Press writers Sean Murphy, Nomaan Merchant and Sue Ogrocki contributed to this report.",
+      "normalized_text": "Associated Press writers Sean Murphy, Nomaan Merchant and Sue Ogrocki contributed to this report.",
+      "content_hash": "8727d4153a10a0c180add5e16bcb8cb398e5407fd86ca2013155edf72ed001c6"
+    }
+  ]
+}

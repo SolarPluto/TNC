@@ -1,0 +1,3627 @@
+{
+  "format_version": 1,
+  "source_id": "nws-retrospective",
+  "body_hash": "9e356c3b438265ea409fd40f4a3b9bf5eba667065f0af97986f477da83499840",
+  "span_count": 517,
+  "spans": [
+    {
+      "ordinal": 0,
+      "span_type": "heading",
+      "raw_text": "The Tornado Outbreak of May 20, 2013",
+      "normalized_text": "The Tornado Outbreak of May 20, 2013",
+      "content_hash": "43cbe2b75523dada70897b69d44240913fb6ced1e2568c2b346ac44400aa329e"
+    },
+    {
+      "ordinal": 1,
+      "span_type": "heading",
+      "raw_text": "Summary",
+      "normalized_text": "Summary",
+      "content_hash": "8e76a94ac8320d515375e625bef1829238b097ecbd33611b59eeefd4ffefebfb"
+    },
+    {
+      "ordinal": 2,
+      "span_type": "paragraph",
+      "raw_text": "A tornado outbreak occurred during the afternoon and evening hours of the May 20, 2013, and was the last day of a three-day stretch of significant severe weather from May 18-20, 2013. This event also produced the most deadly and devastating tornado of the year for Oklahoma and the the United States.",
+      "normalized_text": "A tornado outbreak occurred during the afternoon and evening hours of the May 20, 2013, and was the last day of a three-day stretch of significant severe weather from May 18-20, 2013. This event also produced the most deadly and devastating tornado of the year for Oklahoma and the the United States.",
+      "content_hash": "cae7c1a0eec66505c77823b90854f5761fe9d0aff6f769845306df99d37689c1"
+    },
+    {
+      "ordinal": 3,
+      "span_type": "paragraph",
+      "raw_text": "Several supercell thunderstorms developed during early afternoon of May 20th along a dryline in central Oklahoma. One of these storms developed near Chickasha and rapidly intensified, producing a tornado which touched down at 2:56 PM CDT on the west side of Newcastle. The tornado became violent within minutes, then tracked east-northeastward across the city of Moore and parts of south Oklahoma City for about 40 minutes before finally dissipating near Lake Stanley Draper. The tornado caused catastrophic damage in these areas, and was given a maximum rating of EF-5. The tornado claimed 24 lives, injured scores of people, and caused billions of dollars in damage.",
+      "normalized_text": "Several supercell thunderstorms developed during early afternoon of May 20th along a dryline in central Oklahoma. One of these storms developed near Chickasha and rapidly intensified, producing a tornado which touched down at 2:56 PM CDT on the west side of Newcastle. The tornado became violent within minutes, then tracked east-northeastward across the city of Moore and parts of south Oklahoma City for about 40 minutes before finally dissipating near Lake Stanley Draper. The tornado caused catastrophic damage in these areas, and was given a maximum rating of EF-5. The tornado claimed 24 lives, injured scores of people, and caused billions of dollars in damage.",
+      "content_hash": "b59c12b504c1f994d863b7738408958dbaa470de1ca3c970c708bfcadd922c1f"
+    },
+    {
+      "ordinal": 4,
+      "span_type": "paragraph",
+      "raw_text": "Several other tornadoes also occurred in Stephens and Lincoln Counties during the afternoon of May 20. In addition to the tornadoes, large hail and damaging winds caused damage in many areas.",
+      "normalized_text": "Several other tornadoes also occurred in Stephens and Lincoln Counties during the afternoon of May 20. In addition to the tornadoes, large hail and damaging winds caused damage in many areas.",
+      "content_hash": "23850b13406c20499ec5fbf1948be99eb4860a609d8d8575dd96e40b5a48acce"
+    },
+    {
+      "ordinal": 5,
+      "span_type": "table_cell",
+      "raw_text": "This photo was taken around 3:00 pm CDT on May 20, 2013 from Carrington Lane in the Carrington Place addition in northwest Norman, which is located between 36th Ave NW and 48th Ave NW, and south of Franklin Road. The view is looking northwest towards the corner of Franklin Road and 48th Ave NW. This photo was provided courtesy of Jenny Hamar.",
+      "normalized_text": "This photo was taken around 3:00 pm CDT on May 20, 2013 from Carrington Lane in the Carrington Place addition in northwest Norman, which is located between 36th Ave NW and 48th Ave NW, and south of Franklin Road. The view is looking northwest towards the corner of Franklin Road and 48th Ave NW. This photo was provided courtesy of Jenny Hamar.",
+      "content_hash": "461a358c95e19ecb29500ddfe23d3bf31dc96110ee5005942c0473830d07209d"
+    },
+    {
+      "ordinal": 6,
+      "span_type": "heading",
+      "raw_text": "Fast Facts",
+      "normalized_text": "Fast Facts",
+      "content_hash": "2d77b56111d05d993aa35af496d3ed194884d52f437f439631187463f1079c62"
+    },
+    {
+      "ordinal": 7,
+      "span_type": "list_item",
+      "raw_text": "A rating of EF-5 has been given to the tornado that affected the Newcastle, south OKC, and Moore areas in McClain and Cleveland Counties.",
+      "normalized_text": "A rating of EF-5 has been given to the tornado that affected the Newcastle, south OKC, and Moore areas in McClain and Cleveland Counties.",
+      "content_hash": "1060b22bddf71bc770995b108539c49c913c5d30eba990efb2f773910a4910f3"
+    },
+    {
+      "ordinal": 8,
+      "span_type": "list_item",
+      "raw_text": "The tornado had a path length of approximately 14 miles and was on the ground for approximately 40 minutes from 2:56 PM - 3.35 PM CDT.",
+      "normalized_text": "The tornado had a path length of approximately 14 miles and was on the ground for approximately 40 minutes from 2:56 PM - 3.35 PM CDT.",
+      "content_hash": "1946e6e4a097ab1d532a60a85d8b4e4b532b74f00f9a345cba9430f5499c3954"
+    },
+    {
+      "ordinal": 9,
+      "span_type": "list_item",
+      "raw_text": "The preliminary maximum path width is 1.1 miles.",
+      "normalized_text": "The preliminary maximum path width is 1.1 miles.",
+      "content_hash": "d3fa8dedde6236e3ed2d93dde070e51ade2c49213001edb5157fe6a5eec0c586"
+    },
+    {
+      "ordinal": 10,
+      "span_type": "heading",
+      "raw_text": "Most Tornadoes to Occur on Any May 20th in Oklahoma (1950-Present)",
+      "normalized_text": "Most Tornadoes to Occur on Any May 20th in Oklahoma (1950-Present)",
+      "content_hash": "af372cc21e688bdbb1dbcbef59ae27444465377de929064ed991451fba288490"
+    },
+    {
+      "ordinal": 11,
+      "span_type": "table_cell",
+      "raw_text": "Year",
+      "normalized_text": "Year",
+      "content_hash": "89f6832560dec0b7f8721d1fe3ba0b5036a5d1464ce4339bb16c3e1485bfec34"
+    },
+    {
+      "ordinal": 12,
+      "span_type": "table_cell",
+      "raw_text": "Total",
+      "normalized_text": "Total",
+      "content_hash": "c9b3c38247f744e17dd26fda097d6a9ba9332586b6bdaa038bf8f313a863f2b8"
+    },
+    {
+      "ordinal": 13,
+      "span_type": "table_cell",
+      "raw_text": "2019",
+      "normalized_text": "2019",
+      "content_hash": "023e33504ab909cf87a6f4e4e545090e40bdc0a2153e5b68b19f7fad2b737904"
+    },
+    {
+      "ordinal": 14,
+      "span_type": "table_cell",
+      "raw_text": "25",
+      "normalized_text": "25",
+      "content_hash": "b7a56873cd771f2c446d369b649430b65a756ba278ff97ec81bb6f55b2e73569"
+    },
+    {
+      "ordinal": 15,
+      "span_type": "table_cell",
+      "raw_text": "2013",
+      "normalized_text": "2013",
+      "content_hash": "7931aa2a1bed855457d1ddf6bc06ab4406a9fba0579045a4d6ff78f9c07c440f"
+    },
+    {
+      "ordinal": 16,
+      "span_type": "table_cell",
+      "raw_text": "15",
+      "normalized_text": "15",
+      "content_hash": "e629fa6598d732768f7c726b4b621285f9c3b85303900aa912017db7617d8bdb"
+    },
+    {
+      "ordinal": 17,
+      "span_type": "table_cell",
+      "raw_text": "1977",
+      "normalized_text": "1977",
+      "content_hash": "576c85c584f60555c2a024cbb99dfbbdb5f58c3bdcf28dbc8ea315fd46a388f3"
+    },
+    {
+      "ordinal": 18,
+      "span_type": "table_cell",
+      "raw_text": "14",
+      "normalized_text": "14",
+      "content_hash": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61"
+    },
+    {
+      "ordinal": 19,
+      "span_type": "table_cell",
+      "raw_text": "2001",
+      "normalized_text": "2001",
+      "content_hash": "85d6385b945c0d602103db39b0b654b2af93b5127938e26a959c123f0789b948"
+    },
+    {
+      "ordinal": 20,
+      "span_type": "table_cell",
+      "raw_text": "12",
+      "normalized_text": "12",
+      "content_hash": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918"
+    },
+    {
+      "ordinal": 21,
+      "span_type": "table_cell",
+      "raw_text": "1957",
+      "normalized_text": "1957",
+      "content_hash": "d212b2ac736e3f60408ffe9fbc1d26ae901f8f477fb8b08ec03c9d6b0208ac2b"
+    },
+    {
+      "ordinal": 22,
+      "span_type": "table_cell",
+      "raw_text": "11",
+      "normalized_text": "11",
+      "content_hash": "4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8"
+    },
+    {
+      "ordinal": 23,
+      "span_type": "heading",
+      "raw_text": "GIS Data",
+      "normalized_text": "GIS Data",
+      "content_hash": "fb198d73b545d5a315a5914664d231074a4b6d44bbc8b65b447470d3c4ab6179"
+    },
+    {
+      "ordinal": 24,
+      "span_type": "list_item",
+      "raw_text": "KML file for the Newcastle-Moore tornado damage path only",
+      "normalized_text": "KML file for the Newcastle-Moore tornado damage path only",
+      "content_hash": "f41fd2dbbdfb98d3b8b9dc50e69ddbc40ef8b99e53715a7e4961a333cc979505"
+    },
+    {
+      "ordinal": 25,
+      "span_type": "heading",
+      "raw_text": "Severe Weather Safety Information",
+      "normalized_text": "Severe Weather Safety Information",
+      "content_hash": "44b3807e9d41f1d802e14b721723c57e2fc00e3878113ccae25c257d405eee22"
+    },
+    {
+      "ordinal": 26,
+      "span_type": "list_item",
+      "raw_text": "Highway Overpasses as Tornado Shelters: Fallout From the 3 May 1999 Oklahoma/Kansas Violent Tornado Outbreak",
+      "normalized_text": "Highway Overpasses as Tornado Shelters: Fallout From the 3 May 1999 Oklahoma/Kansas Violent Tornado Outbreak",
+      "content_hash": "30e9890a9746e008f9a44558f30432d3defb36c016f9488b1e5eb1514565d1c0"
+    },
+    {
+      "ordinal": 27,
+      "span_type": "heading",
+      "raw_text": "Web Pages and Reports Related to the May 20, 2013 Event",
+      "normalized_text": "Web Pages and Reports Related to the May 20, 2013 Event",
+      "content_hash": "8636bdb4773289338d715eebdfb1e3002a1493f1c0fa7f6df19f8166124dfd6d"
+    },
+    {
+      "ordinal": 28,
+      "span_type": "list_item",
+      "raw_text": "NEW!  NWS Norman StoryMap for the May 20, 2013 Tornado Outbreak",
+      "normalized_text": "NEW! NWS Norman StoryMap for the May 20, 2013 Tornado Outbreak",
+      "content_hash": "aa5c6191697ded0ba9035dd74cecaec907b37c96e680dbc0911f34921127051c"
+    },
+    {
+      "ordinal": 29,
+      "span_type": "list_item",
+      "raw_text": "NEW!  NWS Norman Roundtable: Remembering the 2013 Tornadoes (YouTube)",
+      "normalized_text": "NEW! NWS Norman Roundtable: Remembering the 2013 Tornadoes (YouTube)",
+      "content_hash": "378ac9b97a765e36dee70303c5309f17f82aaa3cdce0681b1a227e03592bec7c"
+    },
+    {
+      "ordinal": 30,
+      "span_type": "list_item",
+      "raw_text": "NWS Service Assessment: May 2013 Tornadoes and Flash Flooding",
+      "normalized_text": "NWS Service Assessment: May 2013 Tornadoes and Flash Flooding",
+      "content_hash": "39bf12980c54e4b29f1ec5936e5624dfeeaf5c63656e7a3bdcb7ccc184e7c04d"
+    },
+    {
+      "ordinal": 31,
+      "span_type": "list_item",
+      "raw_text": "NIST SP 1164, Preliminary Reconnaissance Report - Newcastle-Moore Tornado (NIST)",
+      "normalized_text": "NIST SP 1164, Preliminary Reconnaissance Report - Newcastle-Moore Tornado (NIST)",
+      "content_hash": "1b1069a4df5b9b306dfc90bc8c119f711384141e4369a4573c2a45cfa43bbbea"
+    },
+    {
+      "ordinal": 32,
+      "span_type": "list_item",
+      "raw_text": "Formal Observation Report Tornado: Moore, Oklahoma, May 20, 2013 Safe Room Performance, Observations, and Conclusions (FEMA)",
+      "normalized_text": "Formal Observation Report Tornado: Moore, Oklahoma, May 20, 2013 Safe Room Performance, Observations, and Conclusions (FEMA)",
+      "content_hash": "6ba13d6bc69a7f969a79b492cb2d37014fe36d0203be21599e3eef8a02c047d6"
+    },
+    {
+      "ordinal": 33,
+      "span_type": "list_item",
+      "raw_text": "A 20-slide presentation of the Event Timeline for the Newcastle-Moore tornado including NWS forecasts and warnings, as well as social media info from Twitter and Facebook",
+      "normalized_text": "A 20-slide presentation of the Event Timeline for the Newcastle-Moore tornado including NWS forecasts and warnings, as well as social media info from Twitter and Facebook",
+      "content_hash": "0a0bd8c2ee901ca4cd0c07b6d66393aa1a96f2cad42be75c82822d48d77462d3"
+    },
+    {
+      "ordinal": 34,
+      "span_type": "list_item",
+      "raw_text": "View the Radar Timeline of the Newcastle-Moore Tornado",
+      "normalized_text": "View the Radar Timeline of the Newcastle-Moore Tornado",
+      "content_hash": "6cad112690ce6c4128deb69d8b15048ddcf3fd85c1e5d817eaef265aadc685d4"
+    },
+    {
+      "ordinal": 35,
+      "span_type": "list_item",
+      "raw_text": "Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "normalized_text": "Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "content_hash": "415519ff9400348fcd0a50f5953a4e0e5f8dd18c3bceb62c6d2784b34e764035"
+    },
+    {
+      "ordinal": 36,
+      "span_type": "list_item",
+      "raw_text": "Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "normalized_text": "Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "content_hash": "a45711e56bbd1637bb912ef6fef0dca762fc07ae0d09c6e68f27aec3a8f234fb"
+    },
+    {
+      "ordinal": 37,
+      "span_type": "list_item",
+      "raw_text": "Oklahoma Department of Emergency Management Situation Update web page for severe weather events occurring from May 18-June 2, 2013",
+      "normalized_text": "Oklahoma Department of Emergency Management Situation Update web page for severe weather events occurring from May 18-June 2, 2013",
+      "content_hash": "cccf51aaa0691d62f3e94cdc677def52bbe1f86f103f1c9ee56d5577c64f533e"
+    },
+    {
+      "ordinal": 38,
+      "span_type": "list_item",
+      "raw_text": "Storm Prediction Center Storm Report for May 20, 2013",
+      "normalized_text": "Storm Prediction Center Storm Report for May 20, 2013",
+      "content_hash": "ac59fa4e8e35e2e6bb35b929f7b6fc6f90210acf392cc961d1d58bd5a17e0302"
+    },
+    {
+      "ordinal": 39,
+      "span_type": "list_item",
+      "raw_text": "SPC Severe Weather Event Review for May 20, 2013",
+      "normalized_text": "SPC Severe Weather Event Review for May 20, 2013",
+      "content_hash": "e4edc668403394904fd787284a2b680a68054f18ee2b10f46b66eacd2d5ebc08"
+    },
+    {
+      "ordinal": 40,
+      "span_type": "list_item",
+      "raw_text": "NWS Norman storm data report for May 2013",
+      "normalized_text": "NWS Norman storm data report for May 2013",
+      "content_hash": "4ef5bf6f7053539131940bfe68ad83dac4bbdf95f8fde1bcecfac08b2f69a673"
+    },
+    {
+      "ordinal": 41,
+      "span_type": "list_item",
+      "raw_text": "NWS Tulsa storm data report for May 2013",
+      "normalized_text": "NWS Tulsa storm data report for May 2013",
+      "content_hash": "9f8e834d0dd0bc0c045843846a60495186ad9455cd14f687f63866a54a67c686"
+    },
+    {
+      "ordinal": 42,
+      "span_type": "heading",
+      "raw_text": "Research Articles and Publications Related to the May 20, 2013 Event",
+      "normalized_text": "Research Articles and Publications Related to the May 20, 2013 Event",
+      "content_hash": "2dc942b7d6bd229ae220343aa77f06770bcbf05476e1b971659e4770730811f1"
+    },
+    {
+      "ordinal": 43,
+      "span_type": "list_item",
+      "raw_text": "20 May 2013 Moore, Oklahoma, Tornado: Damage Survey and Analysis (WEFO)",
+      "normalized_text": "20 May 2013 Moore, Oklahoma, Tornado: Damage Survey and Analysis (WEFO)",
+      "content_hash": "908de5f6c232f24f102ea27130781e4b4bd4a88e48efe0afcf4a9849192f9248"
+    },
+    {
+      "ordinal": 44,
+      "span_type": "list_item",
+      "raw_text": "High-Temporal Resolution Polarimetric X-Band Doppler Radar Observations of the 20 May 2013 Moore, Oklahoma, Tornado (MWR)",
+      "normalized_text": "High-Temporal Resolution Polarimetric X-Band Doppler Radar Observations of the 20 May 2013 Moore, Oklahoma, Tornado (MWR)",
+      "content_hash": "4e743bd7a56bc05940d75ef8feb0e440a01cfac087238346b381715977f0d311"
+    },
+    {
+      "ordinal": 45,
+      "span_type": "heading",
+      "raw_text": "Tornado Data and Information",
+      "normalized_text": "Tornado Data and Information",
+      "content_hash": "3ccf26c912a0359b21e2fcb8fc6b71c4be7f365b2d5a194b09c103460a17c8e5"
+    },
+    {
+      "ordinal": 46,
+      "span_type": "list_item",
+      "raw_text": "List of F5/EF5 Tornadoes in the United State Since 1950 (Storm Prediction Center)",
+      "normalized_text": "List of F5/EF5 Tornadoes in the United State Since 1950 (Storm Prediction Center)",
+      "content_hash": "9d605dc4ab2e92a828eb40003d28cfa5232e65be619553268805d2fc0912160d"
+    },
+    {
+      "ordinal": 47,
+      "span_type": "list_item",
+      "raw_text": "Comprehensive List of Tornadoes in Oklahoma City since 1890 .",
+      "normalized_text": "Comprehensive List of Tornadoes in Oklahoma City since 1890 .",
+      "content_hash": "c36b9617b99e6271303b1580d90b89b34fe9c1993fa8def377379f6feeefa6ba"
+    },
+    {
+      "ordinal": 48,
+      "span_type": "list_item",
+      "raw_text": "Top Ten Costliest Oklahoma Tornadoes (1950-Present)",
+      "normalized_text": "Top Ten Costliest Oklahoma Tornadoes (1950-Present)",
+      "content_hash": "85788103dfaa1e97246ef2ce3e1a8529acf7c625538822ae088d973f05d42f01"
+    },
+    {
+      "ordinal": 49,
+      "span_type": "list_item",
+      "raw_text": "Top Ten Deadliest Oklahoma Tornadoes (1875-Present)",
+      "normalized_text": "Top Ten Deadliest Oklahoma Tornadoes (1875-Present)",
+      "content_hash": "7e9eea224a8c1f58fb9e03d0b7b9cf4c8c582b59f305e07d97079274714d9901"
+    },
+    {
+      "ordinal": 50,
+      "span_type": "list_item",
+      "raw_text": "Quick List of F5 Tornadoes in Oklahoma (1905-Present)",
+      "normalized_text": "Quick List of F5 Tornadoes in Oklahoma (1905-Present)",
+      "content_hash": "423d67300c37440d339a40a2446cf9e3b29dad2b65618ca105a73f18ea50137f"
+    },
+    {
+      "ordinal": 51,
+      "span_type": "list_item",
+      "raw_text": "Detailed List of Violent Tornadoes in Oklahoma (1950-Present)",
+      "normalized_text": "Detailed List of Violent Tornadoes in Oklahoma (1950-Present)",
+      "content_hash": "aa618dee3f8fb6dcea8ff47856750af35eb8b3025617cf5ffa83ebc74c943091"
+    },
+    {
+      "ordinal": 52,
+      "span_type": "list_item",
+      "raw_text": "Detailed List of Killer Tornadoes in Oklahoma (1950-Present)",
+      "normalized_text": "Detailed List of Killer Tornadoes in Oklahoma (1950-Present)",
+      "content_hash": "b42a943462c25140886dcfb383fb3906d9726762c41d4af3868647735fa5fd7d"
+    },
+    {
+      "ordinal": 53,
+      "span_type": "list_item",
+      "raw_text": "Cleveland County, OK Tornadoes (1875-Present)",
+      "normalized_text": "Cleveland County, OK Tornadoes (1875-Present)",
+      "content_hash": "8612a6307e4cae79f4c57d7427f7e80a244c65aa712f93e0c21ffd47eed5fcba"
+    },
+    {
+      "ordinal": 54,
+      "span_type": "list_item",
+      "raw_text": "McClain County, OK Tornadoes (1875-Present)",
+      "normalized_text": "McClain County, OK Tornadoes (1875-Present)",
+      "content_hash": "565e4f003bf5bf5903a0542a94340fabdccc7c823acd59a5b2ab12ed1740f649"
+    },
+    {
+      "ordinal": 55,
+      "span_type": "list_item",
+      "raw_text": "Tornadoes that have occurred in or near Moore, OK (1875-Present)",
+      "normalized_text": "Tornadoes that have occurred in or near Moore, OK (1875-Present)",
+      "content_hash": "fb9473c68c79574f53fbe8fecc5b99c95f72c69b79f53edea20a206fd237187b"
+    },
+    {
+      "ordinal": 56,
+      "span_type": "list_item",
+      "raw_text": "The October 4, 1998 Tornado Outbreak Twenty-eight tornadoes occurred in central and eastern Oklahoma, including an F2 tornado which damaged parts of Moore. It was the largest autumnal outbreak of tornadoes ever recorded in Oklahoma.",
+      "normalized_text": "The October 4, 1998 Tornado Outbreak Twenty-eight tornadoes occurred in central and eastern Oklahoma, including an F2 tornado which damaged parts of Moore. It was the largest autumnal outbreak of tornadoes ever recorded in Oklahoma.",
+      "content_hash": "7e48b4a549fa12c6e69cb1be28afb912dfaac882ba4fe78f4cfc092b023257d8"
+    },
+    {
+      "ordinal": 57,
+      "span_type": "list_item",
+      "raw_text": "The May 3, 1999 Tornado Outbreak This outbreak included nearly 60 tornadoes in central Oklahoma. It was the largest tornado outbreak ever recorded in Oklahoma. The first F5 tornado ever to hit a the Oklahoma City metro area killed 36 people and tore through parts of Newcastle, south OKC and Moore, OK. The damage total was estimated at $1 billion. Two F4 tornadoes also ravaged parts of Kingfisher and Logan counties.",
+      "normalized_text": "The May 3, 1999 Tornado Outbreak This outbreak included nearly 60 tornadoes in central Oklahoma. It was the largest tornado outbreak ever recorded in Oklahoma. The first F5 tornado ever to hit a the Oklahoma City metro area killed 36 people and tore through parts of Newcastle, south OKC and Moore, OK. The damage total was estimated at $1 billion. Two F4 tornadoes also ravaged parts of Kingfisher and Logan counties.",
+      "content_hash": "75e6dfab43c9b4345b5c5d93e71a0847439f59f9100027c5c8b7805afa8507d2"
+    },
+    {
+      "ordinal": 58,
+      "span_type": "list_item",
+      "raw_text": "Oklahoma City Area Tornadoes of May 8, 2003 The central United States experienced a record-breaking week of tornadoes from May 4 through May 10, 2003, when nearly 400 tornadoes occurred in 19 states and caused 42 deaths during the seven days. Included in this total were the tornadoes which hit the southern Oklahoma City metropolitan area on May 8, 2003 including an F4 tornado which tore through parts of Moore, Oklahoma City and Choctaw.",
+      "normalized_text": "Oklahoma City Area Tornadoes of May 8, 2003 The central United States experienced a record-breaking week of tornadoes from May 4 through May 10, 2003, when nearly 400 tornadoes occurred in 19 states and caused 42 deaths during the seven days. Included in this total were the tornadoes which hit the southern Oklahoma City metropolitan area on May 8, 2003 including an F4 tornado which tore through parts of Moore, Oklahoma City and Choctaw.",
+      "content_hash": "79312652b8bbb49405ab9951ce99b4d5ee1ada29aec322dcf18a7d205efd58b9"
+    },
+    {
+      "ordinal": 59,
+      "span_type": "list_item",
+      "raw_text": "The May 10, 2010 Tornado Outbreak This outbreak produced 35 tornadoes in the NWS Norman forecast area alone, and a total of 55 tornadoes in Oklahoma. Two EF4 tornadoes struck the Oklahoma City metro area including Moore, killing 3 people and injuring over 80 others.",
+      "normalized_text": "The May 10, 2010 Tornado Outbreak This outbreak produced 35 tornadoes in the NWS Norman forecast area alone, and a total of 55 tornadoes in Oklahoma. Two EF4 tornadoes struck the Oklahoma City metro area including Moore, killing 3 people and injuring over 80 others.",
+      "content_hash": "09f4cacbdf33bfe2e9d29ac32d9006dbe1c01fb0a78f3c4df1c5caac5d0f904f"
+    },
+    {
+      "ordinal": 60,
+      "span_type": "heading",
+      "raw_text": "Decision Support",
+      "normalized_text": "Decision Support",
+      "content_hash": "5ec1fc8061dd96751fb1d3acb523b83dd7d8114d02bcfb0b9799dbba3d052f0b"
+    },
+    {
+      "ordinal": 61,
+      "span_type": "paragraph",
+      "raw_text": "Immediately after the Moore EF-5 event, the city of Moore and Cleveland county emergency management officials quickly set up an Incident Command (IC) Post in the parking lot of the Warren Theater.  The NWS office was in immediate contact with the Moore IC using the 800 mHZ radio providing continuious weather updates and forecasts. The following day (Tuesday May 21st), the NWS office provided a forecaster on site at the Moore IC, which was then moved to the Fire Station on SW 19th.  The Moore IC was staffed with a NWS meteorologist from Tuesday - Saturday, providing on site weather support to the Incident Commanders and First Responders.  The following meteorolgists took turns serving the IC, Lead Forecaster Scott Curl, General Forecaster Bruce Thoren, and Lead Forecaster Michael Scotten.  These meteorologists were the liaison between the meteorologists at the forecast office and the IC.  They staffed the IC for 12 hour shifts from 7am to 7pm.  Here are some of the photos they collected during there time at the Command Post.",
+      "normalized_text": "Immediately after the Moore EF-5 event, the city of Moore and Cleveland county emergency management officials quickly set up an Incident Command (IC) Post in the parking lot of the Warren Theater. The NWS office was in immediate contact with the Moore IC using the 800 mHZ radio providing continuious weather updates and forecasts. The following day (Tuesday May 21st), the NWS office provided a forecaster on site at the Moore IC, which was then moved to the Fire Station on SW 19th. The Moore IC was staffed with a NWS meteorologist from Tuesday - Saturday, providing on site weather support to the Incident Commanders and First Responders. The following meteorolgists took turns serving the IC, Lead Forecaster Scott Curl, General Forecaster Bruce Thoren, and Lead Forecaster Michael Scotten. These meteorologists were the liaison between the meteorologists at the forecast office and the IC. They staffed the IC for 12 hour shifts from 7am to 7pm. Here are some of the photos they collected during there time at the Command Post.",
+      "content_hash": "cb857a3cdcce6840a33d865ffde52717ee979a3149ef27b24b444ab806491dd3"
+    },
+    {
+      "ordinal": 62,
+      "span_type": "paragraph",
+      "raw_text": "Checkout the Incident Command Structure here , courtesy of FEMA.",
+      "normalized_text": "Checkout the Incident Command Structure here , courtesy of FEMA.",
+      "content_hash": "7ad72bec4bbcfa42b122049755867eb2880ef0cf7e806beac7f70967126bd8f0"
+    },
+    {
+      "ordinal": 63,
+      "span_type": "heading",
+      "raw_text": "The May 20, 2013 Newcastle-South Oklahoma City-Moore EF-5 Tornado",
+      "normalized_text": "The May 20, 2013 Newcastle-South Oklahoma City-Moore EF-5 Tornado",
+      "content_hash": "161fdc8430496d106adc2db1817cf373d8db9e9a3aa2545d10694b7c3fbd8d5b"
+    },
+    {
+      "ordinal": 64,
+      "span_type": "paragraph",
+      "raw_text": " Photo of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado was provided courtesy of Gabe Garfield.",
+      "normalized_text": "Photo of the May 20, 2013 Newcastle-South OKC-Moore EF-5 Tornado was provided courtesy of Gabe Garfield.",
+      "content_hash": "f27e527d35464565f35dc24685f13a93f6ca13a3309ae1282ce091f58b4cc796"
+    },
+    {
+      "ordinal": 65,
+      "span_type": "heading",
+      "raw_text": "Damage Path Maps",
+      "normalized_text": "Damage Path Maps",
+      "content_hash": "75cf8932d256658a9952f0f1238b72257c07e10ea86a6466870fccbe82d7f886"
+    },
+    {
+      "ordinal": 66,
+      "span_type": "paragraph",
+      "raw_text": "Below are images with the preliminary damage path of the Newcastle-South OKC-Moore EF-5 Tornado. Contours delineate the extent of EF-0 (light blue), EF-1 (green), EF-2 (yellow), EF-3 (orange), and EF-4 (red), and EF-5 (magenta) damage from the survey.",
+      "normalized_text": "Below are images with the preliminary damage path of the Newcastle-South OKC-Moore EF-5 Tornado. Contours delineate the extent of EF-0 (light blue), EF-1 (green), EF-2 (yellow), EF-3 (orange), and EF-4 (red), and EF-5 (magenta) damage from the survey.",
+      "content_hash": "4eb01064c8d02fc81294542e66a8d7436ab0211c007a6bc770f4fe8411608a52"
+    },
+    {
+      "ordinal": 67,
+      "span_type": "heading",
+      "raw_text": "Overview",
+      "normalized_text": "Overview",
+      "content_hash": "d4b1ea5708dd532930a85188b45aff6f0a3ed458500c7577e0127a538eb0d100"
+    },
+    {
+      "ordinal": 68,
+      "span_type": "paragraph",
+      "raw_text": "A tornado outbreak occurred during the afternoon and evening hours of the May 20, 2013. Several tornadoes occurred from central Oklahoma down through south central Oklahoma near the Red River. The strongest tornado touched down near Newcastle and traveled through Moore and south Oklahoma City. This tornado caused catastrophic damage in these areas, with a maximum rating of EF-5. The tornado claimed 24 lives and caused billions of dollars in damage. In addition to the tornadoes, large hail and damaging winds cause damage in many areas.",
+      "normalized_text": "A tornado outbreak occurred during the afternoon and evening hours of the May 20, 2013. Several tornadoes occurred from central Oklahoma down through south central Oklahoma near the Red River. The strongest tornado touched down near Newcastle and traveled through Moore and south Oklahoma City. This tornado caused catastrophic damage in these areas, with a maximum rating of EF-5. The tornado claimed 24 lives and caused billions of dollars in damage. In addition to the tornadoes, large hail and damaging winds cause damage in many areas.",
+      "content_hash": "6ecb69468c931817f344cdbe863f62d7c2d693d699e8b3e74899ddb176f64b2d"
+    },
+    {
+      "ordinal": 69,
+      "span_type": "paragraph",
+      "raw_text": "The violent Newcastle-South OKC-Moore tornado was first observed at 1:56 PM CST (2:56 PM CDT) developing about one-half mile south of Oklahoma State Highway 37 in northwest Newcastle to the east of Rockwell Avenue. EF-4 damage was observed soon after the tornado crossed State Highway 37. The tornado continued to expand in size as it approached the Canadian River and moved into Cleveland County.",
+      "normalized_text": "The violent Newcastle-South OKC-Moore tornado was first observed at 1:56 PM CST (2:56 PM CDT) developing about one-half mile south of Oklahoma State Highway 37 in northwest Newcastle to the east of Rockwell Avenue. EF-4 damage was observed soon after the tornado crossed State Highway 37. The tornado continued to expand in size as it approached the Canadian River and moved into Cleveland County.",
+      "content_hash": "4fda74a5f1a8a52fe0cb88ed18ddd4478573632dc4a18d1d69e9a22213f345fd"
+    },
+    {
+      "ordinal": 70,
+      "span_type": "paragraph",
+      "raw_text": "The tornado then moved into Cleveland County at 2:04 PM CST from McClain County as it moved northeast across the Canadian River near U.S. Interstate Highway 44. The tornado then turned more east and then east-northeast after crossing I-44. Violent EF-4 damage was again observed as it began to move into progressively higher density residential areas approaching May Avenue.",
+      "normalized_text": "The tornado then moved into Cleveland County at 2:04 PM CST from McClain County as it moved northeast across the Canadian River near U.S. Interstate Highway 44. The tornado then turned more east and then east-northeast after crossing I-44. Violent EF-4 damage was again observed as it began to move into progressively higher density residential areas approaching May Avenue.",
+      "content_hash": "0bad48276fef3512e4d50f2ea701a45a78a994c92a9d0fce40df877c2ef367e1"
+    },
+    {
+      "ordinal": 71,
+      "span_type": "paragraph",
+      "raw_text": "The center of the large tornado path passed near SW 149th Street and Western Avenue. After crossing Western Avenue, numerous buildings were destroyed and horses killed at Orr Family Farm. Two storage tanks estimated to weigh approximately 10 tons were lifted from Orr Family Farm and landed about one-half mile east.",
+      "normalized_text": "The center of the large tornado path passed near SW 149th Street and Western Avenue. After crossing Western Avenue, numerous buildings were destroyed and horses killed at Orr Family Farm. Two storage tanks estimated to weigh approximately 10 tons were lifted from Orr Family Farm and landed about one-half mile east.",
+      "content_hash": "59fa4423c9668ca8e7bad689c4c254b08cd8a074c2bd751ab536eab50e57f354"
+    },
+    {
+      "ordinal": 72,
+      "span_type": "paragraph",
+      "raw_text": "Moving east, the tornado destroyed much of Briarwood Elementary School, where the NWS storm survey team rated damage as EF-5. Despite the destruction of this elementary school during school hours, no fatalities occurred at the school. As the tornado continued to move east and east-northeast, it moved through much more densely populated suburban neighborhoods of southwest Oklahoma City and Moore where violent destruction was widespread.",
+      "normalized_text": "Moving east, the tornado destroyed much of Briarwood Elementary School, where the NWS storm survey team rated damage as EF-5. Despite the destruction of this elementary school during school hours, no fatalities occurred at the school. As the tornado continued to move east and east-northeast, it moved through much more densely populated suburban neighborhoods of southwest Oklahoma City and Moore where violent destruction was widespread.",
+      "content_hash": "669922dc6725112908934d972ba0d700ba00974b54914525402632dc63629ff3"
+    },
+    {
+      "ordinal": 73,
+      "span_type": "paragraph",
+      "raw_text": "The width of EF-4 and greater damage was up to 250 yards wide as the tornado moved through neighborhoods east of Western Avenue. The first two fatalities occurred in a house in the neighborhood just east of Briarwood Elementary, with another fatality in a house as the tornado approached Santa Fe Avenue.",
+      "normalized_text": "The width of EF-4 and greater damage was up to 250 yards wide as the tornado moved through neighborhoods east of Western Avenue. The first two fatalities occurred in a house in the neighborhood just east of Briarwood Elementary, with another fatality in a house as the tornado approached Santa Fe Avenue.",
+      "content_hash": "bcc151ceb6fedd48fc7f5e58e150b3a5e0c9829279e909bc615084019c9cfb99"
+    },
+    {
+      "ordinal": 74,
+      "span_type": "paragraph",
+      "raw_text": "After crossing Santa Fe Avenue, the tornado moved through more suburban neighborhoods and toward Plaza Towers Elementary School. Damage to the school was extensive and seven children were killed when a wall collapsed at the school. Nine other people were killed in eight different neighborhood homes within one-quarter mile of Plaza Towers Elementary, most occurring just south of the school.",
+      "normalized_text": "After crossing Santa Fe Avenue, the tornado moved through more suburban neighborhoods and toward Plaza Towers Elementary School. Damage to the school was extensive and seven children were killed when a wall collapsed at the school. Nine other people were killed in eight different neighborhood homes within one-quarter mile of Plaza Towers Elementary, most occurring just south of the school.",
+      "content_hash": "3457ec5417cad165ba68d3e34f6feba369c4016bd52f09bc472ce8cf1b5e1d6e"
+    },
+    {
+      "ordinal": 75,
+      "span_type": "paragraph",
+      "raw_text": "The tornado turned northeast as it approached Telephone Road, made a loop near the intersection of Telephone Road and 4th Street, then moved southeast crossing the interstate. Three people were killed when a convenience store along Telephone Road was destroyed. Crossing Telephone Road, the tornado inflicted significant damage to the Moore Medical Center, a post office and numerous businesses along Telephone Road and U.S. Interstate Highway 35.",
+      "normalized_text": "The tornado turned northeast as it approached Telephone Road, made a loop near the intersection of Telephone Road and 4th Street, then moved southeast crossing the interstate. Three people were killed when a convenience store along Telephone Road was destroyed. Crossing Telephone Road, the tornado inflicted significant damage to the Moore Medical Center, a post office and numerous businesses along Telephone Road and U.S. Interstate Highway 35.",
+      "content_hash": "36e354779b0339e62e4dccb3349bf36d2a2fd87914bf6c11185394956aa4c3fe"
+    },
+    {
+      "ordinal": 76,
+      "span_type": "paragraph",
+      "raw_text": "Although the tornado was more narrow after crossing I-35, it continued to produce EF-4 damage in neighborhoods east of the interstate as it curved east and then again east-northeast. One fatality occurred at a business just east of the interstate, and one final fatality occurred in a home between Eastern Avenue and Bryant Avenue. Consistent EF-4 damage continued until the tornado passed SE 4th Street just east of Bryant Avenue.",
+      "normalized_text": "Although the tornado was more narrow after crossing I-35, it continued to produce EF-4 damage in neighborhoods east of the interstate as it curved east and then again east-northeast. One fatality occurred at a business just east of the interstate, and one final fatality occurred in a home between Eastern Avenue and Bryant Avenue. Consistent EF-4 damage continued until the tornado passed SE 4th Street just east of Bryant Avenue.",
+      "content_hash": "d63b3754e0d447b8f432e3d19e346a834f8e9e3ba133f4bc383c8fff49d42ce4"
+    },
+    {
+      "ordinal": 77,
+      "span_type": "paragraph",
+      "raw_text": "Moving east from Bryant Avenue, the tornado continued to produce EF-2 damage with isolated EF-4 damage noted. The density of housing also decreased east of Bryant as the tornado moved east and east-northeast before dissipating at 2:35 PM CST east of Air Depot Blvd. between SE 119th Street and SE 134th Street in southeast Oklahoma City. Overall, over 300 homes experienced EF-4/EF-5 damage along the tornado path.",
+      "normalized_text": "Moving east from Bryant Avenue, the tornado continued to produce EF-2 damage with isolated EF-4 damage noted. The density of housing also decreased east of Bryant as the tornado moved east and east-northeast before dissipating at 2:35 PM CST east of Air Depot Blvd. between SE 119th Street and SE 134th Street in southeast Oklahoma City. Overall, over 300 homes experienced EF-4/EF-5 damage along the tornado path.",
+      "content_hash": "43f75fa8ddd5cc415f8164be74e4acc819bd5e67ea528a2b3f201c6619646b77"
+    },
+    {
+      "ordinal": 78,
+      "span_type": "heading",
+      "raw_text": "Radar Imagery",
+      "normalized_text": "Radar Imagery",
+      "content_hash": "eba95fbf62ad2c1460e80d80e21e75ae18a94f5d326ddb6323b6145d11f11b27"
+    },
+    {
+      "ordinal": 79,
+      "span_type": "heading",
+      "raw_text": "Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5 Tornado",
+      "normalized_text": "Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5 Tornado",
+      "content_hash": "aca441413d31205a660c3ecf55767a163bd0ddc541c668d32213ea0468de9f69"
+    },
+    {
+      "ordinal": 80,
+      "span_type": "heading",
+      "raw_text": "Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "normalized_text": "Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "content_hash": "415519ff9400348fcd0a50f5953a4e0e5f8dd18c3bceb62c6d2784b34e764035"
+    },
+    {
+      "ordinal": 81,
+      "span_type": "heading",
+      "raw_text": "Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "normalized_text": "Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "content_hash": "a45711e56bbd1637bb912ef6fef0dca762fc07ae0d09c6e68f27aec3a8f234fb"
+    },
+    {
+      "ordinal": 82,
+      "span_type": "heading",
+      "raw_text": "Event Timeline",
+      "normalized_text": "Event Timeline",
+      "content_hash": "50c4cd49a79884846f56594dd3321e02dc5dd3ad5fca7b3508ed4e9cc30ba822"
+    },
+    {
+      "ordinal": 83,
+      "span_type": "table_cell",
+      "raw_text": "TIME",
+      "normalized_text": "TIME",
+      "content_hash": "5888675d99b95617ba8cccd20dabe5554e91c71f3877c69d759bd8a5f162ae70"
+    },
+    {
+      "ordinal": 84,
+      "span_type": "table_cell",
+      "raw_text": "INFORMATION",
+      "normalized_text": "INFORMATION",
+      "content_hash": "e59da5e0b86e3865835d7026e22ae42ce7029dc02e734e514ab79a5c5d3f1aa9"
+    },
+    {
+      "ordinal": 85,
+      "span_type": "table_cell",
+      "raw_text": "TIME",
+      "normalized_text": "TIME",
+      "content_hash": "5888675d99b95617ba8cccd20dabe5554e91c71f3877c69d759bd8a5f162ae70"
+    },
+    {
+      "ordinal": 86,
+      "span_type": "table_cell",
+      "raw_text": "INFORMATION",
+      "normalized_text": "INFORMATION",
+      "content_hash": "e59da5e0b86e3865835d7026e22ae42ce7029dc02e734e514ab79a5c5d3f1aa9"
+    },
+    {
+      "ordinal": 87,
+      "span_type": "table_cell",
+      "raw_text": "2:48 AM",
+      "normalized_text": "2:48 AM",
+      "content_hash": "1207c266558e28b0604b1fe877d7e6861b4b62118c4389044927c43d25d438b6"
+    },
+    {
+      "ordinal": 88,
+      "span_type": "table_cell",
+      "raw_text": "Graphicast",
+      "normalized_text": "Graphicast",
+      "content_hash": "a3647206271cf37e1c4d89fdf69c6618c6b4e10559b728d020b567d2588b21b3"
+    },
+    {
+      "ordinal": 89,
+      "span_type": "table_cell",
+      "raw_text": "2:39 PM",
+      "normalized_text": "2:39 PM",
+      "content_hash": "b06bb946f172ce880c19573d2edc44d8b90f01afa1fd4ce01841e5b1cfb4b893"
+    },
+    {
+      "ordinal": 90,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 91,
+      "span_type": "table_cell",
+      "raw_text": "5:00 AM",
+      "normalized_text": "5:00 AM",
+      "content_hash": "bad09f10df9229453e5293c1c8882145d25a398a724d0f7692cc5142a89ef640"
+    },
+    {
+      "ordinal": 92,
+      "span_type": "table_cell",
+      "raw_text": "Hazardous Weather Outlook",
+      "normalized_text": "Hazardous Weather Outlook",
+      "content_hash": "d461d8039f2dc6b7a43ed7e14dba6ef5943adef7b514bc98521a205a80124f6f"
+    },
+    {
+      "ordinal": 93,
+      "span_type": "table_cell",
+      "raw_text": "2:40 PM",
+      "normalized_text": "2:40 PM",
+      "content_hash": "e7d590b0bb98750c25baccdaa2999eb994266f86f334b758903aaecc9ca3ba21"
+    },
+    {
+      "ordinal": 94,
+      "span_type": "table_cell",
+      "raw_text": "Tornado Warning",
+      "normalized_text": "Tornado Warning",
+      "content_hash": "f02a53df89982025694fd0d764fc063bdfb5e69aa3c002d18b5d1e668236950d"
+    },
+    {
+      "ordinal": 95,
+      "span_type": "table_cell",
+      "raw_text": "5:21 AM",
+      "normalized_text": "5:21 AM",
+      "content_hash": "e615da5af5d500b72f946381eb9cd9e48c44d090e2f2873a96377780aac4ebf0"
+    },
+    {
+      "ordinal": 96,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 97,
+      "span_type": "table_cell",
+      "raw_text": "2:41 PM",
+      "normalized_text": "2:41 PM",
+      "content_hash": "610bf817435460d6f01b13e465f19575f13adcd70aa0fb56d0dffcfda08c1d0f"
+    },
+    {
+      "ordinal": 98,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 99,
+      "span_type": "table_cell",
+      "raw_text": "5:34 AM",
+      "normalized_text": "5:34 AM",
+      "content_hash": "f5e20531ffef026948dc350c11cae618b405efb7343246ef14cefd2b02ac3e68"
+    },
+    {
+      "ordinal": 100,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 101,
+      "span_type": "table_cell",
+      "raw_text": "2:45 PM",
+      "normalized_text": "2:45 PM",
+      "content_hash": "14a57bede8c56caa0b2bf4c085db9960ac706de1713e67e3ba265a9f088ac564"
+    },
+    {
+      "ordinal": 102,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 103,
+      "span_type": "table_cell",
+      "raw_text": "7:50 AM",
+      "normalized_text": "7:50 AM",
+      "content_hash": "bf66b075321cf749a2c2b1fe9b765664babf194371527ec0418b70422ad09aa6"
+    },
+    {
+      "ordinal": 104,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 105,
+      "span_type": "table_cell",
+      "raw_text": "2:46 PM",
+      "normalized_text": "2:46 PM",
+      "content_hash": "2391701efd10d03526236ee8c681c22178c00306ebf0c3d6153047118904ff35"
+    },
+    {
+      "ordinal": 106,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 107,
+      "span_type": "table_cell",
+      "raw_text": "7:52 AM",
+      "normalized_text": "7:52 AM",
+      "content_hash": "75fd606664d5a4f5d614cb720ca9871f7fc4969851b99191c2c8a23bffc0c362"
+    },
+    {
+      "ordinal": 108,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 109,
+      "span_type": "table_cell",
+      "raw_text": "2:47 PM",
+      "normalized_text": "2:47 PM",
+      "content_hash": "d9190da4c984d8487f6c081bae5587a666d6f18a017661913275a0ddff3bb7cb"
+    },
+    {
+      "ordinal": 110,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 111,
+      "span_type": "table_cell",
+      "raw_text": "8:13 AM",
+      "normalized_text": "8:13 AM",
+      "content_hash": "11998b6d4551648d377485af2bcba471f83dcc56f4d0f869c85910360eb62f9f"
+    },
+    {
+      "ordinal": 112,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 113,
+      "span_type": "table_cell",
+      "raw_text": "2:47 PM",
+      "normalized_text": "2:47 PM",
+      "content_hash": "d9190da4c984d8487f6c081bae5587a666d6f18a017661913275a0ddff3bb7cb"
+    },
+    {
+      "ordinal": 114,
+      "span_type": "table_cell",
+      "raw_text": "Severe Weather Statement",
+      "normalized_text": "Severe Weather Statement",
+      "content_hash": "ad13d132cf6e9889cc65941050a965ada1ccee45c4f4000d9ffee67861418002"
+    },
+    {
+      "ordinal": 115,
+      "span_type": "table_cell",
+      "raw_text": "8:51 AM",
+      "normalized_text": "8:51 AM",
+      "content_hash": "25c59bdb7c6c430dcd66967c33b5582458ff4a3828eff634b680d793886af065"
+    },
+    {
+      "ordinal": 116,
+      "span_type": "table_cell",
+      "raw_text": "Graphicast",
+      "normalized_text": "Graphicast",
+      "content_hash": "a3647206271cf37e1c4d89fdf69c6618c6b4e10559b728d020b567d2588b21b3"
+    },
+    {
+      "ordinal": 117,
+      "span_type": "table_cell",
+      "raw_text": "2:51 PM",
+      "normalized_text": "2:51 PM",
+      "content_hash": "9168bc7568a4704945149bd528b30d789a99d64fce25472c47684151c99a5f47"
+    },
+    {
+      "ordinal": 118,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 119,
+      "span_type": "table_cell",
+      "raw_text": "9:47 AM",
+      "normalized_text": "9:47 AM",
+      "content_hash": "55729aeda38ff148dc340408ca089ff222ca6ce41b45bf9d2d171c273af1abfe"
+    },
+    {
+      "ordinal": 120,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 121,
+      "span_type": "table_cell",
+      "raw_text": "2:52 PM",
+      "normalized_text": "2:52 PM",
+      "content_hash": "4f3875b49c773fbf7210ea2b9b335295b547202543100426e9b50cc3387444ec"
+    },
+    {
+      "ordinal": 122,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 123,
+      "span_type": "table_cell",
+      "raw_text": "10:15 AM",
+      "normalized_text": "10:15 AM",
+      "content_hash": "fed2e8387399862957083bd4033c9b155113534eb6aaecc6e02e0fc07fa0eeb0"
+    },
+    {
+      "ordinal": 124,
+      "span_type": "table_cell",
+      "raw_text": "Hazardous Weather Outlook",
+      "normalized_text": "Hazardous Weather Outlook",
+      "content_hash": "d461d8039f2dc6b7a43ed7e14dba6ef5943adef7b514bc98521a205a80124f6f"
+    },
+    {
+      "ordinal": 125,
+      "span_type": "table_cell",
+      "raw_text": "2:53 PM",
+      "normalized_text": "2:53 PM",
+      "content_hash": "5701bee4f2aa4f2cdc62c773e7ce32510ee323ec3d6f65c2687c61e9fe46c4b5"
+    },
+    {
+      "ordinal": 126,
+      "span_type": "table_cell",
+      "raw_text": "Severe Weather Statement",
+      "normalized_text": "Severe Weather Statement",
+      "content_hash": "ad13d132cf6e9889cc65941050a965ada1ccee45c4f4000d9ffee67861418002"
+    },
+    {
+      "ordinal": 127,
+      "span_type": "table_cell",
+      "raw_text": "10:27 AM",
+      "normalized_text": "10:27 AM",
+      "content_hash": "086931bab6e298afc2f1c34580444163dd31427a2d7079b190b07d28d7866613"
+    },
+    {
+      "ordinal": 128,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 129,
+      "span_type": "table_cell",
+      "raw_text": "2:56 PM",
+      "normalized_text": "2:56 PM",
+      "content_hash": "94a0ff71d59c2d3cf6ac6c9d34bdf4eac26eb1d507e82ed5127e07368ad5418f"
+    },
+    {
+      "ordinal": 130,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 131,
+      "span_type": "table_cell",
+      "raw_text": "10:29 AM",
+      "normalized_text": "10:29 AM",
+      "content_hash": "f115163de52cda3c993404ea2fff6819523fa1bcef2da8d81f666d6c2ee94fae"
+    },
+    {
+      "ordinal": 132,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 133,
+      "span_type": "table_cell",
+      "raw_text": "2:56 PM",
+      "normalized_text": "2:56 PM",
+      "content_hash": "94a0ff71d59c2d3cf6ac6c9d34bdf4eac26eb1d507e82ed5127e07368ad5418f"
+    },
+    {
+      "ordinal": 134,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 135,
+      "span_type": "table_cell",
+      "raw_text": "11:08 AM",
+      "normalized_text": "11:08 AM",
+      "content_hash": "d7a3c2938053420562f31495bcdd0446aaecbb474e7bc198fd9978a3982365ca"
+    },
+    {
+      "ordinal": 136,
+      "span_type": "table_cell",
+      "raw_text": "Graphicast",
+      "normalized_text": "Graphicast",
+      "content_hash": "a3647206271cf37e1c4d89fdf69c6618c6b4e10559b728d020b567d2588b21b3"
+    },
+    {
+      "ordinal": 137,
+      "span_type": "table_cell",
+      "raw_text": "2:56 PM",
+      "normalized_text": "2:56 PM",
+      "content_hash": "94a0ff71d59c2d3cf6ac6c9d34bdf4eac26eb1d507e82ed5127e07368ad5418f"
+    },
+    {
+      "ordinal": 138,
+      "span_type": "table_cell",
+      "raw_text": "Severe Weather Statement",
+      "normalized_text": "Severe Weather Statement",
+      "content_hash": "ad13d132cf6e9889cc65941050a965ada1ccee45c4f4000d9ffee67861418002"
+    },
+    {
+      "ordinal": 139,
+      "span_type": "table_cell",
+      "raw_text": "11:17 AM",
+      "normalized_text": "11:17 AM",
+      "content_hash": "6903ad11666eaa35e378d92242f39864f51c8375c0151f4f5cc27582ef357443"
+    },
+    {
+      "ordinal": 140,
+      "span_type": "table_cell",
+      "raw_text": "Graphicast",
+      "normalized_text": "Graphicast",
+      "content_hash": "a3647206271cf37e1c4d89fdf69c6618c6b4e10559b728d020b567d2588b21b3"
+    },
+    {
+      "ordinal": 141,
+      "span_type": "table_cell",
+      "raw_text": "2:57 PM",
+      "normalized_text": "2:57 PM",
+      "content_hash": "ef66ed70724e9f3a10a72c7117ffd626e2abb281625ad2559b195e1defb9ea53"
+    },
+    {
+      "ordinal": 142,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 143,
+      "span_type": "table_cell",
+      "raw_text": "11:23 AM",
+      "normalized_text": "11:23 AM",
+      "content_hash": "6de7c059b3c7b024ddda0eb2e57531636c7655c2d165e20cf20fce29a3435af5"
+    },
+    {
+      "ordinal": 144,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 145,
+      "span_type": "table_cell",
+      "raw_text": "3:00 PM",
+      "normalized_text": "3:00 PM",
+      "content_hash": "e8fb80934e36258a62ae396880566e960c8e502b1ac55f181ba749233d8a2dbc"
+    },
+    {
+      "ordinal": 146,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 147,
+      "span_type": "table_cell",
+      "raw_text": "11:23 AM",
+      "normalized_text": "11:23 AM",
+      "content_hash": "6de7c059b3c7b024ddda0eb2e57531636c7655c2d165e20cf20fce29a3435af5"
+    },
+    {
+      "ordinal": 148,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 149,
+      "span_type": "table_cell",
+      "raw_text": "3:00 PM",
+      "normalized_text": "3:00 PM",
+      "content_hash": "e8fb80934e36258a62ae396880566e960c8e502b1ac55f181ba749233d8a2dbc"
+    },
+    {
+      "ordinal": 150,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 151,
+      "span_type": "table_cell",
+      "raw_text": "11:31 AM",
+      "normalized_text": "11:31 AM",
+      "content_hash": "c303fbbebb7d4fc0d80c8282373cd1571ce7997b45a266d45cfbe50394651e34"
+    },
+    {
+      "ordinal": 152,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 153,
+      "span_type": "table_cell",
+      "raw_text": "3:01 PM",
+      "normalized_text": "3:01 PM",
+      "content_hash": "929a1948962b2a9bf2684cb3e43c723a5d161d34dc59d5d5ead6a4799a96ec90"
+    },
+    {
+      "ordinal": 154,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 155,
+      "span_type": "table_cell",
+      "raw_text": "11:52 AM",
+      "normalized_text": "11:52 AM",
+      "content_hash": "f84bc6c63545f4cab27f0159e7b256cb8f22a4a2cd8744cc7f25adb68468ff56"
+    },
+    {
+      "ordinal": 156,
+      "span_type": "table_cell",
+      "raw_text": "PNS - Safety Guidelines",
+      "normalized_text": "PNS - Safety Guidelines",
+      "content_hash": "a30e545a50b983a34176d2c606853b927e13bd006c9c511fe8603589ba74635c"
+    },
+    {
+      "ordinal": 157,
+      "span_type": "table_cell",
+      "raw_text": "3:01 PM",
+      "normalized_text": "3:01 PM",
+      "content_hash": "929a1948962b2a9bf2684cb3e43c723a5d161d34dc59d5d5ead6a4799a96ec90"
+    },
+    {
+      "ordinal": 158,
+      "span_type": "table_cell",
+      "raw_text": "Tornado Warning",
+      "normalized_text": "Tornado Warning",
+      "content_hash": "f02a53df89982025694fd0d764fc063bdfb5e69aa3c002d18b5d1e668236950d"
+    },
+    {
+      "ordinal": 159,
+      "span_type": "table_cell",
+      "raw_text": "12:07 PM",
+      "normalized_text": "12:07 PM",
+      "content_hash": "21540e71853d6bcf4a9113f15da6de5a5b5a852296039836656d3728e99b9bc9"
+    },
+    {
+      "ordinal": 160,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 161,
+      "span_type": "table_cell",
+      "raw_text": "3:01 PM",
+      "normalized_text": "3:01 PM",
+      "content_hash": "929a1948962b2a9bf2684cb3e43c723a5d161d34dc59d5d5ead6a4799a96ec90"
+    },
+    {
+      "ordinal": 162,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 163,
+      "span_type": "table_cell",
+      "raw_text": "12:08 PM",
+      "normalized_text": "12:08 PM",
+      "content_hash": "afcd00a43c891d5fdfbfb9a62376c74f84b3f5d3672650759bfa8e9876b8bb2e"
+    },
+    {
+      "ordinal": 164,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 165,
+      "span_type": "table_cell",
+      "raw_text": "3:02 PM",
+      "normalized_text": "3:02 PM",
+      "content_hash": "ccbe445b4df734c5d3f1b4accb173c34b2a89a6fef7a03354efbaa20e3a8bc2c"
+    },
+    {
+      "ordinal": 166,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 167,
+      "span_type": "table_cell",
+      "raw_text": "12:30 PM",
+      "normalized_text": "12:30 PM",
+      "content_hash": "3627b96174a564176eb68efc0a7385b4bb587cee1fccb50da363b6ca3f3f6c4e"
+    },
+    {
+      "ordinal": 168,
+      "span_type": "table_cell",
+      "raw_text": "Hazardous Weather Outlook",
+      "normalized_text": "Hazardous Weather Outlook",
+      "content_hash": "d461d8039f2dc6b7a43ed7e14dba6ef5943adef7b514bc98521a205a80124f6f"
+    },
+    {
+      "ordinal": 169,
+      "span_type": "table_cell",
+      "raw_text": "3:03 PM",
+      "normalized_text": "3:03 PM",
+      "content_hash": "8375316c7ec7a01d37e7ff88d015eda1406cfcdd79dac5e35d66d6fcecadcfcf"
+    },
+    {
+      "ordinal": 170,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 171,
+      "span_type": "table_cell",
+      "raw_text": "12:30 PM",
+      "normalized_text": "12:30 PM",
+      "content_hash": "3627b96174a564176eb68efc0a7385b4bb587cee1fccb50da363b6ca3f3f6c4e"
+    },
+    {
+      "ordinal": 172,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 173,
+      "span_type": "table_cell",
+      "raw_text": "3:04 PM",
+      "normalized_text": "3:04 PM",
+      "content_hash": "ecad7aa13d72f1d7610e24e14a10818e719c67506b9a9589c722b3ce8cd801c2"
+    },
+    {
+      "ordinal": 174,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 175,
+      "span_type": "table_cell",
+      "raw_text": "12:31 PM",
+      "normalized_text": "12:31 PM",
+      "content_hash": "c5dfabd43cb333c32db17ba2c08212344db447795626896c16576d9f88cd2b0b"
+    },
+    {
+      "ordinal": 176,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 177,
+      "span_type": "table_cell",
+      "raw_text": "3:05 PM",
+      "normalized_text": "3:05 PM",
+      "content_hash": "fe5a01ac404ce895696f428ae74875fc31b3a3bcb5253f310195bc9b3b735ddf"
+    },
+    {
+      "ordinal": 178,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 179,
+      "span_type": "table_cell",
+      "raw_text": "12:58 PM",
+      "normalized_text": "12:58 PM",
+      "content_hash": "123109b2662a74331b4d519ca9d3a3ad2b6990a1871ab03f28eebad04ca469c0"
+    },
+    {
+      "ordinal": 180,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 181,
+      "span_type": "table_cell",
+      "raw_text": "3:09 PM",
+      "normalized_text": "3:09 PM",
+      "content_hash": "87b6213b2f03d4cc2f2c22bf4d1d50a563ba062aefa2b45cb6449bf959428577"
+    },
+    {
+      "ordinal": 182,
+      "span_type": "table_cell",
+      "raw_text": "Severe Weather Statement",
+      "normalized_text": "Severe Weather Statement",
+      "content_hash": "ad13d132cf6e9889cc65941050a965ada1ccee45c4f4000d9ffee67861418002"
+    },
+    {
+      "ordinal": 183,
+      "span_type": "table_cell",
+      "raw_text": "1:04 PM",
+      "normalized_text": "1:04 PM",
+      "content_hash": "5e8c964836e244bbf37d89428a98585acccdd715795064d26ebb9536c97a774f"
+    },
+    {
+      "ordinal": 184,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 185,
+      "span_type": "table_cell",
+      "raw_text": "3:14 PM",
+      "normalized_text": "3:14 PM",
+      "content_hash": "2b019ab09c21dade3f68083c357073ecbbf5bbf053fe50e30cd26724b5526323"
+    },
+    {
+      "ordinal": 186,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 187,
+      "span_type": "table_cell",
+      "raw_text": "1:20 PM",
+      "normalized_text": "1:20 PM",
+      "content_hash": "54344d49fafb8a60311c5e8cceb2cb455c46a78156a5e5211341f9cde6f295be"
+    },
+    {
+      "ordinal": 188,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 189,
+      "span_type": "table_cell",
+      "raw_text": "3:16 PM",
+      "normalized_text": "3:16 PM",
+      "content_hash": "e9a7977c7e09a3702e6202abd116bec0b3cc4bd43174bc5d9d49520f13954f77"
+    },
+    {
+      "ordinal": 190,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 191,
+      "span_type": "table_cell",
+      "raw_text": "1:23 PM",
+      "normalized_text": "1:23 PM",
+      "content_hash": "bf071f3d61b62512479f575792a3b9293dc3048fdf4ab5d53eff26f8ec97b35b"
+    },
+    {
+      "ordinal": 192,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 193,
+      "span_type": "table_cell",
+      "raw_text": "3:19 PM",
+      "normalized_text": "3:19 PM",
+      "content_hash": "5f9d512f092ff548f71e184628e58810a56aa2b15f927fa7ef6cd89f7ef0b571"
+    },
+    {
+      "ordinal": 194,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 195,
+      "span_type": "table_cell",
+      "raw_text": "1:30 PM",
+      "normalized_text": "1:30 PM",
+      "content_hash": "caeb5aa991cf1f4b58cfc2c7ed53e08e157abb82f654b157ad5b35f5a238b075"
+    },
+    {
+      "ordinal": 196,
+      "span_type": "table_cell",
+      "raw_text": "Graphicast",
+      "normalized_text": "Graphicast",
+      "content_hash": "a3647206271cf37e1c4d89fdf69c6618c6b4e10559b728d020b567d2588b21b3"
+    },
+    {
+      "ordinal": 197,
+      "span_type": "table_cell",
+      "raw_text": "3:19 PM",
+      "normalized_text": "3:19 PM",
+      "content_hash": "5f9d512f092ff548f71e184628e58810a56aa2b15f927fa7ef6cd89f7ef0b571"
+    },
+    {
+      "ordinal": 198,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 199,
+      "span_type": "table_cell",
+      "raw_text": "1:50 PM",
+      "normalized_text": "1:50 PM",
+      "content_hash": "8bf0fa6be2ce46f3ce3afdbaf422c7a6c03c8aed97031077448314c4f78a942b"
+    },
+    {
+      "ordinal": 200,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 201,
+      "span_type": "table_cell",
+      "raw_text": "3:21 PM",
+      "normalized_text": "3:21 PM",
+      "content_hash": "8be1c0dc78a08a41c65362f8502743ca7607bda7b1d26ce9e7279ba5866b51d0"
+    },
+    {
+      "ordinal": 202,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 203,
+      "span_type": "table_cell",
+      "raw_text": "1:58 PM",
+      "normalized_text": "1:58 PM",
+      "content_hash": "e5feb31b569e919cbd00b88c4ef161e11a9db5569213ed654adcfc9c1548e07a"
+    },
+    {
+      "ordinal": 204,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 205,
+      "span_type": "table_cell",
+      "raw_text": "3:21 PM",
+      "normalized_text": "3:21 PM",
+      "content_hash": "8be1c0dc78a08a41c65362f8502743ca7607bda7b1d26ce9e7279ba5866b51d0"
+    },
+    {
+      "ordinal": 206,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 207,
+      "span_type": "table_cell",
+      "raw_text": "2:03 PM",
+      "normalized_text": "2:03 PM",
+      "content_hash": "3836530e0079f7a811dbe69eb55bd819bc8cf28f96444d558b8b501603b63b11"
+    },
+    {
+      "ordinal": 208,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 209,
+      "span_type": "table_cell",
+      "raw_text": "3:22 PM",
+      "normalized_text": "3:22 PM",
+      "content_hash": "888c0b7035d4fd60a7153080c9d2c3e3eaff23c46f27dbd62e8206cba540a751"
+    },
+    {
+      "ordinal": 210,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 211,
+      "span_type": "table_cell",
+      "raw_text": "2:09 PM",
+      "normalized_text": "2:09 PM",
+      "content_hash": "0fd24ca1a58a63fac9db575e7ffca56bed938e51395d3c633a94df14e3896151"
+    },
+    {
+      "ordinal": 212,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 213,
+      "span_type": "table_cell",
+      "raw_text": "3:23 PM",
+      "normalized_text": "3:23 PM",
+      "content_hash": "9274cdc73eedcb9c4001f86cabcc39dbf82fa037571b2f3c32332e1687a08cf0"
+    },
+    {
+      "ordinal": 214,
+      "span_type": "table_cell",
+      "raw_text": "Severe Weather Statement",
+      "normalized_text": "Severe Weather Statement",
+      "content_hash": "ad13d132cf6e9889cc65941050a965ada1ccee45c4f4000d9ffee67861418002"
+    },
+    {
+      "ordinal": 215,
+      "span_type": "table_cell",
+      "raw_text": "2:11 PM",
+      "normalized_text": "2:11 PM",
+      "content_hash": "6ab264dcb79cf6c26c78dfca87875059c479f56637c7792c33249eefc74ade63"
+    },
+    {
+      "ordinal": 216,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 217,
+      "span_type": "table_cell",
+      "raw_text": "3:26 PM",
+      "normalized_text": "3:26 PM",
+      "content_hash": "4aa390a246c0693c45546a1571a222e500c99895e6027613d623bd4dc66a3fcd"
+    },
+    {
+      "ordinal": 218,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 219,
+      "span_type": "table_cell",
+      "raw_text": "2:11 PM",
+      "normalized_text": "2:11 PM",
+      "content_hash": "6ab264dcb79cf6c26c78dfca87875059c479f56637c7792c33249eefc74ade63"
+    },
+    {
+      "ordinal": 220,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 221,
+      "span_type": "table_cell",
+      "raw_text": "3:29 PM",
+      "normalized_text": "3:29 PM",
+      "content_hash": "0958be295b375506299ecf0197df123f544f526cc84b6d3bbbf631938ad47920"
+    },
+    {
+      "ordinal": 222,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 223,
+      "span_type": "table_cell",
+      "raw_text": "2:12 PM",
+      "normalized_text": "2:12 PM",
+      "content_hash": "204e06cd5147aff771a57f3e0feb14f4ca949049239b3b5465e225cb39909f78"
+    },
+    {
+      "ordinal": 224,
+      "span_type": "table_cell",
+      "raw_text": "Severe Thunderstorm Warning",
+      "normalized_text": "Severe Thunderstorm Warning",
+      "content_hash": "7722f3447623416928350a835831110813b1e18ef6cdd0cf0d71eb48e67c5418"
+    },
+    {
+      "ordinal": 225,
+      "span_type": "table_cell",
+      "raw_text": "3:32 PM",
+      "normalized_text": "3:32 PM",
+      "content_hash": "09e54be24dcaba7ac531c099b38e80bbfc80a7e820a376ccfde3c464ece50876"
+    },
+    {
+      "ordinal": 226,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 227,
+      "span_type": "table_cell",
+      "raw_text": "2:13 PM",
+      "normalized_text": "2:13 PM",
+      "content_hash": "afc96d82f96049d2c94d5af2db9fd6b8ee54dec7a0f36fa374862089e4815303"
+    },
+    {
+      "ordinal": 228,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 229,
+      "span_type": "table_cell",
+      "raw_text": "3:33 PM",
+      "normalized_text": "3:33 PM",
+      "content_hash": "bbdecb0f3c2ec6a80c861dc1a339696d2b174e961e18bad8251f94fa6753af54"
+    },
+    {
+      "ordinal": 230,
+      "span_type": "table_cell",
+      "raw_text": "Severe Weather Statement",
+      "normalized_text": "Severe Weather Statement",
+      "content_hash": "ad13d132cf6e9889cc65941050a965ada1ccee45c4f4000d9ffee67861418002"
+    },
+    {
+      "ordinal": 231,
+      "span_type": "table_cell",
+      "raw_text": "2:23 PM",
+      "normalized_text": "2:23 PM",
+      "content_hash": "cd27ea242ebecaef57375c8a97afd5ca61c8f31251b4f468360173ca378d8767"
+    },
+    {
+      "ordinal": 232,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 233,
+      "span_type": "table_cell",
+      "raw_text": "3:34 PM",
+      "normalized_text": "3:34 PM",
+      "content_hash": "a08600c0bedaecebed57ce30329b9345e14f27cdd944bf5fa7279854730bc276"
+    },
+    {
+      "ordinal": 234,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 235,
+      "span_type": "table_cell",
+      "raw_text": "2:24 PM",
+      "normalized_text": "2:24 PM",
+      "content_hash": "855d82210024e89e70bcd4ab8d578766957b95cf206170a58a6ba470d8b1de87"
+    },
+    {
+      "ordinal": 236,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 237,
+      "span_type": "table_cell",
+      "raw_text": "3:35 PM",
+      "normalized_text": "3:35 PM",
+      "content_hash": "1ae5e510e56d0a0338e183e363ae24cf599cde7daa8c42dc0f76f36c2ba6a189"
+    },
+    {
+      "ordinal": 238,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 239,
+      "span_type": "table_cell",
+      "raw_text": "2:26 PM",
+      "normalized_text": "2:26 PM",
+      "content_hash": "b1ea26e7f579d7fe63a60a197c0eb33f7aac7600ae7be9116e0fbe66351fe91c"
+    },
+    {
+      "ordinal": 240,
+      "span_type": "table_cell",
+      "raw_text": "Severe Weather Statement",
+      "normalized_text": "Severe Weather Statement",
+      "content_hash": "ad13d132cf6e9889cc65941050a965ada1ccee45c4f4000d9ffee67861418002"
+    },
+    {
+      "ordinal": 241,
+      "span_type": "table_cell",
+      "raw_text": "3:37 PM",
+      "normalized_text": "3:37 PM",
+      "content_hash": "bb2f36e93da07fada3f0f0e83180e725bace471e9eb25137539294e4dc172fda"
+    },
+    {
+      "ordinal": 242,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 243,
+      "span_type": "table_cell",
+      "raw_text": "2:31 PM",
+      "normalized_text": "2:31 PM",
+      "content_hash": "d381bd0f7fee6d21f8a1c2d150daebdf37a2ea4f7224e14e0a8a7081ce7802fc"
+    },
+    {
+      "ordinal": 244,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 245,
+      "span_type": "table_cell",
+      "raw_text": "3:39 PM",
+      "normalized_text": "3:39 PM",
+      "content_hash": "ddffcac304a7d1e62213e279e7c09e62e3ea45fab51d0e9a472633cbbfdad5ae"
+    },
+    {
+      "ordinal": 246,
+      "span_type": "table_cell",
+      "raw_text": "Facebook",
+      "normalized_text": "Facebook",
+      "content_hash": "d41f5b4977ee05c6b61b3b5f054784628f5cd1cbe06a82a5484d1e6de6eefe85"
+    },
+    {
+      "ordinal": 247,
+      "span_type": "table_cell",
+      "raw_text": "2:31 PM",
+      "normalized_text": "2:31 PM",
+      "content_hash": "d381bd0f7fee6d21f8a1c2d150daebdf37a2ea4f7224e14e0a8a7081ce7802fc"
+    },
+    {
+      "ordinal": 248,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 249,
+      "span_type": "table_cell",
+      "raw_text": "3:39 PM",
+      "normalized_text": "3:39 PM",
+      "content_hash": "ddffcac304a7d1e62213e279e7c09e62e3ea45fab51d0e9a472633cbbfdad5ae"
+    },
+    {
+      "ordinal": 250,
+      "span_type": "table_cell",
+      "raw_text": "NWSChat",
+      "normalized_text": "NWSChat",
+      "content_hash": "ff6e3d424eb222f9f24dd4a3a92c598212b44d00471ebfb527e76e34bcd8898c"
+    },
+    {
+      "ordinal": 251,
+      "span_type": "table_cell",
+      "raw_text": "2:34 PM",
+      "normalized_text": "2:34 PM",
+      "content_hash": "01c0d4999fd1bdf1db912d0fb64b7f7d59661c58a864d3963343db3f553bd1d1"
+    },
+    {
+      "ordinal": 252,
+      "span_type": "table_cell",
+      "raw_text": "Twitter",
+      "normalized_text": "Twitter",
+      "content_hash": "bcd18ead5fa830127187d499e97e7a4dc8f641ec34d8c7e9f9f24deae2e39fdc"
+    },
+    {
+      "ordinal": 253,
+      "span_type": "heading",
+      "raw_text": "Tornado Data",
+      "normalized_text": "Tornado Data",
+      "content_hash": "a02bfe222d4e8f549c07b5b9283e14d569b500a3d0ddcea9b5f089b4327467cf"
+    },
+    {
+      "ordinal": 254,
+      "span_type": "paragraph",
+      "raw_text": "Surveys conducted by crews in the NWS Norman and NWS Tulsa forecast areas revealed that 15 tornadoes occurred during the afternoon and evening of May 20, 2013. A total of 5 tornadoes occurred in the NWS Norman forecast area in McClain, Cleveland, Lincoln,  Stephens, and Coal Counties in central and southern Oklahoma. A total of 10 tornadoes occurred in the NWS Tulsa forecast area in Osage, Washington, Rogers, Ottawa, Adair, and Le Flore Counties in eastern Oklahoma.",
+      "normalized_text": "Surveys conducted by crews in the NWS Norman and NWS Tulsa forecast areas revealed that 15 tornadoes occurred during the afternoon and evening of May 20, 2013. A total of 5 tornadoes occurred in the NWS Norman forecast area in McClain, Cleveland, Lincoln, Stephens, and Coal Counties in central and southern Oklahoma. A total of 10 tornadoes occurred in the NWS Tulsa forecast area in Osage, Washington, Rogers, Ottawa, Adair, and Le Flore Counties in eastern Oklahoma.",
+      "content_hash": "20b4fa0f3a1e19b21bf75e64a7bdde8ca34861a4a07932bf0aaacc551c9c9d37"
+    },
+    {
+      "ordinal": 255,
+      "span_type": "table_cell",
+      "raw_text": "#",
+      "normalized_text": "#",
+      "content_hash": "334359b90efed75da5f0ada1d5e6b256f4a6bd0aee7eb39c0f90182a021ffc8b"
+    },
+    {
+      "ordinal": 256,
+      "span_type": "table_cell",
+      "raw_text": "Date",
+      "normalized_text": "Date",
+      "content_hash": "99c40ab405926cb5ad1def9cff4d7ce624f8f8abfff4e85f655347fcb949d08e"
+    },
+    {
+      "ordinal": 257,
+      "span_type": "table_cell",
+      "raw_text": "Time (CST)",
+      "normalized_text": "Time (CST)",
+      "content_hash": "077e21e5c21324fe82d3dc7702b8e2828148c2284f99ea53c88e122c9d095224"
+    },
+    {
+      "ordinal": 258,
+      "span_type": "table_cell",
+      "raw_text": "Path Length (miles)",
+      "normalized_text": "Path Length (miles)",
+      "content_hash": "88f643f05be59954589b27b60a0bfa021a89db845afed945ab1cbb94dca345eb"
+    },
+    {
+      "ordinal": 259,
+      "span_type": "table_cell",
+      "raw_text": "Path Width (yards)",
+      "normalized_text": "Path Width (yards)",
+      "content_hash": "18409b19b2ee5e8ce51f48932f53b7069a842f081b11081dc3a94865d9001071"
+    },
+    {
+      "ordinal": 260,
+      "span_type": "table_cell",
+      "raw_text": "F-Scale",
+      "normalized_text": "F-Scale",
+      "content_hash": "15080f88871d7fea3ccdfc533344276f7e959ae41a2205f6d880fff3f21cc8ac"
+    },
+    {
+      "ordinal": 261,
+      "span_type": "table_cell",
+      "raw_text": "Killed",
+      "normalized_text": "Killed",
+      "content_hash": "b3ce8f082c5333a51874503e85870c7604ac10588202e218b47b937049351a97"
+    },
+    {
+      "ordinal": 262,
+      "span_type": "table_cell",
+      "raw_text": "Injured",
+      "normalized_text": "Injured",
+      "content_hash": "54dec599fe852de36a27e78b7874df57bdf3eb2002664b5cd8dc0d1f8ee6d01a"
+    },
+    {
+      "ordinal": 263,
+      "span_type": "table_cell",
+      "raw_text": "County",
+      "normalized_text": "County",
+      "content_hash": "136c87dec4695cefef030fd6dc7c32faeb6280a795fda70b017197b60e3b7873"
+    },
+    {
+      "ordinal": 264,
+      "span_type": "table_cell",
+      "raw_text": "Path",
+      "normalized_text": "Path",
+      "content_hash": "62fa5a5b0d3c318835a213e22a4b335c42515443d598741d0413e8c47f9ecf67"
+    },
+    {
+      "ordinal": 265,
+      "span_type": "table_cell",
+      "raw_text": "1",
+      "normalized_text": "1",
+      "content_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    },
+    {
+      "ordinal": 266,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 267,
+      "span_type": "table_cell",
+      "raw_text": "1356-1435",
+      "normalized_text": "1356-1435",
+      "content_hash": "cafe4cc681c2ac5c1078bb95b2d139c7b34c0cab65cf0ce3464ac8d302323ac3"
+    },
+    {
+      "ordinal": 268,
+      "span_type": "table_cell",
+      "raw_text": "14",
+      "normalized_text": "14",
+      "content_hash": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61"
+    },
+    {
+      "ordinal": 269,
+      "span_type": "table_cell",
+      "raw_text": "1900",
+      "normalized_text": "1900",
+      "content_hash": "e41d64db5703c6440b5c714d57251a845bc0bd241480b41a4e7fd3e052f85a82"
+    },
+    {
+      "ordinal": 270,
+      "span_type": "table_cell",
+      "raw_text": "EF5",
+      "normalized_text": "EF5",
+      "content_hash": "6400fc6ec3ce766473bb95b60461d5ec54276a6fa88be8449a1d0be921445d0e"
+    },
+    {
+      "ordinal": 271,
+      "span_type": "table_cell",
+      "raw_text": "24",
+      "normalized_text": "24",
+      "content_hash": "c2356069e9d1e79ca924378153cfbbfb4d4416b1f99d41a2940bfdb66c5319db"
+    },
+    {
+      "ordinal": 272,
+      "span_type": "table_cell",
+      "raw_text": "212",
+      "normalized_text": "212",
+      "content_hash": "fa2b7af0a811b9acde602aacb78e3638e8506dfead5fe6c3425b10b526f94bdd"
+    },
+    {
+      "ordinal": 273,
+      "span_type": "table_cell",
+      "raw_text": "McClain/ Cleveland",
+      "normalized_text": "McClain/ Cleveland",
+      "content_hash": "a327a42474cbdbba6b0d5e0843e23d32606fd8b928ba40ae53db17ded5208f70"
+    },
+    {
+      "ordinal": 274,
+      "span_type": "table_cell",
+      "raw_text": "Newcastle (3 NW US-277/SH-130) - 3 WNW Stanley Draper Lake Dam",
+      "normalized_text": "Newcastle (3 NW US-277/SH-130) - 3 WNW Stanley Draper Lake Dam",
+      "content_hash": "0314761faae0fdc9802ffeb14f77fb240aba1a0142086e6b638d5bd8f251b12d"
+    },
+    {
+      "ordinal": 275,
+      "span_type": "table_cell",
+      "raw_text": "2",
+      "normalized_text": "2",
+      "content_hash": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+    },
+    {
+      "ordinal": 276,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 277,
+      "span_type": "table_cell",
+      "raw_text": "1358-1401",
+      "normalized_text": "1358-1401",
+      "content_hash": "92ace0d65dfb939b74a673f6fc28922f0566562836084483839c1aaf4e527d99"
+    },
+    {
+      "ordinal": 278,
+      "span_type": "table_cell",
+      "raw_text": "1",
+      "normalized_text": "1",
+      "content_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    },
+    {
+      "ordinal": 279,
+      "span_type": "table_cell",
+      "raw_text": "30",
+      "normalized_text": "30",
+      "content_hash": "624b60c58c9d8bfb6ff1886c2fd605d2adeb6ea4da576068201b6c6958ce93f4"
+    },
+    {
+      "ordinal": 280,
+      "span_type": "table_cell",
+      "raw_text": "EF0",
+      "normalized_text": "EF0",
+      "content_hash": "2bde75f3b5d42500a835f7af8165b39027114293d69d0fd5a0d032f21b9e8fb4"
+    },
+    {
+      "ordinal": 281,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 282,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 283,
+      "span_type": "table_cell",
+      "raw_text": "Stephens",
+      "normalized_text": "Stephens",
+      "content_hash": "d18d0f4ad12620820bcd18779d141565e8c09da134883340adb6b5d99af40b83"
+    },
+    {
+      "ordinal": 284,
+      "span_type": "table_cell",
+      "raw_text": "7 SSE Marlow",
+      "normalized_text": "7 SSE Marlow",
+      "content_hash": "7b4f5ba885e33e16380f32d024d3cfc0fe59bcea489a82220dd55729b50c30d8"
+    },
+    {
+      "ordinal": 285,
+      "span_type": "table_cell",
+      "raw_text": "3",
+      "normalized_text": "3",
+      "content_hash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+    },
+    {
+      "ordinal": 286,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 287,
+      "span_type": "table_cell",
+      "raw_text": "1407-1422",
+      "normalized_text": "1407-1422",
+      "content_hash": "ef5a0d059aa242574feaec7f6bc8b46c4ca1a84e8a59828988ecdd7390d9f6f6"
+    },
+    {
+      "ordinal": 288,
+      "span_type": "table_cell",
+      "raw_text": "4",
+      "normalized_text": "4",
+      "content_hash": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a"
+    },
+    {
+      "ordinal": 289,
+      "span_type": "table_cell",
+      "raw_text": "200",
+      "normalized_text": "200",
+      "content_hash": "27badc983df1780b60c2b3fa9d3a19a00e46aac798451f0febdca52920faaddf"
+    },
+    {
+      "ordinal": 290,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 291,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 292,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 293,
+      "span_type": "table_cell",
+      "raw_text": "Stephens",
+      "normalized_text": "Stephens",
+      "content_hash": "d18d0f4ad12620820bcd18779d141565e8c09da134883340adb6b5d99af40b83"
+    },
+    {
+      "ordinal": 294,
+      "span_type": "table_cell",
+      "raw_text": "4 SSE Marlow - 4 W Bray",
+      "normalized_text": "4 SSE Marlow - 4 W Bray",
+      "content_hash": "5dd85cb17c523d7e75cf3dbdac46b7f2f50f0691635e18c1e71850401370d7dc"
+    },
+    {
+      "ordinal": 295,
+      "span_type": "table_cell",
+      "raw_text": "4",
+      "normalized_text": "4",
+      "content_hash": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a"
+    },
+    {
+      "ordinal": 296,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 297,
+      "span_type": "table_cell",
+      "raw_text": "1451-1505",
+      "normalized_text": "1451-1505",
+      "content_hash": "a40cf0350c514c44305f85ba07140fbf31da0f5660c6404b85e460fab422da71"
+    },
+    {
+      "ordinal": 298,
+      "span_type": "table_cell",
+      "raw_text": "6.5",
+      "normalized_text": "6.5",
+      "content_hash": "a22eea496bce0154f2e2dc5e652100cd8a0f9571b95ed89dd48599e76d339657"
+    },
+    {
+      "ordinal": 299,
+      "span_type": "table_cell",
+      "raw_text": "500",
+      "normalized_text": "500",
+      "content_hash": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a"
+    },
+    {
+      "ordinal": 300,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 301,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 302,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 303,
+      "span_type": "table_cell",
+      "raw_text": "Osage/ Washington",
+      "normalized_text": "Osage/ Washington",
+      "content_hash": "c8f032fe41f09ba055bc389564095bc0ef72ba6c7666c572c683a8b9029393a5"
+    },
+    {
+      "ordinal": 304,
+      "span_type": "table_cell",
+      "raw_text": "4.5 S Avant - 5.3 W Vera",
+      "normalized_text": "4.5 S Avant - 5.3 W Vera",
+      "content_hash": "119b615e9b46fd72fd4cac21001994a57e50a6106c9247a1878a26bdea60c94e"
+    },
+    {
+      "ordinal": 305,
+      "span_type": "table_cell",
+      "raw_text": "5",
+      "normalized_text": "5",
+      "content_hash": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"
+    },
+    {
+      "ordinal": 306,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 307,
+      "span_type": "table_cell",
+      "raw_text": "1521-1530",
+      "normalized_text": "1521-1530",
+      "content_hash": "549fc3df8c2b4b29930b9435675d4a0366272c57f7c24fc4f6e967b79d6e9446"
+    },
+    {
+      "ordinal": 308,
+      "span_type": "table_cell",
+      "raw_text": "4.5",
+      "normalized_text": "4.5",
+      "content_hash": "32209ccbf8a8e509b9027698cc173343a2695e8ecdbe899bf5335a3100c956fc"
+    },
+    {
+      "ordinal": 309,
+      "span_type": "table_cell",
+      "raw_text": "400",
+      "normalized_text": "400",
+      "content_hash": "26d228663f13a88592a12d16cf9587caab0388b262d6d9f126ed62f9333aca94"
+    },
+    {
+      "ordinal": 310,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 311,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 312,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 313,
+      "span_type": "table_cell",
+      "raw_text": "Washington",
+      "normalized_text": "Washington",
+      "content_hash": "6b9031df058346a877deaba0a830b576fa81b9da8692e183e4eb4c9dc949054c"
+    },
+    {
+      "ordinal": 314,
+      "span_type": "table_cell",
+      "raw_text": "3 SSE - 5 E Ramona",
+      "normalized_text": "3 SSE - 5 E Ramona",
+      "content_hash": "1a7e8ba951a2ea4f27d278cf36f894a718d0cc1aa0cf5e5a4eeb505f748000fb"
+    },
+    {
+      "ordinal": 315,
+      "span_type": "table_cell",
+      "raw_text": "6",
+      "normalized_text": "6",
+      "content_hash": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683"
+    },
+    {
+      "ordinal": 316,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 317,
+      "span_type": "table_cell",
+      "raw_text": "1533-1547",
+      "normalized_text": "1533-1547",
+      "content_hash": "298d2b2af794eba8f808cf2ebcacb82a9f541ce3a2193f9a80fc7d6b638124a9"
+    },
+    {
+      "ordinal": 318,
+      "span_type": "table_cell",
+      "raw_text": "6",
+      "normalized_text": "6",
+      "content_hash": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683"
+    },
+    {
+      "ordinal": 319,
+      "span_type": "table_cell",
+      "raw_text": "500",
+      "normalized_text": "500",
+      "content_hash": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a"
+    },
+    {
+      "ordinal": 320,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 321,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 322,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 323,
+      "span_type": "table_cell",
+      "raw_text": "Washington/ Rogers",
+      "normalized_text": "Washington/ Rogers",
+      "content_hash": "d66ab34e02e41e451931e493921ca8295483b6011ca0e938e51779ae28712ad4"
+    },
+    {
+      "ordinal": 324,
+      "span_type": "table_cell",
+      "raw_text": "5.6 ENE Ramona - 3.9 NNW Talala",
+      "normalized_text": "5.6 ENE Ramona - 3.9 NNW Talala",
+      "content_hash": "e8d9ea2cd7c537ce10c9596fc46af7732c3bbbf4a24a804dce27edcb408e56d7"
+    },
+    {
+      "ordinal": 325,
+      "span_type": "table_cell",
+      "raw_text": "7",
+      "normalized_text": "7",
+      "content_hash": "7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451"
+    },
+    {
+      "ordinal": 326,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 327,
+      "span_type": "table_cell",
+      "raw_text": "1540-1542",
+      "normalized_text": "1540-1542",
+      "content_hash": "7c215fc72a2370c68c8dde720fd9041fcc498cc86f9187c7ad6549684365c057"
+    },
+    {
+      "ordinal": 328,
+      "span_type": "table_cell",
+      "raw_text": "1.2",
+      "normalized_text": "1.2",
+      "content_hash": "77ac319bfe1979e2d799d9e6987e65feb54f61511c03552ebae990826c208590"
+    },
+    {
+      "ordinal": 329,
+      "span_type": "table_cell",
+      "raw_text": "100",
+      "normalized_text": "100",
+      "content_hash": "ad57366865126e55649ecb23ae1d48887544976efea46a48eb5d85a6eeb4d306"
+    },
+    {
+      "ordinal": 330,
+      "span_type": "table_cell",
+      "raw_text": "EF0",
+      "normalized_text": "EF0",
+      "content_hash": "2bde75f3b5d42500a835f7af8165b39027114293d69d0fd5a0d032f21b9e8fb4"
+    },
+    {
+      "ordinal": 331,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 332,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 333,
+      "span_type": "table_cell",
+      "raw_text": "Lincoln",
+      "normalized_text": "Lincoln",
+      "content_hash": "8d54efb91fed801820dda961ef4609f87ae9e80c1da940bd8c356ec90c0ba428"
+    },
+    {
+      "ordinal": 334,
+      "span_type": "table_cell",
+      "raw_text": "6 NE Meeker - 3.1 SSE Sparks",
+      "normalized_text": "6 NE Meeker - 3.1 SSE Sparks",
+      "content_hash": "108345c6e8da88878cf11926ae0dd168fbd199efb157c932b2e87c89d21d7306"
+    },
+    {
+      "ordinal": 335,
+      "span_type": "table_cell",
+      "raw_text": "8",
+      "normalized_text": "8",
+      "content_hash": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3"
+    },
+    {
+      "ordinal": 336,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 337,
+      "span_type": "table_cell",
+      "raw_text": "1725-1740",
+      "normalized_text": "1725-1740",
+      "content_hash": "29c72054c53a2bb1253ec0286002e96238549e186b748519f7adf652dd678069"
+    },
+    {
+      "ordinal": 338,
+      "span_type": "table_cell",
+      "raw_text": "10",
+      "normalized_text": "10",
+      "content_hash": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5"
+    },
+    {
+      "ordinal": 339,
+      "span_type": "table_cell",
+      "raw_text": "800",
+      "normalized_text": "800",
+      "content_hash": "1a1cf797fabe7f95836fabeca626907c77b3e6c9aff7c2290b396a238c69362e"
+    },
+    {
+      "ordinal": 340,
+      "span_type": "table_cell",
+      "raw_text": "EF2",
+      "normalized_text": "EF2",
+      "content_hash": "03f318a0db1652a6daea39160d71db0a55277f2536a471f1af82bc254b3a4d23"
+    },
+    {
+      "ordinal": 341,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 342,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 343,
+      "span_type": "table_cell",
+      "raw_text": "Ottawa",
+      "normalized_text": "Ottawa",
+      "content_hash": "9c633c81c4f7d3a4c54f7ebf361d797ee344283567a80da2ab0fcd052dbea796"
+    },
+    {
+      "ordinal": 344,
+      "span_type": "table_cell",
+      "raw_text": "3.6 SW Ottawa - 3.9 ENE Wyandotte",
+      "normalized_text": "3.6 SW Ottawa - 3.9 ENE Wyandotte",
+      "content_hash": "be8be120a9e6e69131d8afb5d0b21e9c593ac537b108f55240a1cf926e827b3e"
+    },
+    {
+      "ordinal": 345,
+      "span_type": "table_cell",
+      "raw_text": "9",
+      "normalized_text": "9",
+      "content_hash": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+    },
+    {
+      "ordinal": 346,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 347,
+      "span_type": "table_cell",
+      "raw_text": "1732-1743",
+      "normalized_text": "1732-1743",
+      "content_hash": "428036f08a057ab04b7c54e770cc5f3cc8c8d730d2820c68e1a6682ff8c4b3eb"
+    },
+    {
+      "ordinal": 348,
+      "span_type": "table_cell",
+      "raw_text": "9",
+      "normalized_text": "9",
+      "content_hash": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+    },
+    {
+      "ordinal": 349,
+      "span_type": "table_cell",
+      "raw_text": "600",
+      "normalized_text": "600",
+      "content_hash": "284b7e6d788f363f910f7beb1910473e23ce9d6c871f1ce0f31f22a982d48ad4"
+    },
+    {
+      "ordinal": 350,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 351,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 352,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 353,
+      "span_type": "table_cell",
+      "raw_text": "Ottawa/ Newton MO",
+      "normalized_text": "Ottawa/ Newton MO",
+      "content_hash": "598591f37c4b5da105b7aa62b767c71774f059efda0aa0614ab0dc70252fb5f9"
+    },
+    {
+      "ordinal": 354,
+      "span_type": "table_cell",
+      "raw_text": "2.4 WNW Wyandotte - 1 SSW Seneca MO",
+      "normalized_text": "2.4 WNW Wyandotte - 1 SSW Seneca MO",
+      "content_hash": "609b3c00ea327765a283b92f9e39c36514490e08a72da204f991fed9348903b9"
+    },
+    {
+      "ordinal": 355,
+      "span_type": "table_cell",
+      "raw_text": "10",
+      "normalized_text": "10",
+      "content_hash": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5"
+    },
+    {
+      "ordinal": 356,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 357,
+      "span_type": "table_cell",
+      "raw_text": "1732-1734",
+      "normalized_text": "1732-1734",
+      "content_hash": "7062622467046dbf6898dafa595f1da317d9183ea734090942e94cc9c32bfa4e"
+    },
+    {
+      "ordinal": 358,
+      "span_type": "table_cell",
+      "raw_text": "2",
+      "normalized_text": "2",
+      "content_hash": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+    },
+    {
+      "ordinal": 359,
+      "span_type": "table_cell",
+      "raw_text": "150",
+      "normalized_text": "150",
+      "content_hash": "9ae2bdd7beedc2e766c6b76585530e16925115707dc7a06ab5ee4aa2776b2c7b"
+    },
+    {
+      "ordinal": 360,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 361,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 362,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 363,
+      "span_type": "table_cell",
+      "raw_text": "Adair",
+      "normalized_text": "Adair",
+      "content_hash": "bccb84a72955e110b42e582b62d98ce1d4ee54c83b0d2ee8ea86a4b48794bb7c"
+    },
+    {
+      "ordinal": 364,
+      "span_type": "table_cell",
+      "raw_text": "2 SE Proctor - 1.9 WNW Christie",
+      "normalized_text": "2 SE Proctor - 1.9 WNW Christie",
+      "content_hash": "c5ed9032469b24f3b2d64ebebe39c25699af258ff32b68dd505cc4e70ebfcc7c"
+    },
+    {
+      "ordinal": 365,
+      "span_type": "table_cell",
+      "raw_text": "11",
+      "normalized_text": "11",
+      "content_hash": "4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8"
+    },
+    {
+      "ordinal": 366,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 367,
+      "span_type": "table_cell",
+      "raw_text": "1735-1737",
+      "normalized_text": "1735-1737",
+      "content_hash": "fad31b0294ff0b37b93d0228d3ec078615dce1dcd920b1d42c4d2e05af85a079"
+    },
+    {
+      "ordinal": 368,
+      "span_type": "table_cell",
+      "raw_text": "2.5",
+      "normalized_text": "2.5",
+      "content_hash": "b8736b999909049671d0ea075a42b308a5fbe2df1854899123fe09eb0ee9de61"
+    },
+    {
+      "ordinal": 369,
+      "span_type": "table_cell",
+      "raw_text": "300",
+      "normalized_text": "300",
+      "content_hash": "983bd614bb5afece5ab3b6023f71147cd7b6bc2314f9d27af7422541c6558389"
+    },
+    {
+      "ordinal": 370,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 371,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 372,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 373,
+      "span_type": "table_cell",
+      "raw_text": "Adair",
+      "normalized_text": "Adair",
+      "content_hash": "bccb84a72955e110b42e582b62d98ce1d4ee54c83b0d2ee8ea86a4b48794bb7c"
+    },
+    {
+      "ordinal": 374,
+      "span_type": "table_cell",
+      "raw_text": "1.7 WSW - 1.3 N Christie",
+      "normalized_text": "1.7 WSW - 1.3 N Christie",
+      "content_hash": "75be17bdf9e304e5e5314e45c4da8b4df5c0e4d9a6d07e9d4dcfebb738f72879"
+    },
+    {
+      "ordinal": 375,
+      "span_type": "table_cell",
+      "raw_text": "12",
+      "normalized_text": "12",
+      "content_hash": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918"
+    },
+    {
+      "ordinal": 376,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 377,
+      "span_type": "table_cell",
+      "raw_text": "1740-1747",
+      "normalized_text": "1740-1747",
+      "content_hash": "048f5fd2154b43d9ad8bd8b4e5397452ee5a927f84db9f56f7050b364494c3c5"
+    },
+    {
+      "ordinal": 378,
+      "span_type": "table_cell",
+      "raw_text": "8",
+      "normalized_text": "8",
+      "content_hash": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3"
+    },
+    {
+      "ordinal": 379,
+      "span_type": "table_cell",
+      "raw_text": "500",
+      "normalized_text": "500",
+      "content_hash": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a"
+    },
+    {
+      "ordinal": 380,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 381,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 382,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 383,
+      "span_type": "table_cell",
+      "raw_text": "Adair/ Washington AR",
+      "normalized_text": "Adair/ Washington AR",
+      "content_hash": "a9a9f123e73c12822dd0d5432419d735978e16191d5fc261cb8471a825cc74ec"
+    },
+    {
+      "ordinal": 384,
+      "span_type": "table_cell",
+      "raw_text": "1.2 NE Addielee OK - 2.2 NNW Cincinnati AR",
+      "normalized_text": "1.2 NE Addielee OK - 2.2 NNW Cincinnati AR",
+      "content_hash": "e8b39e5047f4d8260a95db58383f4ab347e97ab144a469362f241d21612836f3"
+    },
+    {
+      "ordinal": 385,
+      "span_type": "table_cell",
+      "raw_text": "13",
+      "normalized_text": "13",
+      "content_hash": "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278"
+    },
+    {
+      "ordinal": 386,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 387,
+      "span_type": "table_cell",
+      "raw_text": "1749-1757",
+      "normalized_text": "1749-1757",
+      "content_hash": "970a72b9e4ea9bbd195f1ab0abb41f2c5ad590e393eacaf8738b79ee63131ab4"
+    },
+    {
+      "ordinal": 388,
+      "span_type": "table_cell",
+      "raw_text": "6",
+      "normalized_text": "6",
+      "content_hash": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683"
+    },
+    {
+      "ordinal": 389,
+      "span_type": "table_cell",
+      "raw_text": "250",
+      "normalized_text": "250",
+      "content_hash": "1e472b39b105d349bcd069c4a711b44a2fffb8e274714bb07ecfff69a9a7f67b"
+    },
+    {
+      "ordinal": 390,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 391,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 392,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 393,
+      "span_type": "table_cell",
+      "raw_text": "Coal",
+      "normalized_text": "Coal",
+      "content_hash": "4cc1d6e9f8574bb528cdd79cae8787905a88a115135a173257caa65f51f12104"
+    },
+    {
+      "ordinal": 394,
+      "span_type": "table_cell",
+      "raw_text": "4 WSW - 2 E Lehigh",
+      "normalized_text": "4 WSW - 2 E Lehigh",
+      "content_hash": "3283885c9ef98fbf16a654429813daf655cbe7a3b10bc3fcfe553c5adbc50062"
+    },
+    {
+      "ordinal": 395,
+      "span_type": "table_cell",
+      "raw_text": "14",
+      "normalized_text": "14",
+      "content_hash": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61"
+    },
+    {
+      "ordinal": 396,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 397,
+      "span_type": "table_cell",
+      "raw_text": "1933-1934",
+      "normalized_text": "1933-1934",
+      "content_hash": "309d5932078b76165ea297c67bf6ac79febfcb1548b432e0a88fa6da51e28b9a"
+    },
+    {
+      "ordinal": 398,
+      "span_type": "table_cell",
+      "raw_text": "0.7",
+      "normalized_text": "0.7",
+      "content_hash": "973b372a514f91db8219fef585cdf81b09196afd7948f5fb1e29c2016dd995a0"
+    },
+    {
+      "ordinal": 399,
+      "span_type": "table_cell",
+      "raw_text": "260",
+      "normalized_text": "260",
+      "content_hash": "39bb88f40d3aa2b2fe9dea67be27c74765db0ebb3ff3cf8fb779af6319fa2045"
+    },
+    {
+      "ordinal": 400,
+      "span_type": "table_cell",
+      "raw_text": "EF0",
+      "normalized_text": "EF0",
+      "content_hash": "2bde75f3b5d42500a835f7af8165b39027114293d69d0fd5a0d032f21b9e8fb4"
+    },
+    {
+      "ordinal": 401,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 402,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 403,
+      "span_type": "table_cell",
+      "raw_text": "Le Flore",
+      "normalized_text": "Le Flore",
+      "content_hash": "a6dab79853916eea12aa6b74875b1ccf873652a8a4288ce390218f8a8c17b2b0"
+    },
+    {
+      "ordinal": 404,
+      "span_type": "table_cell",
+      "raw_text": "2.1 S - 1.8 SSE Milton",
+      "normalized_text": "2.1 S - 1.8 SSE Milton",
+      "content_hash": "da3dc0c68bfad9a10e8465332deb7520e016f7d3abc3f6829bd8f06494bd7438"
+    },
+    {
+      "ordinal": 405,
+      "span_type": "table_cell",
+      "raw_text": "15",
+      "normalized_text": "15",
+      "content_hash": "e629fa6598d732768f7c726b4b621285f9c3b85303900aa912017db7617d8bdb"
+    },
+    {
+      "ordinal": 406,
+      "span_type": "table_cell",
+      "raw_text": "05/20/2013",
+      "normalized_text": "05/20/2013",
+      "content_hash": "0ba71c4e709fd3ad700b1bc868314d37677866fba3c8d6290daa3ae0a321b597"
+    },
+    {
+      "ordinal": 407,
+      "span_type": "table_cell",
+      "raw_text": "1944-1955",
+      "normalized_text": "1944-1955",
+      "content_hash": "0b3f0fec2f5050267662895e54e5316823f73c111d9d1fc638285ecf03d6cd0a"
+    },
+    {
+      "ordinal": 408,
+      "span_type": "table_cell",
+      "raw_text": "8.5",
+      "normalized_text": "8.5",
+      "content_hash": "cc6f2aa507f6a1f7de2db7e09ddef04282962c09cb6c6d659f0fa9aa07ac3b6c"
+    },
+    {
+      "ordinal": 409,
+      "span_type": "table_cell",
+      "raw_text": "500",
+      "normalized_text": "500",
+      "content_hash": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a"
+    },
+    {
+      "ordinal": 410,
+      "span_type": "table_cell",
+      "raw_text": "EF1",
+      "normalized_text": "EF1",
+      "content_hash": "2430523f1c2d3df8bc9e9a34b96e46fc09845eb6a983309227b8f76bf0d3fc12"
+    },
+    {
+      "ordinal": 411,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 412,
+      "span_type": "table_cell",
+      "raw_text": "0",
+      "normalized_text": "0",
+      "content_hash": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "ordinal": 413,
+      "span_type": "table_cell",
+      "raw_text": "Le Flore",
+      "normalized_text": "Le Flore",
+      "content_hash": "a6dab79853916eea12aa6b74875b1ccf873652a8a4288ce390218f8a8c17b2b0"
+    },
+    {
+      "ordinal": 414,
+      "span_type": "table_cell",
+      "raw_text": "0.7 ENE Neff - 1.8 S Rock Island",
+      "normalized_text": "0.7 ENE Neff - 1.8 S Rock Island",
+      "content_hash": "57c7c89d657e7502d6f59baf07acc3de51bdd84a030e265b4e9566372baec804"
+    },
+    {
+      "ordinal": 415,
+      "span_type": "heading",
+      "raw_text": "Storm Data",
+      "normalized_text": "Storm Data",
+      "content_hash": "cd91c95b8f99e952797fee620cfdfad8a7585f2ee08ffb78caed456a1a8d3bed"
+    },
+    {
+      "ordinal": 416,
+      "span_type": "heading",
+      "raw_text": "Preliminary Storm Reports on May 20, 2013 Compiled by the Storm Prediction Center",
+      "normalized_text": "Preliminary Storm Reports on May 20, 2013 Compiled by the Storm Prediction Center",
+      "content_hash": "09f22c4e5b5dee675a9bf7be6f2e9461b106b47939f33da4e1e8c1c6077fd0e6"
+    },
+    {
+      "ordinal": 417,
+      "span_type": "heading",
+      "raw_text": "Preliminary Storm Reports on May 20, 2013 from NWS Norman",
+      "normalized_text": "Preliminary Storm Reports on May 20, 2013 from NWS Norman",
+      "content_hash": "cfa54579b879f8539256aac447f6baccecdcdde68e71f585987a6677b1eceac6"
+    },
+    {
+      "ordinal": 418,
+      "span_type": "table_cell",
+      "raw_text": " PRELIMINARY LOCAL STORM REPORT...CORRECTED\nNATIONAL WEATHER SERVICE NORMAN OK\n858 PM CDT WED MAY 22 2013\n\n..TIME...   ...EVENT...      ...CITY LOCATION...     ...LAT.LON...\n..DATE...   ....MAG....      ..COUNTY LOCATION..ST.. ...SOURCE....\n            ..REMARKS..\n\n0154 PM     HAIL             6 N MARLOW              34.73N 97.96W \n05/20/2013  E1.75 INCH       GRADY              OK   PUBLIC          \n\n0156 PM     HAIL             1 S RUSH SPRINGS        34.76N 97.96W \n05/20/2013  E1.00 INCH       GRADY              OK   EMERGENCY MNGR  \n\n0202 PM     HAIL             6 W DUNCAN              34.52N 98.07W \n05/20/2013  E1.00 INCH       STEPHENS           OK   AMATEUR RADIO   \n\n0215 PM     HAIL             1 W SHEPPARD AFB        33.98N 98.52W \n05/20/2013  E1.25 INCH       WICHITA            TX   TRAINED SPOTTER \n\n0220 PM     HAIL             SHEPPARD AFB            33.98N 98.50W \n05/20/2013  E1.75 INCH       WICHITA            TX   TRAINED SPOTTER \n\n0227 PM     HAIL             YUKON                   35.51N 97.75W \n05/20/2013  E3.25 INCH       CANADIAN           OK   NEWSPAPER       \n\n0228 PM     HAIL             WILL ROGERS AIRPORT     35.39N 97.60W \n05/20/2013  E1.00 INCH       OKLAHOMA           OK   NWS EMPLOYEE    \n\n0256 PM     TORNADO          NEWCASTLE               35.25N 97.60W \n05/20/2013                   MCCLAIN            OK   BROADCAST MEDIA \n\n            LIFTED AROUND 336 PM. ESTIMATED PATH LENGTH OF 20 MILES \n            THRU NEWCASTLE, MOORE, AND SOUTH OKC. PRELIMINARY DAMAGE \n            RATING OF AT LEAST EF4.\n\n0306 PM     HAIL             3 NNW MOORE             35.38N 97.50W \n05/20/2013  E2.50 INCH       OKLAHOMA           OK   TRAINED SPOTTER \n\n0412 PM     HAIL             WILL ROGERS AIRPORT     35.39N 97.60W \n05/20/2013  M2.00 INCH       OKLAHOMA           OK   OFFICIAL NWS OBS\n\n0415 PM     HAIL             WAURIKA                 34.17N 98.00W \n05/20/2013  E1.00 INCH       JEFFERSON          OK   PUBLIC          \n\n0430 PM     TORNADO          1 W MEEKER              35.50N 96.91W \n05/20/2013                   LINCOLN            OK   BROADCAST MEDIA \n\n            REPORTED BY KWTV\n\n0436 PM     HAIL             WHITEBEAD               34.77N 97.30W \n05/20/2013  E1.75 INCH       GARVIN             OK   AMATEUR RADIO   \n\n0440 PM     HAIL             WICHITA FALLS           33.91N 98.50W \n05/20/2013  E1.75 INCH       WICHITA            TX   PUBLIC          \n\n0445 PM     HAIL             CORNISH                 34.16N 97.60W \n05/20/2013  E2.50 INCH       JEFFERSON          OK   PUBLIC          \n\n0452 PM     HAIL             6 W STRATFORD           34.80N 97.07W \n05/20/2013  E1.75 INCH       GARVIN             OK   PUBLIC          \n\n0453 PM     HAIL             WICHITA FALLS           33.91N 98.50W \n05/20/2013  E1.75 INCH       WICHITA            TX   PUBLIC          \n\n            5 MILES WEST OF FISHER RD\n\n0543 PM     HAIL             2 SSE TURNER FALLS      34.40N 97.14W \n05/20/2013  E1.00 INCH       MURRAY             OK   EMERGENCY MNGR  \n\n0545 PM     TSTM WND DMG     GENE AUTRY              34.28N 97.04W \n05/20/2013                   CARTER             OK   EMERGENCY MNGR  \n\n            EM REPORTS ROOF BLOWN OFF OF OLD GENE AUTRY GYM.\n\n0630 PM     HAIL             HENRIETTA               33.82N 98.19W \n05/20/2013  E1.00 INCH       CLAY               TX   AMATEUR RADIO   \n\n0639 PM     TSTM WND GST     2 WNW WAPANUCKA         34.38N 96.46W \n05/20/2013  M80.00 MPH       JOHNSTON           OK   TRAINED SPOTTER \n\n            SPOTTER REPORTED TREE BRANCHES DOWN IN AREA\n\n0800 PM     TSTM WND DMG     1 W DURANT              33.99N 96.39W \n05/20/2013                   BRYAN              OK   EMERGENCY MNGR  \n\n            EMERGENCY MANAGEMENT REPORTS TREES DOWN AND POWER LINE \n            DOWN IN WESTERN DURANT.\n\n0805 PM     TSTM WND GST     7 WNW ARDMORE           34.21N 97.24W \n05/20/2013  M62.00 MPH       CARTER             OK   MESONET         \n\n0824 PM     HAIL             MARIETTA                33.93N 97.12W \n05/20/2013  E1.00 INCH       LOVE               OK   EMERGENCY MNGR  \n\n0909 PM     HAIL             4 S LITTLE CITY         34.02N 96.62W \n05/20/2013  E2.75 INCH       MARSHALL           OK   PUBLIC          \n\n0958 PM     HAIL             7 NNW DURANT            34.08N 96.42W \n05/20/2013  E1.00 INCH       BRYAN              OK   EMERGENCY MNGR  \n\n            AT INTERSECTION OF SH-22 AND ALBERT PIKE ROAD\n\n1025 PM     HAIL             GERONIMO                34.48N 98.38W \n05/20/2013  E1.75 INCH       COMANCHE           OK   FIRE DEPT/RESCUE\n\n1025 PM     HAIL             2 SW GERONIMO           34.46N 98.41W \n05/20/2013  E1.25 INCH       COMANCHE           OK   TRAINED SPOTTER \n\n1126 PM     HAIL             DUNCAN                  34.52N 97.97W \n05/20/2013  E1.25 INCH       STEPHENS           OK   LAW ENFORCEMENT \n\n            AT STEPHENS COUNTY FAIRGROUNDS\n\n1127 PM     HAIL             WYNNEWOOD               34.64N 97.16W \n05/20/2013  E1.00 INCH       GARVIN             OK   PUBLIC          \n\n            PUBLIC REPORTED HAIL COVERING GROUND...DIMES TO QUARTERS.\n\n\n1134 PM     HAIL             EMPIRE CITY             34.46N 98.04W \n05/20/2013  E1.75 INCH       STEPHENS           OK   BROADCAST MEDIA \n\n            FROM KSWO\n\n1226 AM     HAIL             ADA                     34.78N 96.66W \n05/21/2013  E1.00 INCH       PONTOTOC           OK   BROADCAST MEDIA \n\n1230 AM     HAIL             ADA                     34.78N 96.66W \n05/21/2013  E1.25 INCH       PONTOTOC           OK   PUBLIC          \n\n0400 AM     HAIL             1 E PURCELL             35.01N 97.35W \n05/21/2013  E1.00 INCH       MCCLAIN            OK   NWS EMPLOYEE    \n\n0517 AM     TSTM WND GST     2 W CYRIL               34.90N 98.24W \n05/21/2013  M77.00 MPH       CADDO              OK   AMATEUR RADIO   \n\n0520 AM     TSTM WND DMG     CYRIL                   34.90N 98.20W \n05/21/2013                   CADDO              OK   EMERGENCY MNGR  \n\n            TREE DAMAGE AND POWERLINES DOWN.\n\n0525 AM     HAIL             CYRIL                   34.90N 98.20W \n05/21/2013  M1.00 INCH       CADDO              OK   AMATEUR RADIO   \n\n0526 AM     TSTM WND DMG     CEMENT                  34.94N 98.14W \n05/21/2013                   CADDO              OK   AMATEUR RADIO   \n\n            ROOF OFF OF BUILDING BY HIGHWAY 277...BLOCKING ROADWAY.\n\n0546 AM     HAIL             NINNEKAH                34.95N 97.92W \n05/21/2013  E1.75 INCH       GRADY              OK   TRAINED SPOTTER \n\n0549 AM     TSTM WND DMG     CEMENT                  34.94N 98.14W \n05/21/2013                   CADDO              OK   AMATEUR RADIO   \n\n            TREES AND POWER LINES DOWN\n\n0550 AM     TSTM WND GST     2 NNW NINNEKAH          34.98N 97.93W \n05/21/2013  M60.00 MPH       GRADY              OK   MESONET         \n\n0953 AM     HAIL             REED                    34.90N 99.68W \n05/21/2013  E1.00 INCH       GREER              OK   EMERGENCY MNGR  \n\n1000 AM     HAIL             6 N MANGUM              34.97N 99.50W \n05/21/2013  E1.75 INCH       GREER              OK   EMERGENCY MNGR  \n\n1016 AM     HAIL             1 S LONE WOLF           34.98N 99.25W \n05/21/2013  E1.75 INCH       KIOWA              OK   AMATEUR RADIO   \n\n1017 AM     HAIL             GRANITE                 34.96N 99.38W \n05/21/2013  E1.25 INCH       GREER              OK   PUBLIC          \n\n1019 AM     HAIL             LONE WOLF               34.99N 99.25W \n05/21/2013  E1.75 INCH       KIOWA              OK   AMATEUR RADIO   \n\n1114 AM     HAIL             EAKLY                   35.31N 98.56W \n05/21/2013  E1.75 INCH       CADDO              OK   AMATEUR RADIO   \n\n1120 AM     HAIL             BINGER                  35.31N 98.34W \n05/21/2013  E1.75 INCH       CADDO              OK   AMATEUR RADIO   \n\n1140 AM     HAIL             2 E NILES               35.43N 98.21W \n05/21/2013  E1.50 INCH       CANADIAN           OK   PUBLIC          \n\n0208 PM     FLASH FLOOD      ATOKA                   34.38N 96.13W \n05/21/2013                   ATOKA              OK   PUBLIC          \n\n            900 BLK OF W 6TH STREET AND 700 BLK OF E 6TH STREET \n            CLOSED DUE TO FLOODING. VIA PUBLIC WORKS\n\n0225 PM     FLASH FLOOD      7 NE COALGATE           34.61N 96.13W \n05/21/2013                   COAL               OK   EMERGENCY MNGR  \n\n            WATER OVER ROADWAY HWY 37 AT KEEL CREEK BRIDGE\n\n\n&&\n\n$$\n\nJPIKE ",
+      "normalized_text": "PRELIMINARY LOCAL STORM REPORT...CORRECTED NATIONAL WEATHER SERVICE NORMAN OK 858 PM CDT WED MAY 22 2013 ..TIME... ...EVENT... ...CITY LOCATION... ...LAT.LON... ..DATE... ....MAG.... ..COUNTY LOCATION..ST.. ...SOURCE.... ..REMARKS.. 0154 PM HAIL 6 N MARLOW 34.73N 97.96W 05/20/2013 E1.75 INCH GRADY OK PUBLIC 0156 PM HAIL 1 S RUSH SPRINGS 34.76N 97.96W 05/20/2013 E1.00 INCH GRADY OK EMERGENCY MNGR 0202 PM HAIL 6 W DUNCAN 34.52N 98.07W 05/20/2013 E1.00 INCH STEPHENS OK AMATEUR RADIO 0215 PM HAIL 1 W SHEPPARD AFB 33.98N 98.52W 05/20/2013 E1.25 INCH WICHITA TX TRAINED SPOTTER 0220 PM HAIL SHEPPARD AFB 33.98N 98.50W 05/20/2013 E1.75 INCH WICHITA TX TRAINED SPOTTER 0227 PM HAIL YUKON 35.51N 97.75W 05/20/2013 E3.25 INCH CANADIAN OK NEWSPAPER 0228 PM HAIL WILL ROGERS AIRPORT 35.39N 97.60W 05/20/2013 E1.00 INCH OKLAHOMA OK NWS EMPLOYEE 0256 PM TORNADO NEWCASTLE 35.25N 97.60W 05/20/2013 MCCLAIN OK BROADCAST MEDIA LIFTED AROUND 336 PM. ESTIMATED PATH LENGTH OF 20 MILES THRU NEWCASTLE, MOORE, AND SOUTH OKC. PRELIMINARY DAMAGE RATING OF AT LEAST EF4. 0306 PM HAIL 3 NNW MOORE 35.38N 97.50W 05/20/2013 E2.50 INCH OKLAHOMA OK TRAINED SPOTTER 0412 PM HAIL WILL ROGERS AIRPORT 35.39N 97.60W 05/20/2013 M2.00 INCH OKLAHOMA OK OFFICIAL NWS OBS 0415 PM HAIL WAURIKA 34.17N 98.00W 05/20/2013 E1.00 INCH JEFFERSON OK PUBLIC 0430 PM TORNADO 1 W MEEKER 35.50N 96.91W 05/20/2013 LINCOLN OK BROADCAST MEDIA REPORTED BY KWTV 0436 PM HAIL WHITEBEAD 34.77N 97.30W 05/20/2013 E1.75 INCH GARVIN OK AMATEUR RADIO 0440 PM HAIL WICHITA FALLS 33.91N 98.50W 05/20/2013 E1.75 INCH WICHITA TX PUBLIC 0445 PM HAIL CORNISH 34.16N 97.60W 05/20/2013 E2.50 INCH JEFFERSON OK PUBLIC 0452 PM HAIL 6 W STRATFORD 34.80N 97.07W 05/20/2013 E1.75 INCH GARVIN OK PUBLIC 0453 PM HAIL WICHITA FALLS 33.91N 98.50W 05/20/2013 E1.75 INCH WICHITA TX PUBLIC 5 MILES WEST OF FISHER RD 0543 PM HAIL 2 SSE TURNER FALLS 34.40N 97.14W 05/20/2013 E1.00 INCH MURRAY OK EMERGENCY MNGR 0545 PM TSTM WND DMG GENE AUTRY 34.28N 97.04W 05/20/2013 CARTER OK EMERGENCY MNGR EM REPORTS ROOF BLOWN OFF OF OLD GENE AUTRY GYM. 0630 PM HAIL HENRIETTA 33.82N 98.19W 05/20/2013 E1.00 INCH CLAY TX AMATEUR RADIO 0639 PM TSTM WND GST 2 WNW WAPANUCKA 34.38N 96.46W 05/20/2013 M80.00 MPH JOHNSTON OK TRAINED SPOTTER SPOTTER REPORTED TREE BRANCHES DOWN IN AREA 0800 PM TSTM WND DMG 1 W DURANT 33.99N 96.39W 05/20/2013 BRYAN OK EMERGENCY MNGR EMERGENCY MANAGEMENT REPORTS TREES DOWN AND POWER LINE DOWN IN WESTERN DURANT. 0805 PM TSTM WND GST 7 WNW ARDMORE 34.21N 97.24W 05/20/2013 M62.00 MPH CARTER OK MESONET 0824 PM HAIL MARIETTA 33.93N 97.12W 05/20/2013 E1.00 INCH LOVE OK EMERGENCY MNGR 0909 PM HAIL 4 S LITTLE CITY 34.02N 96.62W 05/20/2013 E2.75 INCH MARSHALL OK PUBLIC 0958 PM HAIL 7 NNW DURANT 34.08N 96.42W 05/20/2013 E1.00 INCH BRYAN OK EMERGENCY MNGR AT INTERSECTION OF SH-22 AND ALBERT PIKE ROAD 1025 PM HAIL GERONIMO 34.48N 98.38W 05/20/2013 E1.75 INCH COMANCHE OK FIRE DEPT/RESCUE 1025 PM HAIL 2 SW GERONIMO 34.46N 98.41W 05/20/2013 E1.25 INCH COMANCHE OK TRAINED SPOTTER 1126 PM HAIL DUNCAN 34.52N 97.97W 05/20/2013 E1.25 INCH STEPHENS OK LAW ENFORCEMENT AT STEPHENS COUNTY FAIRGROUNDS 1127 PM HAIL WYNNEWOOD 34.64N 97.16W 05/20/2013 E1.00 INCH GARVIN OK PUBLIC PUBLIC REPORTED HAIL COVERING GROUND...DIMES TO QUARTERS. 1134 PM HAIL EMPIRE CITY 34.46N 98.04W 05/20/2013 E1.75 INCH STEPHENS OK BROADCAST MEDIA FROM KSWO 1226 AM HAIL ADA 34.78N 96.66W 05/21/2013 E1.00 INCH PONTOTOC OK BROADCAST MEDIA 1230 AM HAIL ADA 34.78N 96.66W 05/21/2013 E1.25 INCH PONTOTOC OK PUBLIC 0400 AM HAIL 1 E PURCELL 35.01N 97.35W 05/21/2013 E1.00 INCH MCCLAIN OK NWS EMPLOYEE 0517 AM TSTM WND GST 2 W CYRIL 34.90N 98.24W 05/21/2013 M77.00 MPH CADDO OK AMATEUR RADIO 0520 AM TSTM WND DMG CYRIL 34.90N 98.20W 05/21/2013 CADDO OK EMERGENCY MNGR TREE DAMAGE AND POWERLINES DOWN. 0525 AM HAIL CYRIL 34.90N 98.20W 05/21/2013 M1.00 INCH CADDO OK AMATEUR RADIO 0526 AM TSTM WND DMG CEMENT 34.94N 98.14W 05/21/2013 CADDO OK AMATEUR RADIO ROOF OFF OF BUILDING BY HIGHWAY 277...BLOCKING ROADWAY. 0546 AM HAIL NINNEKAH 34.95N 97.92W 05/21/2013 E1.75 INCH GRADY OK TRAINED SPOTTER 0549 AM TSTM WND DMG CEMENT 34.94N 98.14W 05/21/2013 CADDO OK AMATEUR RADIO TREES AND POWER LINES DOWN 0550 AM TSTM WND GST 2 NNW NINNEKAH 34.98N 97.93W 05/21/2013 M60.00 MPH GRADY OK MESONET 0953 AM HAIL REED 34.90N 99.68W 05/21/2013 E1.00 INCH GREER OK EMERGENCY MNGR 1000 AM HAIL 6 N MANGUM 34.97N 99.50W 05/21/2013 E1.75 INCH GREER OK EMERGENCY MNGR 1016 AM HAIL 1 S LONE WOLF 34.98N 99.25W 05/21/2013 E1.75 INCH KIOWA OK AMATEUR RADIO 1017 AM HAIL GRANITE 34.96N 99.38W 05/21/2013 E1.25 INCH GREER OK PUBLIC 1019 AM HAIL LONE WOLF 34.99N 99.25W 05/21/2013 E1.75 INCH KIOWA OK AMATEUR RADIO 1114 AM HAIL EAKLY 35.31N 98.56W 05/21/2013 E1.75 INCH CADDO OK AMATEUR RADIO 1120 AM HAIL BINGER 35.31N 98.34W 05/21/2013 E1.75 INCH CADDO OK AMATEUR RADIO 1140 AM HAIL 2 E NILES 35.43N 98.21W 05/21/2013 E1.50 INCH CANADIAN OK PUBLIC 0208 PM FLASH FLOOD ATOKA 34.38N 96.13W 05/21/2013 ATOKA OK PUBLIC 900 BLK OF W 6TH STREET AND 700 BLK OF E 6TH STREET CLOSED DUE TO FLOODING. VIA PUBLIC WORKS 0225 PM FLASH FLOOD 7 NE COALGATE 34.61N 96.13W 05/21/2013 COAL OK EMERGENCY MNGR WATER OVER ROADWAY HWY 37 AT KEEL CREEK BRIDGE && $$ JPIKE",
+      "content_hash": "a7c6a13ce1b98f3e94f19a68b97f9fc35bba18ff5979306f3953e871e171d569"
+    },
+    {
+      "ordinal": 419,
+      "span_type": "heading",
+      "raw_text": "Radar Imagery",
+      "normalized_text": "Radar Imagery",
+      "content_hash": "eba95fbf62ad2c1460e80d80e21e75ae18a94f5d326ddb6323b6145d11f11b27"
+    },
+    {
+      "ordinal": 420,
+      "span_type": "heading",
+      "raw_text": "Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5 Tornado",
+      "normalized_text": "Radar Timeline for the May 20, 2013 Newcastle-Moore EF-5 Tornado",
+      "content_hash": "aca441413d31205a660c3ecf55767a163bd0ddc541c668d32213ea0468de9f69"
+    },
+    {
+      "ordinal": 421,
+      "span_type": "heading",
+      "raw_text": "Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "normalized_text": "Reflectivity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "content_hash": "415519ff9400348fcd0a50f5953a4e0e5f8dd18c3bceb62c6d2784b34e764035"
+    },
+    {
+      "ordinal": 422,
+      "span_type": "heading",
+      "raw_text": "Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "normalized_text": "Storm Relative Velocity Loop from the Twin Lakes, OK (KTLX) Radar from 3:04 PM - 4:42 PM CDT on May 20, 2013",
+      "content_hash": "a45711e56bbd1637bb912ef6fef0dca762fc07ae0d09c6e68f27aec3a8f234fb"
+    },
+    {
+      "ordinal": 423,
+      "span_type": "heading",
+      "raw_text": "Satellite Imagery",
+      "normalized_text": "Satellite Imagery",
+      "content_hash": "c348d090060c5b80281ffd0e2b4a7950e72dd78d814a11a2fca06231eeb8f658"
+    },
+    {
+      "ordinal": 424,
+      "span_type": "heading",
+      "raw_text": "Visible Satellite Imagery",
+      "normalized_text": "Visible Satellite Imagery",
+      "content_hash": "a46f000bb05db872bc068e9c5d126fe22b0c1682f0c1d03280c4984c68c227b3"
+    },
+    {
+      "ordinal": 425,
+      "span_type": "heading",
+      "raw_text": "Storm Multimedia",
+      "normalized_text": "Storm Multimedia",
+      "content_hash": "76929b69bbde913b6aaa2de3338e84b8aaa0acba7e0c33dbe993865f573075d4"
+    },
+    {
+      "ordinal": 426,
+      "span_type": "heading",
+      "raw_text": "Tornado Photos",
+      "normalized_text": "Tornado Photos",
+      "content_hash": "858e2209e78e27e29ab20e381ebea88ffa84552353519aa29e310054aa48fc9b"
+    },
+    {
+      "ordinal": 427,
+      "span_type": "heading",
+      "raw_text": "Newcastle/Moore EF-5 Tornado",
+      "normalized_text": "Newcastle/Moore EF-5 Tornado",
+      "content_hash": "5fb8cea1d64640f4b6fea602a3c64d31db822616219eac32270982c3b2953a90"
+    },
+    {
+      "ordinal": 428,
+      "span_type": "table_cell",
+      "raw_text": "From Indian Hills Road looking North - Photos courtesy of Gabriel Garfield",
+      "normalized_text": "From Indian Hills Road looking North - Photos courtesy of Gabriel Garfield",
+      "content_hash": "e986f25e9296e4829ce51de9906865141803d90b87e8ef736d21ba3b06616780"
+    },
+    {
+      "ordinal": 429,
+      "span_type": "table_cell",
+      "raw_text": "This photo was taken around 3:00 pm CDT on May 20, 2013 from Carrington Lane in the Carrington Place addition in northwest Norman, which is located between 36th Ave NW and 48th Ave NW, and south of Franklin Road. The view is looking northwest towards the corner of Franklin Road and 48th Ave NW. This photo was provided courtesy of Jenny Hamar.",
+      "normalized_text": "This photo was taken around 3:00 pm CDT on May 20, 2013 from Carrington Lane in the Carrington Place addition in northwest Norman, which is located between 36th Ave NW and 48th Ave NW, and south of Franklin Road. The view is looking northwest towards the corner of Franklin Road and 48th Ave NW. This photo was provided courtesy of Jenny Hamar.",
+      "content_hash": "461a358c95e19ecb29500ddfe23d3bf31dc96110ee5005942c0473830d07209d"
+    },
+    {
+      "ordinal": 430,
+      "span_type": "heading",
+      "raw_text": "Operations Photos",
+      "normalized_text": "Operations Photos",
+      "content_hash": "dd61f4a8ba6613dfe40edcb210a93a772277dd520d0aa07ecd51ba5bd3cda672"
+    },
+    {
+      "ordinal": 431,
+      "span_type": "heading",
+      "raw_text": "National Weather Service Photos from May 20, 2013",
+      "normalized_text": "National Weather Service Photos from May 20, 2013",
+      "content_hash": "076644ad96a14d016675a28bec6feff1f3980bab24ac2a49c0de45d8e8d15e94"
+    },
+    {
+      "ordinal": 432,
+      "span_type": "heading",
+      "raw_text": "Damage Photos",
+      "normalized_text": "Damage Photos",
+      "content_hash": "d480e3d298a997e8ccfc4f31d72e13019200b70c082284039a1d563a0cd29482"
+    },
+    {
+      "ordinal": 433,
+      "span_type": "paragraph",
+      "raw_text": "The following photos show damage produced by the May 20, 2013 EF-5 tornado. These photos were taken by NWS meteorologist Doug Speheger during a damage survey of the Moore, OK area on May 21, 2013.",
+      "normalized_text": "The following photos show damage produced by the May 20, 2013 EF-5 tornado. These photos were taken by NWS meteorologist Doug Speheger during a damage survey of the Moore, OK area on May 21, 2013.",
+      "content_hash": "21308d4a3aa44140116e6928c139433149a7274645a15f9030d3f1d9ded06c79"
+    },
+    {
+      "ordinal": 434,
+      "span_type": "table_cell",
+      "raw_text": "Looking N at professional building at SW6/Classen",
+      "normalized_text": "Looking N at professional building at SW6/Classen",
+      "content_hash": "7036ee820a6a00b70cb06165a8cf1328ac2990b569060c5a8e840a942f6e082d"
+    },
+    {
+      "ordinal": 435,
+      "span_type": "table_cell",
+      "raw_text": "Looking SW at Plaza Towers Elementary",
+      "normalized_text": "Looking SW at Plaza Towers Elementary",
+      "content_hash": "d56e6c0b0eb0af1bdf046fadca28144956426f3421a1e0f061b34cb644bce095"
+    },
+    {
+      "ordinal": 436,
+      "span_type": "table_cell",
+      "raw_text": "Looking at damage at Plaza Towers Elementary",
+      "normalized_text": "Looking at damage at Plaza Towers Elementary",
+      "content_hash": "9b1ed0802ebfb11e34883c890e3a44bfe277b540043a27ffb6ee7533905b71f4"
+    },
+    {
+      "ordinal": 437,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at Plaza Towers Elementary",
+      "normalized_text": "Looking SE at Plaza Towers Elementary",
+      "content_hash": "262a7d7a54d86ad10c687770c2a207868c840e3184143215ac569e6e15a042b1"
+    },
+    {
+      "ordinal": 438,
+      "span_type": "table_cell",
+      "raw_text": "Looking SW at Plaza Towers Elementary",
+      "normalized_text": "Looking SW at Plaza Towers Elementary",
+      "content_hash": "d56e6c0b0eb0af1bdf046fadca28144956426f3421a1e0f061b34cb644bce095"
+    },
+    {
+      "ordinal": 439,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 440,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 441,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 442,
+      "span_type": "table_cell",
+      "raw_text": "View of Briarwood Elementary School",
+      "normalized_text": "View of Briarwood Elementary School",
+      "content_hash": "d9f35b13065d3c96352ca9b7e14f8e1905845344048a7c68f62a0ab7d704b202"
+    },
+    {
+      "ordinal": 443,
+      "span_type": "table_cell",
+      "raw_text": "View of Briarwood Elementary School",
+      "normalized_text": "View of Briarwood Elementary School",
+      "content_hash": "d9f35b13065d3c96352ca9b7e14f8e1905845344048a7c68f62a0ab7d704b202"
+    },
+    {
+      "ordinal": 444,
+      "span_type": "table_cell",
+      "raw_text": "Looking SSW at Tinker Federal Credit Union & Warren Theatre",
+      "normalized_text": "Looking SSW at Tinker Federal Credit Union & Warren Theatre",
+      "content_hash": "063f5ca924ac76578acb966c97fb0f7db3786a99601541c34d42aa010eb62e4e"
+    },
+    {
+      "ordinal": 445,
+      "span_type": "table_cell",
+      "raw_text": "Looking ENE at background: Moore Medical Center",
+      "normalized_text": "Looking ENE at background: Moore Medical Center",
+      "content_hash": "cc36f1c47b5f10b2d4c8ccd564d8eb43252c6b6f988b0fe1275029a6e3af5487"
+    },
+    {
+      "ordinal": 446,
+      "span_type": "table_cell",
+      "raw_text": "Looking SW at Tinker Federal Credit Union",
+      "normalized_text": "Looking SW at Tinker Federal Credit Union",
+      "content_hash": "9063d7d1f13e679c8456b50f6d230488e9d9c8d21fe24f7c6ba9f5417593c2cc"
+    },
+    {
+      "ordinal": 447,
+      "span_type": "table_cell",
+      "raw_text": "Looking S at west side of Tinker Federal Credit Union",
+      "normalized_text": "Looking S at west side of Tinker Federal Credit Union",
+      "content_hash": "1f2d5e28a12e89217ff3e7a075ef5391bdc3fe00f8ea05585e73639f72f45210"
+    },
+    {
+      "ordinal": 448,
+      "span_type": "table_cell",
+      "raw_text": "Looking S at west side of Tinker Federal Credit Union",
+      "normalized_text": "Looking S at west side of Tinker Federal Credit Union",
+      "content_hash": "1f2d5e28a12e89217ff3e7a075ef5391bdc3fe00f8ea05585e73639f72f45210"
+    },
+    {
+      "ordinal": 449,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at background: Moore Medical Center",
+      "normalized_text": "Looking NW at background: Moore Medical Center",
+      "content_hash": "352bcabd47cd11348ea05b214009cdf515f39d665677affaab40aeddbc0c4f0b"
+    },
+    {
+      "ordinal": 450,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at west side of Tinker Federal Credit Union",
+      "normalized_text": "Looking SE at west side of Tinker Federal Credit Union",
+      "content_hash": "846b60bae460ed1077ba9bd54ad8711d02ccbb7df169cc59bc02790972070f1f"
+    },
+    {
+      "ordinal": 451,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at background: Moore Medical Center",
+      "normalized_text": "Looking NW at background: Moore Medical Center",
+      "content_hash": "352bcabd47cd11348ea05b214009cdf515f39d665677affaab40aeddbc0c4f0b"
+    },
+    {
+      "ordinal": 452,
+      "span_type": "table_cell",
+      "raw_text": "Looking S at west side of Tinker Federal Credit Union",
+      "normalized_text": "Looking S at west side of Tinker Federal Credit Union",
+      "content_hash": "1f2d5e28a12e89217ff3e7a075ef5391bdc3fe00f8ea05585e73639f72f45210"
+    },
+    {
+      "ordinal": 453,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at west side of Tinker Federal Credit Union",
+      "normalized_text": "Looking SE at west side of Tinker Federal Credit Union",
+      "content_hash": "846b60bae460ed1077ba9bd54ad8711d02ccbb7df169cc59bc02790972070f1f"
+    },
+    {
+      "ordinal": 454,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 455,
+      "span_type": "table_cell",
+      "raw_text": "Looking at Tinker Federal Credit Union",
+      "normalized_text": "Looking at Tinker Federal Credit Union",
+      "content_hash": "5613cabb81c4180fae2f430b0562628b3cb4e5b6ede2676946ef8021783a8da9"
+    },
+    {
+      "ordinal": 456,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at west side of TFCU; Moore Medical Center",
+      "normalized_text": "Looking NW at west side of TFCU; Moore Medical Center",
+      "content_hash": "01ff017ff4ed51a0118a7fd28ad51a76cae4789ecbccd31cbd33579f4a0e2649"
+    },
+    {
+      "ordinal": 457,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 458,
+      "span_type": "table_cell",
+      "raw_text": "Looking SSE at AMF Moore Lanes",
+      "normalized_text": "Looking SSE at AMF Moore Lanes",
+      "content_hash": "1f7c0a5076e4a12cfa0d8e341f09e0f9b46d42f2d432178af59fad87473fc205"
+    },
+    {
+      "ordinal": 459,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at Moore Medical Center",
+      "normalized_text": "Looking NW at Moore Medical Center",
+      "content_hash": "b909151dc3099a91cdaa49fd5f4a8204555bffd3c824199c043a8d861eda6be5"
+    },
+    {
+      "ordinal": 460,
+      "span_type": "table_cell",
+      "raw_text": "Looking NNW at Moore Medical Center",
+      "normalized_text": "Looking NNW at Moore Medical Center",
+      "content_hash": "57b06ff0106395c435064299ad39b2ca63cd617d41f81a7f6093031cfe11699b"
+    },
+    {
+      "ordinal": 461,
+      "span_type": "table_cell",
+      "raw_text": "Looking N at Moore Medical Center",
+      "normalized_text": "Looking N at Moore Medical Center",
+      "content_hash": "fe288d65e6cd008d6f5af008bbc1a783042485f7615432ecd33555c6b35c9f7a"
+    },
+    {
+      "ordinal": 462,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at Moore Medical Center",
+      "normalized_text": "Looking NW at Moore Medical Center",
+      "content_hash": "b909151dc3099a91cdaa49fd5f4a8204555bffd3c824199c043a8d861eda6be5"
+    },
+    {
+      "ordinal": 463,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at professional building at SW6/Classen",
+      "normalized_text": "Looking NW at professional building at SW6/Classen",
+      "content_hash": "799978a5116c930e18211ab565cfe3e0ca4fc8d16d1ed911e1c4e13a6f481df5"
+    },
+    {
+      "ordinal": 464,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at professional building at SW6/Classen",
+      "normalized_text": "Looking NW at professional building at SW6/Classen",
+      "content_hash": "799978a5116c930e18211ab565cfe3e0ca4fc8d16d1ed911e1c4e13a6f481df5"
+    },
+    {
+      "ordinal": 465,
+      "span_type": "table_cell",
+      "raw_text": "Looking NW at professional building at SW6/Classen",
+      "normalized_text": "Looking NW at professional building at SW6/Classen",
+      "content_hash": "799978a5116c930e18211ab565cfe3e0ca4fc8d16d1ed911e1c4e13a6f481df5"
+    },
+    {
+      "ordinal": 466,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at 7-11 at SW4/Telephone",
+      "normalized_text": "Looking SE at 7-11 at SW4/Telephone",
+      "content_hash": "03815a25b8bf5c0b10c3d2aa01ffdeb074ac7f0a409d56deea95732573cbe5e1"
+    },
+    {
+      "ordinal": 467,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at 7-11 at SW4/Telephone",
+      "normalized_text": "Looking SE at 7-11 at SW4/Telephone",
+      "content_hash": "03815a25b8bf5c0b10c3d2aa01ffdeb074ac7f0a409d56deea95732573cbe5e1"
+    },
+    {
+      "ordinal": 468,
+      "span_type": "table_cell",
+      "raw_text": "Looking S at 7-11 at SW4/Telephone",
+      "normalized_text": "Looking S at 7-11 at SW4/Telephone",
+      "content_hash": "69c8bc4084a8dc219df40b6a4d9d1873930a13eee7f42cffa02807377d48d746"
+    },
+    {
+      "ordinal": 469,
+      "span_type": "table_cell",
+      "raw_text": "Looking W at 7-11 at SW4/Telephone",
+      "normalized_text": "Looking W at 7-11 at SW4/Telephone",
+      "content_hash": "9c73feeae4758eb74f805c76f31056262d358ddd32797f138a1fded7dec93f2b"
+    },
+    {
+      "ordinal": 470,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at Plaza Towers Elementary",
+      "normalized_text": "Looking SE at Plaza Towers Elementary",
+      "content_hash": "262a7d7a54d86ad10c687770c2a207868c840e3184143215ac569e6e15a042b1"
+    },
+    {
+      "ordinal": 471,
+      "span_type": "table_cell",
+      "raw_text": "Looking ESE at Plaza Towers Elementary",
+      "normalized_text": "Looking ESE at Plaza Towers Elementary",
+      "content_hash": "a23ba54ec7a7363b513e46cb02497019f7a0cc6454b791c8bcb007dabbc28abe"
+    },
+    {
+      "ordinal": 472,
+      "span_type": "table_cell",
+      "raw_text": "Looking SSW at Plaza Towers Elementary",
+      "normalized_text": "Looking SSW at Plaza Towers Elementary",
+      "content_hash": "cf3507301cc9f0b354b251608a4e77d5c8ba684dd5a4e7a99747fb1f9657bc76"
+    },
+    {
+      "ordinal": 473,
+      "span_type": "table_cell",
+      "raw_text": "Looking SW at Plaza Towers Elementary",
+      "normalized_text": "Looking SW at Plaza Towers Elementary",
+      "content_hash": "d56e6c0b0eb0af1bdf046fadca28144956426f3421a1e0f061b34cb644bce095"
+    },
+    {
+      "ordinal": 474,
+      "span_type": "table_cell",
+      "raw_text": "Looking S at Plaza Towers Elementary",
+      "normalized_text": "Looking S at Plaza Towers Elementary",
+      "content_hash": "58066fcf5c188d18036bdcae489f20cd3ae782bd16dea484c1b21c09b51da886"
+    },
+    {
+      "ordinal": 475,
+      "span_type": "table_cell",
+      "raw_text": "Looking SW at Plaza Towers Elementary",
+      "normalized_text": "Looking SW at Plaza Towers Elementary",
+      "content_hash": "d56e6c0b0eb0af1bdf046fadca28144956426f3421a1e0f061b34cb644bce095"
+    },
+    {
+      "ordinal": 476,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at Plaza Towers Elementary",
+      "normalized_text": "Looking SE at Plaza Towers Elementary",
+      "content_hash": "262a7d7a54d86ad10c687770c2a207868c840e3184143215ac569e6e15a042b1"
+    },
+    {
+      "ordinal": 477,
+      "span_type": "table_cell",
+      "raw_text": "Looking SE at Plaza Towers Elementary",
+      "normalized_text": "Looking SE at Plaza Towers Elementary",
+      "content_hash": "262a7d7a54d86ad10c687770c2a207868c840e3184143215ac569e6e15a042b1"
+    },
+    {
+      "ordinal": 478,
+      "span_type": "table_cell",
+      "raw_text": "Looking ESE at Plaza Towers Elementary",
+      "normalized_text": "Looking ESE at Plaza Towers Elementary",
+      "content_hash": "a23ba54ec7a7363b513e46cb02497019f7a0cc6454b791c8bcb007dabbc28abe"
+    },
+    {
+      "ordinal": 479,
+      "span_type": "table_cell",
+      "raw_text": "Looking at Plaza Towers Elementary",
+      "normalized_text": "Looking at Plaza Towers Elementary",
+      "content_hash": "131556f1bb2dac51d20835a794d99d5cd28771151853b2f2d029e675cd3bd31d"
+    },
+    {
+      "ordinal": 480,
+      "span_type": "table_cell",
+      "raw_text": "Looking WSW at Plaza Towers Elementary",
+      "normalized_text": "Looking WSW at Plaza Towers Elementary",
+      "content_hash": "b719c80ec1a33aa5348af8a78d193e114d8fc9aeafb5747c1055069336e84a0b"
+    },
+    {
+      "ordinal": 481,
+      "span_type": "table_cell",
+      "raw_text": "Looking WSW at Plaza Towers Elementary",
+      "normalized_text": "Looking WSW at Plaza Towers Elementary",
+      "content_hash": "b719c80ec1a33aa5348af8a78d193e114d8fc9aeafb5747c1055069336e84a0b"
+    },
+    {
+      "ordinal": 482,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 483,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 484,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 485,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 486,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 487,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 488,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 489,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 490,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 491,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 492,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 493,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 494,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 495,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 496,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 497,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 498,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 499,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 500,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 501,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 502,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 503,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 504,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 505,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 506,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Briarwood Elementary School",
+      "normalized_text": "View of damage at Briarwood Elementary School",
+      "content_hash": "94cfefbedc1e2f26c8f34ab5dcf12dfae4fd179ec9d89cfced030b66cf4d0c60"
+    },
+    {
+      "ordinal": 507,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Orr Family Farm",
+      "normalized_text": "View of damage at Orr Family Farm",
+      "content_hash": "bedcefb68a613c9eea8ac3369f0465173f74a7ef34a514d392379bb47015418a"
+    },
+    {
+      "ordinal": 508,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Orr Family Farm",
+      "normalized_text": "View of damage at Orr Family Farm",
+      "content_hash": "bedcefb68a613c9eea8ac3369f0465173f74a7ef34a514d392379bb47015418a"
+    },
+    {
+      "ordinal": 509,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Orr Family Farm>",
+      "normalized_text": "View of damage at Orr Family Farm>",
+      "content_hash": "9ea6241a3381647039ecb4de6f9c20da217e34bb26ab37d6ba557b2456a28825"
+    },
+    {
+      "ordinal": 510,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Orr Family Farm",
+      "normalized_text": "View of damage at Orr Family Farm",
+      "content_hash": "bedcefb68a613c9eea8ac3369f0465173f74a7ef34a514d392379bb47015418a"
+    },
+    {
+      "ordinal": 511,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Orr Family Farm",
+      "normalized_text": "View of damage at Orr Family Farm",
+      "content_hash": "bedcefb68a613c9eea8ac3369f0465173f74a7ef34a514d392379bb47015418a"
+    },
+    {
+      "ordinal": 512,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Orr Family Farm",
+      "normalized_text": "View of damage at Orr Family Farm",
+      "content_hash": "bedcefb68a613c9eea8ac3369f0465173f74a7ef34a514d392379bb47015418a"
+    },
+    {
+      "ordinal": 513,
+      "span_type": "table_cell",
+      "raw_text": "View of damage at Orr Family Farm",
+      "normalized_text": "View of damage at Orr Family Farm",
+      "content_hash": "bedcefb68a613c9eea8ac3369f0465173f74a7ef34a514d392379bb47015418a"
+    },
+    {
+      "ordinal": 514,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 515,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    },
+    {
+      "ordinal": 516,
+      "span_type": "table_cell",
+      "raw_text": "View of tornado damage",
+      "normalized_text": "View of tornado damage",
+      "content_hash": "ecc3b8ee769bb57622b0ca6894665c385b798d794ee0bc03bd34d6578198b594"
+    }
+  ]
+}

@@ -1,0 +1,449 @@
+{
+  "format_version": 1,
+  "source_id": "cbs-ap-status",
+  "body_hash": "cae2264fa41ca27eab64e4fc810216b431dcdb8509435f681ea3ea331ff96bb0",
+  "span_count": 63,
+  "spans": [
+    {
+      "ordinal": 0,
+      "span_type": "heading",
+      "raw_text": "Oklahoma tornado victim search efforts winding down",
+      "normalized_text": "Oklahoma tornado victim search efforts winding down",
+      "content_hash": "8b99941e4cb07cb60d2c74d40012cd41e56cab8e0b8fa7611c89649ff7297de5"
+    },
+    {
+      "ordinal": 1,
+      "span_type": "paragraph",
+      "raw_text": " May 21, 2013 / 10:51 PM EDT / CBS/AP",
+      "normalized_text": "May 21, 2013 / 10:51 PM EDT / CBS/AP",
+      "content_hash": "88868eb1722e2cb0c7f15107673576bc7319595cb3177b316ddf2b2f3e8bc9c5"
+    },
+    {
+      "ordinal": 2,
+      "span_type": "paragraph",
+      "raw_text": "Updated 10:50 pm ET",
+      "normalized_text": "Updated 10:50 pm ET",
+      "content_hash": "83cd03273c2cec1a97668b8c7d549d1501c038799632b6c308864adec43beec6"
+    },
+    {
+      "ordinal": 3,
+      "span_type": "paragraph",
+      "raw_text": "MOORE, Okla. Helmeted rescue workers raced Tuesday to complete the search for survivors and the dead in the Oklahoma City suburb where a mammoth tornado destroyed countless homes, cleared lots down to bare red earth and claimed 24 lives, including those of eight children.",
+      "normalized_text": "MOORE, Okla. Helmeted rescue workers raced Tuesday to complete the search for survivors and the dead in the Oklahoma City suburb where a mammoth tornado destroyed countless homes, cleared lots down to bare red earth and claimed 24 lives, including those of eight children.",
+      "content_hash": "98ada69f5761fb1275ea4459779c7f3a64c2d0c042249574a4cf3230c3a8d9ae"
+    },
+    {
+      "ordinal": 4,
+      "span_type": "paragraph",
+      "raw_text": "Scientists concluded the storm was a rare and extraordinarily powerful type of twister known as an EF5, ranking it at the top of the scale used to measure tornado strength. Those twisters are capable of lifting reinforced buildings off the ground, hurling cars like missiles and stripping trees completely free of bark.",
+      "normalized_text": "Scientists concluded the storm was a rare and extraordinarily powerful type of twister known as an EF5, ranking it at the top of the scale used to measure tornado strength. Those twisters are capable of lifting reinforced buildings off the ground, hurling cars like missiles and stripping trees completely free of bark.",
+      "content_hash": "749c4ac731c22193c2cfcc1c78abef94d4bdb62789b191dc5491e63c0c9dcb3d"
+    },
+    {
+      "ordinal": 5,
+      "span_type": "caption",
+      "raw_text": "       Deadliest U.S. tornadoes  10 photos  ",
+      "normalized_text": "Deadliest U.S. tornadoes 10 photos",
+      "content_hash": "a96b4fa1e86b6bda4ca40667c7d2db0a8b16673873d28ba364dee71059edbaf2"
+    },
+    {
+      "ordinal": 6,
+      "span_type": "caption",
+      "raw_text": "       Tornado's destructive path  17 photos  ",
+      "normalized_text": "Tornado's destructive path 17 photos",
+      "content_hash": "67c8608aa0c831abe924f29fecb394bd9b1aa014c6007cfc1c03d4393ee2cbeb"
+    },
+    {
+      "ordinal": 7,
+      "span_type": "paragraph",
+      "raw_text": "Residents of Moore began returning to their homes a day after the tornado smashed some neighborhoods into jagged wood scraps and gnarled pieces of metal. In place of their houses, many families found only empty lots.",
+      "normalized_text": "Residents of Moore began returning to their homes a day after the tornado smashed some neighborhoods into jagged wood scraps and gnarled pieces of metal. In place of their houses, many families found only empty lots.",
+      "content_hash": "c83f0c1d76b9101a6b6c5b3294f2f980bc77d40ff9a925d43a4a6377a746c28d"
+    },
+    {
+      "ordinal": 8,
+      "span_type": "paragraph",
+      "raw_text": "After nearly 24 hours of searching, the fire chief said he was confident there were no more bodies or survivors in the rubble.",
+      "normalized_text": "After nearly 24 hours of searching, the fire chief said he was confident there were no more bodies or survivors in the rubble.",
+      "content_hash": "a1d72ff3d9b41fdb7f72a8676128be9062350e1c798504beb77c789d3824f083"
+    },
+    {
+      "ordinal": 9,
+      "span_type": "paragraph",
+      "raw_text": "\"I'm 98 percent sure we're good,\" Gary Bird said at a news conference with the governor, who had just completed an aerial tour of the disaster zone.",
+      "normalized_text": "\"I'm 98 percent sure we're good,\" Gary Bird said at a news conference with the governor, who had just completed an aerial tour of the disaster zone.",
+      "content_hash": "7e84c81dbb1e9c0409ece8b1875cafc6e969277c167e67045b34000c7538a1ad"
+    },
+    {
+      "ordinal": 10,
+      "span_type": "paragraph",
+      "raw_text": "Authorities were so focused on the search effort that they had yet to establish the full scope of damage along the storm's long, ruinous path.",
+      "normalized_text": "Authorities were so focused on the search effort that they had yet to establish the full scope of damage along the storm's long, ruinous path.",
+      "content_hash": "2494d08309e9e04294871dca0026f3554c71870417cf5790c30b203190d1a8d5"
+    },
+    {
+      "ordinal": 11,
+      "span_type": "paragraph",
+      "raw_text": "They did not know how many homes were gone or how many families had been displaced. Emergency crews had trouble navigating devastated neighborhoods because there were no street signs left. Some rescuers used smartphones or GPS devices to guide them through areas with no recognizable landmarks.",
+      "normalized_text": "They did not know how many homes were gone or how many families had been displaced. Emergency crews had trouble navigating devastated neighborhoods because there were no street signs left. Some rescuers used smartphones or GPS devices to guide them through areas with no recognizable landmarks.",
+      "content_hash": "08fe5c456b4e1960a714cf75a387f5e127048d9cc781a066df262e15d74d0007"
+    },
+    {
+      "ordinal": 12,
+      "span_type": "paragraph",
+      "raw_text": "The death toll was revised downward from 51 after the state medical examiner said some victims may have been counted twice in the confusion. More than 200 people were treated at area hospitals.",
+      "normalized_text": "The death toll was revised downward from 51 after the state medical examiner said some victims may have been counted twice in the confusion. More than 200 people were treated at area hospitals.",
+      "content_hash": "b7f8601db9f548be1136498ebcf729cbf2a034ef8931c7a60a86548da53ea4f5"
+    },
+    {
+      "ordinal": 13,
+      "span_type": "paragraph",
+      "raw_text": "By Tuesday afternoon, every damaged home had been searched at least once, Bird said. His goal was to conduct three searches of each building just to be certain there were no more bodies or survivors.",
+      "normalized_text": "By Tuesday afternoon, every damaged home had been searched at least once, Bird said. His goal was to conduct three searches of each building just to be certain there were no more bodies or survivors.",
+      "content_hash": "06efd5d0c6cf680982cd89276b5c7c9002dca9e6c47b536fa03d94fe8eafd713"
+    },
+    {
+      "ordinal": 14,
+      "span_type": "paragraph",
+      "raw_text": "The fire chief was hopeful that could be completed before nightfall, but the work was being hampered by heavy rain. Crews also continued a brick-by-brick search of the rubble of a school that was blown apart with many children inside.",
+      "normalized_text": "The fire chief was hopeful that could be completed before nightfall, but the work was being hampered by heavy rain. Crews also continued a brick-by-brick search of the rubble of a school that was blown apart with many children inside.",
+      "content_hash": "c77b70b39b85fcc92da7701f88ed70fe0a0e3b1a525cd078c62f56893a96f55f"
+    },
+    {
+      "ordinal": 15,
+      "span_type": "paragraph",
+      "raw_text": "No additional survivors or bodies have been found since Monday night, Bird said.",
+      "normalized_text": "No additional survivors or bodies have been found since Monday night, Bird said.",
+      "content_hash": "a189372854fdd2e8d3b6eb1edfb01033d11bc55e9c7076d2228a2575c18faef0"
+    },
+    {
+      "ordinal": 16,
+      "span_type": "paragraph",
+      "raw_text": "At least 24 people were killed in the twister, including at least eight children. One of the most hard-hit buildings was Plaza Towers Elementary School in Moore, where police spokesman Jeremy Lewis said seven children died under a collapsed wall. Another child was killed at Briarwood Elementary School in Oklahoma City.",
+      "normalized_text": "At least 24 people were killed in the twister, including at least eight children. One of the most hard-hit buildings was Plaza Towers Elementary School in Moore, where police spokesman Jeremy Lewis said seven children died under a collapsed wall. Another child was killed at Briarwood Elementary School in Oklahoma City.",
+      "content_hash": "a9a45fb7f23884a069b708c3a9fc7b5d1a325bb9102bd162874c71408456d7ec"
+    },
+    {
+      "ordinal": 17,
+      "span_type": "paragraph",
+      "raw_text": "Nineteen of the total fatalities were in Moore; five were in Oklahoma City. About 200 people have been pulled from the rubble, and 25 percent of the homes in more were destroyed, Lewis said. Over 300 people are injured.",
+      "normalized_text": "Nineteen of the total fatalities were in Moore; five were in Oklahoma City. About 200 people have been pulled from the rubble, and 25 percent of the homes in more were destroyed, Lewis said. Over 300 people are injured.",
+      "content_hash": "11ed3502f69637985af7ee870417e478bf081eac3005dc445f82d3258e6ce9e1"
+    },
+    {
+      "ordinal": 18,
+      "span_type": "paragraph",
+      "raw_text": "Gov. Mary Fallin lamented the loss of life, especially the children who were killed, but she celebrated the town's resilience.",
+      "normalized_text": "Gov. Mary Fallin lamented the loss of life, especially the children who were killed, but she celebrated the town's resilience.",
+      "content_hash": "79dd2a06875c68be8f930acf7173c3d2873c4a8ec9c2da4b763d529a78c57748"
+    },
+    {
+      "ordinal": 19,
+      "span_type": "paragraph",
+      "raw_text": "\"We will rebuild, and we will regain our strength,\" Fallin said.",
+      "normalized_text": "\"We will rebuild, and we will regain our strength,\" Fallin said.",
+      "content_hash": "5142c407115a02c037a84e5004dcfa17aab037b05d2aa121eb3e35b05b3c0888"
+    },
+    {
+      "ordinal": 20,
+      "span_type": "paragraph",
+      "raw_text": "In describing the bird's-eye view of the damage, the governor said many houses were \"taken away,\" leaving \"just sticks and bricks, basically. It's hard to tell if there was a structure there or not.\"",
+      "normalized_text": "In describing the bird's-eye view of the damage, the governor said many houses were \"taken away,\" leaving \"just sticks and bricks, basically. It's hard to tell if there was a structure there or not.\"",
+      "content_hash": "a1acdd6fd97f40e61de5bc5d59759e8d62bbd91ebc16418ca85379836155f800"
+    },
+    {
+      "ordinal": 21,
+      "span_type": "paragraph",
+      "raw_text": "Amy Elliott, a spokeswoman for the medical examiner, said an incorrect number of fatalities were originally reported because she believes some victims were counted twice in the early chaos of the storm that struck Monday afternoon. Downed communication lines and problems sharing information with officers exacerbated the problem, she said.",
+      "normalized_text": "Amy Elliott, a spokeswoman for the medical examiner, said an incorrect number of fatalities were originally reported because she believes some victims were counted twice in the early chaos of the storm that struck Monday afternoon. Downed communication lines and problems sharing information with officers exacerbated the problem, she said.",
+      "content_hash": "2f660ad37863a6a26da115ff4f2b8c5eb15182322d3f8c415ea2d9f16fcadde6"
+    },
+    {
+      "ordinal": 22,
+      "span_type": "paragraph",
+      "raw_text": "Hospital officials say they've treated more than 200 patients, including dozens of children. About 20 patients remained at one hospital Tuesday, but it wasn't clear how many patients remained hospitalized at another facility. Spokeswoman Brooke Cayot says Integris Southwest Medical Center has seen 90 patients, including five children who have been released. About 20 people remain hospitalized there.",
+      "normalized_text": "Hospital officials say they've treated more than 200 patients, including dozens of children. About 20 patients remained at one hospital Tuesday, but it wasn't clear how many patients remained hospitalized at another facility. Spokeswoman Brooke Cayot says Integris Southwest Medical Center has seen 90 patients, including five children who have been released. About 20 people remain hospitalized there.",
+      "content_hash": "664e5589d70437b5485683b0901d38e48ce66b2c5a5eac6ebfa70fab72657ca8"
+    },
+    {
+      "ordinal": 23,
+      "span_type": "paragraph",
+      "raw_text": "In Washington, President Barack Obama signed a major disaster declaration and pledged urgent government help for Oklahoma Tuesday in the wake of \"one of the most destructive\" storms in the nation's history.",
+      "normalized_text": "In Washington, President Barack Obama signed a major disaster declaration and pledged urgent government help for Oklahoma Tuesday in the wake of \"one of the most destructive\" storms in the nation's history.",
+      "content_hash": "7ca322c595287bb9747b597526bc5e1d5d96fe49b9751757859b8f9d9da18fbd"
+    },
+    {
+      "ordinal": 24,
+      "span_type": "paragraph",
+      "raw_text": "\"In an instant neighborhoods were destroyed, dozens of people lost their lives, many more were injured,\" Obama said from the White House State Dining Room. \"Among the victims were young children trying to take shelter in the safest place they knew - their school.\"",
+      "normalized_text": "\"In an instant neighborhoods were destroyed, dozens of people lost their lives, many more were injured,\" Obama said from the White House State Dining Room. \"Among the victims were young children trying to take shelter in the safest place they knew - their school.\"",
+      "content_hash": "6dbff412a47d4aebf503b38a4d0f48d0cfecc17a7264c2f8c2c380315ef1a853"
+    },
+    {
+      "ordinal": 25,
+      "span_type": "list_item",
+      "raw_text": "How to help those hit by Oklahoma tornado",
+      "normalized_text": "How to help those hit by Oklahoma tornado",
+      "content_hash": "5ab3af19a5d00342abd1c0f4794c67917d07e30f6e77393619efc58a0109b8b1"
+    },
+    {
+      "ordinal": 26,
+      "span_type": "list_item",
+      "raw_text": "More severe weather expected after monster tornado",
+      "normalized_text": "More severe weather expected after monster tornado",
+      "content_hash": "b411611e98c23cb26dca5f10954c759d13a7a4920540061554a9462caf9f6243"
+    },
+    {
+      "ordinal": 27,
+      "span_type": "list_item",
+      "raw_text": "Obama: \"Full focus\" is on recovery from Oklahoma tornado",
+      "normalized_text": "Obama: \"Full focus\" is on recovery from Oklahoma tornado",
+      "content_hash": "2c2daa548a141edbcb47061edfa627cdcf9f9f0574b0ea4c149edc10217c801b"
+    },
+    {
+      "ordinal": 28,
+      "span_type": "paragraph",
+      "raw_text": "The president added that the town of Moore \"needs to get everything it needs right away.\"",
+      "normalized_text": "The president added that the town of Moore \"needs to get everything it needs right away.\"",
+      "content_hash": "4af39b98217c8d0adc71cd92353c55c573e59c56ac86c46546bedaa80cc18098"
+    },
+    {
+      "ordinal": 29,
+      "span_type": "caption",
+      "raw_text": " The path of Monday's tornado in Moore County, Oklahoma  CBS News ",
+      "normalized_text": "The path of Monday's tornado in Moore County, Oklahoma CBS News",
+      "content_hash": "5652e9a689acf29e2c30a82fb9f0439b03842f3c6ba684c8740df40780ab0de6"
+    },
+    {
+      "ordinal": 30,
+      "span_type": "paragraph",
+      "raw_text": "The ferocious storm -- less than 1 percent of all tornadoes reach such wind speeds -- ripped through the suburb of Moore in the Midwest region known as Tornado Alley. Severe weather warnings were posted in much of the region Tuesday morning.",
+      "normalized_text": "The ferocious storm -- less than 1 percent of all tornadoes reach such wind speeds -- ripped through the suburb of Moore in the Midwest region known as Tornado Alley. Severe weather warnings were posted in much of the region Tuesday morning.",
+      "content_hash": "41de7e2ee54d852a69786da01e3453789bf5586c4b70b2de3a33b3b4f15e0db0"
+    },
+    {
+      "ordinal": 31,
+      "span_type": "paragraph",
+      "raw_text": "The storm laid waste to scores of buildings in Moore, a community of 56,000 people about 10 miles south of Oklahoma City. Block after block lay in ruins. Homes were crushed into piles of broken wood. Cars and trucks were left crumpled on the roadside. Rescuers launched a desperate rescue effort at the two elementary schools, pulling children from heaps of debris and carrying them to a triage center.",
+      "normalized_text": "The storm laid waste to scores of buildings in Moore, a community of 56,000 people about 10 miles south of Oklahoma City. Block after block lay in ruins. Homes were crushed into piles of broken wood. Cars and trucks were left crumpled on the roadside. Rescuers launched a desperate rescue effort at the two elementary schools, pulling children from heaps of debris and carrying them to a triage center.",
+      "content_hash": "195c3c23cbfeee1aa3e320d83fcc0ce8ede68fc60898691c7c622be740631c39"
+    },
+    {
+      "ordinal": 32,
+      "span_type": "paragraph",
+      "raw_text": "Emergency crews were having trouble navigating neighborhoods because the devastation is so complete, and there are no street signs left standing, Fallin added.",
+      "normalized_text": "Emergency crews were having trouble navigating neighborhoods because the devastation is so complete, and there are no street signs left standing, Fallin added.",
+      "content_hash": "de532da25f0e7d667d778a3c022f08478cced4d78de8a057245f703c131abb37"
+    },
+    {
+      "ordinal": 33,
+      "span_type": "paragraph",
+      "raw_text": "At Plaza Towers Elementary, the storm ripped off the roof, knocked down walls and turned the playground into a mass of twisted plastic and metal as students and teachers huddled in hallways and bathrooms.",
+      "normalized_text": "At Plaza Towers Elementary, the storm ripped off the roof, knocked down walls and turned the playground into a mass of twisted plastic and metal as students and teachers huddled in hallways and bathrooms.",
+      "content_hash": "bd33eb86adb048cc1a154e5bd0dd6f609985e0fda82d28259bee99bf810f9fa6"
+    },
+    {
+      "ordinal": 34,
+      "span_type": "caption",
+      "raw_text": "       Tornado's destructive path  17 photos  ",
+      "normalized_text": "Tornado's destructive path 17 photos",
+      "content_hash": "67c8608aa0c831abe924f29fecb394bd9b1aa014c6007cfc1c03d4393ee2cbeb"
+    },
+    {
+      "ordinal": 35,
+      "span_type": "paragraph",
+      "raw_text": "Seven of the eight dead children were killed at the school, but several students were pulled alive from under a collapsed wall and other heaps of mangled debris. Rescue workers passed the survivors down a human chain of parents and neighborhood volunteers. Parents carried children in their arms to a triage center in the parking lot. Some students looked dazed, others terrified.",
+      "normalized_text": "Seven of the eight dead children were killed at the school, but several students were pulled alive from under a collapsed wall and other heaps of mangled debris. Rescue workers passed the survivors down a human chain of parents and neighborhood volunteers. Parents carried children in their arms to a triage center in the parking lot. Some students looked dazed, others terrified.",
+      "content_hash": "6e3576b50b26ad6aec5c5bd2c4f9bc2b5fa62a738e52bc6f76e3396cc79efdcf"
+    },
+    {
+      "ordinal": 36,
+      "span_type": "paragraph",
+      "raw_text": "Isabela Rojas, 7, told CBS News what she heard and saw. \"I was hanging on,\" she said. \"All the dirt that got in my eyes and on my clothes ... all of it was on top of us. The teacher got stuck, so somebody had to help her because the desks were on her leg.\"",
+      "normalized_text": "Isabela Rojas, 7, told CBS News what she heard and saw. \"I was hanging on,\" she said. \"All the dirt that got in my eyes and on my clothes ... all of it was on top of us. The teacher got stuck, so somebody had to help her because the desks were on her leg.\"",
+      "content_hash": "2c054477d88c46b905de72e1c109cf02a7defaf217e652d011dbde1b2181d630"
+    },
+    {
+      "ordinal": 37,
+      "span_type": "paragraph",
+      "raw_text": "Teachers used their bodies to cover their students. Jennifer Doan tearfully recalled from her hospital bed how scared one of the students were. She is recovering from a fractured sternum and spine.",
+      "normalized_text": "Teachers used their bodies to cover their students. Jennifer Doan tearfully recalled from her hospital bed how scared one of the students were. She is recovering from a fractured sternum and spine.",
+      "content_hash": "dd69b265cb3ff1ce8e8e5ec117cad632d840d2d06463d61151a6742ff321d6a7"
+    },
+    {
+      "ordinal": 38,
+      "span_type": "paragraph",
+      "raw_text": "\"I said to keep calm, that [rescuers] would come,\" Doan told CBS News' Vinita Nair. \"He just kept telling me that he couldn't breathe and he didn't want to die.",
+      "normalized_text": "\"I said to keep calm, that [rescuers] would come,\" Doan told CBS News' Vinita Nair. \"He just kept telling me that he couldn't breathe and he didn't want to die.",
+      "content_hash": "c6ba7b765e1fff99af1efec3b509985e37082638a83d9273ec165e8e6105ab9b"
+    },
+    {
+      "ordinal": 39,
+      "span_type": "paragraph",
+      "raw_text": "Nine-year-old Jenae Hornsby was one of the Plaza Towers students who didn't make it. Her father Joshua, raced to the school in his car, but the building was already destroyed by the time he got there.",
+      "normalized_text": "Nine-year-old Jenae Hornsby was one of the Plaza Towers students who didn't make it. Her father Joshua, raced to the school in his car, but the building was already destroyed by the time he got there.",
+      "content_hash": "24b0aa6383c0227be3a90ff62b1cb514e78d905a8ce22379244f165fdb395fd6"
+    },
+    {
+      "ordinal": 40,
+      "span_type": "paragraph",
+      "raw_text": "\"When I hit the corner, where I could see the school, the school was gone,\" he told correspondent Mark Strassman. \"And my heart just sank.\"",
+      "normalized_text": "\"When I hit the corner, where I could see the school, the school was gone,\" he told correspondent Mark Strassman. \"And my heart just sank.\"",
+      "content_hash": "9cf5aacb9b383c17afda28a7cd00a9fdba46621a5a6afd70e0401fa69047f5eb"
+    },
+    {
+      "ordinal": 41,
+      "span_type": "paragraph",
+      "raw_text": "He got a much-dreaded call from the medical examiner 8:30 this morning.",
+      "normalized_text": "He got a much-dreaded call from the medical examiner 8:30 this morning.",
+      "content_hash": "b7fbb65596ea82b23f114ae90941f439fdd8f61cb7b5c5c545cf1497b5d187f9"
+    },
+    {
+      "ordinal": 42,
+      "span_type": "paragraph",
+      "raw_text": "\"To come to terms with that, that I won't be able to spend no more Sunday dinners with her, I'll have no  more time in the Church with her, all that stuff we used to do,\" said her grandmother, Yolanda, through tears. \"And that smile. That smile.\"",
+      "normalized_text": "\"To come to terms with that, that I won't be able to spend no more Sunday dinners with her, I'll have no more time in the Church with her, all that stuff we used to do,\" said her grandmother, Yolanda, through tears. \"And that smile. That smile.\"",
+      "content_hash": "fb0b9817e43dacd6817a02869496a2fded40ba5051122a21659799b00e8b75a6"
+    },
+    {
+      "ordinal": 43,
+      "span_type": "paragraph",
+      "raw_text": "Many parents of missing schoolchildren initially came to St. Andrews United Methodist Church, which had been set up as a meeting site. But only high school students were brought to the church, causing confusion and frustration among parents of students enrolled at Plaza Towers. They were redirected to a Baptist church several miles away.",
+      "normalized_text": "Many parents of missing schoolchildren initially came to St. Andrews United Methodist Church, which had been set up as a meeting site. But only high school students were brought to the church, causing confusion and frustration among parents of students enrolled at Plaza Towers. They were redirected to a Baptist church several miles away.",
+      "content_hash": "41e03642763e0f511abbe02726eb7ad84856c9ae04789d6e1f792ac3647cf0a7"
+    },
+    {
+      "ordinal": 44,
+      "span_type": "paragraph",
+      "raw_text": "\"It was very emotional -- some people just holding on to each other, crying because they couldn't find a child; some people being angry and expressing it verbally\" by shouting at one another, said D.A. Bennett, senior pastor at St. Andrews.",
+      "normalized_text": "\"It was very emotional -- some people just holding on to each other, crying because they couldn't find a child; some people being angry and expressing it verbally\" by shouting at one another, said D.A. Bennett, senior pastor at St. Andrews.",
+      "content_hash": "f1e3bb864aef199a69837d0b98284f5e7a7292fea026aea14d2186506ef2d88f"
+    },
+    {
+      "ordinal": 45,
+      "span_type": "paragraph",
+      "raw_text": "After hearing that the tornado was headed toward another school called Briarwood Elementary, David Wheeler left work and drove 100 mph through blinding rain and gusting wind to find his 8-year-old son, Gabriel. When he got to the school site, \"it was like the earth was wiped clean, like the grass was just sheared off,\" Wheeler said.",
+      "normalized_text": "After hearing that the tornado was headed toward another school called Briarwood Elementary, David Wheeler left work and drove 100 mph through blinding rain and gusting wind to find his 8-year-old son, Gabriel. When he got to the school site, \"it was like the earth was wiped clean, like the grass was just sheared off,\" Wheeler said.",
+      "content_hash": "3e70d595bd3186022d201ed0b8016fffd40e8d91d5f1be6bcb6242c13f8d300c"
+    },
+    {
+      "ordinal": 46,
+      "span_type": "paragraph",
+      "raw_text": "Eventually, he found Gabriel, sitting with the teacher who had protected him. His back was cut and bruised and gravel was embedded in his head -- but he was alive. As the tornado approached, students at Briarwood were initially sent to the halls, but a third-grade teacher -- whom Wheeler identified as Julie Simon -- thought it didn't look safe and so ushered the children into a closet, he said.",
+      "normalized_text": "Eventually, he found Gabriel, sitting with the teacher who had protected him. His back was cut and bruised and gravel was embedded in his head -- but he was alive. As the tornado approached, students at Briarwood were initially sent to the halls, but a third-grade teacher -- whom Wheeler identified as Julie Simon -- thought it didn't look safe and so ushered the children into a closet, he said.",
+      "content_hash": "1d61ef2e3c8d1bc32982aceca87aaf128b4acb43776aa947921c5099b0b3495f"
+    },
+    {
+      "ordinal": 47,
+      "span_type": "paragraph",
+      "raw_text": "The teacher shielded Gabriel with her arms and held him down as the tornado collapsed the roof and starting lifting students upward with a pull so strong that it sucked the glasses off their faces, Wheeler said.",
+      "normalized_text": "The teacher shielded Gabriel with her arms and held him down as the tornado collapsed the roof and starting lifting students upward with a pull so strong that it sucked the glasses off their faces, Wheeler said.",
+      "content_hash": "a561448c9c112c10fa7e9a151995c6b69f47e8b3a99aedc980ccc0332c0dd5cd"
+    },
+    {
+      "ordinal": 48,
+      "span_type": "paragraph",
+      "raw_text": "\"She saved their lives by putting them in a closet and holding their heads down,\" Wheeler said.",
+      "normalized_text": "\"She saved their lives by putting them in a closet and holding their heads down,\" Wheeler said.",
+      "content_hash": "9a21e768808c77e0b1c33372f20124c55a8e1a68a530047d198b58bfb9eae890"
+    },
+    {
+      "ordinal": 49,
+      "span_type": "paragraph",
+      "raw_text": "The tornado also grazed a theater, and leveled countless homes. Authorities were still trying to determine the full scope of the damage.",
+      "normalized_text": "The tornado also grazed a theater, and leveled countless homes. Authorities were still trying to determine the full scope of the damage.",
+      "content_hash": "1808a8d3927883cb44981b818e15bb2b04f138dc4e6b3de9ab067a8663bfcd43"
+    },
+    {
+      "ordinal": 50,
+      "span_type": "paragraph",
+      "raw_text": "Country music star Toby Keith, who grew up in Moore, said his hometown would persevere . The state's most famous athlete, NBA All-Star and Oklahoma City Thunder player Kevin Durant will join the American Red Cross on Wednesday to tour the devastation.  Durant also pledged $1 million in support from The Durant Family Foundation.",
+      "normalized_text": "Country music star Toby Keith, who grew up in Moore, said his hometown would persevere . The state's most famous athlete, NBA All-Star and Oklahoma City Thunder player Kevin Durant will join the American Red Cross on Wednesday to tour the devastation. Durant also pledged $1 million in support from The Durant Family Foundation.",
+      "content_hash": "6f440980fb1efc0ae7b5b928525f3e331acda35a9103b037ad6076722f30eb95"
+    },
+    {
+      "ordinal": 51,
+      "span_type": "caption",
+      "raw_text": "       Deadliest U.S. tornadoes  10 photos  ",
+      "normalized_text": "Deadliest U.S. tornadoes 10 photos",
+      "content_hash": "a96b4fa1e86b6bda4ca40667c7d2db0a8b16673873d28ba364dee71059edbaf2"
+    },
+    {
+      "ordinal": 52,
+      "span_type": "paragraph",
+      "raw_text": "\"Hometown got hit for the gazillionth time. Rise again Moore Oklahoma,\" Keith tweeted Monday evening.",
+      "normalized_text": "\"Hometown got hit for the gazillionth time. Rise again Moore Oklahoma,\" Keith tweeted Monday evening.",
+      "content_hash": "4b12fa3f5267462bece6354b67655170296d2dbfde04f3ab96de00d6aee59343"
+    },
+    {
+      "ordinal": 53,
+      "span_type": "paragraph",
+      "raw_text": "The Storm Prediction Center in Norman, Okla., forecast more stormy weather Tuesday, predicting golf ball-sized hail, powerful winds and isolated, strong tornadoes in parts of Texas, Arkansas, Louisiana and Oklahoma. The area at risk does not include Moore.",
+      "normalized_text": "The Storm Prediction Center in Norman, Okla., forecast more stormy weather Tuesday, predicting golf ball-sized hail, powerful winds and isolated, strong tornadoes in parts of Texas, Arkansas, Louisiana and Oklahoma. The area at risk does not include Moore.",
+      "content_hash": "72f47b06c0d73a6251fd0f30c1a7600c558a2cabe5988213f72f25b712e5e574"
+    },
+    {
+      "ordinal": 54,
+      "span_type": "paragraph",
+      "raw_text": "Monday's tornado loosely followed the path of a killer twister that slammed the region with 300 mph winds in May 1999. It was the fourth tornado to hit Moore since 1998.",
+      "normalized_text": "Monday's tornado loosely followed the path of a killer twister that slammed the region with 300 mph winds in May 1999. It was the fourth tornado to hit Moore since 1998.",
+      "content_hash": "325bb32b38445a9df6de78fba9eac34a9a53ae35d2bd8f8fabe17b2e987117b5"
+    },
+    {
+      "ordinal": 55,
+      "span_type": "paragraph",
+      "raw_text": "The 1999 storm damaged 600 homes and about 100 businesses. Two or three schools were also hit, but \"the kids were out of school, so there were no concerns,\" recalled City Manager Steve Eddy.",
+      "normalized_text": "The 1999 storm damaged 600 homes and about 100 businesses. Two or three schools were also hit, but \"the kids were out of school, so there were no concerns,\" recalled City Manager Steve Eddy.",
+      "content_hash": "677be2cbc5b944cca7ae743f912fdf45eecdf1399bb36da746b8a9f75b823965"
+    },
+    {
+      "ordinal": 56,
+      "span_type": "paragraph",
+      "raw_text": "At the time of Monday's storm, the City Council was meeting. Local leaders watched the twister approaching on television before taking shelter in the bathroom.",
+      "normalized_text": "At the time of Monday's storm, the City Council was meeting. Local leaders watched the twister approaching on television before taking shelter in the bathroom.",
+      "content_hash": "f6c21d09f8a6241c7d5df22fb94099a2fe7b0fb841fcac2883d441db24ef5cda"
+    },
+    {
+      "ordinal": 57,
+      "span_type": "paragraph",
+      "raw_text": "\"We blew our sirens probably five or six times,\" Eddy said. \"We knew it was going to be significant, and there were are a lot of curse words flying.\"",
+      "normalized_text": "\"We blew our sirens probably five or six times,\" Eddy said. \"We knew it was going to be significant, and there were are a lot of curse words flying.\"",
+      "content_hash": "f21448e3dfe994739eae0232954ac66304fd3f565114fc394d49c75b839f4164"
+    },
+    {
+      "ordinal": 58,
+      "span_type": "paragraph",
+      "raw_text": "Monday's twister also came almost exactly two years after an enormous twister, also an EF5, ripped through the city of Joplin, Mo., killing 158 people and injuring hundreds more.",
+      "normalized_text": "Monday's twister also came almost exactly two years after an enormous twister, also an EF5, ripped through the city of Joplin, Mo., killing 158 people and injuring hundreds more.",
+      "content_hash": "139098faba5d011066ff41225f2649e96896e19121ba61b15915477b1191ff86"
+    },
+    {
+      "ordinal": 59,
+      "span_type": "paragraph",
+      "raw_text": "On Monday, Joplin organized a team of about a dozen police and firefighters to assist in Moore.",
+      "normalized_text": "On Monday, Joplin organized a team of about a dozen police and firefighters to assist in Moore.",
+      "content_hash": "527a97ef133b1e72cda6c2b5a9891e495cb457dd2697803454f5ad37e0c9d5b8"
+    },
+    {
+      "ordinal": 60,
+      "span_type": "paragraph",
+      "raw_text": "Joplin City Manager Mark Rohr said his community remembers the assistance it received in 2011 and feels an obligation to lend a hand in Moore.",
+      "normalized_text": "Joplin City Manager Mark Rohr said his community remembers the assistance it received in 2011 and feels an obligation to lend a hand in Moore.",
+      "content_hash": "39c25075df7a2618f3317051be401c7bd11305b78a33743376ac27a718aa4711"
+    },
+    {
+      "ordinal": 61,
+      "span_type": "paragraph",
+      "raw_text": "That May 22, 2011, tornado was the deadliest in the United States since modern tornado record keeping began in 1950, according to the National Oceanic and Atmospheric Administration. Before Joplin, the deadliest modern tornado was June 1953 in Flint, Mich., when 116 people died.",
+      "normalized_text": "That May 22, 2011, tornado was the deadliest in the United States since modern tornado record keeping began in 1950, according to the National Oceanic and Atmospheric Administration. Before Joplin, the deadliest modern tornado was June 1953 in Flint, Mich., when 116 people died.",
+      "content_hash": "05ba500b65b3fb5ac4df0876ebc8bf69c972e8fe69bab19c52e7113540a194c0"
+    },
+    {
+      "ordinal": 62,
+      "span_type": "paragraph",
+      "raw_text": "© 2013 CBS Interactive Inc. All Rights Reserved. This material may not be published, broadcast, rewritten, or redistributed. The Associated Press contributed to this report.",
+      "normalized_text": "© 2013 CBS Interactive Inc. All Rights Reserved. This material may not be published, broadcast, rewritten, or redistributed. The Associated Press contributed to this report.",
+      "content_hash": "280d4f00fbd554601dae770d9f4cc0d39c00025d681e3fe67d8c21e239104845"
+    }
+  ]
+}
