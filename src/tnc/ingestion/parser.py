@@ -56,10 +56,6 @@ def parse_article(
     """Convert article HTML into ordered immutable SourceSpan records."""
 
     tree = LexborHTMLParser(html)
-    article = tree.css_first("article")
-
-    if article is None:
-        raise ValueError("No <article> element found")
 
     selectors = (
         "h1, h2, h3, h4, h5, h6, "
@@ -67,7 +63,31 @@ def parse_article(
         ".update, .correction"
     )
 
-    nodes = article.css(selectors)
+    article = tree.css_first("article")
+
+    if article is not None:
+        nodes = article.css(selectors)
+    else:
+        # ABC stores its headline and story in separate containers.
+        abc_container = tree.css_first(".FITT_Article_main__body")
+        abc_body = (
+            abc_container.css_first('[data-testid="prism-article-body"]')
+            if abc_container is not None
+            else None
+        )
+
+        if abc_body is None:
+            raise ValueError("No supported article content found")
+
+        abc_headline = abc_container.css_first(
+            '[data-testid="prism-headline"]'
+        )
+        nodes = (
+            abc_headline.css(selectors)
+            if abc_headline is not None
+            else []
+        )
+        nodes.extend(abc_body.css(selectors))
 
     spans: list[SourceSpan] = []
 
