@@ -68,6 +68,24 @@
      "That the May 21 publication timestamp identifies the exact moment the corrected 24-death claim first became available.",
      "A historical_available_from value for the frozen ABC correction source."
    ]
- }
+ },
+{
+ "observation_id": "obs-005",
+ "source_id": "cbs-ap-status",
+ "evidence_type": "publisher_displayed_historical_timestamp",
+ "evidence_url": "https://www.cbsnews.com/news/oklahoma-tornado-victim-search-efforts-winding-down/",
+ "published_time_text": "The article body says Updated 10:50 pm ET; structured metadata exposes datePublished 2013-05-21T22:51:00-0400 and dateModified 2013-05-21T22:52:38-0400.",
+ "supports": [
+  "The current frozen CBS/AP status page presents closely spaced historical update, publication, and modification timestamp signals on May 21, 2013.",
+  "The article reports rescue workers racing to complete the search and attributes to Fire Chief Gary Bird confidence that no more bodies or survivors remained in the rubble after nearly 24 hours of searching.",
+  "The fire chief statement is an attributed operational assessment and must not be promoted automatically into an independently established world-state fact."
+ ],
+ "does_not_establish": [
+  "That the exact frozen CBS document bytes were observable at 10:50, 10:51, or 10:52:38 p.m. Eastern Time on May 21, 2013.",
+  "Which of the displayed timestamp signals should be treated as canonical historical availability.",
+  "That the fire chief assessment independently proves that no additional bodies or survivors existed.",
+  "A historical_available_from value for the frozen CBS status source."
+ ]
+}
 ]
 }
