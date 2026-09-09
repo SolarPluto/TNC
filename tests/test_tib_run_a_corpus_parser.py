@@ -14,7 +14,7 @@ EXPECTED_SPAN_COUNTS = {
     "cbs-ap-correction": 60,
     "abc-correction": 23,
     "cbs-ap-status": 55,
-    "nws-retrospective": 517,
+    "nws-retrospective": 396,
 }
 
 

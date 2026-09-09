@@ -146,7 +146,7 @@ def test_parser_handles_frozen_nws_event_page():
         available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
     )
 
-    assert len(spans) == 517
+    assert len(spans) == 396
     assert spans[0].span_type == SpanType.HEADING
     assert spans[0].normalized_text == (
         "The Tornado Outbreak of May 20, 2013"
@@ -161,6 +161,72 @@ def test_parser_handles_frozen_nws_event_page():
         "A rating of EF-5 has been given to the tornado"
         in span.normalized_text
         for span in spans
+    )
+
+
+def test_parser_excludes_nws_resource_and_gallery_chrome():
+    nws_fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "9e356c3b438265ea409fd40f4a3b9bf5eba667065f0af97986f477da83499840"
+    )
+
+    html = nws_fixture.read_text(encoding="utf-8")
+
+    spans = parse_article(
+        html=html,
+        document_version_id="nws-adjudication-filter-test",
+        available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
+    )
+
+    texts = [span.normalized_text for span in spans]
+
+    assert len(spans) == 396
+
+    # Fast Facts keeps substantive factual content but excludes
+    # resource/index material.
+    assert "Fast Facts" in texts
+    assert (
+        "Most Tornadoes to Occur on Any May 20th "
+        "in Oklahoma (1950-Present)"
+        in texts
+    )
+    assert "GIS Data" not in texts
+    assert "Severe Weather Safety Information" not in texts
+    assert not any(
+        text.startswith("Web Pages and Reports Related")
+        for text in texts
+    )
+    assert not any(
+        text.startswith("Research Articles")
+        for text in texts
+    )
+
+    # IDSS keeps the substantive support description while dropping
+    # the external FEMA resource pointer.
+    assert not any(
+        text.startswith(
+            "Checkout the Incident Command Structure"
+        )
+        for text in texts
+    )
+
+    # Damage section keeps its evidentiary provenance paragraph.
+    assert any(
+        text.startswith(
+            "The following photos show damage produced by "
+            "the May 20, 2013 EF-5 tornado."
+        )
+        for text in texts
+    )
+
+    # Other substantive NWS evidence remains present.
+    assert any(
+        "A rating of EF-5 has been given to the tornado"
+        in text
+        for text in texts
     )
 
 

@@ -251,7 +251,76 @@ def parse_article(
 
             nws_headline = tree.css_first("h1.location-pagetitle")
             nodes = [nws_headline] if nws_headline is not None else []
-            nodes.extend(nws_content.css(selectors))
+
+            nws_nodes = nws_content.css(selectors)
+            filtered_nodes = []
+
+            fastfacts_keep_headings = {
+                "Fast Facts",
+                (
+                    "Most Tornadoes to Occur on Any May 20th "
+                    "in Oklahoma (1950-Present)"
+                ),
+            }
+
+            for node in nws_nodes:
+                node_text = normalize_text(
+                    node.text(separator=" ", strip=True)
+                )
+
+                ancestor = node
+                ancestor_ids = set()
+
+                while ancestor is not None:
+                    ancestor_id = ancestor.attributes.get("id")
+                    if ancestor_id:
+                        ancestor_ids.add(ancestor_id)
+                    ancestor = ancestor.parent
+
+                if "fastfacts" in ancestor_ids:
+                    keep_fastfacts_node = False
+
+                    if (
+                        node.tag == "h2"
+                        and node_text in fastfacts_keep_headings
+                    ):
+                        keep_fastfacts_node = True
+                    elif (
+                        node.tag == "li"
+                        and node.css_first("a") is None
+                    ):
+                        keep_fastfacts_node = True
+                    elif node.tag in {"td", "th"}:
+                        keep_fastfacts_node = True
+
+                    if not keep_fastfacts_node:
+                        continue
+
+                if (
+                    "idss" in ancestor_ids
+                    and node.tag == "p"
+                    and node.css_first("a") is not None
+                    and node_text.startswith(
+                        "Checkout the Incident Command Structure"
+                    )
+                ):
+                    continue
+
+                if (
+                    "damage" in ancestor_ids
+                    and node.tag == "td"
+                    and "stormphoto50"
+                    in set(
+                        (
+                            node.attributes.get("class") or ""
+                        ).split()
+                    )
+                ):
+                    continue
+
+                filtered_nodes.append(node)
+
+            nodes.extend(filtered_nodes)
 
     spans: list[SourceSpan] = []
 
