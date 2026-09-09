@@ -106,7 +106,7 @@ def test_parser_handles_frozen_mpr_article():
         available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
     )
 
-    assert len(spans) == 45
+    assert len(spans) == 44
     assert spans[0].span_type == SpanType.HEADING
     assert spans[0].normalized_text == (
         "Huge tornado hits Oklahoma City suburb, kills 51"
@@ -226,5 +226,36 @@ def test_parser_excludes_cbs_article_chrome():
     )
     assert any(
         text.startswith("A tornado rips through the Oklahoma City area")
+        for text in texts
+    )
+
+
+def test_parser_excludes_mpr_contributor_credit():
+    mpr_fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "542607b75d87b2be33810bc444ea3a6b01fe420d91b8c15dcc37f77ba72ae525"
+    )
+
+    html = mpr_fixture.read_text(encoding="utf-8")
+
+    spans = parse_article(
+        html=html,
+        document_version_id="mpr-contributor-filter-test",
+        available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
+    )
+
+    texts = [span.normalized_text for span in spans]
+
+    assert (
+        "Associated Press writers Sean Murphy, Nomaan Merchant and "
+        "Sue Ogrocki contributed to this report."
+        not in texts
+    )
+
+    assert any(
+        text.startswith("DEADLIEST US TORNADOES SINCE 1900")
         for text in texts
     )

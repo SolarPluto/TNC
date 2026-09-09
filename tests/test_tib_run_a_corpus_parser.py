@@ -9,7 +9,7 @@ CORPUS_DIR = Path(__file__).parent.parent / "corpus" / "tib_run_a"
 OBJECTS_DIR = CORPUS_DIR / "objects"
 
 EXPECTED_SPAN_COUNTS = {
-    "mpr-ap-early": 45,
+    "mpr-ap-early": 44,
     "cbs-ap-early": 28,
     "cbs-ap-correction": 60,
     "abc-correction": 23,

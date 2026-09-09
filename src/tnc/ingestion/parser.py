@@ -108,6 +108,14 @@ def parse_article(
                     )
 
                     if (
+                        node.css_first("em") is not None
+                        and node_text.endswith(
+                            "contributed to this report."
+                        )
+                    ):
+                        continue
+
+                    if (
                         "Photos: Tornado hits Moore, Okla." in node_text
                         and "Interactive: Monstrous tornado strikes"
                         in node_text

@@ -2,7 +2,7 @@
   "format_version": 1,
   "source_id": "mpr-ap-early",
   "body_hash": "542607b75d87b2be33810bc444ea3a6b01fe420d91b8c15dcc37f77ba72ae525",
-  "span_count": 45,
+  "span_count": 44,
   "spans": [
     {
       "ordinal": 0,
@@ -311,13 +311,6 @@
       "raw_text": "DEADLIEST US TORNADOES SINCE 1900 A list of the 10 deadliest tornadoes in the United States since 1900: • 695 deaths. March 18, 1925, in Missouri, Illinois and Indiana. • 216 deaths. April 5, 1936, in Tupelo, Miss. • 203 deaths. April 6, 1936, in Gainesville, Ga. • 181 deaths. April 9, 1947, in Woodward, Okla. • 158 deaths. May 22, 2011, in Joplin, Mo. • 143 deaths. April 24, 1908, in Amite, La., and Purvis, Miss. • 116 deaths. June 8, 1953, in Flint, Mich. • 114 deaths. May 11, 1953 in Waco, Texas. • 114 deaths. May 18, 1902 in Goliad, Texas. • 103 deaths. March 23, 1913, in Omaha, Neb. Source: National Oceanic and Atmospheric Administration ",
       "normalized_text": "DEADLIEST US TORNADOES SINCE 1900 A list of the 10 deadliest tornadoes in the United States since 1900: • 695 deaths. March 18, 1925, in Missouri, Illinois and Indiana. • 216 deaths. April 5, 1936, in Tupelo, Miss. • 203 deaths. April 6, 1936, in Gainesville, Ga. • 181 deaths. April 9, 1947, in Woodward, Okla. • 158 deaths. May 22, 2011, in Joplin, Mo. • 143 deaths. April 24, 1908, in Amite, La., and Purvis, Miss. • 116 deaths. June 8, 1953, in Flint, Mich. • 114 deaths. May 11, 1953 in Waco, Texas. • 114 deaths. May 18, 1902 in Goliad, Texas. • 103 deaths. March 23, 1913, in Omaha, Neb. Source: National Oceanic and Atmospheric Administration",
       "content_hash": "f316fa3f0ee325fe5caf3fac9ef4313032217e30565fd7a8f57895e50a11344c"
-    },
-    {
-      "ordinal": 44,
-      "span_type": "paragraph",
-      "raw_text": " Associated Press writers Sean Murphy, Nomaan Merchant and Sue Ogrocki contributed to this report.",
-      "normalized_text": "Associated Press writers Sean Murphy, Nomaan Merchant and Sue Ogrocki contributed to this report.",
-      "content_hash": "8727d4153a10a0c180add5e16bcb8cb398e5407fd86ca2013155edf72ed001c6"
     }
   ]
 }
