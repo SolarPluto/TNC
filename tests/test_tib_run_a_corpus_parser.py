@@ -12,7 +12,7 @@ EXPECTED_SPAN_COUNTS = {
     "mpr-ap-early": 45,
     "cbs-ap-early": 34,
     "cbs-ap-correction": 67,
-    "abc-correction": 33,
+    "abc-correction": 23,
     "cbs-ap-status": 63,
     "nws-retrospective": 517,
 }

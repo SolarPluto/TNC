@@ -78,7 +78,7 @@ def test_parser_handles_frozen_abc_article():
         available_from=datetime(2013, 5, 21, tzinfo=timezone.utc),
     )
 
-    assert len(spans) == 33
+    assert len(spans) == 23
     assert spans[0].span_type == SpanType.HEADING
     assert spans[0].normalized_text == (
         "Oklahoma Tornado Deaths Revised Down to 24, Including 9 Children"
@@ -161,4 +161,30 @@ def test_parser_handles_frozen_nws_event_page():
         "A rating of EF-5 has been given to the tornado"
         in span.normalized_text
         for span in spans
+    )
+
+
+def test_parser_excludes_abc_promotional_content():
+    abc_fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "a4c4100c7c2af0e994b1bcea7e234615c19d845dfaaf7df5b9dd193dc89e9f00"
+    )
+
+    html = abc_fixture.read_text(encoding="utf-8")
+
+    spans = parse_article(
+        html=html,
+        document_version_id="abc-promo-filter-test",
+        available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
+    )
+
+    texts = [span.normalized_text for span in spans]
+
+    assert "Popular Reads" not in texts
+    assert not any(
+        text.startswith(("RELATED:", "PHOTOS:", "VIDEO:"))
+        for text in texts
     )

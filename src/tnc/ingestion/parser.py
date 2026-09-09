@@ -137,7 +137,40 @@ def parse_article(
                 if abc_headline is not None
                 else []
             )
-            nodes.extend(abc_body.css(selectors))
+
+            for node in abc_body.css(selectors):
+                ancestor = node.parent
+                excluded = False
+
+                while ancestor is not None and ancestor is not abc_body:
+                    classes = set(
+                        (ancestor.attributes.get("class") or "").split()
+                    )
+
+                    if "MobileContentPromo" in classes:
+                        excluded = True
+                        break
+
+                    ancestor = ancestor.parent
+
+                if excluded:
+                    continue
+
+                if node.tag == "p":
+                    strong = node.css_first("strong")
+                    link = node.css_first("a")
+
+                    if strong is not None and link is not None:
+                        promo_text = normalize_text(
+                            strong.text(separator=" ", strip=True)
+                        )
+
+                        if promo_text.startswith(
+                            ("RELATED:", "PHOTOS:", "VIDEO:")
+                        ):
+                            continue
+
+                nodes.append(node)
         else:
             # NWS historical event pages store substantive content
             # inside the tabbed event-content container.
