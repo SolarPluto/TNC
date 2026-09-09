@@ -2,7 +2,7 @@
   "format_version": 1,
   "source_id": "cbs-ap-early",
   "body_hash": "7d3fd4d11470ee0e8b9694ef95faf1ee16ab6151e64cfac2ff342244c2c4af53",
-  "span_count": 34,
+  "span_count": 28,
   "spans": [
     {
       "ordinal": 0,
@@ -48,199 +48,157 @@
     },
     {
       "ordinal": 6,
-      "span_type": "list_item",
-      "raw_text": "How to help those hit by Oklahoma tornado",
-      "normalized_text": "How to help those hit by Oklahoma tornado",
-      "content_hash": "5ab3af19a5d00342abd1c0f4794c67917d07e30f6e77393619efc58a0109b8b1"
-    },
-    {
-      "ordinal": 7,
       "span_type": "paragraph",
       "raw_text": "The twister, one of several created by a storm system that swept through the nation's midsection the past two days, reduced homes and building to rubble in Moore, Okla., south of Oklahoma City. An elementary school, a high school, a movie theater and a hospital were among buildings hard hit. President Obama signed a major disaster declaration for the area.",
       "normalized_text": "The twister, one of several created by a storm system that swept through the nation's midsection the past two days, reduced homes and building to rubble in Moore, Okla., south of Oklahoma City. An elementary school, a high school, a movie theater and a hospital were among buildings hard hit. President Obama signed a major disaster declaration for the area.",
       "content_hash": "a038e37e742d447802bd5e4555847e6c45c5213a0141e2fe70a5cdd208f527ff"
     },
     {
-      "ordinal": 8,
+      "ordinal": 7,
       "span_type": "caption",
       "raw_text": " A child is pulled from the rubble of the Plaza Towers Elementary School in Moore, Okla., and passed along to rescuers Monday, May 20, 2013.  AP Photo Sue Ogrocki ",
       "normalized_text": "A child is pulled from the rubble of the Plaza Towers Elementary School in Moore, Okla., and passed along to rescuers Monday, May 20, 2013. AP Photo Sue Ogrocki",
       "content_hash": "9692cc69efd18f11c01a7c73eda33d11536022193dcb37ff8d8e3e62a57d4a60"
     },
     {
-      "ordinal": 9,
+      "ordinal": 8,
       "span_type": "paragraph",
       "raw_text": "CBS affiliate KWTV reported emergency personnel pulled several children out of the rubble after rushing to Plaza Towers Elementary school in Moore, where several children are still missing. The building was in the direct line of the tornado's path and was destroyed. Briarwood Elementary was also damaged, and all the children there were accounted for.",
       "normalized_text": "CBS affiliate KWTV reported emergency personnel pulled several children out of the rubble after rushing to Plaza Towers Elementary school in Moore, where several children are still missing. The building was in the direct line of the tornado's path and was destroyed. Briarwood Elementary was also damaged, and all the children there were accounted for.",
       "content_hash": "392609258528f29692534145da18b85f980abadea559bc169a8fbea3dec2a312"
     },
     {
-      "ordinal": 10,
+      "ordinal": 9,
       "span_type": "paragraph",
       "raw_text": "One woman told CBS News affiliate KWTV she and her two children survived by hiding in the bathtub of their home.  \"Everything is gone,\" she said through tears. \"Our whole house is gone. Everything except for where we were was gone.\"",
       "normalized_text": "One woman told CBS News affiliate KWTV she and her two children survived by hiding in the bathtub of their home. \"Everything is gone,\" she said through tears. \"Our whole house is gone. Everything except for where we were was gone.\"",
       "content_hash": "2ecf4ab16c8b06c91cedec1d9d7d619715a3afb077d4301b20b6e36c5ffe9f91"
     },
     {
-      "ordinal": 11,
+      "ordinal": 10,
       "span_type": "paragraph",
       "raw_text": "One emergency responder on the scene told Werner he helped a couple of individuals with lacerations on the back and head, as well as an individual with a spine injury.",
       "normalized_text": "One emergency responder on the scene told Werner he helped a couple of individuals with lacerations on the back and head, as well as an individual with a spine injury.",
       "content_hash": "b4384c3c089de6ff54d26d72d77dd27e69eaefd369fe09149ec0957109624342"
     },
     {
-      "ordinal": 12,
+      "ordinal": 11,
       "span_type": "paragraph",
       "raw_text": "\"People are crawling from everywhere and anywhere,\" he said. \"It's basically just a war zone.",
       "normalized_text": "\"People are crawling from everywhere and anywhere,\" he said. \"It's basically just a war zone.",
       "content_hash": "51701de914a85a53ec348e5b22bf23c808515d5ca6845cb9ae5f7408dc190950"
     },
     {
-      "ordinal": 13,
+      "ordinal": 12,
       "span_type": "paragraph",
       "raw_text": "Reporting from Moore, correspondent Anna Werner said people appeared to be in shock as they emerged from their splintered homes.",
       "normalized_text": "Reporting from Moore, correspondent Anna Werner said people appeared to be in shock as they emerged from their splintered homes.",
       "content_hash": "94c3ffb56c72556396f44f2339c320f2510522c25c60fd4124802f535ebe48fd"
     },
     {
-      "ordinal": 14,
+      "ordinal": 13,
       "span_type": "paragraph",
       "raw_text": "\"There are a couple of people doing the only thing they can do, which is sit in their chairs on their front lawn,\" Werner said.",
       "normalized_text": "\"There are a couple of people doing the only thing they can do, which is sit in their chairs on their front lawn,\" Werner said.",
       "content_hash": "17d1479c12dd73e8e8335c5538ff935c7a9b75a9ea4f53a19a334e6c0cff93b4"
     },
     {
-      "ordinal": 15,
+      "ordinal": 14,
       "span_type": "paragraph",
       "raw_text": "The Oklahoma City area also experienced difficulties with cell phone communication and many calls weren't going through. Gov. Fallin said AT&T would be coming in to help the situation.",
       "normalized_text": "The Oklahoma City area also experienced difficulties with cell phone communication and many calls weren't going through. Gov. Fallin said AT&T would be coming in to help the situation.",
       "content_hash": "f36f16dbb713a8699af4bc18da2c35f8215c72666082a2fbf7546fc95d34fcdc"
     },
     {
-      "ordinal": 16,
+      "ordinal": 15,
       "span_type": "paragraph",
       "raw_text": "The White House said President Barack Obama called  Gov. Fallin to express his concern about the monstrous tornado and say that he's directed\nthe government and the Federal Emergency Management Agency to provide any assistance she needs. FEMA has sent a special team to\nOklahoma's emergency operations center to help out and dispatch resources.",
       "normalized_text": "The White House said President Barack Obama called Gov. Fallin to express his concern about the monstrous tornado and say that he's directed the government and the Federal Emergency Management Agency to provide any assistance she needs. FEMA has sent a special team to Oklahoma's emergency operations center to help out and dispatch resources.",
       "content_hash": "1b41f343e4c2f8beb3d7e75e3cc5bc900ce42c2e20fb14877488cee18d29e2df"
     },
     {
-      "ordinal": 17,
+      "ordinal": 16,
       "span_type": "paragraph",
       "raw_text": "Moore was hit hard by a tornado in 1999 that killed 36 people. The storm had the highest winds ever recorded near the earth's surface.",
       "normalized_text": "Moore was hit hard by a tornado in 1999 that killed 36 people. The storm had the highest winds ever recorded near the earth's surface.",
       "content_hash": "9a89980826cb73724dc65e405e4a423ce343fdb65774794374bf24194dda05a8"
     },
     {
-      "ordinal": 18,
+      "ordinal": 17,
       "span_type": "paragraph",
       "raw_text": "Severe weather in Oklahoma on Sunday, particularly in the city of Shawnee, caused two deaths and at least 21 injuries. Earlier Monday, spokeswoman Amy Elliot of the Oklahoma state medical examiner's office identified the two people confirmed dead from Sunday's storms as 79-year-old Glen Irish and 76-year-old Billy Hutchinson. Both men were from Shawnee.",
       "normalized_text": "Severe weather in Oklahoma on Sunday, particularly in the city of Shawnee, caused two deaths and at least 21 injuries. Earlier Monday, spokeswoman Amy Elliot of the Oklahoma state medical examiner's office identified the two people confirmed dead from Sunday's storms as 79-year-old Glen Irish and 76-year-old Billy Hutchinson. Both men were from Shawnee.",
       "content_hash": "6b120d4bdd49d5270ad5774431333d7d5fdc767254e752281e8436810e49ee40"
     },
     {
-      "ordinal": 19,
+      "ordinal": 18,
       "span_type": "paragraph",
       "raw_text": "Tornadoes were also reported Sunday in Iowa, Kansas and Oklahoma as part of a storm system that stretched from Texas to Minnesota. Gov. Fallin has declared a state of emergency in 16 counties across the state.",
       "normalized_text": "Tornadoes were also reported Sunday in Iowa, Kansas and Oklahoma as part of a storm system that stretched from Texas to Minnesota. Gov. Fallin has declared a state of emergency in 16 counties across the state.",
       "content_hash": "ccd2c559a4c28e89311b0b309109236a41f126f59f8292af5f8925224377a7c9"
     },
     {
-      "ordinal": 20,
+      "ordinal": 19,
       "span_type": "paragraph",
       "raw_text": "The powerful system spawned baseball-sized hail, and winds strong enough to flip over tractor trailers, littering them across a major interstate, reports Werner.",
       "normalized_text": "The powerful system spawned baseball-sized hail, and winds strong enough to flip over tractor trailers, littering them across a major interstate, reports Werner.",
       "content_hash": "c15d8e42af1818c3a77719ffeee3cab9b602f9e48a227f31e6cf27e0c322bf39"
     },
     {
-      "ordinal": 21,
-      "span_type": "list_item",
-      "raw_text": "KWTV Oklahoma City's Storm Tracker Radar",
-      "normalized_text": "KWTV Oklahoma City's Storm Tracker Radar",
-      "content_hash": "eb07425ee2184ad0a99aec485fc0d1763bc31e058341633137be69d64359fbec"
-    },
-    {
-      "ordinal": 22,
-      "span_type": "list_item",
-      "raw_text": "National Weather Service Storm Prediction Center",
-      "normalized_text": "National Weather Service Storm Prediction Center",
-      "content_hash": "366b147729f1eba4712eef0e168aae162e5443aa68381898d14d26bd1660c02f"
-    },
-    {
-      "ordinal": 23,
+      "ordinal": 20,
       "span_type": "paragraph",
       "raw_text": "Forecasters had been warning of bad weather since last Wednesday and on Sunday said conditions had ripened for powerful tornadoes. Wall-to-wall broadcasts of storm information spread the word, leaving Pottawatomie County Sheriff Mike Booth grateful.",
       "normalized_text": "Forecasters had been warning of bad weather since last Wednesday and on Sunday said conditions had ripened for powerful tornadoes. Wall-to-wall broadcasts of storm information spread the word, leaving Pottawatomie County Sheriff Mike Booth grateful.",
       "content_hash": "641dd212767f704c9e56a6843299f7338b347074f882737cb20b5b7debb75f70"
     },
     {
-      "ordinal": 24,
+      "ordinal": 21,
       "span_type": "paragraph",
       "raw_text": "\"There was a possibility a lot more people could have been injured,\" Booth said. \"This is the worst I've seen in Pottawatomie County in my 25 years of law enforcement.\"",
       "normalized_text": "\"There was a possibility a lot more people could have been injured,\" Booth said. \"This is the worst I've seen in Pottawatomie County in my 25 years of law enforcement.\"",
       "content_hash": "5f3186914c5a78d617b1f5c4eaf400a5139c520b3e95b795ec9e0cbb5d5e38df"
     },
     {
-      "ordinal": 25,
-      "span_type": "caption",
-      "raw_text": "       Massive tornado hits Oklahoma  53 photos  ",
-      "normalized_text": "Massive tornado hits Oklahoma 53 photos",
-      "content_hash": "7cfea2e53c12299845ec1a41cbf8fc062d1f3c90e08c959aa0607ba3a318ff01"
-    },
-    {
-      "ordinal": 26,
+      "ordinal": 22,
       "span_type": "paragraph",
       "raw_text": "Since Sunday, local emergency officials have been going from home site to home site in an effort to account for everyone. Keli Cain, a spokeswoman for the Oklahoma Department of Emergency Management, said that many times in such situations, people who are not found immediately are discovered later to have left the area ahead of the storm.",
       "normalized_text": "Since Sunday, local emergency officials have been going from home site to home site in an effort to account for everyone. Keli Cain, a spokeswoman for the Oklahoma Department of Emergency Management, said that many times in such situations, people who are not found immediately are discovered later to have left the area ahead of the storm.",
       "content_hash": "be6ad22197f95a7798aeada7676d35a63ad94fb58b0b81187edc120479fe7833"
     },
     {
-      "ordinal": 27,
+      "ordinal": 23,
       "span_type": "paragraph",
       "raw_text": "A storm spotter told the National Weather Service that the tornado in Shawnee left the earth \"scoured\" at the mobile home park. At the nearby intersection of Interstate 40 and U.S. 177, a half-dozen tractor-trailers were blown over, closing both highways for a time.",
       "normalized_text": "A storm spotter told the National Weather Service that the tornado in Shawnee left the earth \"scoured\" at the mobile home park. At the nearby intersection of Interstate 40 and U.S. 177, a half-dozen tractor-trailers were blown over, closing both highways for a time.",
       "content_hash": "d5904812141df844b7e020f50430fdd4649a7aec9a242835265acfeb99d3b208"
     },
     {
-      "ordinal": 28,
+      "ordinal": 24,
       "span_type": "caption",
       "raw_text": " A tornado rips through the Oklahoma City area Monday afternoon  KWTV ",
       "normalized_text": "A tornado rips through the Oklahoma City area Monday afternoon KWTV",
       "content_hash": "946e1aa2aa60d5490c0c3ab044117110c92fba59f0fe4da1469ff10b004bd7bf"
     },
     {
-      "ordinal": 29,
+      "ordinal": 25,
       "span_type": "paragraph",
       "raw_text": "In Wichita, Kan., a tornado touched down near Mid-Content Airport on the city's southwest side shortly before 4 p.m., knocking out power to thousands of homes and businesses but bypassing the most populated areas of Kansas' biggest city. The Wichita tornado was an EF1 on the enhanced Fujita scale, with winds of 110 mph, according to the weather service.",
       "normalized_text": "In Wichita, Kan., a tornado touched down near Mid-Content Airport on the city's southwest side shortly before 4 p.m., knocking out power to thousands of homes and businesses but bypassing the most populated areas of Kansas' biggest city. The Wichita tornado was an EF1 on the enhanced Fujita scale, with winds of 110 mph, according to the weather service.",
       "content_hash": "a2de1fde43889bee131d5a18865e7ba334e044f10c4d919094f4d94759612fee"
     },
     {
-      "ordinal": 30,
-      "span_type": "list_item",
-      "raw_text": "Four things you need to know about tornado season",
-      "normalized_text": "Four things you need to know about tornado season",
-      "content_hash": "b51a5d39f528c90c22879bf1becdb400819513be3fb85463e89f9fd1ebaf6e4e"
-    },
-    {
-      "ordinal": 31,
+      "ordinal": 26,
       "span_type": "paragraph",
       "raw_text": "Sedgwick County Emergency Management Director Randy Duncan said there were no reports of fatalities or injuries in Kansas.",
       "normalized_text": "Sedgwick County Emergency Management Director Randy Duncan said there were no reports of fatalities or injuries in Kansas.",
       "content_hash": "9b3b346f7bd6a288d419c79b56734107cb59efbcf1674ee24b6bebf1d68ea3dc"
     },
     {
-      "ordinal": 32,
+      "ordinal": 27,
       "span_type": "paragraph",
       "raw_text": "There were also two reports of tornadoes touching down in Iowa on Sunday night, including one near Huxley, about 20 miles north of Des Moines, and one in Grundy County, which is northeast of Des Moines, according to the Des Moines Register. Six mobile homes in Earlham were damaged. Downed power lines have left about 11,000 homes and business without power across the state.",
       "normalized_text": "There were also two reports of tornadoes touching down in Iowa on Sunday night, including one near Huxley, about 20 miles north of Des Moines, and one in Grundy County, which is northeast of Des Moines, according to the Des Moines Register. Six mobile homes in Earlham were damaged. Downed power lines have left about 11,000 homes and business without power across the state.",
       "content_hash": "f964f9c2faf1f1b7a56140741966b6716c051d35d69debe08b9957af07dfc6e3"
-    },
-    {
-      "ordinal": 33,
-      "span_type": "paragraph",
-      "raw_text": "© 2013 CBS Interactive Inc. All Rights Reserved. This material may not be published, broadcast, rewritten, or redistributed. The Associated Press contributed to this report.",
-      "normalized_text": "© 2013 CBS Interactive Inc. All Rights Reserved. This material may not be published, broadcast, rewritten, or redistributed. The Associated Press contributed to this report.",
-      "content_hash": "280d4f00fbd554601dae770d9f4cc0d39c00025d681e3fe67d8c21e239104845"
     }
   ]
 }

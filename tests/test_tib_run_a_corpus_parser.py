@@ -10,10 +10,10 @@ OBJECTS_DIR = CORPUS_DIR / "objects"
 
 EXPECTED_SPAN_COUNTS = {
     "mpr-ap-early": 45,
-    "cbs-ap-early": 34,
-    "cbs-ap-correction": 67,
+    "cbs-ap-early": 28,
+    "cbs-ap-correction": 60,
     "abc-correction": 23,
-    "cbs-ap-status": 63,
+    "cbs-ap-status": 55,
     "nws-retrospective": 517,
 }
 

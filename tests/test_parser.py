@@ -188,3 +188,43 @@ def test_parser_excludes_abc_promotional_content():
         text.startswith(("RELATED:", "PHOTOS:", "VIDEO:"))
         for text in texts
     )
+
+
+def test_parser_excludes_cbs_article_chrome():
+    cbs_fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "7d3fd4d11470ee0e8b9694ef95faf1ee16ab6151e64cfac2ff342244c2c4af53"
+    )
+
+    html = cbs_fixture.read_text(encoding="utf-8")
+
+    spans = parse_article(
+        html=html,
+        document_version_id="cbs-chrome-filter-test",
+        available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
+    )
+
+    texts = [span.normalized_text for span in spans]
+
+    assert "How to help those hit by Oklahoma tornado" not in texts
+    assert "KWTV Oklahoma City's Storm Tracker Radar" not in texts
+    assert "National Weather Service Storm Prediction Center" not in texts
+    assert "Four things you need to know about tornado season" not in texts
+    assert "Massive tornado hits Oklahoma 53 photos" not in texts
+
+    assert not any(
+        text.startswith("\u00a9 2013 CBS Interactive Inc.")
+        for text in texts
+    )
+
+    assert any(
+        text.startswith("A child is pulled from the rubble")
+        for text in texts
+    )
+    assert any(
+        text.startswith("A tornado rips through the Oklahoma City area")
+        for text in texts
+    )

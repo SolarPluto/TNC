@@ -118,7 +118,69 @@ def parse_article(
 
             nodes = filtered_nodes
         else:
-            nodes = article.css(selectors)
+            article_classes = set(
+                (article.attributes.get("class") or "").split()
+            )
+            is_cbs_story = (
+                "content-article" in article_classes
+                and article.css_first("section.content__body") is not None
+            )
+
+            if is_cbs_story:
+                cbs_body = article.css_first("section.content__body")
+                cbs_headline = article.css_first("h1.content__title")
+                cbs_timestamp = article.css_first(
+                    "p.content__meta--timestamp"
+                )
+
+                nodes = [cbs_headline] if cbs_headline is not None else []
+                if cbs_timestamp is not None:
+                    nodes.append(cbs_timestamp)
+                nodes.extend(cbs_body.css(selectors))
+
+                filtered_nodes = []
+
+                for node in nodes:
+                    ancestor = node.parent
+                    excluded = False
+
+                    while ancestor is not None and ancestor is not article:
+                        classes = set(
+                            (ancestor.attributes.get("class") or "").split()
+                        )
+
+                        if "arrows" in classes and "gray" in classes:
+                            excluded = True
+                            break
+
+                        ancestor = ancestor.parent
+
+                    if excluded:
+                        continue
+
+                    node_classes = set(
+                        (node.attributes.get("class") or "").split()
+                    )
+
+                    if (
+                        node.tag == "figcaption"
+                        and "embed__caption-container" in node_classes
+                        and node.css_first("a.embed__headline-link")
+                        is not None
+                    ):
+                        continue
+
+                    if (
+                        node.tag == "p"
+                        and "content__copyright" in node_classes
+                    ):
+                        continue
+
+                    filtered_nodes.append(node)
+
+                nodes = filtered_nodes
+            else:
+                nodes = article.css(selectors)
     else:
         # ABC stores its headline and story in separate containers.
         abc_container = tree.css_first(".FITT_Article_main__body")
