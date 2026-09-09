@@ -86,6 +86,26 @@
   "That the fire chief assessment independently proves that no additional bodies or survivors existed.",
   "A historical_available_from value for the frozen CBS status source."
  ]
+},
+{
+  "observation_id": "obs-006",
+  "source_id": "cbs-ap-early",
+  "evidence_type": "publisher_displayed_historical_timestamp",
+  "evidence_url": "https://www.cbsnews.com/news/at-least-51-dead-after-massive-okla-tornado/",
+  "published_time_text": "The visible publisher timestamp and structured datePublished show May 20, 2013 at 6:41 PM EDT; the article body says Updated 11:52 p.m.; structured metadata exposes dateModified 2013-05-20T23:53:29-0400.",
+  "supports": [
+    "The current frozen CBS/AP page preserves a 6:41 p.m. publication signal and later 11:52 p.m. body-update and 11:53:29 p.m. structured modification signals on May 20, 2013.",
+    "The later article body attributes an estimate of at least 51 deaths to the Oklahoma City Medical Examiner and says the death toll was expected to climb.",
+    "The page is labeled CBS/AP and states that The Associated Press contributed to the report, so its reporting must not automatically be treated as independent corroboration of other AP-derived publications.",
+    "The article contains separately attributed reporting from hospitals, Moore City Police, Reuters, CBS affiliate KWTV, and other sources, requiring claim-level provenance rather than treating the entire article as one independent evidence source."
+  ],
+  "does_not_establish": [
+    "That the exact frozen article body, including its 11:52 p.m. update, was observable at the 6:41 p.m. publication timestamp.",
+    "That the 11:52 p.m. body-update label or 11:53:29 p.m. structured modification timestamp identifies the exact historical availability time of every claim in the frozen page.",
+    "That CBS/AP constitutes an independent factual source for claims also appearing in other AP-derived publications.",
+    "That every claim in the CBS/AP article originated with The Associated Press.",
+    "A historical_available_from value for the frozen CBS/AP early source."
+  ]
 }
 ]
 }
