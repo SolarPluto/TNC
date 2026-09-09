@@ -89,6 +89,46 @@ def test_parser_handles_frozen_abc_article():
     )
 
 
+def test_parser_handles_frozen_mpr_article():
+    mpr_fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "542607b75d87b2be33810bc444ea3a6b01fe420d91b8c15dcc37f77ba72ae525"
+    )
+
+    html = mpr_fixture.read_text(encoding="utf-8")
+
+    spans = parse_article(
+        html=html,
+        document_version_id="mpr-test",
+        available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
+    )
+
+    assert len(spans) == 45
+    assert spans[0].span_type == SpanType.HEADING
+    assert spans[0].normalized_text == (
+        "Huge tornado hits Oklahoma City suburb, kills 51"
+    )
+    assert spans[1].span_type == SpanType.CAPTION
+    assert spans[2].normalized_text == "By TIM TALLEY Associated Press"
+    assert spans[3].normalized_text.startswith(
+        "MOORE, Okla. (AP) -- A monstrous tornado"
+    )
+
+    texts = [span.normalized_text for span in spans]
+
+    assert not any("Turn Up Your Support" in text for text in texts)
+    assert not any("Create an account or log in" in text for text in texts)
+    assert not any(
+        "Photos: Tornado hits Moore, Okla." in text
+        and "Interactive: Monstrous tornado strikes" in text
+        for text in texts
+    )
+    assert not any("Gallery Fullscreen Slideshow" in text for text in texts)
+
+
 def test_parser_handles_frozen_nws_event_page():
     nws_fixture = (
         Path(__file__).parent.parent

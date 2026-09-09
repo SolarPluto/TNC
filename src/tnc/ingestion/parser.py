@@ -66,7 +66,59 @@ def parse_article(
     article = tree.css_first("article")
 
     if article is not None:
-        nodes = article.css(selectors)
+        # MPR embeds fundraising, gallery, and related-link UI
+        # inside the article container. Preserve the headline and
+        # substantive story body while excluding those injected blocks.
+        is_mpr_story = (
+            "content" in (article.attributes.get("class") or "").split()
+            and "story" in (article.attributes.get("class") or "").split()
+            and tree.css_first(".story-body.userContent") is not None
+        )
+
+        if is_mpr_story:
+            mpr_headline = article.css_first("header.story-header h1")
+            mpr_body = article.css_first(".story-body.userContent")
+
+            nodes = [mpr_headline] if mpr_headline is not None else []
+            nodes.extend(mpr_body.css(selectors))
+
+            filtered_nodes = []
+
+            for node in nodes:
+                ancestor = node.parent
+                excluded = False
+
+                while ancestor is not None and ancestor is not article:
+                    classes = set(
+                        (ancestor.attributes.get("class") or "").split()
+                    )
+
+                    if "donate-ask" in classes or "apm-gallery" in classes:
+                        excluded = True
+                        break
+
+                    ancestor = ancestor.parent
+
+                if excluded:
+                    continue
+
+                if node.tag == "p":
+                    node_text = normalize_text(
+                        node.text(separator=" ", strip=True)
+                    )
+
+                    if (
+                        "Photos: Tornado hits Moore, Okla." in node_text
+                        and "Interactive: Monstrous tornado strikes"
+                        in node_text
+                    ):
+                        continue
+
+                filtered_nodes.append(node)
+
+            nodes = filtered_nodes
+        else:
+            nodes = article.css(selectors)
     else:
         # ABC stores its headline and story in separate containers.
         abc_container = tree.css_first(".FITT_Article_main__body")
