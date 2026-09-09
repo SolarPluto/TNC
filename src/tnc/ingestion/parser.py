@@ -76,18 +76,27 @@ def parse_article(
             else None
         )
 
-        if abc_body is None:
-            raise ValueError("No supported article content found")
+        if abc_body is not None:
+            abc_headline = abc_container.css_first(
+                '[data-testid="prism-headline"]'
+            )
+            nodes = (
+                abc_headline.css(selectors)
+                if abc_headline is not None
+                else []
+            )
+            nodes.extend(abc_body.css(selectors))
+        else:
+            # NWS historical event pages store substantive content
+            # inside the tabbed event-content container.
+            nws_content = tree.css_first("#tabs > .links")
 
-        abc_headline = abc_container.css_first(
-            '[data-testid="prism-headline"]'
-        )
-        nodes = (
-            abc_headline.css(selectors)
-            if abc_headline is not None
-            else []
-        )
-        nodes.extend(abc_body.css(selectors))
+            if nws_content is None:
+                raise ValueError("No supported article content found")
+
+            nws_headline = tree.css_first("h1.location-pagetitle")
+            nodes = [nws_headline] if nws_headline is not None else []
+            nodes.extend(nws_content.css(selectors))
 
     spans: list[SourceSpan] = []
 

@@ -87,3 +87,38 @@ def test_parser_handles_frozen_abc_article():
     assert spans[1].normalized_text == (
         "The tornado destroyed homes and businesses in a 12-mile path."
     )
+
+
+def test_parser_handles_frozen_nws_event_page():
+    nws_fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "9e356c3b438265ea409fd40f4a3b9bf5eba667065f0af97986f477da83499840"
+    )
+
+    html = nws_fixture.read_text(encoding="utf-8")
+
+    spans = parse_article(
+        html=html,
+        document_version_id="nws-test",
+        available_from=datetime(2013, 5, 20, tzinfo=timezone.utc),
+    )
+
+    assert len(spans) == 517
+    assert spans[0].span_type == SpanType.HEADING
+    assert spans[0].normalized_text == (
+        "The Tornado Outbreak of May 20, 2013"
+    )
+    assert spans[1].span_type == SpanType.HEADING
+    assert spans[1].normalized_text == "Summary"
+    assert any(
+        span.normalized_text == "Fast Facts"
+        for span in spans
+    )
+    assert any(
+        "A rating of EF-5 has been given to the tornado"
+        in span.normalized_text
+        for span in spans
+    )
