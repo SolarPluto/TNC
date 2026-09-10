@@ -42,6 +42,7 @@ def main() -> None:
         return
 
     result = process_assertion_spans(spans)
+    span_ordinals = {span.span_id: span.ordinal for span in spans}
 
     print(f"Admitted: {len(result.admitted)}")
     for assertion in result.admitted:
@@ -49,6 +50,10 @@ def main() -> None:
             f"  {assertion.subject} {assertion.predicate} "
             f"{assertion.object}"
         )
+        source_ordinals = ", ".join(
+            str(span_ordinals[span_id]) for span_id in assertion.span_ids
+        )
+        print(f"    Source spans: {source_ordinals}")
 
     print(f"Rejected: {len(result.rejected)}")
     for rejected in result.rejected:

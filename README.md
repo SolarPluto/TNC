@@ -16,6 +16,8 @@ Each output line contains the span's ordinal, structural type, and normalized te
 
 The command prints admitted assertions, rejected candidates, and rejection reasons.
 
+Each admitted assertion includes source-span numbers. These numbers start at 0 and match the ordinals printed by `tnc parse` for the same HTML file.
+
 The current extractor recognizes this structure:
 
     <speaker> <operator> <proposition>

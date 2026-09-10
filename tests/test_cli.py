@@ -57,7 +57,9 @@ def test_assertions_cli(monkeypatch, capsys):
     assert captured.out.splitlines() == [
         "Admitted: 2",
         "  Officials reported five people were injured.",
+        "    Source spans: 0",
         "  Engineers confirmed inspections were underway.",
+        "    Source spans: 1",
         "Rejected: 0",
     ]
 
