@@ -20,5 +20,18 @@
   "observed_discrepancies": [
     "The headline says 7 children; the opening paragraph says nine children."
   ],
-  "replay_admission_status": "pending"
+  "replay_admission_status": "pending",
+  "publisher_labels": {
+    "byline": {
+      "selector": ".byline_date .byline",
+      "raw_text": "\n\t\t\t\t\t\tBy  LAUREN EFFRON (@LEffron831) ,  DEAN SCHABNER, ANTHONY CASTELLANO and  CHRISTINA NG (@ChristinaNg27) \n\t\t\t\t\t"
+    },
+    "date": {
+      "selector": ".byline_date .date",
+      "raw_text": "May 21, 2013",
+      "time_of_day": null,
+      "timezone": null,
+      "interpretation": "Publisher date label only; does not establish exact publication time, edit time, or version availability."
+    }
+  }
 }

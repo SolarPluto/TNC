@@ -30,5 +30,18 @@
     "unchanged_body_span_count": 21,
     "exact_edit_time": null,
     "note": "Both captures already report 24 total deaths. This pair shows a headline child-count revision, not the original 51-to-24 revision."
+  },
+  "publisher_labels": {
+    "byline": {
+      "selector": ".byline_date .byline",
+      "raw_text": "\n\t\t\t\t\t\tBy  LAUREN EFFRON (@LEffron831) ,  DEAN SCHABNER, ANTHONY CASTELLANO and  CHRISTINA NG (@ChristinaNg27) \n\t\t\t\t\t"
+    },
+    "date": {
+      "selector": ".byline_date .date",
+      "raw_text": "May 21, 2013",
+      "time_of_day": null,
+      "timezone": null,
+      "interpretation": "Publisher date label only; does not establish exact publication time, edit time, or version availability."
+    }
   }
 }
