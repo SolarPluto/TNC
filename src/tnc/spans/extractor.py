@@ -26,6 +26,28 @@ OPERATOR_MAP = {
 }
 
 
+def first_sentence(text: str) -> str:
+    """Find a sentence boundary, allowing common titles and decimals."""
+    titles = {"dr.", "mr.", "mrs.", "ms.", "prof.", "sr.", "jr."}
+
+    for boundary in re.finditer(r"[.!?](?=\s|$)", text):
+        end = boundary.end()
+        prefix = text[:end]
+        token = prefix.split()[-1].casefold()
+
+        if boundary.group() == ".":
+            if token in titles:
+                continue
+            # Initials and dotted abbreviations are ambiguous.
+            # Skip the span instead of guessing their sentence boundary.
+            if re.fullmatch(r"(?:[a-z]\.)+", token):
+                return ""
+
+        return prefix.strip()
+
+    return text.strip()
+
+
 def extract_assertion_candidates(
     spans: list[SourceSpan],
 ) -> list[AssertionCandidate]:
@@ -43,7 +65,7 @@ def extract_assertion_candidates(
     candidates: list[AssertionCandidate] = []
 
     for span in spans:
-        text = span.normalized_text.strip()
+        text = first_sentence(span.normalized_text.strip())
 
         match = ATTRIBUTION_PATTERN.match(text)
 

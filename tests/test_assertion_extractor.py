@@ -126,3 +126,45 @@ def test_passive_expected_wording_is_not_treated_as_attribution():
     candidates = extract_assertion_candidates(spans)
 
     assert candidates == []
+
+
+def test_assertion_does_not_include_unrelated_second_sentence():
+    first_sentence = (
+        "The weather service estimated that Monday's tornado "
+        "was at least a half-mile wide."
+    )
+    spans = [
+        make_span(
+            "version-001:span:1",
+            first_sentence + " The 1999 storm had winds clocked at 300 mph.",
+        )
+    ]
+
+    candidates = extract_assertion_candidates(spans)
+
+    assert len(candidates) == 1
+    assert candidates[0].subject == "The weather service"
+    assert candidates[0].object == (
+        "that Monday's tornado was at least a half-mile wide."
+    )
+    assert candidates[0].verbatim_support == [first_sentence]
+    assert candidates[0].span_ids == ["version-001:span:1"]
+
+
+def test_sentence_handling_preserves_abbreviations_and_decimals():
+    text = "Dr. Smith reported repairs would cost 2.5 million dollars."
+    spans = [
+        make_span(
+            "version-001:span:1",
+            text + " The bridge remained closed.",
+        )
+    ]
+
+    candidates = extract_assertion_candidates(spans)
+
+    assert len(candidates) == 1
+    assert candidates[0].subject == "Dr. Smith"
+    assert candidates[0].object == (
+        "repairs would cost 2.5 million dollars."
+    )
+    assert candidates[0].verbatim_support == [text]
