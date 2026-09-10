@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1",
+  "source_id": "abc-correction",
+  "version_id": "abc-archive-20130521155330",
+  "html_body_hash": "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704",
+  "index_body_hash": "0e48947296134c7881038fe24e6dff2062f89b7e38e122dfc7627ae3be72fe22",
+  "archive_capture_at": "2013-05-21T15:53:30Z",
+  "archive_payload_digest": "CXJDJ7IYXYB2XPQJ5PHKFNKFQGAYGEBC",
+  "payload_digest_matches": true,
+  "availability_basis": "Archive capture with matching payload digest.",
+  "supports": [
+    "The saved HTML matches the payload identified by the archive index.",
+    "This version was captured at the recorded archive time."
+  ],
+  "does_not_establish": [
+    "When this version was first published.",
+    "That this version was available before the capture time.",
+    "That the reported claims are true."
+  ],
+  "observed_discrepancies": [
+    "The headline says 7 children; the opening paragraph says nine children."
+  ],
+  "replay_admission_status": "pending"
+}

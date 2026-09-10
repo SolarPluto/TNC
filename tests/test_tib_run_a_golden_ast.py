@@ -81,3 +81,45 @@ def test_archived_abc_matches_golden_ast():
     assert golden["body_hash"] == body_hash
     assert golden["span_count"] == len(spans) == 22
     assert golden["spans"] == serialize_spans(spans)
+
+
+def test_archived_abc_evidence_matches_saved_capture():
+    import base64
+    import hashlib
+
+    evidence = json.loads(
+        (CORPUS_DIR / "abc_archive_20130521155330_evidence.json")
+        .read_text(encoding="utf-8")
+    )
+
+    html_hash = evidence["html_body_hash"]
+    index_hash = evidence["index_body_hash"]
+    body = (OBJECTS_DIR / html_hash).read_bytes()
+    index_body = (OBJECTS_DIR / index_hash).read_bytes()
+
+    assert hashlib.sha256(body).hexdigest() == html_hash
+    assert hashlib.sha256(index_body).hexdigest() == index_hash
+
+    rows = json.loads(index_body)
+    assert len(rows) == 2
+    capture = dict(zip(rows[0], rows[1]))
+
+    assert capture["original"] == (
+        "http://abcnews.go.com/US/"
+        "oklahoma-tornado-deaths-revised-24-including-children/"
+        "story?id=19222656"
+    )
+    assert capture["statuscode"] == "200"
+    assert capture["mimetype"] == "text/html"
+
+    captured_at = datetime.strptime(
+        capture["timestamp"], "%Y%m%d%H%M%S"
+    ).replace(tzinfo=timezone.utc)
+    recorded_at = datetime.fromisoformat(
+        evidence["archive_capture_at"].replace("Z", "+00:00")
+    )
+    assert captured_at == recorded_at
+
+    digest = base64.b32encode(hashlib.sha1(body).digest()).decode("ascii")
+    assert digest == capture["digest"] == evidence["archive_payload_digest"]
+    assert evidence["payload_digest_matches"] is True
