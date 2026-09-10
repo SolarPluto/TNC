@@ -123,3 +123,70 @@ def test_archived_abc_evidence_matches_saved_capture():
     digest = base64.b32encode(hashlib.sha1(body).digest()).decode("ascii")
     assert digest == capture["digest"] == evidence["archive_payload_digest"]
     assert evidence["payload_digest_matches"] is True
+
+
+def test_archived_abc_later_capture_preserves_headline_revision():
+    import base64
+    import hashlib
+
+    evidence = json.loads(
+        (CORPUS_DIR / "abc_archive_20130521175757_evidence.json")
+        .read_text(encoding="utf-8")
+    )
+    body = (OBJECTS_DIR / evidence["html_body_hash"]).read_bytes()
+    index_body = (OBJECTS_DIR / evidence["index_body_hash"]).read_bytes()
+
+    assert hashlib.sha256(body).hexdigest() == evidence["html_body_hash"]
+    assert hashlib.sha256(index_body).hexdigest() == evidence["index_body_hash"]
+
+    rows = json.loads(index_body)
+    captures = [
+        dict(zip(rows[0], row))
+        for row in rows[1:]
+        if row[0] == "20130521175757"
+    ]
+    assert len(captures) == 1
+    capture = captures[0]
+    assert capture["statuscode"] == "200"
+    assert capture["mimetype"] == "text/html"
+    assert capture["original"] == (
+        "http://abcnews.go.com/US/"
+        "oklahoma-tornado-deaths-revised-24-including-children/"
+        "story?id=19222656"
+    )
+
+    digest = base64.b32encode(hashlib.sha1(body).digest()).decode("ascii")
+    assert digest == capture["digest"] == evidence["archive_payload_digest"]
+    assert evidence["payload_digest_matches"] is True
+    assert evidence["archive_capture_at"] == "2013-05-21T17:57:57Z"
+
+    spans = parse_article(
+        html=body.decode("utf-8"),
+        document_version_id=evidence["version_id"],
+        available_from=datetime(2026, 9, 10, tzinfo=timezone.utc),
+    )
+    earlier = json.loads(
+        (GOLDEN_DIR / "abc-archive-20130521155330.json")
+        .read_text(encoding="utf-8")
+    )["spans"]
+
+    assert len(spans) == len(earlier) == 22
+    comparison = evidence["comparison"]
+    assert earlier[0]["normalized_text"] == comparison["earlier_headline"]
+    assert spans[0].normalized_text == comparison["later_headline"]
+    changed = [
+        span.ordinal
+        for span, old in zip(spans, earlier)
+        if (
+            span.ordinal,
+            span.span_type.value,
+            span.normalized_text,
+        ) != (
+            old["ordinal"],
+            old["span_type"],
+            old["normalized_text"],
+        )
+    ]
+    assert changed == comparison["changed_span_ordinals"] == [0]
+    assert comparison["unchanged_body_span_count"] == 21
+    assert comparison["exact_edit_time"] is None

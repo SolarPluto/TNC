@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "source_id": "abc-correction",
+  "version_id": "abc-archive-20130521175757",
+  "html_body_hash": "387d5761ddc81cb22d3dd4d2cb6ebd3a0bc4f2dd5e7a73dcfec05c73d665ae8e",
+  "index_body_hash": "18b9570cc9829abc8fcf7c2cd0d9067fce8c5525a7971f2a5b5173938614f862",
+  "archive_capture_at": "2013-05-21T17:57:57Z",
+  "archive_payload_digest": "ETH7HOPQN3HGMFP5AYJLZUGTEKSHN37T",
+  "payload_digest_matches": true,
+  "availability_basis": "Archive capture with matching payload digest.",
+  "supports": [
+    "The saved HTML matches the payload identified by the archive index.",
+    "This version was captured at the recorded archive time."
+  ],
+  "does_not_establish": [
+    "When this version was first published.",
+    "That this version was available before the capture time.",
+    "That the reported claims are true."
+  ],
+  "observed_discrepancies": [],
+  "replay_admission_status": "pending",
+  "comparison": {
+    "earlier_version_id": "abc-archive-20130521155330",
+    "scope": "Ordinal, structural type, and normalized text of 22 parsed spans.",
+    "changed_span_ordinals": [
+      0
+    ],
+    "earlier_headline": "Oklahoma Tornado Deaths Revised Down to 24, Including 7 Children",
+    "later_headline": "Oklahoma Tornado Deaths Revised Down to 24, Including 9 Children",
+    "unchanged_body_span_count": 21,
+    "exact_edit_time": null,
+    "note": "Both captures already report 24 total deaths. This pair shows a headline child-count revision, not the original 51-to-24 revision."
+  }
+}
