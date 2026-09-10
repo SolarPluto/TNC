@@ -29,11 +29,12 @@ def test_parse_cli(monkeypatch, capsys):
 
 
 @pytest.mark.parametrize("content", [None, b"\xff", b"<html></html>"])
-def test_parse_cli_reports_input_errors(content, tmp_path, monkeypatch, capsys):
+@pytest.mark.parametrize("command", ["parse", "assertions"])
+def test_cli_reports_input_errors(command, content, tmp_path, monkeypatch, capsys):
     path = tmp_path / "input.html"
     if content is not None:
         path.write_bytes(content)
-    monkeypatch.setattr(sys, "argv", ["tnc", "parse", str(path)])
+    monkeypatch.setattr(sys, "argv", ["tnc", command, str(path)])
 
     with pytest.raises(SystemExit) as exc:
         main()
