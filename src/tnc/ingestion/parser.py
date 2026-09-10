@@ -198,15 +198,30 @@ def parse_article(
             else None
         )
 
+        # Archived ABC pages use the older story_core/storyText layout.
+        legacy_abc = False
+        if abc_body is None:
+            legacy_container = tree.css_first("#story_core")
+            if legacy_container is not None:
+                legacy_body = legacy_container.css_first("#storyText")
+                legacy_headline = legacy_container.css_first("h1.headline")
+                if legacy_body is not None and legacy_headline is not None:
+                    abc_container = legacy_container
+                    abc_body = legacy_body
+                    legacy_abc = True
+
         if abc_body is not None:
-            abc_headline = abc_container.css_first(
-                '[data-testid="prism-headline"]'
-            )
-            nodes = (
-                abc_headline.css(selectors)
-                if abc_headline is not None
-                else []
-            )
+            if legacy_abc:
+                nodes = [legacy_headline]
+            else:
+                abc_headline = abc_container.css_first(
+                    '[data-testid="prism-headline"]'
+                )
+                nodes = (
+                    abc_headline.css(selectors)
+                    if abc_headline is not None
+                    else []
+                )
 
             for node in abc_body.css(selectors):
                 ancestor = node.parent
@@ -217,7 +232,10 @@ def parse_article(
                         (ancestor.attributes.get("class") or "").split()
                     )
 
-                    if "MobileContentPromo" in classes:
+                    if (
+                        "MobileContentPromo" in classes
+                        or (legacy_abc and "story_pagination" in classes)
+                    ):
                         excluded = True
                         break
 

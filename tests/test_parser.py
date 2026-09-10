@@ -325,3 +325,54 @@ def test_parser_excludes_mpr_contributor_credit():
         text.startswith("DEADLIEST US TORNADOES SINCE 1900")
         for text in texts
     )
+
+
+def test_parser_handles_archived_abc_2013_layout():
+    fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704"
+    )
+
+    spans = parse_article(
+        html=fixture.read_text(encoding="utf-8"),
+        document_version_id="abc-2013-layout-test",
+        available_from=datetime(2026, 9, 10, tzinfo=timezone.utc),
+    )
+
+    assert spans[0].span_type == SpanType.HEADING
+    assert spans[0].normalized_text == (
+        "Oklahoma Tornado Deaths Revised Down to 24, Including 7 Children"
+    )
+    assert spans[1].span_type == SpanType.PARAGRAPH
+    assert spans[1].normalized_text.startswith(
+        "First responders are in a race against time"
+    )
+    assert "including nine children." in spans[1].normalized_text
+    assert spans[2].normalized_text.startswith(
+        "Oklahoma medical examiner spokeswoman Amy Elliot said"
+    )
+
+
+def test_archived_abc_parser_excludes_page_navigation():
+    fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704"
+    )
+
+    spans = parse_article(
+        html=fixture.read_text(encoding="utf-8"),
+        document_version_id="abc-2013-navigation-test",
+        available_from=datetime(2026, 9, 10, tzinfo=timezone.utc),
+    )
+
+    texts = [span.normalized_text for span in spans]
+    assert not any(text in {"1", "|", "2", "Next Page"} for text in texts)
+    assert spans[-1].normalized_text.startswith(
+        '"I was pulling walls off of people,"'
+    )

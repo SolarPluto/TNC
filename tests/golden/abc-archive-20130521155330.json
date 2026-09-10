@@ -1,0 +1,162 @@
+{
+  "format_version": 1,
+  "source_id": "abc-archive-20130521155330",
+  "body_hash": "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704",
+  "span_count": 22,
+  "spans": [
+    {
+      "ordinal": 0,
+      "span_type": "heading",
+      "raw_text": "Oklahoma Tornado Deaths Revised Down to 24, Including 7 Children",
+      "normalized_text": "Oklahoma Tornado Deaths Revised Down to 24, Including 7 Children",
+      "content_hash": "b930702d7a2791455427393b15f7e2ad8cd1ba12d2c73d922bfa3c6ff01b7c50"
+    },
+    {
+      "ordinal": 1,
+      "span_type": "paragraph",
+      "raw_text": "First responders are in a race against time in the search for any survivors of a devastating tornado that ripped through Moore, Okla., while the medical examiner's office has revised the death toll from 51 to 24, including nine children.",
+      "normalized_text": "First responders are in a race against time in the search for any survivors of a devastating tornado that ripped through Moore, Okla., while the medical examiner's office has revised the death toll from 51 to 24, including nine children.",
+      "content_hash": "9338eb8992a079f7d59b12adf22d83a3649522cbea16adf8654be80982f0f3ac"
+    },
+    {
+      "ordinal": 2,
+      "span_type": "paragraph",
+      "raw_text": "Oklahoma medical examiner spokeswoman Amy Elliot said this morning that she believes some victims were counted twice in the early chaos of the storm. The original death toll included 20 children.",
+      "normalized_text": "Oklahoma medical examiner spokeswoman Amy Elliot said this morning that she believes some victims were counted twice in the early chaos of the storm. The original death toll included 20 children.",
+      "content_hash": "1ae36e55b3dbe4fb4b7f2149e880d597450ebc6b4e54c542361de103c24e9196"
+    },
+    {
+      "ordinal": 3,
+      "span_type": "paragraph",
+      "raw_text": "Two elementary schools were in the path of Monday's tornado, which the National Weather Service gave a preliminary rating of at least EF-4, meaning churning wind speeds of up to 200 mph.",
+      "normalized_text": "Two elementary schools were in the path of Monday's tornado, which the National Weather Service gave a preliminary rating of at least EF-4, meaning churning wind speeds of up to 200 mph.",
+      "content_hash": "469c4bee35ddfd8af241b9b3f8b178b77d3ceae29782625c655b14f550bdcbba"
+    },
+    {
+      "ordinal": 4,
+      "span_type": "paragraph",
+      "raw_text": "Oklahoma City police spokesman Sgt. Gary Knight said seven of the young victims were from Plaza Towers Elementary School.",
+      "normalized_text": "Oklahoma City police spokesman Sgt. Gary Knight said seven of the young victims were from Plaza Towers Elementary School.",
+      "content_hash": "5c2de0c90ab0644c04cbc7844c7970d1cca5646c56e91df8b1acb659cacc37af"
+    },
+    {
+      "ordinal": 5,
+      "span_type": "paragraph",
+      "raw_text": "Moore Mayor Glenn Lewis and National Guard members told ABC News the search-and-rescue operation at the school is now a body-recovery effort.",
+      "normalized_text": "Moore Mayor Glenn Lewis and National Guard members told ABC News the search-and-rescue operation at the school is now a body-recovery effort.",
+      "content_hash": "120f0175b7aa8aa4d022617003b6053e6aaa97281224e2314153e1604250b697"
+    },
+    {
+      "ordinal": 6,
+      "span_type": "paragraph",
+      "raw_text": "\"The walls were just pancaked, absolutely flattened and the students were just grouped together,\" Lt. Gov. Todd Lamb told ABC News.",
+      "normalized_text": "\"The walls were just pancaked, absolutely flattened and the students were just grouped together,\" Lt. Gov. Todd Lamb told ABC News.",
+      "content_hash": "c0e6a93171488b0cbd95609fa58f09f83cc1832501a68cbe0fb0547bd44e6292"
+    },
+    {
+      "ordinal": 7,
+      "span_type": "paragraph",
+      "raw_text": "Oklahoma Gov. Mary Fallin tweeted late Monday night that she visited with search crews at the elementary school. \"Appreciate their hard work and tireless dedication,\" she tweeted.",
+      "normalized_text": "Oklahoma Gov. Mary Fallin tweeted late Monday night that she visited with search crews at the elementary school. \"Appreciate their hard work and tireless dedication,\" she tweeted.",
+      "content_hash": "d02ac378540fb6acd47802478f45a591f97d8f0f4db00916a4a78f72988f9fcf"
+    },
+    {
+      "ordinal": 8,
+      "span_type": "paragraph",
+      "raw_text": "Fallin has also deployed 80 National Guard members to help with search-and-rescue efforts throughout the city.",
+      "normalized_text": "Fallin has also deployed 80 National Guard members to help with search-and-rescue efforts throughout the city.",
+      "content_hash": "68a01aa99287441952f1a328089e7e90f136a63cccb4f8e2408972657ff25977"
+    },
+    {
+      "ordinal": 9,
+      "span_type": "paragraph",
+      "raw_text": "Authorities said Briarwood Elementary School in Moore received a \"direct hit\" from the storm and was also destroyed, with its roof and walls blown off.",
+      "normalized_text": "Authorities said Briarwood Elementary School in Moore received a \"direct hit\" from the storm and was also destroyed, with its roof and walls blown off.",
+      "content_hash": "a1b2356db47aa665ab2233465787b3ab5fcc6dc8f457937658400d7b5055b2b8"
+    },
+    {
+      "ordinal": 10,
+      "span_type": "paragraph",
+      "raw_text": "\"A lot of parents started walking, running to Briarwood, and when we got up to Briarwood, it had been just completely destroyed,\" Moore resident Robert Raymond said. \"I'm just happy that I was able to find my son and my family is OK. The scene over there at the school is just catastrophic. I've never seen anything like it before.\"",
+      "normalized_text": "\"A lot of parents started walking, running to Briarwood, and when we got up to Briarwood, it had been just completely destroyed,\" Moore resident Robert Raymond said. \"I'm just happy that I was able to find my son and my family is OK. The scene over there at the school is just catastrophic. I've never seen anything like it before.\"",
+      "content_hash": "22ed3dd4703399d0c57a5788d59b07282f662a9eb0cbef7ef5eeb600930a58a3"
+    },
+    {
+      "ordinal": 11,
+      "span_type": "paragraph",
+      "raw_text": "Moore resident Andrew Wheeler credits a Briarwood teacher with keeping his son safe as the tornado wrecked havoc on the building as students were preparing for their final days in school before summer vacation.",
+      "normalized_text": "Moore resident Andrew Wheeler credits a Briarwood teacher with keeping his son safe as the tornado wrecked havoc on the building as students were preparing for their final days in school before summer vacation.",
+      "content_hash": "a8c1bb4f1dc37637f721977fde52f54341aeb9fd344fe25b481eebe8894432d6"
+    },
+    {
+      "ordinal": 12,
+      "span_type": "paragraph",
+      "raw_text": "\"The teacher held their heads, and bricks and everything were falling all over the kids. She got her arm injured. One of the other boys on her other side got a big gash in his head, but he's OK,\" Wheeler said.",
+      "normalized_text": "\"The teacher held their heads, and bricks and everything were falling all over the kids. She got her arm injured. One of the other boys on her other side got a big gash in his head, but he's OK,\" Wheeler said.",
+      "content_hash": "69e29ca1feaad02508e11631187ed3c15a1646b5122d111d0ca42fecfd17f4f9"
+    },
+    {
+      "ordinal": 13,
+      "span_type": "paragraph",
+      "raw_text": "A total of 242 patients, including 58 children, were treated at hospitals. Many patients have been treated and discharged while others have been transferred among hospitals.",
+      "normalized_text": "A total of 242 patients, including 58 children, were treated at hospitals. Many patients have been treated and discharged while others have been transferred among hospitals.",
+      "content_hash": "60ddc65989adb18fab42c58eb0f92fc3ac3326c6aa4c96cdc7c1fd225b2a8070"
+    },
+    {
+      "ordinal": 14,
+      "span_type": "paragraph",
+      "raw_text": "Kelly Wells, spokeswoman for Norman Regional Health System, which oversees three hospitals in Oklahoma, said lacerations, broken bones, head and neck injuries were the most common.",
+      "normalized_text": "Kelly Wells, spokeswoman for Norman Regional Health System, which oversees three hospitals in Oklahoma, said lacerations, broken bones, head and neck injuries were the most common.",
+      "content_hash": "83fd9a2d534d60f061d18e51c0046b5542e25e9668e4879b17916ef079949e8c"
+    },
+    {
+      "ordinal": 15,
+      "span_type": "paragraph",
+      "raw_text": "Moore Medical Center, the only hospital in Moore, sustained major damage and was evacuating all its patients to other hospitals.",
+      "normalized_text": "Moore Medical Center, the only hospital in Moore, sustained major damage and was evacuating all its patients to other hospitals.",
+      "content_hash": "6078501d73b39c7e001cbcd410f3fc909fe7138bfe7bda64b28e9eb5d26c702e"
+    },
+    {
+      "ordinal": 16,
+      "span_type": "paragraph",
+      "raw_text": "Betsy Randolph of the State Highway Patrol asked people not involved in search-and-rescue operations to stay off the roads so first responders can do their job.",
+      "normalized_text": "Betsy Randolph of the State Highway Patrol asked people not involved in search-and-rescue operations to stay off the roads so first responders can do their job.",
+      "content_hash": "8906c66b56bb7acb5a8ab7974a28e502aefa6028a128e5978ec5e782c431bb0b"
+    },
+    {
+      "ordinal": 17,
+      "span_type": "paragraph",
+      "raw_text": "\"We do still have rescue, search-and-rescue crews throughout this city. Some of the heavily hit areas, they are still searching for people. We still have people that are trapped,\" she said.",
+      "normalized_text": "\"We do still have rescue, search-and-rescue crews throughout this city. Some of the heavily hit areas, they are still searching for people. We still have people that are trapped,\" she said.",
+      "content_hash": "fd666e6f8630ad0189be85f40daa93634c4f6f86b0b63a8f62437bf0d26ef4b7"
+    },
+    {
+      "ordinal": 18,
+      "span_type": "paragraph",
+      "raw_text": "President Obama signed a disaster declaration in Oklahoma and ordered federal aid to supplement state and local recovery efforts in the area affected by severe storms and tornadoes.",
+      "normalized_text": "President Obama signed a disaster declaration in Oklahoma and ordered federal aid to supplement state and local recovery efforts in the area affected by severe storms and tornadoes.",
+      "content_hash": "b04a2c83b66830ca9bf7086d02260ca7c1128659901bba9699e6a1449b8c99e8"
+    },
+    {
+      "ordinal": 19,
+      "span_type": "paragraph",
+      "raw_text": "The first tornado warning went out around 2:40 p.m. local time and just 16 minutes later a tornado tore a 12-mile gash in Oklahoma from Newcastle to Oklahoma City. Frantic groups of rescuers could be seen digging through debris within minutes after the tornado blew by.",
+      "normalized_text": "The first tornado warning went out around 2:40 p.m. local time and just 16 minutes later a tornado tore a 12-mile gash in Oklahoma from Newcastle to Oklahoma City. Frantic groups of rescuers could be seen digging through debris within minutes after the tornado blew by.",
+      "content_hash": "36e63773d27b5b49e02beefbd7e76214beb06a82345610c5a6782a583aca8579"
+    },
+    {
+      "ordinal": 20,
+      "span_type": "paragraph",
+      "raw_text": "Moore, a community of 41,000 people about 10 miles south of Oklahoma City, saw homes wiped off their foundations and cars tossed like toys on top of nearby buildings. Block after block lay in ruins, reduced to smoking piles of wood and brick.",
+      "normalized_text": "Moore, a community of 41,000 people about 10 miles south of Oklahoma City, saw homes wiped off their foundations and cars tossed like toys on top of nearby buildings. Block after block lay in ruins, reduced to smoking piles of wood and brick.",
+      "content_hash": "a9c59590c1a1b8ac43ad7d92aec2fac22217eb26faef741b107f27839d69200d"
+    },
+    {
+      "ordinal": 21,
+      "span_type": "paragraph",
+      "raw_text": "\"I was pulling walls off of people,\" Moore resident Tomas Earson said. \"There were people crawling out from everywhere and anywhere. It's basically just a war zone.\"",
+      "normalized_text": "\"I was pulling walls off of people,\" Moore resident Tomas Earson said. \"There were people crawling out from everywhere and anywhere. It's basically just a war zone.\"",
+      "content_hash": "81fc101415200806c5c53ad48bd548a47f78c498e3cbeea63f3ec8fb3f8a3b96"
+    }
+  ]
+}

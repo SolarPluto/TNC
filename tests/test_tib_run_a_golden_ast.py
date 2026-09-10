@@ -56,3 +56,28 @@ def test_tib_run_a_parser_matches_golden_ast() -> None:
         assert golden["body_hash"] == body_hash
         assert golden["span_count"] == len(actual_spans)
         assert golden["spans"] == actual_spans
+
+
+def test_archived_abc_matches_golden_ast():
+    import hashlib
+
+    source_id = "abc-archive-20130521155330"
+    body_hash = "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704"
+    golden = json.loads(
+        (GOLDEN_DIR / f"{source_id}.json").read_text(encoding="utf-8")
+    )
+    body = (OBJECTS_DIR / body_hash).read_bytes()
+
+    assert hashlib.sha256(body).hexdigest() == body_hash
+
+    spans = parse_article(
+        html=body.decode("utf-8"),
+        document_version_id=f"{source_id}-golden-test",
+        available_from=datetime(2026, 9, 10, tzinfo=timezone.utc),
+    )
+
+    assert golden["format_version"] == 1
+    assert golden["source_id"] == source_id
+    assert golden["body_hash"] == body_hash
+    assert golden["span_count"] == len(spans) == 22
+    assert golden["spans"] == serialize_spans(spans)
