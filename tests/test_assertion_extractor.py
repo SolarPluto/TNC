@@ -114,3 +114,15 @@ def test_multiple_spans_produce_separate_provenance_bound_candidates():
 
     assert candidates[0].assertion_id == "version-001:assertion:0"
     assert candidates[1].assertion_id == "version-001:assertion:1"
+
+def test_passive_expected_wording_is_not_treated_as_attribution():
+    spans = [
+        make_span(
+            "version-001:span:1",
+            "The death toll was expected to rise.",
+        )
+    ]
+
+    candidates = extract_assertion_candidates(spans)
+
+    assert candidates == []

@@ -57,6 +57,12 @@ def extract_assertion_candidates(
         if not speaker or not object_text:
             continue
 
+        # Passive wording does not identify a speaker in this pattern.
+        if speaker.split()[-1].casefold() in {
+            "am", "is", "are", "was", "were", "be", "been", "being",
+        }:
+            continue
+
         candidate_number = len(candidates)
 
         candidates.append(
