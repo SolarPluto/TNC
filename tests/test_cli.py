@@ -109,3 +109,37 @@ def test_assertions_cli_shows_rejection_reason(monkeypatch, capsys):
         "  Officials reported five people were injured.",
         "    Reason: Unknown span IDs: missing-span",
     ]
+
+
+def test_parse_cli_selects_one_span(monkeypatch, capsys):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["tnc", "parse", str(FIXTURE), "--span", "6"],
+    )
+
+    main()
+
+    captured = capsys.readouterr()
+    assert captured.err == ""
+    assert captured.out.splitlines() == [
+        "6\tupdate_notice\tUpdate: Officials later said five people were injured.",
+    ]
+
+
+@pytest.mark.parametrize("ordinal", [-1, 999])
+def test_parse_cli_rejects_missing_span(ordinal, monkeypatch, capsys):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["tnc", "parse", str(FIXTURE), "--span", str(ordinal)],
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert f"No source span with ordinal {ordinal}" in captured.err
+    assert "Traceback" not in captured.err

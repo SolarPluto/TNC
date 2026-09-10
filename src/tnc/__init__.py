@@ -14,6 +14,11 @@ def main() -> None:
         "parse", help="Parse local HTML into spans"
     )
     parse_command.add_argument("html_file", type=Path)
+    parse_command.add_argument(
+        "--span",
+        type=int,
+        help="Show only the source span with this ordinal (starting at 0)",
+    )
 
     assertions_command = commands.add_parser(
         "assertions", help="Extract assertions from local HTML"
@@ -34,6 +39,10 @@ def main() -> None:
         parser.error(str(exc))
 
     if args.command == "parse":
+        if args.span is not None:
+            spans = [span for span in spans if span.ordinal == args.span]
+            if not spans:
+                parser.error(f"No source span with ordinal {args.span}")
         for span in spans:
             print(
                 f"{span.ordinal}\t{span.span_type.value}"

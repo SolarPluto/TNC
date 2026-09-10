@@ -10,6 +10,12 @@ Run from the TNC project folder:
 
 Each output line contains the span's ordinal, structural type, and normalized text.
 
+To display one source span, use its ordinal (starting at 0):
+
+    uv run tnc parse tests/fixtures/article_v1.html --span 6
+
+Omit --span to display all spans. A nonexistent ordinal produces an error.
+
 ## Extract assertions
 
     uv run tnc assertions tests/fixtures/assertions_v1.html
