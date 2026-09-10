@@ -62,8 +62,13 @@ def test_assertions_cli(monkeypatch, capsys):
     ]
 
 
-def test_assertions_cli_with_no_candidates(monkeypatch, capsys):
-    monkeypatch.setattr(sys, "argv", ["tnc", "assertions", str(FIXTURE)])
+def test_assertions_cli_with_no_candidates(tmp_path, monkeypatch, capsys):
+    fixture = tmp_path / "no_candidates.html"
+    fixture.write_text(
+        "<article><p>The bridge remained closed.</p></article>",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(sys, "argv", ["tnc", "assertions", str(fixture)])
 
     main()
 

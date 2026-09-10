@@ -10,7 +10,7 @@ from tnc.spans.models import SourceSpan
 
 ATTRIBUTION_PATTERN = re.compile(
     r"^(?P<speaker>.+?)\s+"
-    r"(?P<operator>reported|confirmed|denied|estimated|alleged|expected)\s+"
+    r"(?P<operator>reported|confirmed|denied|estimated|alleged|expected|said)\s+"
     r"(?P<object>.+)$",
     re.IGNORECASE,
 )
@@ -18,6 +18,7 @@ ATTRIBUTION_PATTERN = re.compile(
 
 OPERATOR_MAP = {
     "reported": EpistemicOperator.REPORTED,
+    "said": EpistemicOperator.REPORTED,
     "confirmed": EpistemicOperator.CONFIRMED,
     "denied": EpistemicOperator.DENIED,
     "estimated": EpistemicOperator.ESTIMATED,

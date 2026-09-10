@@ -168,3 +168,25 @@ def test_sentence_handling_preserves_abbreviations_and_decimals():
         "repairs would cost 2.5 million dollars."
     )
     assert candidates[0].verbatim_support == [text]
+
+
+def test_extracts_simple_said_assertion():
+    text = "Authorities said the school was damaged."
+    spans = [
+        make_span(
+            "version-001:span:1",
+            text,
+        )
+    ]
+
+    candidates = extract_assertion_candidates(spans)
+
+    assert len(candidates) == 1
+    candidate = candidates[0]
+    assert candidate.subject == "Authorities"
+    assert candidate.speaker == "Authorities"
+    assert candidate.predicate == "said"
+    assert candidate.object == "the school was damaged."
+    assert candidate.epistemic_operator == EpistemicOperator.REPORTED
+    assert candidate.verbatim_support == [text]
+    assert candidate.span_ids == ["version-001:span:1"]

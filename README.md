@@ -20,7 +20,9 @@ The current extractor recognizes this structure:
 
     <speaker> <operator> <proposition>
 
-Supported operators: reported, confirmed, denied, estimated, alleged, expected.
+Supported operators: reported, confirmed, denied, estimated, alleged, expected, said.
+
+The word "said" maps to the REPORTED category while remaining "said" in the extracted predicate.
 
 Only the first sentence of each source span is considered. Later sentences in the same span are not extracted. Sentence detection uses limited punctuation rules, with support for common titles and decimal numbers; it is not a general language parser. Ambiguous initials and dotted abbreviations cause the span to be skipped.
 
