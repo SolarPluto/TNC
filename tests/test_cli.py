@@ -59,3 +59,16 @@ def test_assertions_cli(monkeypatch, capsys):
         "  Engineers confirmed inspections were underway.",
         "Rejected: 0",
     ]
+
+
+def test_assertions_cli_with_no_candidates(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["tnc", "assertions", str(FIXTURE)])
+
+    main()
+
+    captured = capsys.readouterr()
+    assert captured.err == ""
+    assert captured.out.splitlines() == [
+        "Admitted: 0",
+        "Rejected: 0",
+    ]
