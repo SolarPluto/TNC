@@ -3,13 +3,23 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from tnc.ingestion.parser import hash_text, parse_article
+from tnc.spans.pipeline import process_assertion_spans
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(prog="tnc")
     commands = parser.add_subparsers(dest="command", required=True)
-    parse_command = commands.add_parser("parse", help="Parse local HTML into spans")
+
+    parse_command = commands.add_parser(
+        "parse", help="Parse local HTML into spans"
+    )
     parse_command.add_argument("html_file", type=Path)
+
+    assertions_command = commands.add_parser(
+        "assertions", help="Extract assertions from local HTML"
+    )
+    assertions_command.add_argument("html_file", type=Path)
+
     args = parser.parse_args()
 
     try:
@@ -23,5 +33,29 @@ def main() -> None:
     except (OSError, UnicodeError, ValueError) as exc:
         parser.error(str(exc))
 
-    for span in spans:
-        print(f"{span.ordinal}\t{span.span_type.value}\t{span.normalized_text}")
+    if args.command == "parse":
+        for span in spans:
+            print(
+                f"{span.ordinal}\t{span.span_type.value}"
+                f"\t{span.normalized_text}"
+            )
+        return
+
+    result = process_assertion_spans(spans)
+
+    print(f"Admitted: {len(result.admitted)}")
+    for assertion in result.admitted:
+        print(
+            f"  {assertion.subject} {assertion.predicate} "
+            f"{assertion.object}"
+        )
+
+    print(f"Rejected: {len(result.rejected)}")
+    for rejected in result.rejected:
+        candidate = rejected.candidate
+        print(
+            f"  {candidate.subject} {candidate.predicate} "
+            f"{candidate.object}"
+        )
+        for error in rejected.validation.errors:
+            print(f"    Reason: {error}")

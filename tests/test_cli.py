@@ -43,3 +43,19 @@ def test_parse_cli_reports_input_errors(content, tmp_path, monkeypatch, capsys):
     assert captured.out == ""
     assert "tnc: error:" in captured.err
     assert "Traceback" not in captured.err
+
+
+def test_assertions_cli(monkeypatch, capsys):
+    fixture = Path(__file__).parent / "fixtures" / "assertions_v1.html"
+    monkeypatch.setattr(sys, "argv", ["tnc", "assertions", str(fixture)])
+
+    main()
+
+    captured = capsys.readouterr()
+    assert captured.err == ""
+    assert captured.out.splitlines() == [
+        "Admitted: 2",
+        "  Officials reported five people were injured.",
+        "  Engineers confirmed inspections were underway.",
+        "Rejected: 0",
+    ]
