@@ -22,6 +22,8 @@ The current extractor recognizes this structure:
 
 Supported operators: reported, confirmed, denied, estimated, alleged, expected.
 
+Only the first sentence of each source span is considered. Later sentences in the same span are not extracted. Sentence detection uses limited punctuation rules, with support for common titles and decimal numbers; it is not a general language parser. Ambiguous initials and dotted abbreviations cause the span to be skipped.
+
 Unsupported wording is skipped. An empty result does not mean the article contains no claims.
 
 Admission checks source references and verbatim support. It does not verify whether a statement is true.
