@@ -74,6 +74,12 @@ def extract_assertion_candidates(
             continue
 
         speaker = match.group("speaker").strip()
+        speaker = re.sub(
+            r"^Update:\s*", "", speaker, flags=re.IGNORECASE
+        ).strip()
+        speaker = re.sub(
+            r"\s+(?:initially|later)$", "", speaker, flags=re.IGNORECASE
+        ).strip()
         operator_text = match.group("operator").lower()
         object_text = match.group("object").strip()
 

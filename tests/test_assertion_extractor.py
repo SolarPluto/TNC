@@ -190,3 +190,22 @@ def test_extracts_simple_said_assertion():
     assert candidate.epistemic_operator == EpistemicOperator.REPORTED
     assert candidate.verbatim_support == [text]
     assert candidate.span_ids == ["version-001:span:1"]
+
+
+def test_speaker_excludes_update_label_and_timing_words():
+    examples = [
+        "Officials initially said three people were injured.",
+        "Update: Officials later said five people were injured.",
+    ]
+
+    for text in examples:
+        spans = [make_span("version-001:span:1", text)]
+
+        candidates = extract_assertion_candidates(spans)
+
+        assert len(candidates) == 1
+        candidate = candidates[0]
+        assert candidate.speaker == "Officials"
+        assert candidate.subject == "Officials"
+        assert candidate.attribution_chain == ["Officials"]
+        assert candidate.verbatim_support == [text]
