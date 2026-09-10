@@ -73,3 +73,32 @@ def test_assertions_cli_with_no_candidates(monkeypatch, capsys):
         "Admitted: 0",
         "Rejected: 0",
     ]
+
+
+def test_assertions_cli_shows_rejection_reason(monkeypatch, capsys):
+    from tnc.spans.extractor import extract_assertion_candidates
+
+    fixture = Path(__file__).parent / "fixtures" / "assertions_v1.html"
+
+    def extract_invalid_candidate(spans):
+        candidate = extract_assertion_candidates(spans)[0]
+        return [
+            candidate.model_copy(update={"span_ids": ["missing-span"]})
+        ]
+
+    monkeypatch.setattr(
+        "tnc.spans.pipeline.extract_assertion_candidates",
+        extract_invalid_candidate,
+    )
+    monkeypatch.setattr(sys, "argv", ["tnc", "assertions", str(fixture)])
+
+    main()
+
+    captured = capsys.readouterr()
+    assert captured.err == ""
+    assert captured.out.splitlines() == [
+        "Admitted: 0",
+        "Rejected: 1",
+        "  Officials reported five people were injured.",
+        "    Reason: Unknown span IDs: missing-span",
+    ]
