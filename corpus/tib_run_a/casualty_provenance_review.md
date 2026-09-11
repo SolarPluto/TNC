@@ -103,3 +103,27 @@ capture bodies is also unresolved. No document relation is assigned.
 
 This comparison covers only the MPR/AP and CBS/AP early pair; broader AP overlap
 review remains incomplete.
+
+## ABC archive and CBS/AP correction textual comparison
+
+Compared ABC archive version abc-archive-20130521155330 with the CBS/AP
+correction live body identified above. Both body SHA-256 hashes were verified.
+Used paragraph_similarity on all parsed paragraph spans.
+
+- ABC to CBS: 0.39302673133421223.
+- CBS to ABC: 0.35260045747565233.
+- Highest-scoring pair: ABC span 18 and CBS span 40, approximately 0.6711.
+  This pair concerns disaster assistance rather than casualty attribution.
+- ABC span 2 and CBS span 7: approximately 0.4786. Both attribute the belief
+  that victims were counted twice to the medical examiner's spokeswoman.
+  Preserve the Elliot/Elliott spelling difference and the belief qualification.
+
+The five highest-scoring pairs were manually reviewed. Similar wording in the
+casualty explanation supports the shared-authority finding already recorded.
+It does not establish direct copying, an explicit citation between publishers,
+or independent confirmation of the casualty figures.
+
+The scores measure character similarity, not copying probability or factual
+agreement. No document-level reprint or derivation relation is assigned.
+The exact historical availability of the CBS live body remains unresolved;
+ABC's archive capture time must not be used to date it.
