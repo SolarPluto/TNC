@@ -1,0 +1,155 @@
+{
+  "format_version": 1,
+  "source_id": "abc-early-archive-20130521120016",
+  "body_hash": "d1410eb00ab2c487e0dbc3da645f1f6be4e83a2ff0096e8d95dc14013985884f",
+  "span_count": 21,
+  "spans": [
+    {
+      "ordinal": 0,
+      "span_type": "heading",
+      "raw_text": "Oklahoma Tornado: 20 Children Among at Least 51 Dead, 'Horrific' Damage",
+      "normalized_text": "Oklahoma Tornado: 20 Children Among at Least 51 Dead, 'Horrific' Damage",
+      "content_hash": "0729f672d60e0edfbff1ad5e9916fec26a0b5fb667a722db4b21d8b9afdb3d81"
+    },
+    {
+      "ordinal": 1,
+      "span_type": "paragraph",
+      "raw_text": "At least 20 of the 51 people killed by a devastating monster tornado that ripped through Moore, Okla., were children, the Oklahoma Chief Medical Examiner said this evening, as searchers picked through the rubble of schools, homes and businesses leveled by the storm.",
+      "normalized_text": "At least 20 of the 51 people killed by a devastating monster tornado that ripped through Moore, Okla., were children, the Oklahoma Chief Medical Examiner said this evening, as searchers picked through the rubble of schools, homes and businesses leveled by the storm.",
+      "content_hash": "a38adf6a88a95cb123be3ed904d07338c754ff4fc7f3b5a9f3aeec6b1891421a"
+    },
+    {
+      "ordinal": 2,
+      "span_type": "paragraph",
+      "raw_text": "Officials said they expect the total number of deaths to rise overnight as first responders continue to look for survivors. Two elementary schools were in the path of the tornado, but the medical examiner did not specify what school the deceased students attended.",
+      "normalized_text": "Officials said they expect the total number of deaths to rise overnight as first responders continue to look for survivors. Two elementary schools were in the path of the tornado, but the medical examiner did not specify what school the deceased students attended.",
+      "content_hash": "53431957a5404a9d7db088edc6f2e4da882883678a6d43f9d3f84a47455ea219"
+    },
+    {
+      "ordinal": 3,
+      "span_type": "paragraph",
+      "raw_text": "Desperate parents stood around what was left of the devastated Plaza Towers Elementary School, many of them sobbing, as rescuers worked to help pull out school children and faculty.",
+      "normalized_text": "Desperate parents stood around what was left of the devastated Plaza Towers Elementary School, many of them sobbing, as rescuers worked to help pull out school children and faculty.",
+      "content_hash": "564b6219c2144806c98e29cc45e461c053a3c943837001fba660ced6026f630f"
+    },
+    {
+      "ordinal": 4,
+      "span_type": "paragraph",
+      "raw_text": "\"I know there's a number of dead children from that school,\" Oklahoma City Police spokesman Sgt. Gary Knight said.",
+      "normalized_text": "\"I know there's a number of dead children from that school,\" Oklahoma City Police spokesman Sgt. Gary Knight said.",
+      "content_hash": "37c948a585ec6b7e5f18b3221f81893a7372c8c3e50223c35df5b8f2a7d5de0b"
+    },
+    {
+      "ordinal": 5,
+      "span_type": "paragraph",
+      "raw_text": "Authorities said Briarwood Elementary School in Moore received a \"direct hit\" from the storm and was also destroyed, with its roof and walls blown off.",
+      "normalized_text": "Authorities said Briarwood Elementary School in Moore received a \"direct hit\" from the storm and was also destroyed, with its roof and walls blown off.",
+      "content_hash": "a1b2356db47aa665ab2233465787b3ab5fcc6dc8f457937658400d7b5055b2b8"
+    },
+    {
+      "ordinal": 6,
+      "span_type": "paragraph",
+      "raw_text": "Children were still in school because in anticipation of the severe weather this afternoon, schools in the Moore area did not release their students at the end of the day, according to Oklahoma Emergency Management officials.",
+      "normalized_text": "Children were still in school because in anticipation of the severe weather this afternoon, schools in the Moore area did not release their students at the end of the day, according to Oklahoma Emergency Management officials.",
+      "content_hash": "4fe46b9d62558076e78e3fb7e27c9a2902fea1d099cd6b081423e22bab2ba843"
+    },
+    {
+      "ordinal": 7,
+      "span_type": "paragraph",
+      "raw_text": "Entire neighborhoods have been wiped out, cars were tossed around like toys and were found on top of buildings.",
+      "normalized_text": "Entire neighborhoods have been wiped out, cars were tossed around like toys and were found on top of buildings.",
+      "content_hash": "06f997e76b77f2883790af76f39f186d6450f995343295e2aad184e9a97ad177"
+    },
+    {
+      "ordinal": 8,
+      "span_type": "paragraph",
+      "raw_text": "Oklahoma Governor Mary Fallin said at a news conference tonight that downed powerlines and massive traffic jams have made emergency responses difficult, and cautioned those not involved in search and rescue operations to stay away from disaster areas.",
+      "normalized_text": "Oklahoma Governor Mary Fallin said at a news conference tonight that downed powerlines and massive traffic jams have made emergency responses difficult, and cautioned those not involved in search and rescue operations to stay away from disaster areas.",
+      "content_hash": "5d6ce6f5ce95fc369c54f78ab7d4c738e225c2cd29dde471149bed892acf9d60"
+    },
+    {
+      "ordinal": 9,
+      "span_type": "paragraph",
+      "raw_text": "\"Our prayers and thoughts are with an Oklahoma families hit hard,\" Fallin said at a news conference today. \"Our hearts are just broken for the parents wondering about the state of their children.\"",
+      "normalized_text": "\"Our prayers and thoughts are with an Oklahoma families hit hard,\" Fallin said at a news conference today. \"Our hearts are just broken for the parents wondering about the state of their children.\"",
+      "content_hash": "3c9afde9b910b14804376be40803daf16932daaa11f6c5685eb9e3677a09ecfd"
+    },
+    {
+      "ordinal": 10,
+      "span_type": "paragraph",
+      "raw_text": "One sixth grade boy named Brady, who goes to Briarwood, told ABC affiliate KOCO-TV in Oklahoma City that he and other students took cover in a bathroom.",
+      "normalized_text": "One sixth grade boy named Brady, who goes to Briarwood, told ABC affiliate KOCO-TV in Oklahoma City that he and other students took cover in a bathroom.",
+      "content_hash": "246f46d7b334ce097ec66bf33ebaaa98e6bd428f02865362bcdf75fb06b76ee0"
+    },
+    {
+      "ordinal": 11,
+      "span_type": "paragraph",
+      "raw_text": "\"Cinderblocks and everything collapsed on them but they were underneath so that kind of saved them a little bit, but I mean they were trapped in there,\" he said.",
+      "normalized_text": "\"Cinderblocks and everything collapsed on them but they were underneath so that kind of saved them a little bit, but I mean they were trapped in there,\" he said.",
+      "content_hash": "5089bf774e95d88f6bf36b20df80ebd5c07f05343d3dcc1745d0f014b89dec92"
+    },
+    {
+      "ordinal": 12,
+      "span_type": "paragraph",
+      "raw_text": "David Barnes, the director of Oklahoma Emergency Management in Oklahoma County, told ABC News that a single twister tore through homes from Newcastle to Moore, a path of 12 miles. The damage was \"widespread\" and people's homes were completely destroyed, all the way to their foundations, he said.",
+      "normalized_text": "David Barnes, the director of Oklahoma Emergency Management in Oklahoma County, told ABC News that a single twister tore through homes from Newcastle to Moore, a path of 12 miles. The damage was \"widespread\" and people's homes were completely destroyed, all the way to their foundations, he said.",
+      "content_hash": "c3f5bf2e75674605407d003082c8f5d2cd6af828a0450570220615d4fa47818f"
+    },
+    {
+      "ordinal": 13,
+      "span_type": "paragraph",
+      "raw_text": "The National Weather Service said the preliminary rating of the Newcastle-Moore tornado was at least EF-4, meaning wind speeds of up to 200 mph.",
+      "normalized_text": "The National Weather Service said the preliminary rating of the Newcastle-Moore tornado was at least EF-4, meaning wind speeds of up to 200 mph.",
+      "content_hash": "645926cc913325e450bc5f9b8ef35b86c778365bbeccf88f9db441e6454e22a9"
+    },
+    {
+      "ordinal": 14,
+      "span_type": "paragraph",
+      "raw_text": "\"It is absolutely devastating, this is horrific,\" Oklahoma Lt. Gov Todd Lamb said. \"We're going to have fatalities. ... We're going to have significant injuries. ... We just don't know what those numbers are. Schools have been hit, a hospital has been hit, businesses have been flattened, neighborhoods have been wiped away -- we don't have the numbers in yet but it is going to be significant and it is going to be horrific.\"",
+      "normalized_text": "\"It is absolutely devastating, this is horrific,\" Oklahoma Lt. Gov Todd Lamb said. \"We're going to have fatalities. ... We're going to have significant injuries. ... We just don't know what those numbers are. Schools have been hit, a hospital has been hit, businesses have been flattened, neighborhoods have been wiped away -- we don't have the numbers in yet but it is going to be significant and it is going to be horrific.\"",
+      "content_hash": "35303a6de9f1febd36e99370410940da06ebbb4256eececd83f71829caf5f06d"
+    },
+    {
+      "ordinal": 15,
+      "span_type": "paragraph",
+      "raw_text": "Moore resident Melissa Newton said the hail from the tornado was \"about the size of golfballs.\"",
+      "normalized_text": "Moore resident Melissa Newton said the hail from the tornado was \"about the size of golfballs.\"",
+      "content_hash": "528510fb6f47c435e65875ace3f81485d7fef564ad30af32957926f89e0e5db8"
+    },
+    {
+      "ordinal": 16,
+      "span_type": "paragraph",
+      "raw_text": "The National Weather Service issued a rare tornado emergency for the Oklahoma City metropolitan area at 3:01 p.m., warning that significant damage and fatalities were likely.",
+      "normalized_text": "The National Weather Service issued a rare tornado emergency for the Oklahoma City metropolitan area at 3:01 p.m., warning that significant damage and fatalities were likely.",
+      "content_hash": "da75541a4becfeea14206435744a20f47a6dbfdef6bde1cba3d2b1349aa8bfa5"
+    },
+    {
+      "ordinal": 17,
+      "span_type": "paragraph",
+      "raw_text": "At least 105 people have been admitted to area hospitals as more people emerged from the rubble. Moore Medical Center, the only hospital in Moore, sustained major damage and was evacuating all of its patients to other hospitals.",
+      "normalized_text": "At least 105 people have been admitted to area hospitals as more people emerged from the rubble. Moore Medical Center, the only hospital in Moore, sustained major damage and was evacuating all of its patients to other hospitals.",
+      "content_hash": "54689ecc9907e763cbb49b0888b6ff3619d90dc9d8ac35ab034ead2237ad8e5b"
+    },
+    {
+      "ordinal": 18,
+      "span_type": "paragraph",
+      "raw_text": "The Oklahoma University Medical Center in downtown Oklahoma City had received 85 patients, 65 of which were children. Integris Southwest Medical Center in downtown Oklahoma City, said it received 33 patients, including three children.",
+      "normalized_text": "The Oklahoma University Medical Center in downtown Oklahoma City had received 85 patients, 65 of which were children. Integris Southwest Medical Center in downtown Oklahoma City, said it received 33 patients, including three children.",
+      "content_hash": "f324122b0b73a260ed9ab7a415a5a87184bef26a92f2151d663c23698abaf624"
+    },
+    {
+      "ordinal": 19,
+      "span_type": "paragraph",
+      "raw_text": "First responders were reportedly having trouble reaching Moore, which has a population of about 56,300 people, because people were stuck in their cars on the highway.",
+      "normalized_text": "First responders were reportedly having trouble reaching Moore, which has a population of about 56,300 people, because people were stuck in their cars on the highway.",
+      "content_hash": "f5dc37bdc0f44825297f6e97bc4e608cdb33cd93d5f94f7d9cb01cf38840a9fa"
+    },
+    {
+      "ordinal": 20,
+      "span_type": "paragraph",
+      "raw_text": "\"We've got so many people that are all on the interstate that we can not get our emergency responders to the scene because we've got so many people tied up in traffic on I-35,\" said Betsy Randolph of the State Highway Patrol.",
+      "normalized_text": "\"We've got so many people that are all on the interstate that we can not get our emergency responders to the scene because we've got so many people tied up in traffic on I-35,\" said Betsy Randolph of the State Highway Patrol.",
+      "content_hash": "d58c0e341251da841fc6e77e4b1e97e20b489725c29d2305b7cf91e8d9982675"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1",
+  "source_id": "abc-early",
+  "version_id": "abc-early-archive-20130521120016",
+  "original_url": "http://abcnews.go.com/US/oklahoma-tornado-20-children-51-dead-horrific-damage/story?id=19219367",
+  "archive_capture_url": "https://web.archive.org/web/20130521120016id_/http://abcnews.go.com/US/oklahoma-tornado-20-children-51-dead-horrific-damage/story?id=19219367",
+  "html_body_hash": "d1410eb00ab2c487e0dbc3da645f1f6be4e83a2ff0096e8d95dc14013985884f",
+  "index_body_hash": "c0740d244711d3052e481a21a98a41639d926f474d103bd2300fd50d44d3b69b",
+  "archive_capture_at": "2013-05-21T12:00:16Z",
+  "archive_payload_digest": "5OB2DBXQUSHZJN32RJ2X2UCOE6OKKWVO",
+  "payload_digest_matches": true,
+  "availability_basis": "Archive capture with matching payload digest.",
+  "publisher_labels": {
+    "byline": {
+      "selector": ".byline_date .byline",
+      "raw_text": "\n\t\t\t\t\t\tBy  LAUREN EFFRON (@LEffron831)  and  DEAN SCHABNER\n\t\t\t\t\t"
+    },
+    "date": {
+      "selector": ".byline_date .date",
+      "raw_text": "May 20, 2013",
+      "time_of_day": null,
+      "timezone": null,
+      "interpretation": "Publisher date label only; exact publication time is unknown."
+    }
+  },
+  "relevant_span_ordinals": {
+    "headline": 0,
+    "casualty_report_and_medical_examiner_attribution": 1,
+    "preliminary_storm_rating": 13
+  },
+  "supports": [
+    "The saved HTML matches the payload identified by the archive index.",
+    "This captured version reports 51 deaths and attributes the casualty report to the Oklahoma Chief Medical Examiner."
+  ],
+  "does_not_establish": [
+    "When this version was first published.",
+    "That these exact bytes were available on May 20.",
+    "That the reported casualty figures were true.",
+    "That this separate article URL is an earlier version of the ABC correction document."
+  ],
+  "replay_admission_status": "pending"
+}

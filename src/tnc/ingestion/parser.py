@@ -253,6 +253,18 @@ def parse_article(
                             strong.text(separator=" ", strip=True)
                         )
 
+                        if (
+                            legacy_abc
+                            and promo_text.startswith("LIVE UPDATES:")
+                            and normalize_text(
+                                node.text(separator=" ", strip=True)
+                            ) == promo_text
+                            and normalize_text(
+                                link.text(separator=" ", strip=True)
+                            ) == promo_text
+                        ):
+                            continue
+
                         if promo_text.startswith(
                             ("RELATED:", "PHOTOS:", "VIDEO:")
                         ):

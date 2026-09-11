@@ -376,3 +376,27 @@ def test_archived_abc_parser_excludes_page_navigation():
     assert spans[-1].normalized_text.startswith(
         '"I was pulling walls off of people,"'
     )
+
+
+def test_archived_abc_early_excludes_live_updates_link():
+    fixture = (
+        Path(__file__).parent.parent
+        / "corpus"
+        / "tib_run_a"
+        / "objects"
+        / "d1410eb00ab2c487e0dbc3da645f1f6be4e83a2ff0096e8d95dc14013985884f"
+    )
+    spans = parse_article(
+        html=fixture.read_text(encoding="utf-8"),
+        document_version_id="abc-early-navigation-test",
+        available_from=datetime(2026, 9, 10, tzinfo=timezone.utc),
+    )
+
+    texts = [span.normalized_text for span in spans]
+    assert "LIVE UPDATES: Tornado Damage in Oklahoma" not in texts
+    assert texts[0] == (
+        "Oklahoma Tornado: 20 Children Among at Least 51 Dead, "
+        "'Horrific' Damage"
+    )
+    assert texts[1].startswith("At least 20 of the 51 people killed")
+    assert "the Oklahoma Chief Medical Examiner said" in texts[1]

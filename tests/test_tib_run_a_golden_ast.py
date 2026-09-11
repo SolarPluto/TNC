@@ -190,3 +190,61 @@ def test_archived_abc_later_capture_preserves_headline_revision():
     assert changed == comparison["changed_span_ordinals"] == [0]
     assert comparison["unchanged_body_span_count"] == 21
     assert comparison["exact_edit_time"] is None
+
+
+def test_archived_abc_early_matches_evidence_and_golden():
+    import base64
+    import hashlib
+
+    version_id = "abc-early-archive-20130521120016"
+    evidence = json.loads(
+        (CORPUS_DIR / "abc_early_archive_20130521120016_evidence.json")
+        .read_text(encoding="utf-8")
+    )
+    golden = json.loads(
+        (GOLDEN_DIR / f"{version_id}.json").read_text(encoding="utf-8")
+    )
+
+    body = (OBJECTS_DIR / evidence["html_body_hash"]).read_bytes()
+    index_body = (OBJECTS_DIR / evidence["index_body_hash"]).read_bytes()
+    assert hashlib.sha256(body).hexdigest() == evidence["html_body_hash"]
+    assert hashlib.sha256(index_body).hexdigest() == evidence["index_body_hash"]
+
+    rows = json.loads(index_body)
+    captures = [
+        dict(zip(rows[0], row))
+        for row in rows[1:]
+        if row[0] == "20130521120016"
+    ]
+    assert len(captures) == 1
+    capture = captures[0]
+    assert capture["original"] == evidence["original_url"]
+    assert capture["statuscode"] == "200"
+    assert capture["mimetype"] == "text/html"
+
+    digest = base64.b32encode(hashlib.sha1(body).digest()).decode("ascii")
+    assert digest == capture["digest"] == evidence["archive_payload_digest"]
+    assert evidence["payload_digest_matches"] is True
+
+    captured_at = datetime.strptime(
+        capture["timestamp"], "%Y%m%d%H%M%S"
+    ).replace(tzinfo=timezone.utc)
+    assert captured_at == datetime.fromisoformat(
+        evidence["archive_capture_at"].replace("Z", "+00:00")
+    )
+    assert evidence["archive_capture_url"] == (
+        "https://web.archive.org/web/"
+        + capture["timestamp"] + "id_/" + capture["original"]
+    )
+
+    spans = parse_article(
+        html=body.decode("utf-8"),
+        document_version_id=version_id,
+        available_from=datetime(2026, 9, 10, tzinfo=timezone.utc),
+    )
+    assert evidence["version_id"] == version_id
+    assert golden["format_version"] == 1
+    assert golden["source_id"] == version_id
+    assert golden["body_hash"] == evidence["html_body_hash"]
+    assert golden["span_count"] == len(spans) == 21
+    assert golden["spans"] == serialize_spans(spans)
