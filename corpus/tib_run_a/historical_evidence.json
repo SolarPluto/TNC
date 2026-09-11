@@ -130,6 +130,60 @@
     "The headline says 7 children; the opening paragraph says nine children."
   ],
   "replay_admission_status": "pending"
+},
+{
+  "observation_id": "obs-008",
+  "source_id": "abc-correction",
+  "version_id": "abc-archive-20130521175757",
+  "evidence_type": "archive_capture_with_matching_payload_digest",
+  "evidence_file": "corpus/tib_run_a/abc_archive_20130521175757_evidence.json",
+  "html_body_hash": "387d5761ddc81cb22d3dd4d2cb6ebd3a0bc4f2dd5e7a73dcfec05c73d665ae8e",
+  "index_body_hash": "18b9570cc9829abc8fcf7c2cd0d9067fce8c5525a7971f2a5b5173938614f862",
+  "archive_capture_at": "2013-05-21T17:57:57Z",
+  "supports": [
+    "The saved HTML matches the payload identified by the archive index.",
+    "This version was captured at the recorded archive time."
+  ],
+  "does_not_establish": [
+    "When this version was first published.",
+    "That this version was available before the capture time.",
+    "That the reported claims are true."
+  ],
+  "replay_admission_status": "pending",
+  "observed_discrepancies": [],
+  "comparison": {
+    "earlier_version_id": "abc-archive-20130521155330",
+    "scope": "Ordinal, structural type, and normalized text of 22 parsed spans.",
+    "changed_span_ordinals": [
+      0
+    ],
+    "earlier_headline": "Oklahoma Tornado Deaths Revised Down to 24, Including 7 Children",
+    "later_headline": "Oklahoma Tornado Deaths Revised Down to 24, Including 9 Children",
+    "unchanged_body_span_count": 21,
+    "exact_edit_time": null,
+    "note": "Both captures already report 24 total deaths. This pair shows a headline child-count revision, not the original 51-to-24 revision."
+  }
+},
+{
+  "observation_id": "obs-009",
+  "source_id": "abc-early",
+  "version_id": "abc-early-archive-20130521120016",
+  "evidence_type": "archive_capture_with_matching_payload_digest",
+  "evidence_file": "corpus/tib_run_a/abc_early_archive_20130521120016_evidence.json",
+  "html_body_hash": "d1410eb00ab2c487e0dbc3da645f1f6be4e83a2ff0096e8d95dc14013985884f",
+  "index_body_hash": "c0740d244711d3052e481a21a98a41639d926f474d103bd2300fd50d44d3b69b",
+  "archive_capture_at": "2013-05-21T12:00:16Z",
+  "supports": [
+    "The saved HTML matches the payload identified by the archive index.",
+    "This captured version reports 51 deaths and attributes the casualty report to the Oklahoma Chief Medical Examiner."
+  ],
+  "does_not_establish": [
+    "When this version was first published.",
+    "That these exact bytes were available on May 20.",
+    "That the reported casualty figures were true.",
+    "That this separate article URL is an earlier version of the ABC correction document."
+  ],
+  "replay_admission_status": "pending"
 }
 ]
 }
