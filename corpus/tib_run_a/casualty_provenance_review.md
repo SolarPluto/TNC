@@ -1,0 +1,82 @@
+# Casualty provenance review
+
+Status: initial manual review; historical replay admission remains pending.
+These findings concern casualty reporting for the May 20, 2013 Moore tornado.
+
+## ABC early archive
+
+Body: d1410eb00ab2c487e0dbc3da645f1f6be4e83a2ff0096e8d95dc14013985884f
+Version: abc-early-archive-20130521120016
+Relevant span: 1.
+
+The report attributes the casualty statement to the Oklahoma Chief Medical
+Examiner. Preserve the wording "At least 20 of the 51 people killed".
+The publisher is ABC News; the attributed authority is the medical examiner.
+
+## ABC correction archive
+
+Body: 39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704
+Version: abc-archive-20130521155330
+Relevant spans: 1 and 2.
+
+Span 1 attributes the revision from 51 to 24, including nine children, to the
+medical examiner's office. Span 2 names spokeswoman Amy Elliot and qualifies
+the double-counting explanation as her belief.
+
+The headline in span 0 says 7 children. Preserve its discrepancy with the body.
+The later capture, abc-archive-20130521175757, changes the headline to 9 children;
+its 21 parsed body spans match this capture in ordinal, type, and normalized text.
+
+## CBS/AP correction live capture
+
+Body: 78a9a32f42c2adb5f4f9ab978394d4a3eac8c816eb40df73cb279bf83f318438
+Source: cbs-ap-correction.
+Relevant spans: 3, 4, 7, 8, and 9.
+
+Span 3 reports "At least 24" deaths, including "at least nine children".
+Span 4 identifies the state medical examiner's office as revising the estimate.
+Span 7 names Amy Elliott and retains her belief that some victims were counted
+twice. Preserve the spelling difference from ABC's "Amy Elliot".
+Span 9 reports that authorities initially said "as many as 51".
+
+These passages support a shared underlying medical-examiner authority with ABC's
+correction coverage. They do not establish that one publisher copied the other.
+
+## MPR/AP early live capture
+
+Body: 542607b75d87b2be33810bc444ea3a6b01fe420d91b8c15dcc37f77ba72ae525
+Source: mpr-ap-early.
+Relevant spans: 2 and 3; full parsed article reviewed.
+
+Span 2 credits Tim Talley and Associated Press.
+Span 3 reports "At least 51" deaths, including "at least 20 children".
+The phrase "officials said" explicitly attributes the expectation that the toll
+would rise. The underlying authority for the count is not named in the reviewed
+text and remains unresolved. Do not fill it in from another article.
+
+## CBS/AP early live capture
+
+Body: 7d3fd4d11470ee0e8b9694ef95faf1ee16ab6151e64cfac2ff342244c2c4af53
+Source: cbs-ap-early.
+Relevant span: 3. Scope exclusion: span 17.
+
+Span 3 attributes "at least 51" deaths to "The Oklahoma City Medical Examiner".
+Preserve this authority wording; equivalence to the differently named offices
+in other articles is not established solely by similar casualty figures.
+
+Span 17 concerns Sunday's Shawnee storms and names spokeswoman Amy Elliot.
+It must not supply the speaker or casualty count for Monday's Moore report.
+
+## Review implications and remaining work
+
+- ABC and CBS correction reporting share an attributed medical-examiner authority.
+  Do not count the publishers as independent confirmation of the casualty claim.
+- Preserve exact counts, qualifiers, authority labels, and speaker spellings.
+- AP credits identify reporting contribution or lineage, not proof that every
+  claim is a reprint or that a particular document copied another.
+- No document-level citation, reprint, or derivation relation is assigned here.
+  A classifier result of None does not establish independence.
+- Live captures retain unresolved historical availability. Archive capture
+  times apply only to the corresponding archived payloads.
+- Complete AP textual-overlap review and any required authority-identity
+  resolution before finalizing provenance decisions for historical replay.
