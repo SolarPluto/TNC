@@ -72,5 +72,35 @@
       "body_hash": "9e356c3b438265ea409fd40f4a3b9bf5eba667065f0af97986f477da83499840",
 "status": "frozen_live"
     }
+  ],
+  "archive_versions": [
+    {
+      "source_id": "abc-early",
+      "version_id": "abc-early-archive-20130521120016",
+      "html_body_hash": "d1410eb00ab2c487e0dbc3da645f1f6be4e83a2ff0096e8d95dc14013985884f",
+      "index_body_hash": "c0740d244711d3052e481a21a98a41639d926f474d103bd2300fd50d44d3b69b",
+      "archive_capture_at": "2013-05-21T12:00:16Z",
+      "evidence_file": "corpus/tib_run_a/abc_early_archive_20130521120016_evidence.json",
+      "replay_admission_status": "pending"
+    },
+    {
+      "source_id": "abc-correction",
+      "version_id": "abc-archive-20130521155330",
+      "html_body_hash": "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704",
+      "index_body_hash": "0e48947296134c7881038fe24e6dff2062f89b7e38e122dfc7627ae3be72fe22",
+      "archive_capture_at": "2013-05-21T15:53:30Z",
+      "evidence_file": "corpus/tib_run_a/abc_archive_20130521155330_evidence.json",
+      "replay_admission_status": "pending"
+    },
+    {
+      "source_id": "abc-correction",
+      "version_id": "abc-archive-20130521175757",
+      "html_body_hash": "387d5761ddc81cb22d3dd4d2cb6ebd3a0bc4f2dd5e7a73dcfec05c73d665ae8e",
+      "index_body_hash": "18b9570cc9829abc8fcf7c2cd0d9067fce8c5525a7971f2a5b5173938614f862",
+      "archive_capture_at": "2013-05-21T17:57:57Z",
+      "evidence_file": "corpus/tib_run_a/abc_archive_20130521175757_evidence.json",
+      "replay_admission_status": "pending"
+    }
   ]
+
 }
