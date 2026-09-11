@@ -80,3 +80,26 @@ It must not supply the speaker or casualty count for Monday's Moore report.
   times apply only to the corresponding archived payloads.
 - Complete AP textual-overlap review and any required authority-identity
   resolution before finalizing provenance decisions for historical replay.
+
+## MPR/AP and CBS/AP early textual comparison
+
+Compared the two frozen early-report bodies identified above after verifying
+their SHA-256 hashes. Used the existing paragraph_similarity function on all
+parsed paragraph spans.
+
+- MPR to CBS: 0.35304475782829786.
+- CBS to MPR: 0.3513571143518113.
+- Highest-scoring paragraph pair: MPR span 38 and CBS span 16, approximately
+  0.4674. Both mention the 1999 tornado but contain different statements.
+
+The five highest-scoring pairs were manually reviewed. They provide no strong
+textual evidence that these saved documents are reprints of each other.
+Character similarity is not a probability of copying or a measure of factual
+agreement. Low similarity does not establish independent reporting.
+
+AP contribution remains relevant, but its claim-level extent and any copying
+direction remain unresolved. Historical publication order of these exact live
+capture bodies is also unresolved. No document relation is assigned.
+
+This comparison covers only the MPR/AP and CBS/AP early pair; broader AP overlap
+review remains incomplete.
