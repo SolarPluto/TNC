@@ -34,7 +34,8 @@ class PreflightAuditResult(Model):
     report: DeploymentPreflightReport | None = None
     reason_codes: tuple[Literal['INVALID_REQUEST', 'INPUT_UNAVAILABLE', 'INPUT_INVALID',
         'ANCHOR_MISMATCH', 'PHASE_MISMATCH', 'BINDING_INVALID', 'INSPECTION_UNAVAILABLE',
-        'BUDGET_EXCEEDED', 'CLOCK_INVALID'], ...] = Field(max_length=1)
+        'BUDGET_EXCEEDED', 'CLOCK_INVALID', 'TRUSTED_CONFIGURATION_UNAVAILABLE',
+        'TRUSTED_CONFIGURATION_INVALID', 'TRUSTED_CONFIGURATION_EXPIRED', 'ROLLBACK_DETECTED'], ...] = Field(max_length=1)
     inspected_object_count: int = Field(strict=True, ge=0, le=128)
     execution_time_ms: int = Field(strict=True, ge=0)
 
@@ -98,7 +99,7 @@ def _load_inputs(request, api, check):
             raise ValueError('Input cleanup failed')
 
 
-def _run(request, trusted_anchor, api_factory, inspector, utcnow, monotonic):
+def _run(request, trusted_anchor, api_factory, inspector, utcnow, monotonic, *, input_loader=_load_inputs):
     stage = 'INVALID_REQUEST'
     start = last = None
     elapsed = 0
@@ -120,7 +121,7 @@ def _run(request, trusted_anchor, api_factory, inspector, utcnow, monotonic):
         trusted_anchor = decode_canonical(ExternalInstallationAnchor, canonical_bytes(trusted_anchor))
         check()
         stage = 'INPUT_UNAVAILABLE'
-        blobs = _load_inputs(request, api_factory(), check)
+        blobs = input_loader(request, api_factory(), check)
         check()
         stage = 'INPUT_INVALID'
         envelope, anchor, descriptor = tuple(decode_canonical(kind, data) for kind, data in zip(
