@@ -16,6 +16,7 @@ from tnc.provenance.review_store import (
 
 
 _SCHEMA = Path(__file__).with_name("sqlite_schema.sql")
+_MIGRATION_V2 = Path(__file__).with_name("sqlite_migration_v2.sql")
 
 
 def _require(condition):
@@ -51,11 +52,27 @@ def _schema_rows(connection):
     return connection.execute("SELECT type, name, tbl_name, sql FROM sqlite_schema ORDER BY name").fetchall()
 
 
-@lru_cache(maxsize=1)
-def _expected_schema():
+def _apply_v2(connection):
+    """Execute trusted DDL without executescript's implicit pre-commit behavior."""
+    statement = ""
+    for line in _MIGRATION_V2.read_text(encoding="utf-8").splitlines(keepends=True):
+        statement += line
+        if sqlite3.complete_statement(statement):
+            connection.execute(statement)
+            statement = ""
+    _require(not statement.strip())
+
+
+@lru_cache(maxsize=2)
+def _expected_schema(version=1):
+    _require(version in (1, 2))
     connection = sqlite3.connect(":memory:", isolation_level=None)
     try:
         connection.executescript(_SCHEMA.read_text(encoding="utf-8"))
+        if version == 2:
+            connection.execute("BEGIN IMMEDIATE")
+            _apply_v2(connection)
+            connection.execute("COMMIT")
         return _schema_rows(connection)
     finally:
         connection.close()
@@ -120,6 +137,18 @@ class SqliteReviewStore:
         store.history()  # Validate ledger; outbox faults must not prevent revocation.
         return store
 
+    def migrate_to_v2(self) -> None:
+        """Explicit, atomic layout upgrade; preserve all old ledger/outbox bytes.
+
+        Already-v2 retries validate before succeeding. No auto-migration on open.
+        Journal tables remain empty until journal-aware operations are implemented.
+        """
+        with self._transaction(write=True, outbox=True) as (connection, _, _state):
+            if connection.execute("PRAGMA user_version").fetchone() == (1,):
+                _apply_v2(connection)
+                # Validate the target layout/data before the enclosing COMMIT.
+                self._load(connection, outbox=True)
+
     def _connect(self):
         connection = sqlite3.connect(self._path.as_uri() + "?mode=rw", uri=True,
             isolation_level=None, autocommit=sqlite3.LEGACY_TRANSACTION_CONTROL, timeout=self._timeout)
@@ -138,8 +167,16 @@ class SqliteReviewStore:
 
     def _load(self, connection, *, outbox):
         try:
-            _require(connection.execute("PRAGMA user_version").fetchone() == (1,))
-            _require(_schema_rows(connection) == _expected_schema())
+            version = connection.execute("PRAGMA user_version").fetchone()[0]
+            _require(version in (1, 2))
+            _require(_schema_rows(connection) == _expected_schema(version))
+            if version == 2:
+                # Until the manager is implemented, legacy operations must not
+                # bypass ownership/fencing on externally inserted journal rows.
+                for table in ("request_intents", "prepared_requests", "request_events"):
+                    _require(connection.execute(f"SELECT count(*) FROM {table}").fetchone() == (0,))
+                _require(connection.execute("SELECT * FROM journal_state").fetchall()
+                         == [(1, 1, 0, "0" * 64)])
             checkpoints = connection.execute("SELECT * FROM store_state").fetchall()
             _require(len(checkpoints) == 1)
             state = checkpoints[0]

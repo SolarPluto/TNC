@@ -24,7 +24,9 @@ even an existing empty file. Failed provisioning leaves the file for explicit
 inspection; it never deletes or replaces it automatically. The directory must
 already exist with host-managed permissions. open_existing and every subsequent
 operation use SQLite URI mode=rw so a missing file cannot become a new empty store.
-No migrations or automatic directory creation are performed.
+Opening never migrates automatically and no directory is automatically created.
+The explicit `store.migrate_to_v2()` method adds empty request-journal tables in
+one transaction. See `sqlite_migration.md` for its boundaries and validation.
 
 ## Transaction and semantic rules
 
@@ -36,7 +38,8 @@ triggers and synchronous=FULL. Lock waits have a finite host-configured timeout
 authority. This uses Python's explicit transaction mode described in the
 [sqlite3 documentation](https://docs.python.org/3.12/library/sqlite3.html).
 
-Every operation compares the stored schema with the bundled version-1 schema,
+Every operation compares the stored schema with the exact supported version-1 or
+version-2 layout,
 checks its version and checkpoint, reconstructs full canonical records, validates
 all SQL projections, and verifies the ledger. Release and outbox reads additionally
 validate the complete outbox against its checkpoint and historical review prefixes.
