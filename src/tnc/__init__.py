@@ -4,10 +4,11 @@ from pathlib import Path
 
 from tnc.ingestion.parser import hash_text, parse_article
 from tnc.spans.pipeline import process_assertion_spans
+from tnc.historical_cli import aware_time, run_historical
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="tnc")
+    parser = argparse.ArgumentParser(prog="tnc", allow_abbrev=False)
     commands = parser.add_subparsers(dest="command", required=True)
 
     parse_command = commands.add_parser(
@@ -25,7 +26,17 @@ def main() -> None:
     )
     assertions_command.add_argument("html_file", type=Path)
 
+    historical_command = commands.add_parser(
+        "historical-replay", help="Query a host-configured archived version", allow_abbrev=False,
+    )
+    historical_command.add_argument("--document", required=True)
+    historical_command.add_argument("--version", required=True)
+    historical_command.add_argument("--time", required=True, type=aware_time)
+
     args = parser.parse_args()
+
+    if args.command == "historical-replay":
+        raise SystemExit(run_historical(document_id=args.document, version_id=args.version, query_time=args.time))
 
     try:
         html = args.html_file.read_text(encoding="utf-8")
