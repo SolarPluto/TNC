@@ -6,13 +6,13 @@ from tnc.provenance.authorization_models import canonical_bytes, decode_canonica
 from tnc.provenance.deployment_validation import validate_installation_records
 from tnc.provenance.update_models import (
     UPDATE_RECORD_LIMIT, UpdateCandidate, UpdateIntent, UpdateAuthorityHead,
-    SyntheticInstallerEvidence, PreparedUpdateEvidence, SyntheticDrainEvidence,
+    SyntheticInstallerEvidence, InstallerEvidenceClaims, PreparedUpdateEvidence, SyntheticDrainEvidence,
     UpdateReceipt, LocatorObservation, UpdateOperation, UpdateCommand,
     UpdateTransitionResult, UpdateRecoveryResult,
 )
 
 
-_KINDS = (UpdateCandidate, UpdateIntent, UpdateAuthorityHead, SyntheticInstallerEvidence,
+_KINDS = (InstallerEvidenceClaims, UpdateCandidate, UpdateIntent, UpdateAuthorityHead, SyntheticInstallerEvidence,
           PreparedUpdateEvidence, SyntheticDrainEvidence, UpdateReceipt, LocatorObservation,
           UpdateOperation, UpdateCommand, UpdateTransitionResult, UpdateRecoveryResult)
 
@@ -139,6 +139,16 @@ def _operation(operation, head, now):
 
 
 def evaluate_update_transition(*, head, existing, command, authority, now):
+    return _evaluate_transition(head=head, existing=existing, command=command, authority=authority, now=now,
+                                evidence_kind=SyntheticInstallerEvidence)
+
+
+def _evaluate_checked_update_transition(*, head, existing, command, authority, now):
+    return _evaluate_transition(head=head, existing=existing, command=command, authority=authority, now=now,
+                                evidence_kind=InstallerEvidenceClaims)
+
+
+def _evaluate_transition(*, head, existing, command, authority, now, evidence_kind):
     """Return a proposed immutable operation/head; caller-supplied state must be trusted.
 
     A backend must serialize and durably recheck the same expected head. This
@@ -147,7 +157,7 @@ def evaluate_update_transition(*, head, existing, command, authority, now):
     try:
         _time(now)
         command = _copy(command, UpdateCommand)
-        authority = _copy(authority, SyntheticInstallerEvidence)
+        authority = _copy(authority, evidence_kind)
         intent = command.intent
         _authority(authority, intent, now)  # Do not expose stored operation to an unauthorized caller.
         _require(head is not None, 'AUTHORITY_UNAVAILABLE')

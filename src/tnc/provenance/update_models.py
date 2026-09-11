@@ -37,13 +37,17 @@ class UpdateAuthorityHead(Model):
     generation_location: LocalPath
 
 
-class SyntheticInstallerEvidence(Interval):
-    """Test/host assertions only; no signature verification or credentials."""
+class InstallerEvidenceClaims(Interval):
+    """Internal validator claims; records alone do not authenticate their source."""
     principal_id: Identifier
     signer_key_hash: Digest
     deployment_id: Identifier
     authenticated: bool = Field(strict=True)
     may_publish: bool = Field(strict=True)
+
+
+class SyntheticInstallerEvidence(InstallerEvidenceClaims):
+    """Synthetic evidence for standalone pure tests; never a live credential."""
 
 
 class PreparedUpdateEvidence(Interval):
