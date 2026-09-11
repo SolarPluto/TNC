@@ -17,6 +17,7 @@ from tnc.provenance.review_store import (
 
 _SCHEMA = Path(__file__).with_name("sqlite_schema.sql")
 _MIGRATION_V2 = Path(__file__).with_name("sqlite_migration_v2.sql")
+_MIGRATION_V3 = Path(__file__).with_name("sqlite_migration_v3.sql")
 
 
 def _require(condition):
@@ -53,9 +54,17 @@ def _schema_rows(connection):
 
 
 def _apply_v2(connection):
+    _apply_ddl(connection, _MIGRATION_V2)
+
+
+def _apply_v3(connection):
+    _apply_ddl(connection, _MIGRATION_V3)
+
+
+def _apply_ddl(connection, path):
     """Execute trusted DDL without executescript's implicit pre-commit behavior."""
     statement = ""
-    for line in _MIGRATION_V2.read_text(encoding="utf-8").splitlines(keepends=True):
+    for line in path.read_text(encoding="utf-8").splitlines(keepends=True):
         statement += line
         if sqlite3.complete_statement(statement):
             connection.execute(statement)
@@ -63,15 +72,17 @@ def _apply_v2(connection):
     _require(not statement.strip())
 
 
-@lru_cache(maxsize=2)
+@lru_cache(maxsize=3)
 def _expected_schema(version=1):
-    _require(version in (1, 2))
+    _require(version in (1, 2, 3))
     connection = sqlite3.connect(":memory:", isolation_level=None)
     try:
         connection.executescript(_SCHEMA.read_text(encoding="utf-8"))
-        if version == 2:
+        if version >= 2:
             connection.execute("BEGIN IMMEDIATE")
             _apply_v2(connection)
+            if version == 3:
+                _apply_v3(connection)
             connection.execute("COMMIT")
         return _schema_rows(connection)
     finally:
@@ -144,10 +155,35 @@ class SqliteReviewStore:
         Journal history is validated by the journal-aware adapter.
         """
         with self._transaction(write=True, outbox=True) as (connection, _, _state):
+            _require(connection.execute("PRAGMA user_version").fetchone()[0] in (1, 2))
             if connection.execute("PRAGMA user_version").fetchone() == (1,):
                 _apply_v2(connection)
                 # Validate the target layout/data before the enclosing COMMIT.
                 self._load(connection, outbox=True)
+
+    def migrate_to_v3(self) -> None:
+        """Explicit v2-to-v3 storage-only migration; journal writes stay closed."""
+        with self._transaction(write=True, outbox=True) as (connection, _, _state):
+            version = connection.execute("PRAGMA user_version").fetchone()[0]
+            _require(version in (2, 3))
+            _require(connection.execute("PRAGMA foreign_key_check").fetchall() == [])
+            if version == 2:
+                _apply_v3(connection)
+            self._load(connection, outbox=True)
+            _require(connection.execute("PRAGMA foreign_key_check").fetchall() == [])
+
+    def _validate_v3(self, connection, state):
+        # Transitional schema: no authorization writers exist yet. Never treat
+        # structurally plausible rows as authenticated administrative records.
+        for table in ("authorization_events", "execution_authorizations",
+                      "execution_assignments", "release_authorizations"):
+            _require(connection.execute(f"SELECT count(*) FROM {table}").fetchone() == (0,))
+        for table in ("authorization_state", "release_authorization_state"):
+            _require(connection.execute(f"SELECT * FROM {table}").fetchall() == [(1, 1, 0, "0" * 64)])
+        journal = connection.execute("SELECT sequence, head_hash FROM journal_state").fetchone()
+        _require(journal is not None)
+        boundary = (1, *journal, state[4], state[5])
+        _require(connection.execute("SELECT * FROM authorization_migration_boundary").fetchall() == [boundary])
 
     def _connect(self):
         connection = sqlite3.connect(self._path.as_uri() + "?mode=rw", uri=True,
@@ -168,7 +204,7 @@ class SqliteReviewStore:
     def _load(self, connection, *, outbox):
         try:
             version = connection.execute("PRAGMA user_version").fetchone()[0]
-            _require(version in (1, 2))
+            _require(version in (1, 2, 3))
             _require(_schema_rows(connection) == _expected_schema(version))
             checkpoints = connection.execute("SELECT * FROM store_state").fetchall()
             _require(len(checkpoints) == 1)
@@ -193,9 +229,11 @@ class SqliteReviewStore:
                 _require(len(releases) == state[4])
                 snapshot._release_state = (tuple(releases), state[5])
                 snapshot._validate_releases()
-            if version == 2:
+            if version >= 2:
                 from tnc.provenance.request_journal import validate_journal
                 validate_journal(connection, snapshot, outbox=outbox)
+            if version == 3:
+                self._validate_v3(connection, state)
             return snapshot, state
         except (ValueError, TypeError, AttributeError) as exc:
             raise ReviewIntegrityError("SQLite history or schema is invalid") from exc
@@ -262,6 +300,8 @@ class SqliteReviewStore:
     def _commit_release_in_transaction(self, connection, snapshot, state, request):
         """Internal only: caller owns BEGIN IMMEDIATE and journal fence validation."""
         _require(connection.in_transaction)
+        if connection.execute("PRAGMA user_version").fetchone() == (3,):
+            raise ReviewStoreError("Authenticated release writes not enabled")
         result = snapshot.commit_release(request=request)
         if len(snapshot._release_state[0]) != state[4]:
             record = snapshot._release_state[0][-1]

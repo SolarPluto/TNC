@@ -239,9 +239,12 @@ class RequestJournalManager:
             raise JournalAccessError("Operation unavailable")
         return caller
 
-    def _read(self, connection, snapshot):
-        if connection.execute("PRAGMA user_version").fetchone() != (2,):
+    def _read(self, connection, snapshot, *, write=True):
+        version = connection.execute("PRAGMA user_version").fetchone()[0]
+        if version not in (2, 3):
             raise ReviewStoreError("Explicit schema-v2 migration required")
+        if version == 3 and write:
+            raise ReviewStoreError("Authenticated journal writes not enabled")
         return validate_journal(connection, snapshot, outbox=True)
 
     def _owned(self, data, operation_id, caller):
@@ -319,7 +322,7 @@ class RequestJournalManager:
         if expected_query is not None:
             expected_query = QueryIdentity.model_validate(expected_query.model_dump())
         with self._store._transaction(outbox=True) as (connection, snapshot, _):
-            data = self._read(connection, snapshot)
+            data = self._read(connection, snapshot, write=False)
             record = self._owned(data, operation_id, caller)
             if expected_query is not None and record.intent.query != expected_query:
                 raise JournalConflictError("Recovery query mismatch")
