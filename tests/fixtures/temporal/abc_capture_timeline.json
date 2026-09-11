@@ -1,0 +1,112 @@
+{
+  "fixture_id": "abc-archive-observation-boundaries-v1",
+  "scope": "Test-only conservative archive visibility; not historical claim replay admission.",
+  "availability_policy": "Capture time is the test visibility cutoff, not first publication. Preserve actual retrieval in observed_at.",
+  "replay_admission_status": "pending",
+  "versions": [
+    {
+      "version_id": "abc-early-archive-20130521120016",
+      "document_id": "abc-early",
+      "original_url": "http://abcnews.go.com/US/oklahoma-tornado-20-children-51-dead-horrific-damage/story?id=19219367",
+      "html_body_hash": "d1410eb00ab2c487e0dbc3da645f1f6be4e83a2ff0096e8d95dc14013985884f",
+      "index_body_hash": "c0740d244711d3052e481a21a98a41639d926f474d103bd2300fd50d44d3b69b",
+      "evidence_file": "corpus/tib_run_a/abc_early_archive_20130521120016_evidence.json",
+      "capture_at": "2013-05-21T12:00:16Z",
+      "retrieved_at": "2026-09-11T00:18:20.947537Z",
+      "first_published_at": null,
+      "exact_edit_at": null
+    },
+    {
+      "version_id": "abc-archive-20130521155330",
+      "document_id": "abc-correction",
+      "original_url": "http://abcnews.go.com/US/oklahoma-tornado-deaths-revised-24-including-children/story?id=19222656",
+      "html_body_hash": "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704",
+      "index_body_hash": "0e48947296134c7881038fe24e6dff2062f89b7e38e122dfc7627ae3be72fe22",
+      "evidence_file": "corpus/tib_run_a/abc_archive_20130521155330_evidence.json",
+      "capture_at": "2013-05-21T15:53:30Z",
+      "retrieved_at": "2026-09-10T22:21:36.940319Z",
+      "first_published_at": null,
+      "exact_edit_at": null
+    },
+    {
+      "version_id": "abc-archive-20130521175757",
+      "document_id": "abc-correction",
+      "original_url": "http://abcnews.go.com/US/oklahoma-tornado-deaths-revised-24-including-children/story?id=19222656",
+      "html_body_hash": "387d5761ddc81cb22d3dd4d2cb6ebd3a0bc4f2dd5e7a73dcfec05c73d665ae8e",
+      "index_body_hash": "18b9570cc9829abc8fcf7c2cd0d9067fce8c5525a7971f2a5b5173938614f862",
+      "evidence_file": "corpus/tib_run_a/abc_archive_20130521175757_evidence.json",
+      "capture_at": "2013-05-21T17:57:57Z",
+      "retrieved_at": "2026-09-10T23:23:04.484240Z",
+      "first_published_at": null,
+      "exact_edit_at": null
+    }
+  ],
+  "checkpoints": [
+    {
+      "case_id": "1-before",
+      "query_at": "2013-05-21T12:00:15.999999Z",
+      "expected_selected_versions": []
+    },
+    {
+      "case_id": "1-at",
+      "query_at": "2013-05-21T12:00:16Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016"
+      ]
+    },
+    {
+      "case_id": "1-after",
+      "query_at": "2013-05-21T12:00:16.000001Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016"
+      ]
+    },
+    {
+      "case_id": "2-before",
+      "query_at": "2013-05-21T15:53:29.999999Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016"
+      ]
+    },
+    {
+      "case_id": "2-at",
+      "query_at": "2013-05-21T15:53:30Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016",
+        "abc-archive-20130521155330"
+      ]
+    },
+    {
+      "case_id": "2-after",
+      "query_at": "2013-05-21T15:53:30.000001Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016",
+        "abc-archive-20130521155330"
+      ]
+    },
+    {
+      "case_id": "3-before",
+      "query_at": "2013-05-21T17:57:56.999999Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016",
+        "abc-archive-20130521155330"
+      ]
+    },
+    {
+      "case_id": "3-at",
+      "query_at": "2013-05-21T17:57:57Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016",
+        "abc-archive-20130521175757"
+      ]
+    },
+    {
+      "case_id": "3-after",
+      "query_at": "2013-05-21T17:57:57.000001Z",
+      "expected_selected_versions": [
+        "abc-early-archive-20130521120016",
+        "abc-archive-20130521175757"
+      ]
+    }
+  ]
+}
