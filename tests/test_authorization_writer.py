@@ -33,6 +33,10 @@ class TestProvisioningSession:
             session_id=self.anchor.provisioning_session_id, manifest_hash=record_digest(manifest),
             deployment_id=manifest.deployment_id, valid_from=NOW, valid_until=END) | self.changes))
 
+    def verify_commit(self, proof, *, database_path):
+        """Synthetic fixture; real monotonic checks are tested by provisioning_session."""
+        return None
+
 
 class TestSession:
     __test__ = False

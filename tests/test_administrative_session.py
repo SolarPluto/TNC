@@ -51,6 +51,9 @@ def writer(pki):
     store = SqliteReviewStore.open_existing(path=store._path, allowed_reviewers=frozenset(), bootstrap_anchor=anchor)
     result = AdministrationWriter(store=store)
     class SyntheticBootstrap:
+        def verify_commit(self, proof, *, database_path):
+            return None  # Synthetic bootstrap only; this suite tests live mTLS appends.
+
         def verify_activation(self, manifest):
             return ProvisioningAuthorization(operator_id=anchor.operator_id, session_id=anchor.provisioning_session_id,
                 manifest_hash=anchor.manifest_hash, deployment_id=anchor.deployment_id,

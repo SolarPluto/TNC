@@ -48,6 +48,7 @@ class ProvisioningAuthorization(Model):
 
 class ProvisioningSession(Protocol):
     def verify_activation(self, manifest: BootstrapManifest) -> ProvisioningAuthorization: ...
+    def verify_commit(self, proof: ProvisioningAuthorization, *, database_path: str) -> None: ...
 
 
 class AdministrativeSession(Protocol):
@@ -71,6 +72,16 @@ class AdministrationWriter:
             raise ReviewStoreError('Invalid host clock')
         return at.astimezone(timezone.utc)
 
+    def _check_provisioning_commit(self, provisioning, proof):
+        # Mandatory bounded in-memory lease check. No file/token/TLS callbacks here.
+        try:
+            if provisioning.verify_commit(proof, database_path=str(self._store._path)) is not None:
+                raise AuthorizationError('Access denied')
+            if not proof.valid_from <= self._now() < proof.valid_until:
+                raise AuthorizationError('Access denied')
+        except Exception:
+            raise AuthorizationError('Access denied') from None
+
     def migrate_to_v4(self, *, provisioning: ProvisioningSession,
                       manifest: BootstrapManifest) -> BootstrapReceipt:
         manifest = _copy(manifest, BootstrapManifest)
@@ -79,6 +90,7 @@ class AdministrationWriter:
         digest = record_digest(manifest)
         anchor = self._store._bootstrap_anchor
         with self._store._transaction(write=True, outbox=True) as (connection, _, _):
+            self._check_provisioning_commit(provisioning, proof)
             now = self._now()
             if (anchor is None or proof.operator_id != anchor.operator_id
                     or proof.manifest_hash != digest or digest != anchor.manifest_hash
@@ -91,6 +103,7 @@ class AdministrationWriter:
                 old, _, _ = read_administration(connection, anchor)
                 if old.manifest != manifest:
                     raise ReviewConflictError('Bootstrap request conflict')
+                self._check_provisioning_commit(provisioning, proof)
                 return old.receipt
             if version != 3:
                 raise ReviewStoreError('Explicit version-3 source required')
@@ -125,6 +138,7 @@ class AdministrationWriter:
             self._store._load(connection, outbox=True)
             if connection.execute('PRAGMA foreign_key_check').fetchall():
                 raise ReviewIntegrityError('Invalid target foreign keys')
+            self._check_provisioning_commit(provisioning, proof)
         return receipt
 
     def history(self):
