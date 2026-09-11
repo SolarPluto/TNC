@@ -18,6 +18,7 @@ from tnc.provenance.review_store import (
 _SCHEMA = Path(__file__).with_name("sqlite_schema.sql")
 _MIGRATION_V2 = Path(__file__).with_name("sqlite_migration_v2.sql")
 _MIGRATION_V3 = Path(__file__).with_name("sqlite_migration_v3.sql")
+_MIGRATION_V4 = Path(__file__).with_name("sqlite_migration_v4.sql")
 
 
 def _require(condition):
@@ -61,6 +62,10 @@ def _apply_v3(connection):
     _apply_ddl(connection, _MIGRATION_V3)
 
 
+def _apply_v4(connection):
+    _apply_ddl(connection, _MIGRATION_V4)
+
+
 def _apply_ddl(connection, path):
     """Execute trusted DDL without executescript's implicit pre-commit behavior."""
     statement = ""
@@ -72,17 +77,19 @@ def _apply_ddl(connection, path):
     _require(not statement.strip())
 
 
-@lru_cache(maxsize=3)
+@lru_cache(maxsize=4)
 def _expected_schema(version=1):
-    _require(version in (1, 2, 3))
+    _require(version in (1, 2, 3, 4))
     connection = sqlite3.connect(":memory:", isolation_level=None)
     try:
         connection.executescript(_SCHEMA.read_text(encoding="utf-8"))
         if version >= 2:
             connection.execute("BEGIN IMMEDIATE")
             _apply_v2(connection)
-            if version == 3:
+            if version >= 3:
                 _apply_v3(connection)
+            if version == 4:
+                _apply_v4(connection)
             connection.execute("COMMIT")
         return _schema_rows(connection)
     finally:
@@ -112,13 +119,15 @@ class SqliteReviewStore:
     SQLite, not its local RLock, serializes independent processes.
     """
     def __init__(self, *, path: Path, allowed_reviewers: frozenset[str],
-                 clock: Callable[[], datetime] | None = None, timeout: float = 5.0):
+                 clock: Callable[[], datetime] | None = None, timeout: float = 5.0,
+                 bootstrap_anchor=None):
         if not isinstance(timeout, (int, float)) or not math.isfinite(timeout) or not 0 <= timeout <= 60:
             raise ValueError("Timeout must be finite and between 0 and 60 seconds")
         self._path = Path(path).absolute()
         self._allowed_reviewers = frozenset(allowed_reviewers)
         self._clock = clock
         self._timeout = timeout
+        self._bootstrap_anchor = bootstrap_anchor
 
     @classmethod
     def provision(cls, *, path: Path, allowed_reviewers: frozenset[str], clock=None, timeout=5.0):
@@ -143,8 +152,10 @@ class SqliteReviewStore:
         return store
 
     @classmethod
-    def open_existing(cls, *, path: Path, allowed_reviewers: frozenset[str], clock=None, timeout=5.0):
-        store = cls(path=path, allowed_reviewers=allowed_reviewers, clock=clock, timeout=timeout)
+    def open_existing(cls, *, path: Path, allowed_reviewers: frozenset[str], clock=None, timeout=5.0,
+                      bootstrap_anchor=None):
+        store = cls(path=path, allowed_reviewers=allowed_reviewers, clock=clock, timeout=timeout,
+                    bootstrap_anchor=bootstrap_anchor)
         store.history()  # Validate ledger; outbox faults must not prevent revocation.
         return store
 
@@ -172,13 +183,17 @@ class SqliteReviewStore:
             self._load(connection, outbox=True)
             _require(connection.execute("PRAGMA foreign_key_check").fetchall() == [])
 
-    def _validate_v3(self, connection, state):
+    def _validate_v3(self, connection, state, *, administration=False):
         # Transitional schema: no authorization writers exist yet. Never treat
         # structurally plausible rows as authenticated administrative records.
-        for table in ("authorization_events", "execution_authorizations",
-                      "execution_assignments", "release_authorizations"):
+        tables = ("execution_authorizations", "execution_assignments", "release_authorizations")
+        if not administration:
+            tables += ("authorization_events",)
+        for table in tables:
             _require(connection.execute(f"SELECT count(*) FROM {table}").fetchone() == (0,))
-        for table in ("authorization_state", "release_authorization_state"):
+        checkpoints = ("release_authorization_state",) if administration else (
+            "authorization_state", "release_authorization_state")
+        for table in checkpoints:
             _require(connection.execute(f"SELECT * FROM {table}").fetchall() == [(1, 1, 0, "0" * 64)])
         journal = connection.execute("SELECT sequence, head_hash FROM journal_state").fetchone()
         _require(journal is not None)
@@ -204,7 +219,7 @@ class SqliteReviewStore:
     def _load(self, connection, *, outbox):
         try:
             version = connection.execute("PRAGMA user_version").fetchone()[0]
-            _require(version in (1, 2, 3))
+            _require(version in (1, 2, 3, 4))
             _require(_schema_rows(connection) == _expected_schema(version))
             checkpoints = connection.execute("SELECT * FROM store_state").fetchall()
             _require(len(checkpoints) == 1)
@@ -234,6 +249,10 @@ class SqliteReviewStore:
                 validate_journal(connection, snapshot, outbox=outbox)
             if version == 3:
                 self._validate_v3(connection, state)
+            if version == 4:
+                self._validate_v3(connection, state, administration=True)
+                from tnc.provenance.authorization_storage import read_administration
+                read_administration(connection, self._bootstrap_anchor)
             return snapshot, state
         except (ValueError, TypeError, AttributeError) as exc:
             raise ReviewIntegrityError("SQLite history or schema is invalid") from exc
@@ -300,7 +319,7 @@ class SqliteReviewStore:
     def _commit_release_in_transaction(self, connection, snapshot, state, request):
         """Internal only: caller owns BEGIN IMMEDIATE and journal fence validation."""
         _require(connection.in_transaction)
-        if connection.execute("PRAGMA user_version").fetchone() == (3,):
+        if connection.execute("PRAGMA user_version").fetchone()[0] in (3, 4):
             raise ReviewStoreError("Authenticated release writes not enabled")
         result = snapshot.commit_release(request=request)
         if len(snapshot._release_state[0]) != state[4]:

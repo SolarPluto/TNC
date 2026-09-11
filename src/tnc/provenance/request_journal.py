@@ -241,9 +241,9 @@ class RequestJournalManager:
 
     def _read(self, connection, snapshot, *, write=True):
         version = connection.execute("PRAGMA user_version").fetchone()[0]
-        if version not in (2, 3):
+        if version not in (2, 3, 4):
             raise ReviewStoreError("Explicit schema-v2 migration required")
-        if version == 3 and write:
+        if version in (3, 4) and write:
             raise ReviewStoreError("Authenticated journal writes not enabled")
         return validate_journal(connection, snapshot, outbox=True)
 
