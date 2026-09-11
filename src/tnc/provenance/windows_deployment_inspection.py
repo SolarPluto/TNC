@@ -73,7 +73,7 @@ def _acl(data):
         aces=tuple(AceRecord(kind=k,flags=f,mask=m,sid=s) for k,f,m,s in entries))
 
 
-def _inspect(envelope,anchor,descriptor,api,utcnow,monotonic):
+def _inspect(envelope,anchor,descriptor,api,utcnow,monotonic,*,timeout_seconds=10):
     # Freeze inputs before any native operation. These are host inputs, not a
     # signature verification or a trust anchor discovered from inspected files.
     for value,kind in ((envelope,InstallationEnvelope),(anchor,ExternalInstallationAnchor),(descriptor,HostProvisioningDescriptor)):
@@ -98,7 +98,7 @@ def _inspect(envelope,anchor,descriptor,api,utcnow,monotonic):
     cleanup_failed=False
     def budget():
         _,tick=clocks()
-        if tick-start_tick>10 or len(handles)>128:raise DeploymentInspectionError('Inspection budget exceeded')
+        if tick-start_tick>timeout_seconds or len(handles)>128:raise DeploymentInspectionError('Inspection budget exceeded')
     def hold(handle):
         handles.append(handle)
         budget()
