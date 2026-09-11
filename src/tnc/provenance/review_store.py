@@ -126,6 +126,53 @@ class ReviewReader(Protocol):
     def resolve(self, *, document_id: str, version_id: str) -> ReviewResolution: ...
 
 
+class ReleaseRequest(ReviewModel):
+    """Host-internal candidate, not public query input or proof of admission."""
+    model_config = ConfigDict(frozen=True, extra="forbid", ser_json_bytes="hex",
+                              val_json_bytes="hex")
+    release_id: str = Field(min_length=1, pattern=r"\S")
+    availability: ArchiveAvailabilityRecord
+    expected_review_sequence: int = Field(gt=0, strict=True)
+    expected_review_entry_hash: str = Field(pattern=r"^[a-f0-9]{64}$")
+    expected_availability_fingerprint: str = Field(pattern=r"^[a-f0-9]{64}$")
+    query_time: datetime
+    parser_version: str = Field(min_length=1, pattern=r"\S")
+    policy_version: str = Field(min_length=1, pattern=r"\S")
+    payload: bytes = Field(strict=True)
+
+    @field_validator("query_time")
+    @classmethod
+    def normalize_query_time(cls, value):
+        return _utc(value)
+
+    @field_validator("availability", mode="before")
+    @classmethod
+    def validate_availability(cls, value):
+        return ReviewRequest.validate_availability(value)
+
+
+class ReleaseReceipt(ReviewModel):
+    release_id: str
+    release_sequence: int = Field(gt=0, strict=True)
+    review_sequence: int = Field(gt=0, strict=True)
+    review_entry_hash: str
+    store_revision: int = Field(gt=0, strict=True)
+    store_head_hash: str
+    candidate_hash: str
+    payload_hash: str
+    previous_release_hash: str
+    entry_hash: str
+
+
+class StoredRelease(ReviewModel):
+    request: ReleaseRequest
+    receipt: ReleaseReceipt
+
+
+class ReleaseCommitter(Protocol):
+    def commit_release(self, *, request: ReleaseRequest) -> ReleaseReceipt: ...
+
+
 class ReviewWriter(Protocol):
     def append(self, *, request: ReviewRequest, actor: ReviewerContext,
                expected_head_sequence: int | None) -> StoredReviewRecord: ...
@@ -142,6 +189,14 @@ def _entry_digest(record: StoredReviewRecord) -> str:
         canonical_availability_bytes(record.request.availability)
     )["availability"]
     return sha256(_json_bytes(data)).hexdigest()
+
+
+def _candidate_digest(request: ReleaseRequest) -> str:
+    return sha256(_json_bytes(request.model_dump(mode="json"))).hexdigest()
+
+
+def _release_digest(receipt: ReleaseReceipt) -> str:
+    return sha256(_json_bytes(receipt.model_dump(mode="json", exclude={"entry_hash"}))).hexdigest()
 
 
 def _require(condition: bool) -> None:
@@ -188,6 +243,93 @@ class InMemoryReviewStore:
         self._revision = 0
         self._head_hash = _GENESIS
         self._lock = RLock()
+        # One assignment commits both immutable outbox contents and checkpoint.
+        self._release_state: tuple[tuple[StoredRelease, ...], str] = ((), _GENESIS)
+
+    def _validate_releases(self) -> None:
+        """Caller holds the ledger lock and has validated the review history."""
+        try:
+            releases, checkpoint = self._release_state
+            previous, ids, previous_revision = _GENESIS, set(), 0
+            for sequence, original in enumerate(releases, start=1):
+                request = ReleaseRequest.model_validate(original.request.model_dump())
+                receipt = ReleaseReceipt.model_validate(original.receipt.model_dump())
+                _require(receipt.release_sequence == sequence)
+                _require(receipt.release_id == request.release_id and request.release_id not in ids)
+                _require(receipt.previous_release_hash == previous)
+                _require(receipt.entry_hash == _release_digest(receipt))
+                _require(receipt.candidate_hash == _candidate_digest(request))
+                _require(receipt.payload_hash == sha256(request.payload).hexdigest())
+                _require(previous_revision <= receipt.store_revision <= self._revision)
+                prefix = self._records[:receipt.store_revision]
+                _require(bool(prefix) and prefix[-1].entry_hash == receipt.store_head_hash)
+                matching = [r for r in prefix if _key(r.request) == (
+                    request.availability.document_id, request.availability.version_id)]
+                _require(bool(matching))
+                head = matching[-1]
+                self._check_release_head(request, head)
+                _require(receipt.review_sequence == head.sequence)
+                _require(receipt.review_entry_hash == head.entry_hash)
+                previous, previous_revision = receipt.entry_hash, receipt.store_revision
+                ids.add(request.release_id)
+            _require(previous == checkpoint)
+        except (ValueError, AssertionError, AttributeError, TypeError) as exc:
+            raise ReviewIntegrityError("Outbox validation failed; no release permitted") from exc
+
+    @staticmethod
+    def _check_release_head(request: ReleaseRequest, head: StoredReviewRecord | None) -> None:
+        if head is None or head.request.verdict != ReviewVerdict.APPROVED:
+            raise ReviewConflictError("Current review is not approved")
+        if (head.sequence != request.expected_review_sequence
+                or head.entry_hash != request.expected_review_entry_hash):
+            raise ReviewConflictError("Review changed before release")
+        if (head.request.availability != request.availability
+                or head.availability_fingerprint != request.expected_availability_fingerprint
+                or availability_fingerprint(request.availability) != request.expected_availability_fingerprint):
+            raise ReviewConflictError("Release evidence does not match approval")
+        if request.query_time < request.availability.capture_at:
+            raise ReviewStoreError("Query precedes archive capture")
+
+    def commit_release(self, *, request: ReleaseRequest) -> ReleaseReceipt:
+        """Atomically check current approval and insert a private outbox result.
+
+        Host-only: this does not validate archive bytes, spans, or claim semantics.
+        Exact retries acknowledge a prior release even after revocation, without
+        publishing again. Outbox insertion, not later transport, is release.
+        """
+        request = ReleaseRequest.model_validate(request.model_dump(warnings=False))
+        with self._lock:
+            heads = self._validate()
+            self._validate_releases()
+            releases, previous_hash = self._release_state
+            for stored in releases:
+                if stored.request.release_id == request.release_id:
+                    if stored.request == request:
+                        return stored.receipt
+                    raise ReviewConflictError("Release ID already exists with different content")
+            head = heads.get((request.availability.document_id, request.availability.version_id))
+            self._check_release_head(request, head)
+            receipt = ReleaseReceipt(
+                release_id=request.release_id, release_sequence=len(releases) + 1,
+                review_sequence=head.sequence, review_entry_hash=head.entry_hash,
+                store_revision=self._revision, store_head_hash=self._head_hash,
+                candidate_hash=_candidate_digest(request), payload_hash=sha256(request.payload).hexdigest(),
+                previous_release_hash=previous_hash, entry_hash=_GENESIS,
+            )
+            receipt = receipt.model_copy(update={"entry_hash": _release_digest(receipt)})
+            record = StoredRelease(request=request, receipt=receipt)
+            next_state = ((*releases, record), receipt.entry_hash)
+            # Linearization point, under the same lock used by review append.
+            # No injected callbacks, clock calls, or I/O occur in this operation.
+            self._release_state = next_state
+            return receipt
+
+    def release_history(self) -> tuple[StoredRelease, ...]:
+        """Host-only audit of already released results, not fresh authorization."""
+        with self._lock:
+            self._validate()
+            self._validate_releases()
+            return self._release_state[0]
 
     def _validate(self) -> dict[tuple[str, str], StoredReviewRecord]:
         """Validate the whole ledger; corruption anywhere blocks all reads/writes."""

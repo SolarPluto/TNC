@@ -99,9 +99,52 @@ and complete real-ABC absence/pending state. No actual ABC reviews are appended.
 
 No SQLite backend, crash recovery, restart persistence, authenticated writer
 boundary, or production wrapper is implemented here. A new store instance is empty.
-Likewise, a revision in a read result is only a checkpoint: the future wrapper must
-coordinate a head check with result release if concurrent revocation must prevent
-an in-flight result. This code does not claim that guarantee.
+An ordinary resolve result remains only a checkpoint. The coordinated operation
+below provides the narrower in-memory outbox release guarantee; a wrapper must
+use it after completing admission and replay validation.
+
+## Coordinated in-memory release
+
+`commit_release(request=ReleaseRequest(...))` implements the host-internal
+`ReleaseCommitter` protocol. The request binds an exact expected review sequence,
+entry hash, complete availability and fingerprint, query time, parser/policy
+versions, release ID, and immutable serialized payload bytes. These are trusted
+pipeline inputs, never fields accepted from a public historical query client.
+This primitive does not verify body/index bytes, parse spans, validate transitions,
+or prove that the supplied payload passed admission. That remains wrapper work.
+
+Under the same lock as review append, it validates the ledger and existing outbox,
+requires the current version head to be the exact expected approval, checks the
+full evidence binding and inclusive capture cutoff, builds a receipt, and commits
+one immutable outbox state with a single assignment. No callbacks, clock calls,
+or network operations occur during release. Unrelated reviews may advance the
+global revision without invalidating the target approval. A replacing approval,
+rejection, or revocation blocks the old candidate.
+
+Outbox insertion is the release point. Revocation committed before insertion
+blocks a new release; revocation committed afterward does not retract the prior
+release. This is not a guarantee about subsequent network delivery. Receipts
+record release order and the review ledger checkpoint rather than wall-clock
+release time. They bind the full request and payload with SHA-256 hashes.
+
+Exact retries return the prior receipt without adding an outbox entry, even after
+revocation. This acknowledges historical release, not current permission. A new
+release ID still requires the current approval. Reusing an ID with changed content
+or preconditions raises ReviewConflictError. Failure before state assignment
+leaves the outbox unchanged; if execution is interrupted after commit but before
+acknowledgement, the same ID/request recovers the receipt without duplication.
+
+`release_history()` is a host-only audit of immutable already released records,
+including their payloads. It checks receipt hashes and that each recorded review
+was the approved version head at the recorded ledger prefix, so later legitimate
+revocation does not invalidate history. Outbox corruption blocks audit and release;
+review revocations remain writable when only the outbox is corrupt. Like the
+ledger, this outbox has no persistence or protection against coherent replacement
+of private process state. A durable implementation needs a transactional outbox.
+
+The concurrency tests use events/barriers to exercise both operation orders,
+including a writer waiting while release holds the shared lock. These tests cover
+the in-memory contract, not crash durability, transport, or distributed locking.
 
 Run from the project root:
 
