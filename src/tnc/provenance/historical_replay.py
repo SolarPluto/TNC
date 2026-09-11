@@ -109,6 +109,14 @@ class HistoricalReplayEngine:
         self._store = review_store
 
     def execute(self, *, document_id: str, version_id: str, query_time: datetime) -> ReplayOutcome:
+        return self._run(document_id=document_id, version_id=version_id, query_time=query_time)
+
+    def _prepare(self, *, document_id: str, version_id: str, query_time: datetime, release_id: str):
+        """Host-only journal preparation: return a private candidate, never publish."""
+        return self._run(document_id=document_id, version_id=version_id, query_time=query_time,
+                         preparation_release_id=release_id)
+
+    def _run(self, *, document_id, version_id, query_time, preparation_release_id=None):
         admission = None
 
         def blocked(reason, status="rejected"):
@@ -192,12 +200,14 @@ class HistoricalReplayEngine:
             "snapshots": [s.model_dump(mode="json") for s in snapshots],
         }, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
         candidate = ReleaseRequest(
-            release_id=str(uuid4()), availability=availability,
+            release_id=preparation_release_id or str(uuid4()), availability=availability,
             expected_review_sequence=head.sequence, expected_review_entry_hash=head.entry_hash,
             expected_availability_fingerprint=head.availability_fingerprint,
             query_time=query_time, parser_version="tnc-parser-1", policy_version="single-version-replay-1",
             payload=payload,
         )
+        if preparation_release_id is not None:
+            return candidate
         try:
             receipt = self._store.commit_release(request=candidate)
         except ReviewIntegrityError:

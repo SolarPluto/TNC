@@ -4,6 +4,12 @@
 resolve, append, history, commit_release and release_history interfaces. The CLI
 still starts with its empty in-memory store. No real ABC reviews are created.
 
+Version 2 now validates request-journal history as described in `request_journal.md`.
+Public commit_release refuses a journal-reserved release ID. Its internal
+transaction-scoped implementation is shared with journal finalization so the
+outbox and terminal event commit together. Host-only internal methods are not
+an access-control boundary against arbitrary code executing in the same process.
+
 ## Host API
 
 ```python

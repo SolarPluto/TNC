@@ -141,7 +141,7 @@ class SqliteReviewStore:
         """Explicit, atomic layout upgrade; preserve all old ledger/outbox bytes.
 
         Already-v2 retries validate before succeeding. No auto-migration on open.
-        Journal tables remain empty until journal-aware operations are implemented.
+        Journal history is validated by the journal-aware adapter.
         """
         with self._transaction(write=True, outbox=True) as (connection, _, _state):
             if connection.execute("PRAGMA user_version").fetchone() == (1,):
@@ -170,13 +170,6 @@ class SqliteReviewStore:
             version = connection.execute("PRAGMA user_version").fetchone()[0]
             _require(version in (1, 2))
             _require(_schema_rows(connection) == _expected_schema(version))
-            if version == 2:
-                # Until the manager is implemented, legacy operations must not
-                # bypass ownership/fencing on externally inserted journal rows.
-                for table in ("request_intents", "prepared_requests", "request_events"):
-                    _require(connection.execute(f"SELECT count(*) FROM {table}").fetchone() == (0,))
-                _require(connection.execute("SELECT * FROM journal_state").fetchall()
-                         == [(1, 1, 0, "0" * 64)])
             checkpoints = connection.execute("SELECT * FROM store_state").fetchall()
             _require(len(checkpoints) == 1)
             state = checkpoints[0]
@@ -200,6 +193,9 @@ class SqliteReviewStore:
                 _require(len(releases) == state[4])
                 snapshot._release_state = (tuple(releases), state[5])
                 snapshot._validate_releases()
+            if version == 2:
+                from tnc.provenance.request_journal import validate_journal
+                validate_journal(connection, snapshot, outbox=outbox)
             return snapshot, state
         except (ValueError, TypeError, AttributeError) as exc:
             raise ReviewIntegrityError("SQLite history or schema is invalid") from exc
@@ -257,13 +253,22 @@ class SqliteReviewStore:
 
     def commit_release(self, *, request: ReleaseRequest) -> ReleaseReceipt:
         with self._transaction(write=True, outbox=True) as (connection, snapshot, state):
-            result = snapshot.commit_release(request=request)
-            if len(snapshot._release_state[0]) != state[4]:
-                record = snapshot._release_state[0][-1]
-                connection.execute("INSERT INTO outbox VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                   _release_values(record))
-                updated = connection.execute("UPDATE store_state SET release_sequence=?, release_head_hash=? "
-                    "WHERE singleton=1 AND release_sequence=? AND release_head_hash=?",
-                    (result.release_sequence, result.entry_hash, state[4], state[5]))
-                _require(updated.rowcount == 1)
+            if connection.execute("PRAGMA user_version").fetchone() == (2,):
+                if connection.execute("SELECT 1 FROM request_intents WHERE release_id=?", (request.release_id,)).fetchone():
+                    raise ReviewStoreError("Journal-owned release requires journal finalization")
+            result = self._commit_release_in_transaction(connection, snapshot, state, request)
+        return result
+
+    def _commit_release_in_transaction(self, connection, snapshot, state, request):
+        """Internal only: caller owns BEGIN IMMEDIATE and journal fence validation."""
+        _require(connection.in_transaction)
+        result = snapshot.commit_release(request=request)
+        if len(snapshot._release_state[0]) != state[4]:
+            record = snapshot._release_state[0][-1]
+            connection.execute("INSERT INTO outbox VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                               _release_values(record))
+            updated = connection.execute("UPDATE store_state SET release_sequence=?, release_head_hash=? "
+                "WHERE singleton=1 AND release_sequence=? AND release_head_hash=?",
+                (result.release_sequence, result.entry_hash, state[4], state[5]))
+            _require(updated.rowcount == 1)
         return result

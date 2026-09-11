@@ -12,8 +12,9 @@ store = SqliteReviewStore.open_existing(
 store.migrate_to_v2()
 ```
 
-This is schema preparation only. Registration, principal checks, worker fencing,
-candidate preparation and atomic journal/outbox finalization are not implemented.
+Migration prepares the schema. The separate RequestJournalManager now implements
+registration, principal scoping, worker fencing, preparation and finalization;
+see `request_journal.md` for its host-only trust boundary.
 There is no migration command or recovery-token option in the CLI. Tests operate
 on temporary synthetic databases; no deployed database or real review is changed.
 
@@ -49,20 +50,19 @@ hash representation are unchanged. journal_state.codec_version is separately 1.
 These identifiers describe different scopes; a layout upgrade does not rehash
 legacy history or manufacture journal entries for old releases.
 
-## Transitional guard
+## Journal-aware validation
 
-The current version-2 adapter accepts only an empty journal: all three record
-tables must be empty and the journal checkpoint must equal its initial state.
-Any externally inserted intent/candidate/event or altered journal checkpoint
-blocks adapter operations, including legacy release. This prevents the existing
-release method from operating around journal ownership rules that do not exist
-yet. A future manager must replace this temporary guard with full event/binding
-validation and enforce reserved release ownership within a shared transaction.
+The initial empty-journal guard has been replaced with full intent, prepared
+candidate, event-chain and checkpoint validation. Standalone release refuses
+journal-reserved IDs; journal finalization checks the worker generation inside
+the same transaction as outbox insertion and the COMMITTED event. Arbitrary
+externally inserted rows without valid canonical history still block operations.
 
 With an empty journal, normal review and release operations continue on version
 2. Old receipts remain recoverable by exact candidate retry after revocation.
-Opening still validates only the ledger/outbox schema and ledger content for
-ordinary operations; release/outbox audit validate outbox data. Migration is
+Opening validates schema, ledger and structural journal history for ordinary
+operations; release/outbox audit also validate outbox data and journal receipt
+bindings. Migration is
 stricter: it validates both histories before altering the layout.
 
 Old application builds that recognize only version 1 will reject a migrated
@@ -80,5 +80,5 @@ post-DDL validation rollback, new version-2 writes, the empty-journal guard,
 bounded writer contention, and process termination immediately before/after
 COMMIT using IPC events. These are process-crash tests, not power-loss simulations.
 
-Next implementation step: the journal registration, recovery and worker-claim
-manager, followed by journal-aware preparation and coordinated finalization.
+The manager is implemented separately; authenticated deployment and CLI journal
+integration remain future work.
