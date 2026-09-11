@@ -79,3 +79,14 @@ def test_source_relation_is_immutable():
 
     with pytest.raises(ValidationError):
         relation.confidence = 0.50
+
+def test_shared_source_evidence_round_trips_and_defaults_to_unknown():
+    assert ProvenanceSignals.model_validate({}).shared_source_evidence is None
+    signals = ProvenanceSignals(shared_source_evidence="Review section: shared AP lineage.")
+    assert ProvenanceSignals.model_validate_json(signals.model_dump_json()) == signals
+
+
+@pytest.mark.parametrize("evidence", ["", "   ", "\n"])
+def test_shared_source_evidence_requires_nonblank_review(evidence):
+    with pytest.raises(ValidationError):
+        ProvenanceSignals(shared_source_evidence=evidence)

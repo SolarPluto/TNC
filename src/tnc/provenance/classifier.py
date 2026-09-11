@@ -17,9 +17,10 @@ def classify_source_relation(
 
     Priority:
     1. Explicit citation
-    2. Strong reprint evidence
-    3. Likely derivation
-    4. Otherwise no relation judgment
+    2. Abstain from overlap-based labels when shared-source evidence exists
+    3. Strong reprint evidence
+    4. Likely derivation
+    5. Otherwise no relation judgment (not evidence of independence)
 
     Measurements remain stored in ProvenanceSignals.
     This function only converts them into an inspectable judgment.
@@ -35,6 +36,11 @@ def classify_source_relation(
             signals=signals,
             rationale="The target explicitly cites the source.",
         )
+
+    # Shared origin can explain even identical copy without establishing that
+    # the target copied this source document. Direct citations still take priority.
+    if signals.shared_source_evidence is not None:
+        return None
 
     if (
         signals.source_published_before_target is True

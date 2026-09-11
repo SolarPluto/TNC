@@ -217,12 +217,14 @@ def measure_provenance_signals(
     target_spans: list[SourceSpan],
     source_name: str,
     source_published_before_target: bool | None,
+    shared_source_evidence: str | None = None,
 ) -> ProvenanceSignals:
     """
     Measure the deterministic v0.1 provenance signals for two documents.
 
     Measurements are returned without making any provenance judgment.
     Classification remains the responsibility of the provenance classifier.
+    Shared-source evidence is supplied by review, not inferred from text overlap.
     """
 
     return ProvenanceSignals(
@@ -243,4 +245,5 @@ def measure_provenance_signals(
             source_name,
         ),
         source_published_before_target=source_published_before_target,
+        shared_source_evidence=shared_source_evidence,
     )

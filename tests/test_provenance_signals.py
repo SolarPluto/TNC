@@ -449,3 +449,13 @@ def test_measure_provenance_signals_preserves_unknown_time_order():
     assert signals.named_source_overlap == 0.0
     assert signals.explicit_citation is False
     assert signals.source_published_before_target is None
+
+def test_measurement_preserves_review_reference_without_inventing_citation():
+    evidence = "casualty_provenance_review.md: shared medical-examiner authority."
+    signals = measure_provenance_signals(
+        source_spans=[], target_spans=[], source_name="ABC News",
+        source_published_before_target=None, shared_source_evidence=evidence,
+    )
+    assert signals.shared_source_evidence == evidence
+    assert signals.explicit_citation is False
+    assert signals.source_published_before_target is None

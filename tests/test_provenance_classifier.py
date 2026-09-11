@@ -1,3 +1,5 @@
+import pytest
+
 from tnc.provenance.classifier import classify_source_relation
 from tnc.provenance.models import ProvenanceSignals, SourceRelationType
 
@@ -88,3 +90,40 @@ def test_weak_overlap_produces_no_relation_judgment():
     relation = classify(signals)
 
     assert relation is None
+
+
+@pytest.mark.parametrize(
+    "paragraph,quote,named",
+    [(1.0, 1.0, 1.0), (0.90, 0.80, 0.0), (0.70, 0.50, 0.0),
+     (0.70, 0.0, 0.60)],
+)
+def test_shared_source_blocks_overlap_labels_at_all_rule_boundaries(paragraph, quote, named):
+    signals = ProvenanceSignals(
+        paragraph_similarity=paragraph,
+        quote_overlap=quote,
+        named_source_overlap=named,
+        source_published_before_target=True,
+        shared_source_evidence="Reviewed pair: both credit the same AP wire lineage.",
+    )
+    assert classify(signals) is None
+    assert signals.paragraph_similarity == paragraph
+    assert classify(signals.model_copy(update={"shared_source_evidence": None})) is not None
+
+
+def test_shared_source_does_not_override_direct_citation():
+    signals = ProvenanceSignals(
+        explicit_citation=True,
+        shared_source_evidence="Review: common medical-examiner authority.",
+    )
+    relation = classify(signals)
+    assert relation.relation_type == SourceRelationType.EXPLICITLY_CITES
+    assert relation.signals == signals
+
+
+@pytest.mark.parametrize("order", [False, None])
+def test_unknown_or_reversed_order_remains_unresolved(order):
+    assert classify(ProvenanceSignals(
+        paragraph_similarity=1.0, quote_overlap=1.0,
+        source_published_before_target=order,
+        shared_source_evidence="Review: common wire lineage.",
+    )) is None

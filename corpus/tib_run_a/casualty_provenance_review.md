@@ -127,3 +127,45 @@ The scores measure character similarity, not copying probability or factual
 agreement. No document-level reprint or derivation relation is assigned.
 The exact historical availability of the CBS live body remains unresolved;
 ABC's archive capture time must not be used to date it.
+
+## Classifier shared-source guardrail
+
+`shared_source_pairs.json` records the two reviewed comparisons above, tied to
+exact body hashes. The evidence applies symmetrically and only to those versions.
+It distinguishes shared AP contribution from shared medical-examiner authority;
+it does not assert AP lineage for ABC or assign any new relationship label.
+
+Pass each pair's `shared_source_evidence` to `infer_source_relation` (or
+`measure_provenance_signals`) when comparing these exact bodies. The classifier
+retains explicit citation priority, then abstains from similarity-based reprint
+and derivation judgments when reviewed shared-source evidence is present, even
+at perfect overlap. Unannotated pairs retain the existing behavior. The API does
+not automatically load corpus sidecars or infer lineage from a wire-service name.
+
+Keep the measured signals for inspection even when the classifier returns None.
+None means no document-level judgment, never independent confirmation. Publication
+order and historical replay admission remain unresolved for these live bodies.
+
+## Frozen-body integrity check
+
+The classifier audit checks all nine article-body hashes. Three CBS objects in
+Git's stored revision differed from the original local frozen files, despite the
+original working tree reporting clean. The working copy restores the original
+local bytes for CBS early, correction, and status; each matches its existing
+SHA-256 object name. No reacquisition or content normalization was used. These
+byte-preserving repairs must accompany the hash regression test in a future commit.
+
+Frozen objects also disable whitespace linting in `.gitattributes`: their exact
+bytes are evidence and must not be reformatted to satisfy code-style checks.
+
+## Corpus impact verification
+
+Compared all 72 directed pairs of the nine frozen article versions. All nine
+body hashes match the inventory. With exact historical publication order left
+unknown, all pairs return None before and after the guardrail; no stored labels
+or historical replay admissions are changed. The two reviewed pairs reproduce
+the paragraph scores above in both directions. This is a conservative offline
+comparison, not validation of historical replay or proof of independence.
+Synthetic boundary tests separately show that recorded shared-source evidence
+blocks both reprint and derivation labels even when publication order is known
+and overlap reaches the existing thresholds or 1.0; direct citations survive.

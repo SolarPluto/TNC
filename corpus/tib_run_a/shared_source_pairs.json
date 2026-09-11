@@ -1,0 +1,19 @@
+{
+  "review": "casualty_provenance_review.md",
+  "pairs": [
+    {
+      "source_version_id": "mpr-ap-early",
+      "target_version_id": "cbs-ap-early",
+      "source_body_hash": "542607b75d87b2be33810bc444ea3a6b01fe420d91b8c15dcc37f77ba72ae525",
+      "target_body_hash": "7d3fd4d11470ee0e8b9694ef95faf1ee16ab6151e64cfac2ff342244c2c4af53",
+      "shared_source_evidence": "casualty_provenance_review.md, MPR/AP and CBS/AP early textual comparison: shared AP contribution; claim-level extent, direct copying, and historical publication order remain unresolved."
+    },
+    {
+      "source_version_id": "abc-archive-20130521155330",
+      "target_version_id": "cbs-ap-correction",
+      "source_body_hash": "39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704",
+      "target_body_hash": "78a9a32f42c2adb5f4f9ab978394d4a3eac8c816eb40df73cb279bf83f318438",
+      "shared_source_evidence": "casualty_provenance_review.md, ABC archive and CBS/AP correction textual comparison: shared medical-examiner authority for casualty reporting; this does not establish shared AP copy, direct copying, or independent confirmation."
+    }
+  ]
+}

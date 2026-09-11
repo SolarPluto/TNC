@@ -25,6 +25,19 @@ class ProvenanceSignals(BaseModel):
 
     source_published_before_target: bool | None = None
 
+    shared_source_evidence: str | None = Field(
+        default=None,
+        min_length=1,
+        pattern=r"\S",
+        description=(
+            "Reviewed evidence that a common wire, syndication lineage, or "
+            "underlying authority could explain the overlap between these "
+            "documents. Include the review reference and scope; do not infer "
+            "this from similarity or a wire-service name alone. None means "
+            "unreviewed or unrecorded, not independent."
+        ),
+    )
+
 
 class SourceRelation(BaseModel):
     """

@@ -119,3 +119,18 @@ def test_pipeline_returns_none_for_weak_evidence():
     )
 
     assert relation is None
+
+def test_pipeline_passes_reviewed_shared_source_evidence():
+    spans = [
+        make_span("paragraph", "Amy Elliott said the count was revised."),
+        make_span("quote", "Some victims were counted twice.", SpanType.QUOTE),
+    ]
+    kwargs = dict(
+        relation_id="shared-wire", source_version_id="a", target_version_id="b",
+        source_spans=spans, target_spans=spans, source_name="Publisher A",
+        source_published_before_target=True,
+    )
+    assert infer_source_relation(**kwargs).relation_type == SourceRelationType.REPRINT_OF
+    assert infer_source_relation(
+        **kwargs, shared_source_evidence="Reviewed pair: common AP lineage."
+    ) is None
