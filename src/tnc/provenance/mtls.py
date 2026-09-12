@@ -7,6 +7,7 @@ import socket
 import ssl
 from typing import Callable
 from uuid import uuid4
+from time import monotonic
 
 from tnc.provenance.host_auth import (
     AuthenticationError, AuthorizationStateReader, RegistryCredentialVerifier,
@@ -142,6 +143,32 @@ class MtlsConnection:
     def recv(self, size: int) -> bytes:
         self.verify()
         return self._socket.recv(size)
+
+    def recv_before(self, size: int, deadline: float) -> bytes:
+        """Bound one receive by an absolute monotonic deadline, including verification.
+
+        Host worker only, like recv. The previous socket timeout is restored.
+        Provider callbacks are cooperative; late completion is rejected.
+        """
+        if type(size) is not int or not 0 < size <= 16384:
+            raise ValueError("Invalid receive bound")
+        if type(deadline) not in (int, float) or not math.isfinite(deadline):
+            raise ValueError("Invalid deadline")
+        if monotonic() >= deadline:
+            raise TimeoutError("Receive deadline exceeded")
+        self.verify()
+        remaining = deadline - monotonic()
+        if remaining <= 0:
+            raise TimeoutError("Receive deadline exceeded")
+        previous = self._socket.gettimeout()
+        try:
+            self._socket.settimeout(remaining if previous is None else min(previous, remaining))
+            data = self._socket.recv(size)
+            if monotonic() >= deadline:
+                raise TimeoutError("Receive deadline exceeded")
+            return data
+        finally:
+            self._socket.settimeout(previous)
 
     def sendall(self, data: bytes) -> None:
         self.verify()
