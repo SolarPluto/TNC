@@ -323,3 +323,16 @@ def evaluate_client_observation(mark,observation,*,expected_challenge,principal_
         return result('ADVANCE_PROPOSED',ClientCheckpointMark(deployment_id=current.deployment_id,
             store_instance_id=current.store_instance_id,authority_revision=revision,envelope_hash=digest))
     except Exception: return result('INDETERMINATE')
+
+
+def validate_simulation_state(state, *, trusted_initial_envelope, now):
+    """Return a bounded validated copy, without authentication or freshness claims."""
+    try:
+        if type(now) is not datetime or now.utcoffset() is None:
+            raise ValueError('Aware time required')
+        state = _copy(state, AuthoritySimulationState)
+        anchor = _copy(trusted_initial_envelope, ReconciliationEnvelope)
+        _validate_state(state, anchor, now)
+        return state
+    except Exception:
+        raise ValueError('INVALID_SIMULATION_STATE') from None
