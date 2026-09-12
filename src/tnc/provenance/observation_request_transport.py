@@ -59,7 +59,7 @@ class ObservationRequestTransport:
         self._timeout = timeout
         self._clock = clock
 
-    def bind(self, connection):
+    def _process(self, connection):
         """Read one frame from the very connection whose identity is verified.
 
         All failures close the stream to prevent framing desynchronization.
@@ -67,7 +67,7 @@ class ObservationRequestTransport:
         """
         result = BindingOutcome(status='DENIED', reason_code='ACCESS_DENIED')
         if type(connection) is not MtlsConnection:
-            return result
+            return result, None, None
         try:
             deadline = monotonic() + self._timeout
             started = self._clock()
@@ -81,28 +81,70 @@ class ObservationRequestTransport:
             initial = bind_observation_request(raw, identity=first, policy=policy,
                 host_context=context, now=self._clock())
             if initial.status != 'BOUND':
-                return result
+                return result, None, None
             # Detect intervening enrollment and policy changes before returning.
             current = connection.verify()
             _check(deadline)
             fields = ('principal_id', 'credential_id', 'connection_id', 'registry_revision')
             if any(getattr(first, f) != getattr(current, f) for f in fields):
-                return result
+                return result, None, None
             if (_snapshot(self._policy_reader, ObservationPolicy) != policy
                     or _snapshot(self._context_reader, ObservationHostContext) != context):
-                return result
+                return result, None, None
             _check(deadline)
             now = self._clock()
             if now < started:
-                return result
+                return result, None, None
             checked = bind_observation_request(raw, identity=current, policy=policy,
                 host_context=context, now=now)
             _check(deadline)
             if checked.status == 'BOUND':
                 result = checked
-            return result
+            return result, raw if result.status == 'BOUND' else None, deadline
         except Exception:
-            return result
+            return result, None, None
         finally:
             if result.status != 'BOUND':
                 connection.close()
+
+    def bind(self, connection):
+        """Return serializable audit data only, never a bridge capability."""
+        return self._process(connection)[0]
+
+    def receive_handoff(self, connection):
+        """Read and validate a frame, retaining exact bytes in a transient handoff."""
+        from tnc.provenance.observation_handoff import _mint
+        result, raw, deadline = self._process(connection)
+        if result.status != 'BOUND':
+            return None
+        try:
+            return _mint(self, connection, raw, result.binding, deadline)
+        except Exception:
+            connection.close()
+            return None
+
+    def _revalidate(self, raw, prior, connection, deadline):
+        _check(deadline)
+        identity = connection.verify()
+        policy = _snapshot(self._policy_reader, ObservationPolicy)
+        _check(deadline)
+        context = _snapshot(self._context_reader, ObservationHostContext)
+        current = connection.verify()
+        identity_fields = ('principal_id', 'credential_id', 'connection_id', 'registry_revision')
+        if any(getattr(identity, f) != getattr(current, f) for f in identity_fields):
+            raise ValueError('Changed identity')
+        identity = current
+        now = self._clock()
+        if not prior.valid_from <= now < prior.valid_until:
+            raise ValueError('Expired binding')
+        result = bind_observation_request(raw, identity=identity, policy=policy,
+            host_context=context, now=now)
+        _check(deadline)
+        if result.status != 'BOUND':
+            raise ValueError('Access denied')
+        fields = ('request_digest', 'principal_id', 'credential_id', 'connection_id',
+            'registry_revision', 'deployment_id', 'store_instance_id', 'issuer_id',
+            'policy_revision', 'policy_digest', 'grant_id')
+        if any(getattr(prior, f) != getattr(result.binding, f) for f in fields):
+            raise ValueError('Changed binding')
+        return result.binding.model_copy(update={'valid_until': min(prior.valid_until, result.binding.valid_until)})

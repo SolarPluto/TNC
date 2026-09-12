@@ -1,5 +1,6 @@
 """Read-only synthetic authority recovery and observation; no authentication."""
 from contextlib import closing
+from dataclasses import dataclass
 from pathlib import Path
 import sqlite3
 
@@ -8,12 +9,20 @@ from tnc.provenance.reconciliation_models import ReconciliationEnvelope, Reconci
 from tnc.provenance.reconciliation_simulation import (
     AuthoritySimulationCommand, SyntheticAuthorityCaller, decode_simulation_record,
     simulate_authority, evaluate_client_observation,
+    SyntheticCurrentObservation, SyntheticAuthorityPolicy,
 )
 from tnc.provenance.reconciliation_durable_store import TestCheckpointAuthorityStore
 
 
 class AuthorityReadError(ValueError):
     """Fixed reasons without request contents or filesystem diagnostics."""
+
+
+@dataclass(frozen=True)
+class CurrentAuthoritySnapshot:
+    """Host-only test authority data, captured from one validated read transaction."""
+    observation: SyntheticCurrentObservation
+    policy: SyntheticAuthorityPolicy
 
 
 def _copy(value, kind):
@@ -29,7 +38,7 @@ class ReadOnlyAuthorityAdapter:
         self.path = Path(store_path).absolute()
         self._anchor = _copy(trusted_initial_envelope, ReconciliationEnvelope)
 
-    def _read(self, command, caller, now):
+    def _read(self, command, caller, now, *, include_snapshot=False):
         try:
             caller = _copy(caller, SyntheticAuthorityCaller)
             command = _copy(command, AuthoritySimulationCommand)
@@ -50,6 +59,8 @@ class ReadOnlyAuthorityAdapter:
                     if result.status == 'DENIED':
                         raise AuthorityReadError(result.reason_code)
                     if result.status == 'CURRENT':
+                        if include_snapshot:
+                            return CurrentAuthoritySnapshot(result.observation, state.policy)
                         return result.observation
                     if result.status != 'RECOVERED':
                         raise AuthorityReadError('INVALID_STATE')
@@ -83,6 +94,14 @@ class ReadOnlyAuthorityAdapter:
         except Exception:
             raise AuthorityReadError('INVALID_INPUT') from None
         return self._read(command,caller,now)
+
+    def observe_current_snapshot(self, challenge, *, caller, now):
+        """Return observation and policy from the same synthetic authority snapshot."""
+        try:
+            command = AuthoritySimulationCommand(action='OBSERVE_CURRENT', challenge=challenge)
+        except Exception:
+            raise AuthorityReadError('INVALID_INPUT') from None
+        return self._read(command, caller, now, include_snapshot=True)
 
     @staticmethod
     def evaluate_client_observation(observation, client_high_water, *, expected_challenge,
