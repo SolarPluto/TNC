@@ -63,11 +63,11 @@ class TestObservationBridge:
             raise ValueError('Host adapters required')
         self._transport, self._reader = transport, reader
 
-    def observe(self, connection, handoff):
+    def _observe(self, connection, handoff):
         denied = ObservationBridgeResult(status='DENIED', reason_code='ACCESS_DENIED')
         try:
             if type(connection) is not MtlsConnection or type(handoff) is not ObservationHandoff:
-                return denied
+                return denied, None
             raw, prior, deadline = handoff._take(self._transport, connection)
             live = self._transport._revalidate(raw, prior, connection, deadline)
             request = decode_v2_record(ObservationRequest, raw)
@@ -82,14 +82,29 @@ class TestObservationBridge:
             observation, policy = snapshot.observation, snapshot.policy
             if (observation.principal_id != request.principal_id or observation.challenge != request.challenge
                     or (policy.deployment_id, policy.store_instance_id) != (request.deployment_id, request.store_instance_id)):
-                return denied
+                return denied, None
             candidate = UnsignedObservationCandidate(request=request, request_digest=record_digest(request),
                 binding=final, envelope=observation.envelope, envelope_digest=record_digest(observation.envelope),
                 policy_revision=policy.revision, policy_digest=record_digest(policy), valid_from=final.valid_from,
                 valid_until=min(final.valid_until, observation.valid_until))
             if len(canonical_bytes(candidate)) > 131072:
-                return denied
+                return denied, None
             _check(deadline)
-            return ObservationBridgeResult(status='CANDIDATE', candidate=candidate)
+            return ObservationBridgeResult(status='CANDIDATE', candidate=candidate), deadline
         except Exception:
-            return denied
+            return denied, None
+
+    def observe(self, connection, handoff):
+        """Return an unsigned report; this report cannot authorize signing."""
+        return self._observe(connection, handoff)[0]
+
+    def prepare_signing(self, connection, handoff):
+        """Host-only test path. Preserve the consumed request's original deadline."""
+        from tnc.provenance.observation_signer_adapter import _mint_signing
+        result, deadline = self._observe(connection, handoff)
+        if result.status != 'CANDIDATE':
+            return None
+        try:
+            return _mint_signing(self, connection, result.candidate, deadline)
+        except Exception:
+            return None
