@@ -174,6 +174,44 @@ class MtlsConnection:
         self.verify()
         self._socket.sendall(data)
 
+    def send_before(self, data: bytes, deadline: float, *, expected_identity=None) -> None:
+        """Bound a small host response by one absolute monotonic deadline.
+
+        Handles partial writes and rechecks enrollment between them. One worker
+        per connection; callbacks remain cooperative, as with recv_before.
+        """
+        if type(data) is not bytes or not 0 < len(data) <= 32772:
+            raise ValueError('Invalid send bound')
+        if type(deadline) not in (int, float) or not math.isfinite(deadline):
+            raise ValueError('Invalid deadline')
+        if expected_identity is not None and type(expected_identity) is not VerifiedIdentity:
+            raise ValueError('Invalid identity')
+        pinned = expected_identity
+        previous = self._socket.gettimeout()
+        offset = 0
+        try:
+            while offset < len(data):
+                if monotonic() >= deadline:
+                    raise TimeoutError('Send deadline exceeded')
+                current = self.verify()
+                if pinned is None:
+                    pinned = current
+                elif any(getattr(current, field) != getattr(pinned, field)
+                        for field in ('principal_id', 'credential_id', 'connection_id', 'registry_revision')):
+                    raise AuthenticationError('Authentication failed')
+                remaining = deadline - monotonic()
+                if remaining <= 0:
+                    raise TimeoutError('Send deadline exceeded')
+                self._socket.settimeout(remaining if previous is None else min(previous, remaining))
+                sent = self._socket.send(data[offset:])
+                if sent <= 0:
+                    raise ConnectionError('Closed stream')
+                offset += sent
+                if monotonic() >= deadline:
+                    raise TimeoutError('Send deadline exceeded')
+        finally:
+            self._socket.settimeout(previous)
+
     def close(self):
         self._socket.close()
 
