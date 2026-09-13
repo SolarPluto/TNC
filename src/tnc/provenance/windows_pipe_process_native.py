@@ -171,3 +171,4 @@ class NativeProcessAPI:
         self._ensure_bound()
         if not self._CloseHandle(HANDLE(handle)):
             raise NativeProcessAPIError("CloseHandle", _last_error())
+        return True
