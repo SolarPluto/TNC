@@ -151,20 +151,24 @@ def test_native_adapter_close_contract_returns_true(native_env):
     assert len(kernel.CloseHandle.calls) == 1
 
 
-# The remaining test uses the already-reviewed disposable native pipe harness.
-pytestmark_native = pytest.mark.skipif(sys.platform != 'win32', reason='Native Windows process lease integration')
-
-
-def _native_client(control, info):
+def _native_client(control, name):
     import test_windows_pipe_process as pipe_test
     try:
-        api = pipe_native.NativePipeApi()
-        checks = pipe_test._NativeChecks(api)
-        handle, error = checks.open_client(info['name'])
+        process_api = process_native.NativeProcessAPI()
+        own = process_api.open_process(os.getpid(), process_native.PROCESS_LEASE_RIGHTS, False)
+        try:
+            birth = process_api.creation_filetime(own)
+        finally:
+            assert process_api.close(own) is True
+        pipe_test._send(control, kind='ready', pid=os.getpid(), birth=birth)
+        assert pipe_test._receive(control)['kind'] == 'open'
+        pipe_api = pipe_native.NativePipeApi()
+        checks = pipe_test._NativeChecks(pipe_api)
+        handle, error = checks.open_client(name)
         assert pipe_native._valid_handle(handle), error
-        pipe_test._send(control, kind='opened', pid=os.getpid(), birth=checks.birth(os.getpid()))
+        pipe_test._send(control, kind='opened')
         assert pipe_test._receive(control)['kind'] == 'close'
-        assert api.close(handle)
+        assert pipe_api.close(handle)
         pipe_test._send(control, kind='closed')
     finally:
         control.close()
@@ -184,8 +188,8 @@ def _native_server(control, name, expected):
             timestamp=1, expiry=2)
         baseline = checks.handles()
         endpoint = pipe_native.OwnedPipeEndpoint(policy=policy, api=pipe_api)
-        pipe_test._send(control, kind='ready')
         connect = endpoint.begin_connect(pipe_test._plan('CONNECT', 1))
+        pipe_test._send(control, kind='connecting')
         assert connect.wait_until(connect._plan.request_deadline)
         connect.dispose()
         tick = time.monotonic_ns() // 1_000_000
@@ -209,26 +213,18 @@ def test_real_named_pipe_process_lease_correlates_and_cleans_up():
     harness = pipe_test._Harness()
     try:
         name = r'\\.\pipe\TNC-native-lease-' + uuid.uuid4().hex
-        # Start the client first so its independently observed process instance can pin server policy.
-        parent, child = harness.ctx.Pipe()
-        client = harness.ctx.Process(target=_native_client, args=(child, {'name': name}))
-        # The client cannot open until the server exists; use its process object PID and a separate native query for birth.
-        client.start(); child.close(); harness.children.append((client, parent))
-        query = process_native.NativeProcessAPI()
-        handle = query.open_process(client.pid, process_native.PROCESS_LEASE_RIGHTS, False)
-        try:
-            expected = {'pid': client.pid, 'birth': query.creation_filetime(handle)}
-        finally:
-            assert query.close(handle) is True
+        client, client_control = harness.spawn(_native_client, name)
+        expected = pipe_test._receive(client_control)
+        assert expected['kind'] == 'ready' and expected['pid'] == client.pid
         server, server_control = harness.spawn(_native_server, name, expected)
-        assert pipe_test._receive(server_control)['kind'] == 'ready'
-        opened = pipe_test._receive(parent)
-        assert (opened['pid'], opened['birth']) == (expected['pid'], expected['birth'])
+        assert pipe_test._receive(server_control)['kind'] == 'connecting'
+        pipe_test._send(client_control, kind='open')
+        assert pipe_test._receive(client_control)['kind'] == 'opened'
         done = pipe_test._receive(server_control)
         assert done == {'kind': 'done', 'status': 'CORRELATED', 'source': 'NATIVE_PROCESS_API',
                         'authorized': False, 'delta': 0}
-        pipe_test._send(parent, kind='close')
-        assert pipe_test._receive(parent)['kind'] == 'closed'
+        pipe_test._send(client_control, kind='close')
+        assert pipe_test._receive(client_control)['kind'] == 'closed'
         harness.join(client)
         harness.join(server)
     finally:
