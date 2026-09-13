@@ -1,7 +1,8 @@
-"""Owned process-handle correlation with explicitly injected test APIs only.
+"""Owned process-handle correlation with isolated fake and native acquisition paths.
 
-No native bindings, token exclusion proof, grants, or signing. The fake result
-is audit evidence and cannot be promoted to a native identity assertion.
+The lease owns one retained process handle and applies the same bounded lifetime,
+PID, creation-time, pipe-PID, ownership, and cleanup checks to either backend.
+Results remain audit-only and never grant authorization, custody, or signing.
 """
 import os
 import threading
@@ -11,6 +12,7 @@ from pydantic import Field, model_validator
 from tnc.provenance.authorization_models import Model, Identifier
 from tnc.provenance.windows_custody_peer import Tick, _copy
 from tnc.provenance.windows_pipe_native import OwnedPipeEndpoint, _valid_handle
+from tnc.provenance.windows_pipe_process_native import NativeProcessAPI, NativeProcessAPIError
 
 PROCESS_RIGHTS = 0x00101000  # QUERY_LIMITED_INFORMATION | SYNCHRONIZE
 MAX_LEASES = 16
@@ -41,7 +43,7 @@ class ProcessLeasePlan(Model):
 class ProcessLeaseAudit(Model):
     status: Literal['CORRELATED', 'INDETERMINATE']
     reason: Identifier
-    source: Literal['FAKE_PROCESS_API'] = 'FAKE_PROCESS_API'
+    source: Literal['FAKE_PROCESS_API', 'NATIVE_PROCESS_API'] = 'FAKE_PROCESS_API'
     audit_only: Literal[True] = True
     authorization_granted: Literal[False] = False
 
@@ -51,7 +53,7 @@ class ProcessLeaseError(ValueError):
 
 
 class ProcessLeaseContainment(RuntimeError):
-    """Fake-worker shutdown required; unresolved ownership remains retained."""
+    """Worker shutdown required; unresolved native-style ownership remains retained."""
 
 
 class ProcessAPIForTesting:
@@ -66,7 +68,7 @@ class ProcessAPIForTesting:
 
 class OwnedProcessLease:
     def __init__(self):
-        raise TypeError('Use explicit test acquisition')
+        raise TypeError('Use an explicit acquisition entry point')
 
     def __reduce__(self):
         raise TypeError('Process leases cannot be serialized')
@@ -147,7 +149,7 @@ class OwnedProcessLease:
             status, reason = 'INDETERMINATE', 'PROCESS_CORRELATION_FAILED'
         finally:
             self._release()
-        return ProcessLeaseAudit(status=status, reason=reason)
+        return ProcessLeaseAudit(status=status, reason=reason, source=self._source)
 
     def abort(self):
         self._owner_check()
@@ -157,12 +159,10 @@ class OwnedProcessLease:
             raise ProcessLeaseError('LEASE_CONSUMED')
         self._consumed = True
         self._release()
-        return ProcessLeaseAudit(status='INDETERMINATE', reason='ABORTED')
+        return ProcessLeaseAudit(status='INDETERMINATE', reason='ABORTED', source=self._source)
 
 
-def acquire_process_lease_for_testing(endpoint, pin, plan, *, api, clock):
-    if type(endpoint) is not OwnedPipeEndpoint or not isinstance(api, ProcessAPIForTesting) or not callable(clock):
-        raise ProcessLeaseError('EXPLICIT_TEST_INPUTS_REQUIRED')
+def _prepare_lease(endpoint, pin, plan, *, api, clock, source):
     pin, plan = _copy(ProcessInstancePin, pin), _copy(ProcessLeasePlan, plan)
     endpoint._guard()
     expected = endpoint._policy.expected_process
@@ -172,7 +172,7 @@ def acquire_process_lease_for_testing(endpoint, pin, plan, *, api, clock):
         raise ProcessLeaseError('CONNECTED_IDLE_ENDPOINT_REQUIRED')
     lease = object.__new__(OwnedProcessLease)
     lease._endpoint, lease._api, lease._clock = endpoint, api, clock
-    lease._pin, lease._plan, lease._pipe = pin, plan, endpoint._handle
+    lease._pin, lease._plan, lease._pipe, lease._source = pin, plan, endpoint._handle, source
     lease._owner = (os.getpid(), threading.get_ident())
     lease._handle, lease._consumed, lease._fatal = None, False, False
     lease._last_tick = plan.created_tick
@@ -182,15 +182,30 @@ def acquire_process_lease_for_testing(endpoint, pin, plan, *, api, clock):
             raise ProcessLeaseError('LEASE_CAPACITY_OR_REUSE')
         endpoint._process_lease_claimed = endpoint._process_lease_active = True
         _LEASES[id(lease)] = lease  # Strong ownership registered before dispatch.
+    return lease
+
+
+def _drop_unopened(lease):
+    """Release registry ownership when native OpenProcess definitively returned no handle."""
+    lease._consumed = True
+    lease._endpoint._process_lease_active = False
+    with _LOCK:
+        _LEASES.pop(id(lease), None)
+
+
+def acquire_process_lease_for_testing(endpoint, pin, plan, *, api, clock):
+    if type(endpoint) is not OwnedPipeEndpoint or not isinstance(api, ProcessAPIForTesting) or not callable(clock):
+        raise ProcessLeaseError('EXPLICIT_TEST_INPUTS_REQUIRED')
+    lease = _prepare_lease(endpoint, pin, plan, api=api, clock=clock, source='FAKE_PROCESS_API')
     try:
         pid = lease._call(api.client_process_id, lease._pipe)
-        if type(pid) is not int or pid != pin.pid:
+        if type(pid) is not int or pid != lease._pin.pid:
             raise ProcessLeaseError('PIPE_PID_MISMATCH')
         lease._clock_check()
         try:
-            handle = api.open_process(pin.pid, PROCESS_RIGHTS, False)
+            handle = api.open_process(lease._pin.pid, PROCESS_RIGHTS, False)
         except BaseException:
-            # Dispatch raised: do not assume no allocation occurred or retry.
+            # A trusted injected callback can allocate and then raise; containment is required.
             lease._contain()
         lease._handle = handle  # Retain before clock checks or other callbacks.
         if handle is None or type(handle) is int and handle == 0:
@@ -207,3 +222,52 @@ def acquire_process_lease_for_testing(endpoint, pin, plan, *, api, clock):
         lease._consumed = True
         lease._release()
         raise ProcessLeaseError('PROCESS_ACQUISITION_FAILED') from None
+
+
+def acquire_process_lease_native(endpoint, pin, plan, *, api, clock):
+    """Acquire one real Windows process handle without promoting it to authorization.
+
+    The exact NativeProcessAPI type is required so caller-defined implementations
+    cannot label synthetic observations as native. OpenProcess failure is definitive
+    no-handle evidence; failures after a handle is retained are cleaned up through
+    the same bounded lease ownership path.
+    """
+    if type(endpoint) is not OwnedPipeEndpoint or type(api) is not NativeProcessAPI or not callable(clock):
+        raise ProcessLeaseError('EXPLICIT_NATIVE_INPUTS_REQUIRED')
+    lease = _prepare_lease(endpoint, pin, plan, api=api, clock=clock, source='NATIVE_PROCESS_API')
+    try:
+        try:
+            pid = lease._call(api.client_process_id, lease._pipe)
+        except NativeProcessAPIError:
+            lease._consumed = True
+            lease._release()
+            raise ProcessLeaseError('NATIVE_API_UNCERTAIN') from None
+        if type(pid) is not int or pid != lease._pin.pid:
+            raise ProcessLeaseError('PIPE_PID_MISMATCH')
+        lease._clock_check()
+        try:
+            handle = api.open_process(lease._pin.pid, PROCESS_RIGHTS, False)
+        except NativeProcessAPIError as error:
+            if error.operation == 'OpenProcess':
+                _drop_unopened(lease)
+                raise ProcessLeaseError('PROCESS_UNAVAILABLE') from None
+            lease._consumed = True
+            lease._release()
+            raise ProcessLeaseError('NATIVE_API_UNCERTAIN') from None
+        lease._handle = handle  # Native handle is owned before any further callback.
+        if not _valid_handle(handle):
+            lease._contain()
+        lease._clock_check()
+        try:
+            lease._check()
+        except NativeProcessAPIError:
+            lease._consumed = True
+            lease._release()
+            raise ProcessLeaseError('NATIVE_API_UNCERTAIN') from None
+        return lease
+    except (ProcessLeaseContainment, ProcessLeaseError):
+        raise
+    except BaseException:
+        lease._consumed = True
+        lease._release()
+        raise ProcessLeaseError('NATIVE_API_UNCERTAIN') from None
