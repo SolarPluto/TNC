@@ -265,9 +265,15 @@ def acquire_process_lease_native(endpoint, pin, plan, *, api, clock):
             lease._release()
             raise ProcessLeaseError('NATIVE_API_UNCERTAIN') from None
         return lease
-    except (ProcessLeaseContainment, ProcessLeaseError):
+    except ProcessLeaseContainment:
+        raise
+    except ProcessLeaseError:
+        if not lease._consumed:
+            lease._consumed = True
+            lease._release()
         raise
     except BaseException:
-        lease._consumed = True
-        lease._release()
+        if not lease._consumed:
+            lease._consumed = True
+            lease._release()
         raise ProcessLeaseError('NATIVE_API_UNCERTAIN') from None
