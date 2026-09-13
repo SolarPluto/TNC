@@ -110,25 +110,32 @@ def _copy(kind,value):
     return decode_canonical(kind,raw)
 
 
+def _identity_mismatch(policy, *, scope, observed_at, process, token, security, now):
+    """Shared field comparisons on already reconstructed records; no provenance claim."""
+    if not policy.timestamp<=observed_at<=now<policy.expiry:return 'TIME_MISMATCH'
+    if scope!=(policy.deployment_id,policy.store_instance_id,policy.pipe_name):return 'SCOPE_MISMATCH'
+    expected=(PipeACE(sid=policy.service_sid,mask=SERVICE_RIGHTS),PipeACE(sid=policy.client_sid,mask=CLIENT_RIGHTS))
+    if security.owner_sid!=policy.service_sid or not security.protected_dacl or security.aces!=expected:
+        return 'DESCRIPTOR_MISMATCH'
+    if process!=policy.expected_process:return 'PROCESS_LIFETIME_MISMATCH'
+    if (token.user_sid!=policy.client_sid or token.logon_sid!=policy.logon_sid
+            or token.authentication_id!=policy.authentication_id
+            or token.session_id!=policy.expected_process.session_id or not token.logon_enabled):
+        return 'TOKEN_IDENTITY_MISMATCH'
+    return None
+
+
 def evaluate_windows_peer(policy,observation,*,now):
     """Audit comparison only. Synthetic observations are not authorization tokens."""
     try:
         policy=_copy(WindowsPeerPolicy,policy);observation=_copy(WindowsPeerObservation,observation)
         if type(now) is not int or not 0<=now<=2**63-1:raise ValueError('Exact time required')
         def deny(reason):return WindowsPeerResult(status='VIOLATIONS',reason=reason)
-        if not policy.timestamp<=observation.observed_at<=now<policy.expiry:return deny('TIME_MISMATCH')
-        if (observation.deployment_id,observation.store_instance_id,observation.pipe_name)!=(
-                policy.deployment_id,policy.store_instance_id,policy.pipe_name):return deny('SCOPE_MISMATCH')
-        security=observation.security
-        expected=(PipeACE(sid=policy.service_sid,mask=SERVICE_RIGHTS),PipeACE(sid=policy.client_sid,mask=CLIENT_RIGHTS))
-        if security.owner_sid!=policy.service_sid or not security.protected_dacl or security.aces!=expected:
-            return deny('DESCRIPTOR_MISMATCH')
-        if observation.process!=policy.expected_process:return deny('PROCESS_LIFETIME_MISMATCH')
+        reason=_identity_mismatch(policy,scope=(observation.deployment_id,observation.store_instance_id,observation.pipe_name),
+            observed_at=observation.observed_at,process=observation.process,token=observation.token,
+            security=observation.security,now=now)
+        if reason:return deny(reason)
         token=observation.token
-        if (token.user_sid!=policy.client_sid or token.logon_sid!=policy.logon_sid
-                or token.authentication_id!=policy.authentication_id
-                or token.session_id!=policy.expected_process.session_id or not token.logon_enabled):
-            return deny('TOKEN_IDENTITY_MISMATCH')
         if token.token_type!='IMPERSONATION' or token.level!='IDENTIFICATION' or token.restricted or token.app_container:
             return deny('TOKEN_PROFILE_DENIED')
         return WindowsPeerResult(status='CONFORMS',reason='MATCHED',observation=observation)
