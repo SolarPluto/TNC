@@ -446,3 +446,17 @@ def test_fake_capture_has_no_external_side_effects(env, monkeypatch):
     for name in ('builtins.open', 'socket.socket', 'sqlite3.connect', 'time.time', 'time.monotonic_ns', 'os._exit'):
         monkeypatch.setattr(name, forbidden)
     assert inspect(env).status == 'CAPTURED'
+
+
+@pytest.mark.parametrize('length', [1, 2, 3, 5])
+def test_restriction_flag_native_return_lengths(env, length):
+    fake = env[2]
+    original = fake.GetTokenInformation
+    def information(handle, kind, buffer, capacity, returned):
+        ok = original(handle, kind, buffer, capacity, returned)
+        if kind == t.HAS_RESTRICTIONS and ok:
+            c.cast(returned, c.POINTER(t.DWORD)).contents.value = length
+        return ok
+    fake.GetTokenInformation = information
+    result = inspect(env)
+    assert result.status == ('CAPTURED' if length == 1 else 'INDETERMINATE')

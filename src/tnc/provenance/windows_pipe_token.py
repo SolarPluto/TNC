@@ -259,7 +259,13 @@ class NativePipeTokenAPI:
         if not integrity.startswith('S-1-16-') or len(integrity.split('-')) != 4 or not attributes & 0x20:
             raise TokenCaptureError('INTEGRITY_LABEL')
         session = self._fixed(token, SESSION, DWORD, budget, check).value
-        filtered = self._fixed(token, HAS_RESTRICTIONS, DWORD, budget, check).value
+        # Windows can report a one-byte return length for this documented DWORD
+        # class. Keep a DWORD allocation; accept only the explicit 1/4-byte forms.
+        flag_buffer = budget.allocate(c.sizeof(DWORD))
+        ok, _, length = self._query(token, HAS_RESTRICTIONS, flag_buffer, c.sizeof(DWORD), check)
+        if not ok or length not in (1, 4):
+            raise TokenCaptureError('RESTRICTION_FLAG_LENGTH')
+        filtered = int.from_bytes(bytes(flag_buffer[:length]), 'little')
         app = self._fixed(token, APP_CONTAINER, DWORD, budget, check).value
         if filtered not in (0, 1) or app not in (0, 1):
             raise TokenCaptureError('BOOLEAN_SCALAR')

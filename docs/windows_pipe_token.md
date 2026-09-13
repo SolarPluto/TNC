@@ -2,8 +2,8 @@
 
 This milestone adds `windows_pipe_token.py` and fake-injected tests. It does not
 authorize peers, invoke signing, create workers, or connect native token capture
-to a production endpoint. The explicit ctypes path still requires disposable
-native-process acceptance tests before integration.
+to a production endpoint. The explicit ctypes path is now exercised by the separately documented
+disposable native-process tests; policy integration remains pending.
 
 ## Ownership and capture
 
@@ -86,3 +86,5 @@ authentication, revised pure policy mapping, and live grant checks remain separa
 milestones. No signing, key custody, persistence, or application payload parsing is
 introduced. Same-account and privileged compromise remain outside this adapter's
 protection.
+
+Native follow-up: see [disposable token-process tests](windows_pipe_native_token.md) for tested paths, the bounded restriction-flag ABI correction, and remaining identity coverage limits.
