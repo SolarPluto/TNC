@@ -277,6 +277,8 @@ class OwnedPipeEndpoint:
 
     def close(self):
         self._guard()
+        if getattr(self, '_process_lease_active', False):
+            raise PipeAdapterError('PROCESS_LEASE_ACTIVE')
         if self._active is not None:
             raise PipeAdapterError('OPERATION_NOT_DISPOSED')
         try:
