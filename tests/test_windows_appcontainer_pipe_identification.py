@@ -65,7 +65,7 @@ def _no_temporal_guard():
     """
 
 
-def test_named_pipe_identification_token_appcontainer_diagnostic():
+def test_named_pipe_identification_token_appcontainer_diagnostic(request):
     k = _kernel32()
     name = rf'\\.\pipe\tnc-appcontainer-ident-{os.getpid()}-{uuid.uuid4().hex}'
     server = k.CreateNamedPipeW(
@@ -157,6 +157,21 @@ def test_named_pipe_identification_token_appcontainer_diagnostic():
         else:
             assert result.status == 'UNPROVEN'
             assert result.reason == 'IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN'
+
+        # Bypass pytest capture only for this audit observation so ordinary
+        # `pytest -q` CI preserves the exact Windows evidence shape in its log.
+        capture = request.config.pluginmanager.getplugin('capturemanager')
+        assert capture is not None
+        with capture.global_and_fixture_disabled():
+            print(
+                'TNC_APPCONTAINER_IDENTIFICATION_OBSERVATION '
+                f'is_appcontainer={evidence.token_is_app_container!r} '
+                f'appcontainer_sid={evidence.app_container_sid!r} '
+                f'capability_count={len(evidence.capability_sids)} '
+                f'status={result.status} reason={result.reason}',
+                flush=True,
+            )
+
         assert not result.authorization_granted
         assert not result.admission_granted
     finally:
