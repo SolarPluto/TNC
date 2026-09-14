@@ -146,6 +146,8 @@ def test_named_pipe_identification_token_appcontainer_diagnostic(request):
 
         # Emit before assertions so both green and red runs preserve the exact
         # Windows evidence shape. This bypasses pytest capture only for this line.
+        # capability_count is audit-only at IDENTIFICATION level: zero does not
+        # distinguish genuine absence from information not populated at this level.
         capture = request.config.pluginmanager.getplugin('capturemanager')
         assert capture is not None
         with capture.global_and_fixture_disabled():
