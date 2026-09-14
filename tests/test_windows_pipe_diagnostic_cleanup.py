@@ -1,6 +1,10 @@
 """Failure injection for diagnostic token cleanup; never impersonates a client."""
 from contextlib import ExitStack
 import ctypes as c
+import os
+from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
@@ -69,3 +73,40 @@ def test_revert_failure_requires_containment_without_retry(result):
         with ExitStack() as cleanup:
             cleanup.callback(harness._revert_or_fail_fast, api)
     assert api.calls == [('revert',), ('fail_fast',)]
+
+
+@pytest.mark.skipif(os.name != 'nt', reason='Real Windows native fail_fast path')
+@pytest.mark.parametrize('raises', [False, True])
+def test_native_fail_fast_terminates_child_without_unwinding(tmp_path, raises):
+    # Only revert is injected. Keep the real NativePipeTokenAPI.fail_fast and
+    # os._exit; no actual impersonation or natural OS revert failure is induced.
+    tests_directory = str(Path(__file__).resolve().parent)
+    script = f'''
+import atexit
+from pathlib import Path
+import sys
+sys.path.insert(0, {tests_directory!r})
+import test_windows_appcontainer_pipe_positive_control as harness
+from tnc.provenance.windows_pipe_token import NativePipeTokenAPI
+api = NativePipeTokenAPI()
+assert api._fake is False
+def failed_revert():
+    if {raises!r}:
+        raise RuntimeError('injected revert exception')
+    return False
+api.revert = failed_revert
+atexit.register(lambda: Path('atexit').write_text('unexpected'))
+Path('started').write_text('native fail_fast selected')
+try:
+    harness._revert_or_fail_fast(api)
+finally:
+    Path('unwound').write_text('unexpected')
+Path('continued').write_text('unexpected')
+'''
+    result = subprocess.run(
+        [sys.executable, '-c', script], cwd=tmp_path,
+        capture_output=True, text=True, timeout=15,
+    )
+    assert (tmp_path / 'started').exists(), result.stdout + result.stderr
+    assert result.returncode == 78, result.stdout + result.stderr
+    assert not any((tmp_path / name).exists() for name in ('unwound', 'continued', 'atexit'))

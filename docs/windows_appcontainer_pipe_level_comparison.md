@@ -131,9 +131,23 @@ effective access is their intersection. The local timeout itself did not record
 a kernel access-check trace, so this is the documented explanation consistent
 with the narrowed user-plus-package ACL succeeding, not a traced diagnosis.
 
-Final local cleanup/diagnostic validation: **15 passed in 5.17s**. This includes
+Initial local cleanup/diagnostic validation: **15 passed in 5.17s**. This includes
 six injected failure cases covering close False/exception, preservation of an
 original failure, and revert False/exception without retry, plus all three live
 pipe diagnostics and the observation tests. Evidence shapes were unchanged.
 These edits have not received hosted validation and do not inherit b069984's
 earlier hosted green result.
+
+The original six injected cases use a fake API whose fail_fast raises a sentinel.
+They establish dispatch/callback behavior, not real process termination.
+Two later Windows subprocess cases now inject revert False/exception while
+keeping the real NativePipeTokenAPI.fail_fast and os._exit implementation. Each
+child selects the native API and writes a startup marker; the parent requires
+exit code 78 and absence of finally, continuation, and atexit markers.
+No actual impersonation or naturally occurring RevertToSelf failure is induced.
+This establishes local process termination without Python unwinding for those
+two injected paths, not recovery or coverage of every abort mode.
+
+Latest local cleanup/diagnostic validation: **17 passed in 3.30s**, with unchanged
+live evidence shapes. The two additional cases are the subprocess tests above.
+Hosted validation remains outstanding.

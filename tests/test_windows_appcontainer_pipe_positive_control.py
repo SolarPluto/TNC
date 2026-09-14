@@ -335,7 +335,13 @@ def _checked_cleanup(function, *args):
 
 
 def _revert_or_fail_fast(api):
-    """Do not let pytest continue in an unconfirmed thread security context."""
+    """Do not let pytest continue in an unconfirmed thread security context.
+
+    Native fail_fast uses os._exit(78): this terminates the test runner without
+    unwinding, further cleanup callbacks, or a guaranteed pytest summary. That
+    terminal outcome is intentional; an ordinary test failure could leave the
+    thread running subsequent tests in the client's security context.
+    """
     try:
         reverted = api.revert()
     except BaseException:
