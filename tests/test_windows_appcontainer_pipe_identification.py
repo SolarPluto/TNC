@@ -12,6 +12,8 @@ import uuid
 
 import pytest
 
+import test_windows_appcontainer_pipe_positive_control as harness
+
 from tnc.provenance.windows_appcontainer_evidence import evaluate_appcontainer_exclusion
 from tnc.provenance.windows_appcontainer_probe import NativeAppContainerProbe
 from tnc.provenance.windows_pipe_token import NativePipeTokenAPI
@@ -180,7 +182,7 @@ def test_named_pipe_identification_token_appcontainer_diagnostic(emit_observatio
                 assert api.close(token)
         finally:
             if impersonated:
-                assert api.revert()
+                harness._revert_or_fail_fast(api)
         release_client.set()
         assert client_done.wait(10)
         thread.join(timeout=1)
