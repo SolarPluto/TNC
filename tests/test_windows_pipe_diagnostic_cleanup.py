@@ -80,6 +80,8 @@ def test_revert_failure_requires_containment_without_retry(result):
 def test_native_fail_fast_terminates_child_without_unwinding(tmp_path, raises):
     # Only revert is injected. Keep the real NativePipeTokenAPI.fail_fast and
     # os._exit; no actual impersonation or natural OS revert failure is induced.
+    # Requires tnc importable in bare sys.executable (installed by uv sync or
+    # supplied on PYTHONPATH), independently of pytest's test-path insertion.
     tests_directory = str(Path(__file__).resolve().parent)
     script = f'''
 import atexit

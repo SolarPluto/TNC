@@ -151,3 +151,11 @@ two injected paths, not recovery or coverage of every abort mode.
 Latest local cleanup/diagnostic validation: **17 passed in 3.30s**, with unchanged
 live evidence shapes. The two additional cases are the subprocess tests above.
 Hosted validation remains outstanding.
+
+The helper documents why BaseException deliberately includes interrupts during
+revert, and why the post-fail_fast assertion is a defensive unreachable guard for
+the supplied implementations. Subprocess tests explicitly require tnc importable
+by a bare sys.executable, independently of pytest's test-path insertion.
+After these comment-only clarifications, the focused cleanup suite was rerun:
+**8 passed in 0.96s**, including both original-exception preservation cases and
+both direct-close failure cases. No behavior changed in this clarification.

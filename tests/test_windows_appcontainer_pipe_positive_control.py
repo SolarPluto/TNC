@@ -341,6 +341,10 @@ def _revert_or_fail_fast(api):
     unwinding, further cleanup callbacks, or a guaranteed pytest summary. That
     terminal outcome is intentional; an ordinary test failure could leave the
     thread running subsequent tests in the client's security context.
+
+    Catch BaseException deliberately: KeyboardInterrupt or SystemExit raised
+    during revert must also abort with exit 78 rather than unwind while the
+    thread security context is unconfirmed.
     """
     try:
         reverted = api.revert()
@@ -349,6 +353,8 @@ def _revert_or_fail_fast(api):
         raise
     if not reverted:
         api.fail_fast()
+        # Defensive guard only: both the native and supplied fake fail_fast
+        # implementations are non-returning.
         raise AssertionError('fail_fast unexpectedly returned')
 
 
