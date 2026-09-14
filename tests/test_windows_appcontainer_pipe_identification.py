@@ -145,20 +145,19 @@ def test_named_pipe_identification_token_appcontainer_diagnostic(request):
         result = evaluate_appcontainer_exclusion(evidence)
 
         # Emit before assertions so both green and red runs preserve the exact
-        # Windows evidence shape. This bypasses pytest capture only for this line.
+        # Windows evidence shape. Use pytest's own terminal abstraction rather
+        # than raw stdout, which can be invalid on hosted Windows under capture.
         # capability_count is audit-only at IDENTIFICATION level: zero does not
         # distinguish genuine absence from information not populated at this level.
-        capture = request.config.pluginmanager.getplugin('capturemanager')
-        assert capture is not None
-        with capture.global_and_fixture_disabled():
-            print(
-                'TNC_APPCONTAINER_IDENTIFICATION_OBSERVATION '
-                f'is_appcontainer={evidence.token_is_app_container!r} '
-                f'appcontainer_sid={evidence.app_container_sid!r} '
-                f'capability_count={len(evidence.capability_sids)} '
-                f'status={result.status} reason={result.reason}',
-                flush=True,
-            )
+        reporter = request.config.pluginmanager.getplugin('terminalreporter')
+        assert reporter is not None
+        reporter.write_line(
+            'TNC_APPCONTAINER_IDENTIFICATION_OBSERVATION '
+            f'is_appcontainer={evidence.token_is_app_container!r} '
+            f'appcontainer_sid={evidence.app_container_sid!r} '
+            f'capability_count={len(evidence.capability_sids)} '
+            f'status={result.status} reason={result.reason}'
+        )
 
         # Identification-level evidence is one-sided: a positive AppContainer
         # signal may deny, but negative/absent signals must never become proven
