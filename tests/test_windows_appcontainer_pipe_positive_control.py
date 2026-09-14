@@ -364,6 +364,8 @@ def test_appcontainer_client_identification_token_positive_control(emit_observat
         capabilities = SECURITY_CAPABILITIES(
             AppContainerSid=app_sid,
             Capabilities=None,
+            # The launched control genuinely has no requested capabilities;
+            # an empty identification observation alone cannot establish that.
             CapabilityCount=0,
             Reserved=0,
         )
