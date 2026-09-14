@@ -9,6 +9,8 @@ path.
 import base64
 import ctypes as c
 import os
+import sys
+import time
 import uuid
 
 import pytest
@@ -27,11 +29,17 @@ SIZE_T = c.c_size_t
 INVALID_HANDLE_VALUE = c.c_void_p(-1).value
 ERROR_INSUFFICIENT_BUFFER = 122
 ERROR_PIPE_CONNECTED = 535
+ERROR_IO_PENDING = 997
+ERROR_NOT_FOUND = 1168
 WAIT_OBJECT_0 = 0
+IO_TIMEOUT_MS = 30_000
+CANCEL_TIMEOUT_MS = 5_000
 
 PIPE_ACCESS_DUPLEX = 0x00000003
+FILE_FLAG_OVERLAPPED = 0x40000000
 PIPE_REJECT_REMOTE_CLIENTS = 0x00000008
 TOKEN_QUERY = 0x0008
+TOKEN_USER = 1
 TOKEN_IS_APPCONTAINER = 29
 TOKEN_APPCONTAINER_SID = 31
 SECURITY_DESCRIPTOR_REVISION = 1
@@ -39,6 +47,19 @@ PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES = 0x00020009
 EXTENDED_STARTUPINFO_PRESENT = 0x00080000
 CREATE_SUSPENDED = 0x00000004
 CREATE_NO_WINDOW = 0x08000000
+
+
+class OVERLAPPED(c.Structure):
+    _fields_ = [
+        ('Internal', SIZE_T), ('InternalHigh', SIZE_T),
+        ('Offset', DWORD), ('OffsetHigh', DWORD), ('hEvent', HANDLE),
+    ]
+
+
+# If cancellation itself stalls, retain native storage until process teardown.
+# CancelIoEx requests cancellation; it does not make OVERLAPPED/buffers safe to
+# release. Leaking on this exceptional failure is safer than use-after-free.
+_undrained_io = []
 
 
 class SECURITY_ATTRIBUTES(c.Structure):
@@ -105,12 +126,22 @@ def _kernel32():
     k = c.WinDLL('kernel32.dll', use_last_error=True, winmode=0x800)
     k.CreateNamedPipeW.argtypes = [c.c_wchar_p, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, c.POINTER(SECURITY_ATTRIBUTES)]
     k.CreateNamedPipeW.restype = HANDLE
+    k.CreateFileW.argtypes = [c.c_wchar_p, DWORD, DWORD, c.c_void_p, DWORD, DWORD, HANDLE]
+    k.CreateFileW.restype = HANDLE
     k.ConnectNamedPipe.argtypes = [HANDLE, c.c_void_p]
     k.ConnectNamedPipe.restype = BOOL
     k.DisconnectNamedPipe.argtypes = [HANDLE]
     k.DisconnectNamedPipe.restype = BOOL
     k.ReadFile.argtypes = [HANDLE, c.c_void_p, DWORD, c.POINTER(DWORD), c.c_void_p]
     k.ReadFile.restype = BOOL
+    k.WriteFile.argtypes = k.ReadFile.argtypes
+    k.WriteFile.restype = BOOL
+    k.CreateEventW.argtypes = [c.c_void_p, BOOL, BOOL, c.c_wchar_p]
+    k.CreateEventW.restype = HANDLE
+    k.GetOverlappedResult.argtypes = [HANDLE, c.POINTER(OVERLAPPED), c.POINTER(DWORD), BOOL]
+    k.GetOverlappedResult.restype = BOOL
+    k.CancelIoEx.argtypes = [HANDLE, c.POINTER(OVERLAPPED)]
+    k.CancelIoEx.restype = BOOL
     k.CloseHandle.argtypes = [HANDLE]
     k.CloseHandle.restype = BOOL
     k.LocalFree.argtypes = [c.c_void_p]
@@ -134,7 +165,60 @@ def _kernel32():
     k.TerminateProcess.restype = BOOL
     k.GetExitCodeProcess.argtypes = [HANDLE, c.POINTER(DWORD)]
     k.GetExitCodeProcess.restype = BOOL
+    k.GetCurrentProcess.argtypes = []
+    k.GetCurrentProcess.restype = HANDLE
     return k
+
+
+def _pipe_io(k, server, operation, buffer=None, *, timeout_ms=IO_TIMEOUT_MS):
+    """Complete one pipe operation, with bounded waiting and cancellation."""
+    overlapped = OVERLAPPED()
+    overlapped.hEvent = k.CreateEventW(None, True, False, None)
+    assert overlapped.hEvent, c.get_last_error()
+    transferred = DWORD()
+    pending = False
+    try:
+        if operation == 'connect':
+            ok = k.ConnectNamedPipe(server, c.byref(overlapped))
+        else:
+            function = {'read': k.ReadFile, 'write': k.WriteFile}[operation]
+            ok = function(server, buffer, 1, c.byref(transferred), c.byref(overlapped))
+        if not ok:
+            error = c.get_last_error()
+            if operation == 'connect' and error == ERROR_PIPE_CONNECTED:
+                return 0
+            assert error == ERROR_IO_PENDING, f'pipe {operation}: WinError {error}'
+            pending = True
+            wait = k.WaitForSingleObject(overlapped.hEvent, timeout_ms)
+            assert wait == WAIT_OBJECT_0, (
+                f'pipe {operation} did not complete within {timeout_ms}ms; wait={wait:#x}'
+            )
+            pending = False
+        assert k.GetOverlappedResult(server, c.byref(overlapped), c.byref(transferred), False), (
+            f'pipe {operation} completion: WinError {c.get_last_error()}'
+        )
+        return transferred.value
+    finally:
+        if pending:
+            cancelled = k.CancelIoEx(server, c.byref(overlapped))
+            error = c.get_last_error()
+            drained = k.WaitForSingleObject(overlapped.hEvent, CANCEL_TIMEOUT_MS) == WAIT_OBJECT_0
+            if not drained:
+                _undrained_io.append((overlapped, buffer, transferred))
+            failure = sys.exception()
+            if failure is not None and (not drained or (not cancelled and error != ERROR_NOT_FOUND)):
+                failure.add_note(f'pipe cancellation: cancelled={bool(cancelled)}, error={error}, drained={drained}')
+            if not drained:
+                # Keep the event and buffers alive while the OS may still use them.
+                overlapped = None
+        if overlapped is not None:
+            if not k.CloseHandle(overlapped.hEvent):
+                message = f'CloseHandle pipe event: WinError {c.get_last_error()}'
+                failure = sys.exception()
+                if failure is not None:
+                    failure.add_note(message)
+                else:
+                    pytest.fail(message)
 
 
 def _advapi32():
@@ -194,9 +278,27 @@ def _raw_primary_oracle(advapi, kernel32, token, expected_sid):
     assert _sid_string(advapi, kernel32, info.TokenAppContainer) == expected_sid
 
 
-def _pipe_security(advapi, appcontainer_sid):
+def _current_user_sid(advapi, kernel32):
+    token = HANDLE()
+    assert advapi.OpenProcessToken(kernel32.GetCurrentProcess(), TOKEN_QUERY, c.byref(token)), c.get_last_error()
+    try:
+        size = DWORD()
+        assert not advapi.GetTokenInformation(token, TOKEN_USER, None, 0, c.byref(size))
+        assert c.get_last_error() == ERROR_INSUFFICIENT_BUFFER
+        buffer = c.create_string_buffer(size.value)
+        assert advapi.GetTokenInformation(token, TOKEN_USER, buffer, size.value, c.byref(size)), c.get_last_error()
+        # TOKEN_USER starts with SID_AND_ATTRIBUTES, whose first member is PSID.
+        return _sid_string(advapi, kernel32, c.c_void_p.from_buffer(buffer))
+    finally:
+        assert kernel32.CloseHandle(token), c.get_last_error()
+
+
+def _pipe_security(advapi, appcontainer_sid, user_sid):
     descriptor = c.c_void_p()
-    sddl = f'D:(A;;GA;;;WD)(A;;GA;;;{appcontainer_sid})S:(ML;;NW;;;LW)'
+    # AppContainer checks both the user and package principals. Package-only
+    # access failed the real-client handshake; narrow World to the launching
+    # user instead. No other local user or package is granted an ACE.
+    sddl = f'D:(A;;GRGW;;;{user_sid})(A;;GRGW;;;{appcontainer_sid})S:(ML;;NW;;;LW)'
     assert advapi.ConvertStringSecurityDescriptorToSecurityDescriptorW(
         sddl, SECURITY_DESCRIPTOR_REVISION, c.byref(descriptor), None
     ), c.get_last_error()
@@ -209,9 +311,10 @@ def _pipe_security(advapi, appcontainer_sid):
 
 def _no_temporal_guard():
     """Test-only bypass; production PipeTokenInspector still enforces deadlines."""
+    return None
 
 
-def test_appcontainer_client_identification_token_positive_control(request):
+def test_appcontainer_client_identification_token_positive_control(emit_observation):
     k = _kernel32()
     advapi = _advapi32()
     userenv = _userenv()
@@ -236,12 +339,12 @@ def test_appcontainer_client_identification_token_positive_control(request):
         profile_created = True
         expected_sid = _sid_string(advapi, k, app_sid)
 
-        descriptor, security_attributes = _pipe_security(advapi, expected_sid)
+        descriptor, security_attributes = _pipe_security(advapi, expected_sid, _current_user_sid(advapi, k))
         pipe_component = f'tnc-appcontainer-positive-{os.getpid()}-{uuid.uuid4().hex}'
         pipe_name = rf'\\.\pipe\{pipe_component}'
         server = k.CreateNamedPipeW(
             pipe_name,
-            PIPE_ACCESS_DUPLEX,
+            PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
             PIPE_REJECT_REMOTE_CLIENTS,
             1,
             4096,
@@ -255,8 +358,8 @@ def test_appcontainer_client_identification_token_positive_control(request):
         assert not k.InitializeProcThreadAttributeList(None, 1, 0, c.byref(size))
         assert c.get_last_error() == ERROR_INSUFFICIENT_BUFFER
         attr_buffer = c.create_string_buffer(size.value)
+        assert k.InitializeProcThreadAttributeList(attr_buffer, 1, 0, c.byref(size)), c.get_last_error()
         attr_list = c.cast(attr_buffer, c.c_void_p)
-        assert k.InitializeProcThreadAttributeList(attr_list, 1, 0, c.byref(size)), c.get_last_error()
 
         capabilities = SECURITY_CAPABILITIES(
             AppContainerSid=app_sid,
@@ -276,11 +379,13 @@ def test_appcontainer_client_identification_token_positive_control(request):
 
         powershell = os.path.join(os.environ['SystemRoot'], 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe')
         script = (
-            "$p=[System.IO.Pipes.NamedPipeClientStream]::new('.', '"
+            "$ErrorActionPreference='Stop';$p=[System.IO.Pipes.NamedPipeClientStream]::new('.', '"
             + pipe_component
             + "', [System.IO.Pipes.PipeDirection]::InOut, [System.IO.Pipes.PipeOptions]::None, "
               "[System.Security.Principal.TokenImpersonationLevel]::Identification);"
-              "$p.Connect(5000);$p.WriteByte(88);$p.Flush();Start-Sleep -Seconds 3;$p.Dispose()"
+              "try {$p.Connect(30000);$p.WriteByte(88);$p.Flush();"
+              "if ($p.ReadByte() -ne 89) {throw 'Missing server completion byte'}}"
+              "finally {$p.Dispose()}"
         )
         encoded = base64.b64encode(script.encode('utf-16le')).decode('ascii')
         command_line = c.create_unicode_buffer(
@@ -321,14 +426,15 @@ def test_appcontainer_client_identification_token_positive_control(request):
         assert not primary_result.admission_granted
 
         assert k.ResumeThread(pi.hThread) != 0xFFFFFFFF, c.get_last_error()
-        connected = bool(k.ConnectNamedPipe(server, None))
-        if not connected:
-            assert c.get_last_error() == ERROR_PIPE_CONNECTED
-
         byte = c.create_string_buffer(1)
-        read = DWORD()
-        assert k.ReadFile(server, byte, 1, c.byref(read), None), c.get_last_error()
-        assert read.value == 1 and byte.raw == b'X'
+        try:
+            _pipe_io(k, server, 'connect')
+            assert _pipe_io(k, server, 'read', byte) == 1 and byte.raw == b'X'
+        except AssertionError as failure:
+            exit_code = DWORD()
+            if k.GetExitCodeProcess(pi.hProcess, c.byref(exit_code)):
+                failure.add_note(f'PRIMARY oracle/control passed; pipe handshake failed; child exit code={exit_code.value} (259=still active)')
+            raise
 
         assert api.open_thread_token() is None
         assert api.impersonate(server)
@@ -346,9 +452,7 @@ def test_appcontainer_client_identification_token_positive_control(request):
         )
         identification_result = evaluate_appcontainer_exclusion(identification_evidence)
 
-        reporter = request.config.pluginmanager.getplugin('terminalreporter')
-        assert reporter is not None
-        reporter.write_line(
+        emit_observation(
             'TNC_APPCONTAINER_MATCHED_PAIR_POSITIVE_OBSERVATION '
             f'oracle_is_appcontainer=True oracle_sid={expected_sid!r} '
             f'is_appcontainer={identification_evidence.token_is_app_container!r} '
@@ -363,29 +467,41 @@ def test_appcontainer_client_identification_token_positive_control(request):
         assert identification_result.status != 'PROVEN_NON_APPCONTAINER'
         assert not identification_result.authorization_granted
         assert not identification_result.admission_granted
+        assert api.close(pipe_token)
+        pipe_token = None
+        assert api.revert()
+        impersonated = False
+        # The child stays connected until probing and safety checks are done.
+        assert _pipe_io(k, server, 'write', c.create_string_buffer(b'Y')) == 1
+        assert k.WaitForSingleObject(pi.hProcess, IO_TIMEOUT_MS) == WAIT_OBJECT_0, 'client did not exit after completion'
+        exit_code = DWORD()
+        assert k.GetExitCodeProcess(pi.hProcess, c.byref(exit_code)), c.get_last_error()
+        assert exit_code.value == 0, f'client exit code={exit_code.value}'
     finally:
-        try:
-            if pipe_token is not None:
-                assert api.close(pipe_token)
-        finally:
-            if impersonated:
-                assert api.revert()
+        failure = sys.exception()
+        cleanup_errors = []
+
+        def check(ok, label):
+            if not ok:
+                cleanup_errors.append(f'{label}: WinError {c.get_last_error()}')
+
+        if pipe_token is not None:
+            check(api.close(pipe_token), 'close pipe token')
+        if impersonated:
+            check(api.revert(), 'revert impersonation')
 
         if primary_token.value:
-            k.CloseHandle(primary_token)
+            check(k.CloseHandle(primary_token), 'CloseHandle primary token')
         if server not in (None, 0, INVALID_HANDLE_VALUE):
             k.DisconnectNamedPipe(server)
-            k.CloseHandle(server)
+            check(k.CloseHandle(server), 'CloseHandle server')
         if pi.hProcess:
             if k.WaitForSingleObject(pi.hProcess, 5000) != WAIT_OBJECT_0:
-                k.TerminateProcess(pi.hProcess, 1)
-                assert k.WaitForSingleObject(pi.hProcess, 5000) == WAIT_OBJECT_0
-            exit_code = DWORD()
-            assert k.GetExitCodeProcess(pi.hProcess, c.byref(exit_code))
-            assert exit_code.value == 0
-            k.CloseHandle(pi.hProcess)
+                check(k.TerminateProcess(pi.hProcess, 1), 'TerminateProcess')
+                check(k.WaitForSingleObject(pi.hProcess, 5000) == WAIT_OBJECT_0, 'wait for terminated client')
+            check(k.CloseHandle(pi.hProcess), 'CloseHandle process')
         if pi.hThread:
-            k.CloseHandle(pi.hThread)
+            check(k.CloseHandle(pi.hThread), 'CloseHandle thread')
         if attr_list:
             k.DeleteProcThreadAttributeList(attr_list)
         if descriptor:
@@ -394,6 +510,72 @@ def test_appcontainer_client_identification_token_positive_control(request):
             advapi.FreeSid(app_sid)
         if profile_created:
             hr = int(userenv.DeleteAppContainerProfile(profile_name))
-            assert hr == 0, f'DeleteAppContainerProfile HRESULT 0x{hr & 0xffffffff:08x}'
+            if hr != 0:
+                cleanup_errors.append(f'DeleteAppContainerProfile HRESULT 0x{hr & 0xffffffff:08x}')
+        if cleanup_errors:
+            message = '; '.join(cleanup_errors)
+            if failure is not None:
+                failure.add_note(message)
+            else:
+                pytest.fail(message)
 
     assert api.open_thread_token() is None
+
+
+@pytest.fixture
+def local_pipe():
+    """Real disposable pipe for failure-path checks, without AppContainer setup."""
+    k = _kernel32()
+    name = rf'\\.\pipe\tnc-overlapped-{uuid.uuid4().hex}'
+    server = k.CreateNamedPipeW(
+        name, PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
+        PIPE_REJECT_REMOTE_CLIENTS, 1, 4096, 4096, 0, None,
+    )
+    assert server not in (None, 0, INVALID_HANDLE_VALUE), c.get_last_error()
+    clients = []
+
+    def connect():
+        client = k.CreateFileW(name, 0xC0000000, 0, None, 3, 0, None)
+        assert client not in (None, 0, INVALID_HANDLE_VALUE), c.get_last_error()
+        clients.append(client)
+        return client
+
+    try:
+        yield k, server, connect
+    finally:
+        for client in clients:
+            assert k.CloseHandle(client), c.get_last_error()
+        assert k.CloseHandle(server), c.get_last_error()
+
+
+@pytest.mark.parametrize('operation', ['connect', 'read'])
+def test_pipe_io_stalled_peer_is_bounded(local_pipe, operation):
+    k, server, connect = local_pipe
+    if operation == 'read':
+        client = connect()
+        _pipe_io(k, server, 'connect')
+    retained = len(_undrained_io)
+    started = time.monotonic()
+    with pytest.raises(AssertionError, match=f'pipe {operation} did not complete within 50ms'):
+        _pipe_io(k, server, operation, c.create_string_buffer(1), timeout_ms=50)
+    assert time.monotonic() - started < 6
+    assert len(_undrained_io) == retained, 'cancelled I/O failed to drain'
+    if operation == 'read':
+        # A cancelled read must not consume data sent to the next operation.
+        written = DWORD()
+        assert k.WriteFile(client, c.create_string_buffer(b'X'), 1, c.byref(written), None)
+        byte = c.create_string_buffer(1)
+        assert _pipe_io(k, server, 'read', byte) == 1 and byte.raw == b'X'
+
+
+def test_pipe_io_connected_peer_round_trip(local_pipe):
+    k, server, connect = local_pipe
+    client = connect()  # Exercise ERROR_PIPE_CONNECTED before ConnectNamedPipe.
+    _pipe_io(k, server, 'connect')
+    transferred = DWORD()
+    assert k.WriteFile(client, c.create_string_buffer(b'X'), 1, c.byref(transferred), None)
+    byte = c.create_string_buffer(1)
+    assert _pipe_io(k, server, 'read', byte) == 1 and byte.raw == b'X'
+    assert _pipe_io(k, server, 'write', c.create_string_buffer(b'Y')) == 1
+    assert k.ReadFile(client, byte, 1, c.byref(transferred), None)
+    assert transferred.value == 1 and byte.raw == b'Y'

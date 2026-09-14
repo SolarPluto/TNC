@@ -63,9 +63,10 @@ def _no_temporal_guard():
     Windows token semantics; residual impersonation is checked independently after
     cleanup. Do not use this bypass on production paths.
     """
+    return None
 
 
-def test_named_pipe_identification_token_appcontainer_diagnostic(request):
+def test_named_pipe_identification_token_appcontainer_diagnostic(emit_observation):
     k = _kernel32()
     name = rf'\\.\pipe\tnc-appcontainer-ident-{os.getpid()}-{uuid.uuid4().hex}'
     server = k.CreateNamedPipeW(
@@ -149,9 +150,7 @@ def test_named_pipe_identification_token_appcontainer_diagnostic(request):
         # than raw stdout, which can be invalid on hosted Windows under capture.
         # capability_count is audit-only at IDENTIFICATION level: zero does not
         # distinguish genuine absence from information not populated at this level.
-        reporter = request.config.pluginmanager.getplugin('terminalreporter')
-        assert reporter is not None
-        reporter.write_line(
+        emit_observation(
             'TNC_APPCONTAINER_IDENTIFICATION_OBSERVATION '
             f'is_appcontainer={evidence.token_is_app_container!r} '
             f'appcontainer_sid={evidence.app_container_sid!r} '
