@@ -55,6 +55,16 @@ def _kernel32():
     return k
 
 
+def _no_temporal_guard():
+    """Test-only bypass for production deadline checks inside NativePipeTokenAPI.capture.
+
+    Production PipeTokenInspector supplies an enforcing callback that checks the
+    deadline/clock before and after each native query. This diagnostic isolates
+    Windows token semantics; residual impersonation is checked independently after
+    cleanup. Do not use this bypass on production paths.
+    """
+
+
 def test_named_pipe_identification_token_appcontainer_diagnostic():
     k = _kernel32()
     name = rf'\\.\pipe\tnc-appcontainer-ident-{os.getpid()}-{uuid.uuid4().hex}'
@@ -123,31 +133,39 @@ def test_named_pipe_identification_token_appcontainer_diagnostic():
         assert token is not None
 
         # Independently verify Windows minted the exact profile under study.
-        facts = api.capture(token, lambda: None)
+        facts = api.capture(token, _no_temporal_guard)
         assert facts.token_type == 'IMPERSONATION'
         assert facts.level == 'IDENTIFICATION'
 
         evidence = NativeAppContainerProbe().probe(
             token,
-            token_type='IMPERSONATION',
-            level='IDENTIFICATION',
+            token_type=facts.token_type,
+            level=facts.level,
         )
         result = evaluate_appcontainer_exclusion(evidence)
 
-        # Even if classes 29/30/31 are fully queryable and internally consistent,
-        # Microsoft guidance forbids converting TokenIsAppContainer==0 on an
-        # identification-level impersonation token into exclusion proof.
-        assert result.status in {'UNPROVEN', 'APPCONTAINER', 'INDETERMINATE'}
-        if evidence.token_is_app_container is False and evidence.app_container_sid is None:
+        # Identification-level evidence is one-sided: a positive AppContainer
+        # signal may deny, but negative/absent signals must never become proven
+        # exclusion. Freeze each exact branch so an ambiguous state cannot drift.
+        assert result.status != 'PROVEN_NON_APPCONTAINER'
+        if evidence.token_is_app_container:
+            assert result.status == 'APPCONTAINER'
+            assert result.reason == 'TOKEN_IS_APPCONTAINER'
+        elif evidence.app_container_sid is not None:
+            assert result.status == 'INDETERMINATE'
+            assert result.reason == 'APPCONTAINER_SIGNAL_CONFLICT'
+        else:
             assert result.status == 'UNPROVEN'
             assert result.reason == 'IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN'
         assert not result.authorization_granted
         assert not result.admission_granted
     finally:
-        if token is not None:
-            assert api.close(token)
-        if impersonated:
-            assert api.revert()
+        try:
+            if token is not None:
+                assert api.close(token)
+        finally:
+            if impersonated:
+                assert api.revert()
         release_client.set()
         assert client_done.wait(10)
         thread.join(timeout=1)
