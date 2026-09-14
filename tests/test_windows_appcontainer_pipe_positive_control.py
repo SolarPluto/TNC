@@ -7,6 +7,7 @@ at identification level. Neither observation is an admission or authorization
 path.
 """
 import base64
+from contextlib import ExitStack
 import ctypes as c
 import os
 import sys
@@ -202,6 +203,8 @@ def _pipe_io(k, server, operation, buffer=None, *, timeout_ms=IO_TIMEOUT_MS):
         if pending:
             cancelled = k.CancelIoEx(server, c.byref(overlapped))
             error = c.get_last_error()
+            # ERROR_NOT_FOUND is benign when cancellation raced completion;
+            # still wait for the event before releasing native storage.
             drained = k.WaitForSingleObject(overlapped.hEvent, CANCEL_TIMEOUT_MS) == WAIT_OBJECT_0
             if not drained:
                 _undrained_io.append((overlapped, buffer, transferred))
@@ -288,6 +291,7 @@ def _current_user_sid(advapi, kernel32):
         buffer = c.create_string_buffer(size.value)
         assert advapi.GetTokenInformation(token, TOKEN_USER, buffer, size.value, c.byref(size)), c.get_last_error()
         # TOKEN_USER starts with SID_AND_ATTRIBUTES, whose first member is PSID.
+        # Read only that native pointer, avoiding a duplicate struct layout.
         return _sid_string(advapi, kernel32, c.c_void_p.from_buffer(buffer))
     finally:
         assert kernel32.CloseHandle(token), c.get_last_error()
@@ -314,6 +318,34 @@ def _no_temporal_guard():
     return None
 
 
+def _checked_cleanup(function, *args):
+    try:
+        ok = function(*args)
+    except Exception as error:
+        message = f'{function!r} cleanup raised: {error!r}'
+    else:
+        if ok:
+            return
+        message = f'{function!r} cleanup failed: WinError {c.get_last_error()}'
+    failure = sys.exception()
+    if failure is not None:
+        failure.add_note(message)
+    else:
+        pytest.fail(message)
+
+
+def _revert_or_fail_fast(api):
+    """Do not let pytest continue in an unconfirmed thread security context."""
+    try:
+        reverted = api.revert()
+    except BaseException:
+        api.fail_fast()
+        raise
+    if not reverted:
+        api.fail_fast()
+        raise AssertionError('fail_fast unexpectedly returned')
+
+
 def test_appcontainer_client_identification_token_positive_control(emit_observation):
     k = _kernel32()
     advapi = _advapi32()
@@ -327,8 +359,7 @@ def test_appcontainer_client_identification_token_positive_control(emit_observat
     primary_token = HANDLE()
     pi = PROCESS_INFORMATION()
     api = NativePipeTokenAPI()
-    pipe_token = None
-    impersonated = False
+    token_cleanup = ExitStack()
     profile_created = False
 
     try:
@@ -440,9 +471,10 @@ def test_appcontainer_client_identification_token_positive_control(emit_observat
 
         assert api.open_thread_token() is None
         assert api.impersonate(server)
-        impersonated = True
+        token_cleanup.callback(_revert_or_fail_fast, api)
         pipe_token = api.open_thread_token()
         assert pipe_token is not None
+        token_cleanup.callback(_checked_cleanup, api.close, pipe_token)
         facts = api.capture(pipe_token, _no_temporal_guard)
         assert facts.token_type == 'IMPERSONATION'
         assert facts.level == 'IDENTIFICATION'
@@ -469,10 +501,9 @@ def test_appcontainer_client_identification_token_positive_control(emit_observat
         assert identification_result.status != 'PROVEN_NON_APPCONTAINER'
         assert not identification_result.authorization_granted
         assert not identification_result.admission_granted
-        assert api.close(pipe_token)
-        pipe_token = None
-        assert api.revert()
-        impersonated = False
+        # ExitStack consumes each callback before calling it. A failing close
+        # still triggers reversion and cannot be retried by the outer finally.
+        token_cleanup.close()
         # The child stays connected until probing and safety checks are done.
         assert _pipe_io(k, server, 'write', c.create_string_buffer(b'Y')) == 1
         assert k.WaitForSingleObject(pi.hProcess, IO_TIMEOUT_MS) == WAIT_OBJECT_0, 'client did not exit after completion'
@@ -487,10 +518,7 @@ def test_appcontainer_client_identification_token_positive_control(emit_observat
             if not ok:
                 cleanup_errors.append(f'{label}: WinError {c.get_last_error()}')
 
-        if pipe_token is not None:
-            check(api.close(pipe_token), 'close pipe token')
-        if impersonated:
-            check(api.revert(), 'revert impersonation')
+        token_cleanup.close()
 
         if primary_token.value:
             check(k.CloseHandle(primary_token), 'CloseHandle primary token')

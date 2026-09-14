@@ -1,8 +1,11 @@
-"""Same ordinary process, two pipe SQOS levels, independently anchored first."""
+"""Same ordinary process, two pipe SQOS levels, independently anchored first.
+
+Both endpoints belong to this process: this is self-impersonation, not evidence
+of equivalence with an external-process pipe client.
+"""
 from contextlib import ExitStack
 import ctypes as c
 import os
-import sys
 import uuid
 
 import pytest
@@ -18,14 +21,7 @@ SECURITY_SQOS_PRESENT = 0x00100000
 PIPE_LEVELS = [('IDENTIFICATION', 0x00010000), ('IMPERSONATION', 0x00020000)]
 
 
-def _checked_cleanup(function, *args):
-    if not function(*args):
-        message = f'{function!r} cleanup failed: WinError {c.get_last_error()}'
-        failure = sys.exception()
-        if failure is not None:
-            failure.add_note(message)
-        else:
-            pytest.fail(message)
+_checked_cleanup = harness._checked_cleanup
 
 
 def _raw_ordinary_primary_oracle(advapi, token):
@@ -37,6 +33,11 @@ def _raw_ordinary_primary_oracle(advapi, token):
     ), c.get_last_error()
     assert returned.value == c.sizeof(flag)
     assert flag.value == 0, 'PRIMARY oracle: this runner is not an ordinary client'
+    # This oracle requires class 31 to succeed with a pointer-sized structure
+    # containing NULL for the ordinary token, as observed locally. A build that
+    # rejects this query or returns another size fails oracle setup here, before
+    # either pipe observation; that is not an exclusion-classifier result.
+    # sizeof(info) follows pointer width and is not hard-coded to eight bytes.
     info = harness.TOKEN_APPCONTAINER_INFORMATION()
     assert advapi.GetTokenInformation(
         token, harness.TOKEN_APPCONTAINER_SID, c.byref(info), c.sizeof(info), c.byref(returned)
@@ -90,7 +91,7 @@ def test_same_ordinary_client_at_both_pipe_levels(emit_observation):
 
                 with ExitStack() as token_cleanup:
                     assert api.impersonate(server)
-                    token_cleanup.callback(_checked_cleanup, api.revert)
+                    token_cleanup.callback(harness._revert_or_fail_fast, api)
                     token = api.open_thread_token()
                     assert token is not None
                     token_cleanup.callback(_checked_cleanup, api.close, token)
@@ -112,6 +113,9 @@ def test_same_ordinary_client_at_both_pipe_levels(emit_observation):
                     assert result.audit_only
                     assert not result.authorization_granted
                     assert not result.admission_granted
+                    # Keep the independent safety invariant as an immediate
+                    # failure, before the next connection. Exact experimental
+                    # expectations remain below, after both measurements.
                     if level == 'IDENTIFICATION':
                         assert result.status != 'PROVEN_NON_APPCONTAINER'
                     observations.append((level, evidence, result))

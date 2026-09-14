@@ -13,12 +13,25 @@ Verify the client PID, captured user SID, token type, and actual level. Keep eac
 connection alive through probing and a bounded completion-byte exchange. Reuse
 PR #8's bounded overlapped I/O and shared observation reporting.
 
+Both endpoints belong to the current process, so this is self-impersonation.
+It does not establish external-process client equivalence. PR #7 also uses a
+same-process client, in a separate thread; PR #8 launches an external AppContainer
+process. The ordinary PRIMARY oracle additionally requires class 31 to return a
+pointer-sized structure containing a null SID. If a different build rejects the
+query or returns another size, the test fails oracle setup before measuring
+either pipe token. The observed local success is not a portability guarantee.
+
 Record each evidence shape before asserting safety. Both results must remain
 audit-only and grant neither admission nor authorization. IDENTIFICATION must
 never produce exclusion proof. After both observations, check the precommitted
 expectations: negative flag/null SID at both levels, UNPROVEN at IDENTIFICATION,
 and PROVEN_NON_APPCONTAINER at IMPERSONATION. Capability count is recorded, not
 used to decide either branch.
+
+Safety assertions intentionally remain immediate: an actual safety failure at
+the first level stops the experiment. The promise to retain both observations
+before checking expectations applies to the final branch-expectation assertions,
+not to failures of setup, measurement, or the independent safety invariants.
 
 - Failure of the raw PRIMARY oracle means the ordinary-client premise was not
   established. Setup, PID/user/level, or handshake failures are harness failures.
@@ -37,7 +50,9 @@ used to decide either branch.
 
 The existing evaluator also permits exclusion for consistent negative PRIMARY
 and DELEGATION evidence. Those branches and the IMPERSONATION branch already have
-unit coverage; this experiment closes a native ordinary-pipe coverage gap.
+synthetic-evidence unit coverage: the tests construct evidence records rather
+than showing Windows produces those records. That is not equivalent to live
+coverage. This experiment closes a native ordinary-pipe coverage gap.
 No production policy or admission behavior changes. Excluding AppContainer is
 one property of a peer, not proof that the peer is safe or trusted.
 
@@ -72,4 +87,53 @@ Both observations were recorded and all independent safety assertions passed.
 The measured flag/SID/capability shape stayed the same; the verified level changed
 the classifier's treatment of negative evidence. This supports native branch
 reachability locally, not a claim that the level changed the flag's information.
-Hosted Server 2025 validation remains pending.
+This establishes exclusion-branch reachability for an ordinary client at
+IMPERSONATION on one local host. It does not establish negative reliability
+across builds, SKUs, restricted/filtered/low-integrity token variants, or safety
+for downstream trust decisions. The local output did not record a build number.
+Hosted Server 2025 validation has not run for this follow-up.
+
+The live evaluator-result matrix is:
+
+| Client / level | Evidence category and scope |
+| --- | --- |
+| Ordinary / IDENTIFICATION | Live negative, UNPROVEN; PR #7 hosted and this follow-up local |
+| AppContainer / IDENTIFICATION | Live positive, APPCONTAINER; PR #8 hosted |
+| AppContainer / PRIMARY | Live positive, APPCONTAINER mechanism control; PR #8 hosted |
+| Ordinary / IMPERSONATION | Live negative, PROVEN_NON_APPCONTAINER; this follow-up local only |
+| Ordinary / PRIMARY exclusion | No dedicated live negative evaluator control in this experiment |
+| Either polarity / DELEGATION | No live control in these experiments |
+
+The new raw PRIMARY oracle did observe a live negative flag/null SID, but it does
+not call the TNC probe or evaluator. It must not be counted as a live
+PRIMARY-negative exclusion result. The existing native PRIMARY smoke test accepts
+several statuses and does not establish that specific result either.
+
+## Cleanup review follow-up
+
+NativePipeTokenAPI.close and revert are stateless wrappers over CloseHandle and
+RevertToSelf; neither tracks consumed handles. The positive harness now registers
+token cleanup in ExitStack so a failed close cannot be retried by the outer
+finally. Close failure still runs reversion. False returns and ordinary exceptions
+from close fail normal cleanup or become notes on an existing assertion.
+
+All three pipe diagnostics now use a shared revert-or-fail-fast callback. A false
+return or exception invokes the existing NativePipeTokenAPI.fail_fast mechanism,
+which exits the native process with code 78. There is no retry or normal pytest
+continuation in an unconfirmed client context. Microsoft specifically recommends
+process shutdown after failed [RevertToSelf](https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-reverttoself).
+This fatal path takes precedence over ordinary cleanup/summary guarantees.
+
+The package-only DACL failure is consistent with Microsoft's documented
+[dual-principal access model](https://learn.microsoft.com/en-us/windows/win32/secauthz/implementing-an-appcontainer#appcontainer-overview):
+both the user/group portion and the AppContainer portion must grant access;
+effective access is their intersection. The local timeout itself did not record
+a kernel access-check trace, so this is the documented explanation consistent
+with the narrowed user-plus-package ACL succeeding, not a traced diagnosis.
+
+Final local cleanup/diagnostic validation: **15 passed in 5.17s**. This includes
+six injected failure cases covering close False/exception, preservation of an
+original failure, and revert False/exception without retry, plus all three live
+pipe diagnostics and the observation tests. Evidence shapes were unchanged.
+These edits have not received hosted validation and do not inherit b069984's
+earlier hosted green result.
