@@ -1,10 +1,8 @@
 """Pure AppContainer evidence classification for Windows token observations.
 
-This module performs no native calls and grants no admission. It records the
-security meaning of already-captured token facts so native probes can be added
-without silently changing policy. Identification-level impersonation with a
-zero TokenIsAppContainer result remains explicitly unproven, per Microsoft
-GetTokenInformation guidance.
+This module performs no native calls and grants no admission. The normative
+truth table, empirical anchors, unverified rows, and audit/classification signal
+boundary are documented in ``docs/TNC_AppContainer_Evidence_Model.md``.
 """
 from typing import Literal
 
