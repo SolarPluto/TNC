@@ -8,7 +8,7 @@ import sys
 
 import pytest
 
-import test_windows_appcontainer_pipe_positive_control as harness
+import _native_harness as harness
 
 
 class Containment(BaseException):
@@ -88,7 +88,7 @@ import atexit
 from pathlib import Path
 import sys
 sys.path.insert(0, {tests_directory!r})
-import test_windows_appcontainer_pipe_positive_control as harness
+import _native_harness as harness
 from tnc.provenance.windows_pipe_token import NativePipeTokenAPI
 api = NativePipeTokenAPI()
 assert api._fake is False
