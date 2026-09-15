@@ -7,14 +7,13 @@ that experimental answer is carried only by the emitted observation payload.
 import base64
 from contextlib import ExitStack
 import ctypes as c
-import importlib.util
 import os
-from pathlib import Path
 import sys
 import uuid
 
 import pytest
 
+import _native_harness as h
 from tnc.provenance.windows_appcontainer_evidence import evaluate_appcontainer_exclusion
 from tnc.provenance.windows_appcontainer_probe import NativeAppContainerProbe
 from tnc.provenance.windows_pipe_token import NativePipeTokenAPI
@@ -24,19 +23,6 @@ pytestmark = pytest.mark.skipif(os.name != 'nt', reason='Windows AppContainer ca
 
 INTERNET_CLIENT_SID = 'S-1-15-3-1'
 SE_GROUP_ENABLED = 0x00000004
-
-
-def _load_hardened_harness():
-    """Reuse the PR #8 pipe/lifetime harness without copying its native plumbing."""
-    path = Path(__file__).with_name('test_windows_appcontainer_pipe_positive_control.py')
-    spec = importlib.util.spec_from_file_location('_tnc_appcontainer_positive_harness', path)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-h = _load_hardened_harness()
 
 
 class SID_AND_ATTRIBUTES(c.Structure):

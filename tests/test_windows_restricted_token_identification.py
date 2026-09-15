@@ -10,14 +10,13 @@ from sibling test modules into tests/_native_harness.py and update this import.
 import base64
 from contextlib import ExitStack
 import ctypes as c
-import importlib.util
 import os
-from pathlib import Path
 import sys
 import uuid
 
 import pytest
 
+import _native_harness as h
 from tnc.provenance.windows_appcontainer_evidence import evaluate_appcontainer_exclusion
 from tnc.provenance.windows_appcontainer_probe import NativeAppContainerProbe
 from tnc.provenance.windows_pipe_token import NativePipeTokenAPI
@@ -34,18 +33,6 @@ DISABLE_MAX_PRIVILEGE = 0x00000001
 SE_PRIVILEGE_ENABLED = 0x00000002
 ERROR_PRIVILEGE_NOT_HELD = 1314
 SE_CHANGE_NOTIFY_NAME = 'SeChangeNotifyPrivilege'
-
-
-def _load_hardened_harness():
-    path = Path(__file__).with_name('test_windows_appcontainer_pipe_positive_control.py')
-    spec = importlib.util.spec_from_file_location('_tnc_appcontainer_positive_harness', path)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-h = _load_hardened_harness()
 
 
 class LUID(c.Structure):
