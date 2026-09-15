@@ -9,6 +9,12 @@ from tnc.provenance.windows_appcontainer_evidence import (
 )
 
 
+OBSERVED_APPCONTAINER_PROFILE_SID = (
+    'S-1-15-2-1907653899-2990589184-3036783457-1989655661-2059118350-1516424849-3209279269'
+)
+OBSERVED_INTERNET_CLIENT_CAPABILITY_SID = 'S-1-15-3-1'
+
+
 def evidence(**update):
     data = dict(
         source='NATIVE_TOKEN_API',
@@ -27,6 +33,83 @@ def _declared_impersonation_levels():
 
 
 IMPERSONATION_LEVELS = _declared_impersonation_levels()
+
+
+@pytest.mark.parametrize(
+    ('record', 'expected_status', 'expected_reason'),
+    [
+        pytest.param(
+            dict(
+                token_type='PRIMARY',
+                level=None,
+                token_is_app_container=False,
+                app_container_sid=None,
+                capability_sids=(),
+            ),
+            'PROVEN_NON_APPCONTAINER',
+            'TOKEN_IS_APPCONTAINER_FALSE_USABLE',
+            id='observed-primary-negative-pr12',
+        ),
+        pytest.param(
+            dict(
+                token_type='IMPERSONATION',
+                level='IDENTIFICATION',
+                token_is_app_container=False,
+                app_container_sid=None,
+                capability_sids=(),
+            ),
+            'UNPROVEN',
+            'IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN',
+            id='observed-identification-negative-pr7-pr12',
+        ),
+        pytest.param(
+            dict(
+                token_type='IMPERSONATION',
+                level='IMPERSONATION',
+                token_is_app_container=False,
+                app_container_sid=None,
+                capability_sids=(),
+            ),
+            'PROVEN_NON_APPCONTAINER',
+            'TOKEN_IS_APPCONTAINER_FALSE_USABLE',
+            id='observed-impersonation-negative-pr9',
+        ),
+        pytest.param(
+            dict(
+                token_type='IMPERSONATION',
+                level='IDENTIFICATION',
+                token_is_app_container=True,
+                app_container_sid=OBSERVED_APPCONTAINER_PROFILE_SID,
+                capability_sids=(),
+            ),
+            'APPCONTAINER',
+            'TOKEN_IS_APPCONTAINER',
+            id='observed-appcontainer-empty-capabilities-pr8',
+        ),
+        pytest.param(
+            dict(
+                token_type='IMPERSONATION',
+                level='IDENTIFICATION',
+                token_is_app_container=True,
+                app_container_sid=OBSERVED_APPCONTAINER_PROFILE_SID,
+                capability_sids=(OBSERVED_INTERNET_CLIENT_CAPABILITY_SID,),
+            ),
+            'APPCONTAINER',
+            'TOKEN_IS_APPCONTAINER',
+            id='observed-appcontainer-capability-bearing-pr11',
+        ),
+    ],
+)
+def test_observed_status_reason_pairs_are_pinned(record, expected_status, expected_reason):
+    evidence_record = AppContainerTokenEvidence(
+        source='NATIVE_TOKEN_API',
+        **record,
+    )
+    result = evaluate_appcontainer_exclusion(evidence_record)
+    assert (result.status, result.reason) == (expected_status, expected_reason)
+    assert result.audit_only
+    assert not result.authorization_granted
+    assert not result.admission_granted
 
 
 def test_identification_level_zero_remains_unproven():
