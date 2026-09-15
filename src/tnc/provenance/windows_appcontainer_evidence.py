@@ -68,7 +68,9 @@ def evaluate_appcontainer_exclusion(evidence):
             # trusted here fails closed by default, including future enum values.
             if evidence.level == 'IDENTIFICATION':
                 return result('UNPROVEN', 'IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN')
-            return result('UNPROVEN', 'UNVERIFIED_IMPERSONATION_LEVEL_EXCLUSION_UNPROVEN')
+            if evidence.level == 'DELEGATION':
+                return result('UNPROVEN', 'DELEGATION_LEVEL_EXCLUSION_UNPROVEN')
+            return result('UNPROVEN', 'UNVERIFIED_LEVEL_EXCLUSION_UNPROVEN')
 
         # Capability observations remain recorded for audit. They do not negate
         # the documented TokenIsAppContainer result and are not themselves used
