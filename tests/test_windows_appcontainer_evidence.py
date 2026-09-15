@@ -46,6 +46,12 @@ def test_every_untrusted_impersonation_level_zero_fails_closed(level):
     assert not result.authorization_granted and not result.admission_granted
 
 
+def test_delegation_level_zero_has_level_specific_unproven_reason():
+    result = evaluate_appcontainer_exclusion(evidence(level='DELEGATION'))
+    assert result.status == 'UNPROVEN'
+    assert result.reason == 'DELEGATION_LEVEL_EXCLUSION_UNPROVEN'
+
+
 def test_impersonation_level_zero_remains_trusted_boundary():
     result = evaluate_appcontainer_exclusion(evidence(level='IMPERSONATION'))
     assert result.status == 'PROVEN_NON_APPCONTAINER'
