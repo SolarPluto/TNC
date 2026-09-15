@@ -21,23 +21,25 @@ See [Classification signals vs. audit signals](#classification-signals-vs-audit-
 | IMPERSONATION | IDENTIFICATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Observed** — PR #8 and PR #11 |
 | IMPERSONATION | IMPERSONATION | `False` | `None` | `PROVEN_NON_APPCONTAINER` | `TOKEN_IS_APPCONTAINER_FALSE_USABLE` | **Observed** — PR #9, including hosted Windows Server 2025 replication |
 | IMPERSONATION | IMPERSONATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** — current evaluator would classify this way because a positive flag is checked first |
-| IMPERSONATION | DELEGATION | `False` | `None` | `PROVEN_NON_APPCONTAINER` | `TOKEN_IS_APPCONTAINER_FALSE_USABLE` | **Assumed usable by current evaluator; unverified on Windows** |
+| IMPERSONATION | DELEGATION | `False` | `None` | `UNPROVEN` | `DELEGATION_LEVEL_EXCLUSION_UNPROVEN` | **Fail-closed default; unverified on Windows** |
 | IMPERSONATION | DELEGATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** |
 | any valid token | any valid level | `False` | non-null | `INDETERMINATE` | `APPCONTAINER_SIGNAL_CONFLICT` | **Defensive evaluator behavior; synthetically exercised, not empirically observed from Windows** |
 | any valid token | any valid level | `True` | `None` | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** — current evaluator treats the positive flag as sufficient denial evidence even without class-31 SID material |
 | invalid evidence record | n/a | n/a | n/a | `INDETERMINATE` | `INVALID_APPCONTAINER_EVIDENCE` | Synthetic validation/error path; not a Windows token shape |
 
-### Important boundary: DELEGATION remains an assumption
+### Trusted impersonation levels are explicit
 
-The current evaluator special-cases only identification-level impersonation. Therefore a
-negative AppContainer flag on `IMPERSONATION` or `DELEGATION` falls through to
-`PROVEN_NON_APPCONTAINER`. PR #9 directly observed the IMPERSONATION row on Windows Server
-2025, so that row is empirically anchored. DELEGATION has not been observed and must remain
-labeled **assumed usable, unverified** until either Windows documentation is cited for that
-boundary or a native experiment anchors the row.
+Negative evidence on an impersonation token is trusted only at levels explicitly named by the
+evaluator. Today `IMPERSONATION` is the sole trusted impersonation level, anchored by PR #9.
+`IDENTIFICATION` is documented by Windows and observed by PR #7/#12 as unusable for exclusion.
+`DELEGATION` has not been empirically anchored, so it now fails closed as `UNPROVEN` rather
+than inheriting a permissive fall-through.
 
-The specification must not infer DELEGATION coverage merely because the implementation has a
-`DELEGATION` literal in its type signature.
+This polarity is deliberate: adding a future value to the `level` enum does not make negative
+evidence usable merely because the new value exists. A new level must consciously opt in to
+the trusted set after documentation or native evidence supports doing so. The safe default is
+`UNPROVEN`. Known levels use level-specific reason codes; a future unrecognized enum value
+falls back to `UNVERIFIED_LEVEL_EXCLUSION_UNPROVEN` until it is explicitly classified.
 
 ## Classification signals vs. audit signals
 

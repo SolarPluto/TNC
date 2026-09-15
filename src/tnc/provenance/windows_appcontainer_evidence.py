@@ -43,9 +43,9 @@ class AppContainerExclusionResult(Model):
 def evaluate_appcontainer_exclusion(evidence):
     """Classify AppContainer evidence without granting peer admission.
 
-    TokenIsAppContainer=0 is sufficient only when the queried token is not an
-    identification-level impersonation token. AppContainer SID/capability facts
-    are treated as consistency signals here, not as an independent allow path.
+    TokenIsAppContainer=0 is sufficient only for PRIMARY tokens and explicitly
+    trusted impersonation levels. AppContainer SID/capability facts are treated
+    as consistency signals here, not as an independent allow path.
     """
     def result(status, reason):
         return AppContainerExclusionResult(status=status, reason=reason)
@@ -63,11 +63,14 @@ def evaluate_appcontainer_exclusion(evidence):
         if evidence.app_container_sid is not None:
             return result('INDETERMINATE', 'APPCONTAINER_SIGNAL_CONFLICT')
 
-        # Microsoft explicitly warns that a zero TokenIsAppContainer result on
-        # an identification-level impersonation token must not be treated as a
-        # successful non-AppContainer determination.
-        if evidence.token_type == 'IMPERSONATION' and evidence.level == 'IDENTIFICATION':
-            return result('UNPROVEN', 'IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN')
+        if evidence.token_type == 'IMPERSONATION' and evidence.level != 'IMPERSONATION':
+            # Trusted impersonation levels are explicit. Any level not named as
+            # trusted here fails closed by default, including future enum values.
+            if evidence.level == 'IDENTIFICATION':
+                return result('UNPROVEN', 'IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN')
+            if evidence.level == 'DELEGATION':
+                return result('UNPROVEN', 'DELEGATION_LEVEL_EXCLUSION_UNPROVEN')
+            return result('UNPROVEN', 'UNVERIFIED_LEVEL_EXCLUSION_UNPROVEN')
 
         # Capability observations remain recorded for audit. They do not negate
         # the documented TokenIsAppContainer result and are not themselves used

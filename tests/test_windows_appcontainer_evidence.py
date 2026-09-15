@@ -1,4 +1,6 @@
 """Pure tests for AppContainer exclusion evidence semantics."""
+from typing import Literal, get_args, get_origin
+
 import pytest
 
 from tnc.provenance.windows_appcontainer_evidence import (
@@ -18,6 +20,15 @@ def evidence(**update):
     return AppContainerTokenEvidence(**data)
 
 
+def _declared_impersonation_levels():
+    annotation = AppContainerTokenEvidence.model_fields['level'].annotation
+    literal = next(arg for arg in get_args(annotation) if get_origin(arg) is Literal)
+    return get_args(literal)
+
+
+IMPERSONATION_LEVELS = _declared_impersonation_levels()
+
+
 def test_identification_level_zero_remains_unproven():
     result = evaluate_appcontainer_exclusion(evidence())
     assert result.status == 'UNPROVEN'
@@ -25,9 +36,24 @@ def test_identification_level_zero_remains_unproven():
     assert result.audit_only and not result.authorization_granted and not result.admission_granted
 
 
-@pytest.mark.parametrize('level', ['IMPERSONATION', 'DELEGATION'])
-def test_higher_impersonation_level_zero_can_prove_non_appcontainer(level):
+@pytest.mark.parametrize(
+    'level',
+    [level for level in IMPERSONATION_LEVELS if level != 'IMPERSONATION'],
+)
+def test_every_untrusted_impersonation_level_zero_fails_closed(level):
     result = evaluate_appcontainer_exclusion(evidence(level=level))
+    assert result.status == 'UNPROVEN'
+    assert not result.authorization_granted and not result.admission_granted
+
+
+def test_delegation_level_zero_has_level_specific_unproven_reason():
+    result = evaluate_appcontainer_exclusion(evidence(level='DELEGATION'))
+    assert result.status == 'UNPROVEN'
+    assert result.reason == 'DELEGATION_LEVEL_EXCLUSION_UNPROVEN'
+
+
+def test_impersonation_level_zero_remains_trusted_boundary():
+    result = evaluate_appcontainer_exclusion(evidence(level='IMPERSONATION'))
     assert result.status == 'PROVEN_NON_APPCONTAINER'
     assert result.reason == 'TOKEN_IS_APPCONTAINER_FALSE_USABLE'
     assert not result.admission_granted
