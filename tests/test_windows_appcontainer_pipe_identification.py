@@ -12,7 +12,7 @@ import uuid
 
 import pytest
 
-import test_windows_appcontainer_pipe_positive_control as harness
+import _native_harness as harness
 
 from tnc.provenance.windows_appcontainer_evidence import evaluate_appcontainer_exclusion
 from tnc.provenance.windows_appcontainer_probe import NativeAppContainerProbe

@@ -17,7 +17,6 @@ import uuid
 import pytest
 
 from _native_harness import (
-    BOOL,
     CREATE_NO_WINDOW,
     CREATE_SUSPENDED,
     DWORD,
@@ -35,9 +34,6 @@ from _native_harness import (
     SIZE_T,
     STARTUPINFOEXW,
     STARTUPINFOW,
-    TOKEN_APPCONTAINER_INFORMATION,
-    TOKEN_APPCONTAINER_SID,
-    TOKEN_IS_APPCONTAINER,
     TOKEN_QUERY,
     WAIT_OBJECT_0,
     _advapi32,
