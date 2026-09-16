@@ -156,9 +156,10 @@ def _finish_client(harness, client, channel):
 def test_native_token_capture_and_reversion(harness, scenario):
     server, control, client, channel, _ = _start(harness, scenario)
     done = pipe._receive(control)
-    # Known intermittent: one impersonation run reported delta=1 and passed on reruns.
-    # Keep this invariant strict; rerun a recurrence until the leaked/transient handle
-    # mechanism is identified rather than weakening the assertion without evidence.
+    # Known intermittent: on 2026-09-16, the [impersonation] case reported delta=1
+    # once in three attempts and passed on reruns; identification did not reproduce it.
+    # Keep delta == 0 deliberately strict: narrowing the invariant before the mechanism
+    # is understood could hide a real leaked handle rather than a transient Windows handle.
     assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
     result = done['result']
     assert result['status'] == 'CAPTURED', done
