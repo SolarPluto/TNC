@@ -17,21 +17,21 @@ See [Classification signals vs. audit signals](#classification-signals-vs-audit-
 |---|---|---:|---|---|---|---|
 | PRIMARY | — | `False` | `None` | `PROVEN_NON_APPCONTAINER` | `TOKEN_IS_APPCONTAINER_FALSE_USABLE` | **Observed** — PR #12 emitted source/restricted/child PRIMARY results |
 | PRIMARY | — | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Observed** — PR #8 and PR #11 |
-| IMPERSONATION | IDENTIFICATION | `False` | `None` | `UNPROVEN` | `IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN` | **Observed** — PR #7 and PR #12 |
+| IMPERSONATION | IDENTIFICATION | `False` | `None` | `UNPROVEN` | `IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN` | **Observed** — PR #7, PR #12, and PR #19 |
 | IMPERSONATION | IDENTIFICATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Observed** — PR #8 and PR #11 |
 | IMPERSONATION | IMPERSONATION | `False` | `None` | `PROVEN_NON_APPCONTAINER` | `TOKEN_IS_APPCONTAINER_FALSE_USABLE` | **Observed** — PR #9, including hosted Windows Server 2025 replication |
 | IMPERSONATION | IMPERSONATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** — current evaluator would classify this way because a positive flag is checked first |
-| IMPERSONATION | DELEGATION | `False` | `None` | `UNPROVEN` | `DELEGATION_LEVEL_EXCLUSION_UNPROVEN` | **Fail-closed default; unverified on Windows** |
-| IMPERSONATION | DELEGATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** |
+| IMPERSONATION | DELEGATION | `False` | `None` | `UNPROVEN` | `DELEGATION_LEVEL_EXCLUSION_UNPROVEN` | **Unobserved; fail-closed default** — no client-side local-pipe construction has been attempted; Windows feasibility is unknown |
+| IMPERSONATION | DELEGATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** — no client-side local-pipe construction has been attempted; Windows feasibility is unknown |
 | any valid token | any valid level | `False` | non-null | `INDETERMINATE` | `APPCONTAINER_SIGNAL_CONFLICT` | **Defensive evaluator behavior; synthetically exercised, not empirically observed from Windows** |
-| any valid token | any valid level | `True` | `None` | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** — current evaluator treats the positive flag as sufficient denial evidence even without class-31 SID material |
+| any valid token | any valid level | `True` | `None` | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Probe-unreachable native shape; directly synthesizable only** — the native probe raises if the class-31 SID query fails instead of converting that failure to `None` |
 | invalid evidence record | n/a | n/a | n/a | `INDETERMINATE` | `INVALID_APPCONTAINER_EVIDENCE` | Synthetic validation/error path; not a Windows token shape |
 
 ### Trusted impersonation levels are explicit
 
 Negative evidence on an impersonation token is trusted only at levels explicitly named by the
 evaluator. Today `IMPERSONATION` is the sole trusted impersonation level, anchored by PR #9.
-`IDENTIFICATION` is documented by Windows and observed by PR #7/#12 as unusable for exclusion.
+`IDENTIFICATION` is documented by Windows and observed by PR #7/#12/#19 as unusable for exclusion.
 `DELEGATION` has not been empirically anchored, so it now fails closed as `UNPROVEN` rather
 than inheriting a permissive fall-through.
 
@@ -126,22 +126,39 @@ PR #12 contributes one new empirical pole — a restricted non-AppContainer clie
 IDENTIFICATION. Its restricted-handle and child-PRIMARY probes are harness/identity checks,
 not additional independent samples.
 
+### PR #19 — low-integrity non-AppContainer at IDENTIFICATION
+
+A duplicated PRIMARY token was lowered from High integrity (`S-1-16-12288`) to Low integrity
+(`S-1-16-4096`) before process creation, verified before launch, and then observed again on the
+child PRIMARY token and the identification-level pipe impersonation token. User SID continuity
+held throughout. The identification token retained the Low mandatory label and produced
+`False / None / [] -> UNPROVEN / IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN`.
+
+This established the final currently constructible negative-gate pole and also demonstrated
+that, in this configuration, the identification-level impersonation token carries the client's
+mandatory integrity label through impersonation.
+
 ## Current empirical region: sample, not census
 
-The current experimental sequence covers four substantive client/token poles:
+The current experimental sequence covers five substantive client/token poles:
 
 1. ordinary non-AppContainer,
 2. ordinary AppContainer,
-3. capability-bearing AppContainer, and
-4. restricted non-AppContainer.
+3. capability-bearing AppContainer,
+4. restricted non-AppContainer, and
+5. low-integrity non-AppContainer.
+
+A pole is an empirical client/token configuration, while a truth-table row is a classifier
+evidence shape; multiple poles can anchor the same row, and one pole can exercise multiple
+rows. The counts therefore are not expected to match.
 
 Those samples establish different claims and must not be collapsed into a generic count of
 "passing AppContainer tests." In particular, PR #8 established positive-branch reachability,
-while PR #11 established capability survival.
+PR #11 established capability survival, and PR #19 established low-integrity continuity
+through the identification-level impersonation token.
 
 Important untested or incompletely tested regions include:
 
-- low-integrity variants,
 - service-account tokens,
 - network-logon tokens,
 - anonymous tokens,
@@ -153,6 +170,15 @@ Important untested or incompletely tested regions include:
 The conflict/INDETERMINATE path is **defensive evaluator behavior, synthetically exercised,
 not empirically observed from Windows**. No known native producer has been demonstrated in
 this experiment sequence.
+
+### Empirical closure — 2026-09-16
+
+As of 2026-09-16, empirical coverage is complete for all states constructible with the current
+native harness through PR #19. `DELEGATION` remains unobserved: no client-side local-pipe
+construction has been attempted, and Windows feasibility for producing a delegation-level
+impersonation token on a local pipe is unknown. The `False + non-null AppContainer SID`
+conflict remains an unobserved defensive sentinel because no credible Windows token producer
+is known. These two rows are producer-gated open questions, not unfinished repository work.
 
 ## Policy boundary
 
