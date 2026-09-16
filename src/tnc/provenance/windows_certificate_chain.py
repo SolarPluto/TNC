@@ -94,10 +94,12 @@ class _WindowsChainAPI:
 
         ``now`` is passed to ``CertGetCertificateChain`` as ``pTime``, but an empirical
         Windows Server 2025 reproduction (Actions run 35112451453) showed that CRL
-        freshness is still evaluated against the system wall clock. Callers must not
-        assume this method validates CRL freshness against the supplied ``now``. If
-        historical- or future-time validation is required, CRL freshness must be
-        evaluated separately against the intended validation time.
+        freshness is still evaluated against the system wall clock. A chain-engine
+        rejection for CRL freshness is final on this backend: later Python-side CRL
+        checks against the supplied ``now`` cannot rescue it because they run only
+        after native chain construction succeeds. Historical- or future-time validation
+        that must accept a CRL Windows considers expired therefore requires a different
+        backend path, not merely a different caller-supplied ``now``.
         """
         with ExitStack() as stack:
             def store():
