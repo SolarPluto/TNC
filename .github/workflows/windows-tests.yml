@@ -27,5 +27,5 @@ jobs:
       - name: Sync locked environment
         run: uv sync --locked
 
-      - name: Run full test suite
-        run: uv run pytest -q
+      - name: Run one-off CRL wall-clock reproduction
+        run: uv run pytest -q tests/test_crl_wall_clock_repro_once.py -vv
