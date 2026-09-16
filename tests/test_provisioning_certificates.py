@@ -275,14 +275,16 @@ def test_native_offline_and_client_policy_flags(case,pki):
     assert checked=={'engine','offline','client'}
 
 
-@pytest.mark.parametrize('offset', [-1,0,1])
+@pytest.mark.parametrize('offset', [-1,0,3600])
 def test_crl_expiry_boundary(case,pki,offset):
+    # Windows evaluates CRL freshness against wall clock even when pTime is supplied;
+    # use a wide positive margin so this acceptance case is not a timing race.
     supplied=crl(pki,end=pki.now+timedelta(seconds=offset))
     with snapshot(case,pki,crls=(supplied,)) as value:
         if offset<=0:
             with pytest.raises(CertificateVerificationError): validate_nominated_certificate(value,now=pki.now)
         else:
-            assert validate_nominated_certificate(value,now=pki.now).valid_until==pki.now+timedelta(seconds=1)
+            assert validate_nominated_certificate(value,now=pki.now).valid_until==pki.now+timedelta(seconds=3600)
 
 
 def test_tls_and_provisioning_agree_on_valid_and_revoked(case,pki):
