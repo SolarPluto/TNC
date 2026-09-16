@@ -178,5 +178,5 @@ def validate_nominated_certificate(snapshot, *, now):
     """Host-only current-time check; no provisioning proof or private-key possession."""
     try:
         return _verify(snapshot, now, _WindowsChainAPI())
-    except Exception:
-        raise CertificateVerificationError('Nominated certificate unavailable') from None
+    except Exception as error:
+        raise CertificateVerificationError('Nominated certificate unavailable') from error
