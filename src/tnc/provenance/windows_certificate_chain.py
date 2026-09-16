@@ -90,6 +90,17 @@ class _WindowsChainAPI:
             c.POINTER(_PolicyStatus)], w.BOOL)
 
     def verify(self, leaf, roots, intermediates, crls, now):
+        """Verify at ``now`` with one Windows caveat about revocation freshness.
+
+        ``now`` is passed to ``CertGetCertificateChain`` as ``pTime``, but an empirical
+        Windows Server 2025 reproduction (Actions run 35112451453) showed that CRL
+        freshness is still evaluated against the system wall clock. A chain-engine
+        rejection for CRL freshness is final on this backend: later Python-side CRL
+        checks against the supplied ``now`` cannot rescue it because they run only
+        after native chain construction succeeds. Historical- or future-time validation
+        that must accept a CRL Windows considers expired therefore requires a different
+        backend path, not merely a different caller-supplied ``now``.
+        """
         with ExitStack() as stack:
             def store():
                 handle = self.lib.CertOpenStore(2, 0, None, 0x2000, None)
