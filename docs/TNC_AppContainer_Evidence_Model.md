@@ -20,7 +20,7 @@ See [Classification signals vs. audit signals](#classification-signals-vs-audit-
 | IMPERSONATION | IDENTIFICATION | `False` | `None` | `UNPROVEN` | `IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN` | **Observed** — PR #7, PR #12, and PR #19 |
 | IMPERSONATION | IDENTIFICATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Observed** — PR #8 and PR #11 |
 | IMPERSONATION | IMPERSONATION | `False` | `None` | `PROVEN_NON_APPCONTAINER` | `TOKEN_IS_APPCONTAINER_FALSE_USABLE` | **Observed** — PR #9, including hosted Windows Server 2025 replication |
-| IMPERSONATION | IMPERSONATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** — current evaluator would classify this way because a positive flag is checked first |
+| IMPERSONATION | IMPERSONATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Observed** — PR #21 with verified `level=IMPERSONATION`, AppContainer SID matching the PRIMARY oracle, and `capabilities=[]` |
 | IMPERSONATION | DELEGATION | `False` | `None` | `UNPROVEN` | `DELEGATION_LEVEL_EXCLUSION_UNPROVEN` | **Unobserved; fail-closed default** — no client-side local-pipe construction has been attempted; Windows feasibility is unknown |
 | IMPERSONATION | DELEGATION | `True` | non-null | `APPCONTAINER` | `TOKEN_IS_APPCONTAINER` | **Unobserved** — no client-side local-pipe construction has been attempted; Windows feasibility is unknown |
 | any valid token | any valid level | `False` | non-null | `INDETERMINATE` | `APPCONTAINER_SIGNAL_CONFLICT` | **Defensive evaluator behavior; synthetically exercised, not empirically observed from Windows** |
@@ -138,24 +138,38 @@ This established the final currently constructible negative-gate pole and also d
 that, in this configuration, the identification-level impersonation token carries the client's
 mandatory integrity label through impersonation.
 
+### PR #21 — real AppContainer at IMPERSONATION
+
+The PR #8 matched-pair producer was reused with one experimental variable changed: the client
+requested `TokenImpersonationLevel.Impersonation` instead of `Identification`. After
+`ImpersonateNamedPipeClient`, the captured token was independently required to report
+`level=IMPERSONATION` before the AppContainer probe ran. The verified token retained
+`TokenIsAppContainer=True`, the same AppContainer SID as the PRIMARY oracle, and no capability
+SIDs; the evaluator returned `APPCONTAINER / TOKEN_IS_APPCONTAINER`.
+
+This anchors the positive IMPERSONATION row and shows that class 29/31 positive AppContainer
+identity survives into an impersonation-level local named-pipe token for this tested client.
+
 ## Current empirical region: sample, not census
 
-The current experimental sequence covers five substantive client/token poles:
+The current experimental sequence covers six substantive client/token poles:
 
 1. ordinary non-AppContainer,
-2. ordinary AppContainer,
-3. capability-bearing AppContainer,
-4. restricted non-AppContainer, and
-5. low-integrity non-AppContainer.
+2. AppContainer at IDENTIFICATION,
+3. capability-bearing AppContainer at IDENTIFICATION,
+4. restricted non-AppContainer,
+5. low-integrity non-AppContainer, and
+6. AppContainer at IMPERSONATION.
 
 A pole is an empirical client/token configuration, while a truth-table row is a classifier
 evidence shape; multiple poles can anchor the same row, and one pole can exercise multiple
 rows. The counts therefore are not expected to match.
 
 Those samples establish different claims and must not be collapsed into a generic count of
-"passing AppContainer tests." In particular, PR #8 established positive-branch reachability,
-PR #11 established capability survival, and PR #19 established low-integrity continuity
-through the identification-level impersonation token.
+"passing AppContainer tests." In particular, PR #8 established positive-branch reachability
+at IDENTIFICATION, PR #11 established capability survival, PR #19 established low-integrity
+continuity through the identification-level impersonation token, and PR #21 established the
+positive AppContainer row at IMPERSONATION.
 
 Important untested or incompletely tested regions include:
 
@@ -163,7 +177,7 @@ Important untested or incompletely tested regions include:
 - network-logon tokens,
 - anonymous tokens,
 - DELEGATION-level native observations,
-- AppContainer-positive IMPERSONATION/DELEGATION observations, and
+- AppContainer-positive DELEGATION observations, and
 - the false-flag/non-null-SID conflict (including any sentinel-like SID state such as
   `S-1-15-2-1`).
 
@@ -173,8 +187,10 @@ this experiment sequence.
 
 ### Empirical closure — 2026-09-16
 
-As of 2026-09-16, empirical coverage is complete for all states constructible with the current
-native harness through PR #19. `DELEGATION` remains unobserved: no client-side local-pipe
+PR #20's closure statement through PR #19 was premature: the AppContainer-positive
+IMPERSONATION row remained constructible but untested. PR #21 closes that gap. As of
+2026-09-16, empirical coverage is complete for all states constructible with the current
+native harness through PR #21. `DELEGATION` remains unobserved: no client-side local-pipe
 construction has been attempted, and Windows feasibility for producing a delegation-level
 impersonation token on a local pipe is unknown. The `False + non-null AppContainer SID`
 conflict remains an unobserved defensive sentinel because no credible Windows token producer
