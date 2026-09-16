@@ -1,5 +1,7 @@
 # TNC Windows Test Reliability Inventory
 
+**As of 2026-09-16.** Update this inventory as reliability investigations progress, fixes accumulate validation runs, or new flaky surfaces are observed.
+
 This document records intermittent or timing-sensitive Windows test surfaces so that a retry does not erase diagnostic evidence. It is an inventory, not a waiver: strict assertions remain strict until a mechanism is identified.
 
 ## Measurement semantics: process handle counts
@@ -25,9 +27,9 @@ This makes whole-process `delta == 0` a deliberately strong invariant. Do not we
 
 - **Test:** `tests/test_windows_pipe_native_token.py::test_native_token_capture_and_reversion[impersonation]`.
 - **Observed failure shape:** final cleanup reported `delta=1` where the test deliberately requires `delta == 0`.
-- **First observed:** 2026-09-16. **Run ID: not recovered.** The observation was recorded as one failure in three attempts, with the reruns passing; no trustworthy Actions run ID was preserved, so this document does not invent one.
+- **First observed:** 2026-09-16. **Run ID: not recovered.** The provenance is a deliberate three-attempt window around that occurrence on 2026-09-16: one failure followed by two passing reruns. It is **not** a repository-wide flake-rate estimate. No trustworthy Actions run ID for that window was preserved, so this document does not invent one.
 - **Retry/reproduction:** did not reproduce on the two reruns; the `identification` parameter did not reproduce it.
-- **Status:** **pending investigation; documented by #26**. #26 keeps the strict `delta == 0` assertion and records the occurrence beside it.
+- **Status:** **pending investigation; documented by #26**. The code-level record is the inline comment immediately above the strict assertion in `tests/test_windows_pipe_native_token.py`; that comment points back to this inventory as the authoritative cross-surface record.
 - **Relationship to handle-count semantics:** this test samples the same unsynchronized whole-process handle count. The extra live handle may be a TNC leak, a still-running cleanup/finalizer path, or an unrelated/runtime handle present at the sample point. Do not assume its mechanism matches the `cancel_write` occurrence merely because both report `delta=1`.
 
 ### 3. Pending-I/O `cancel_write` handle count
@@ -36,7 +38,7 @@ This makes whole-process `delta == 0` a deliberately strong invariant. Do not we
 - **Observed failure shape:** the final close message was `{'kind': 'closed', 'delta': 1}` while the assertion expected `{'kind': 'closed', 'delta': 0}`.
 - **First observed:** 2026-09-16, Actions run `35121176638`, attempt 1.
 - **Retry/reproduction:** attempt 1 finished `1 failed, 3279 passed, 1 warning`; attempt 2 of the same run passed the full suite with `3280 passed, 1 warning`.
-- **Status:** **pending investigation; no local test comment yet**. The failure was discovered while validating docstring-only #25 and is unrelated to that diff.
+- **Status:** **pending investigation**. A code-level comment immediately above the strict assertion in `tests/test_windows_pipe_process.py` points to this inventory; the failure was discovered while validating docstring-only #25 and is unrelated to that diff.
 - **Relationship to handle-count semantics:** because this path exercises cancellation of pending overlapped I/O, its mechanism may differ from `[impersonation]` even though both report `delta=1`. A still-open event/pipe/runtime handle at the sample point is plausible, but must be identified rather than inferred.
 
 ## Next reliability investigation
@@ -54,5 +56,17 @@ The evidence should determine the eventual fix:
 - synchronize the measurement point if TNC-owned cleanup is still legitimately in flight;
 - narrow the invariant to TNC-owned handle classes if unrelated process/runtime handles make whole-process equality overspecified; or
 - fix a real leak if a TNC-owned handle remains persistently open.
+
+## What not to do
+
+Until the instrumentation above identifies the mechanism, do **not**:
+
+- silently narrow or weaken `delta == 0` assertions;
+- add retry-until-zero behavior to `_NativeChecks.handles()` or its callers;
+- mark these tests flaky, xfail, skip-on-failure, or otherwise convert an unexplained failure into acceptance;
+- widen timing/sample windows merely to make the failure disappear; or
+- assume two `delta=1` surfaces share a mechanism without matching handle identity and persistence evidence.
+
+Those changes can erase the distinction between a real TNC-owned leak, cleanup that is still legitimately in flight, and an invariant that is measuring unrelated process/runtime handles.
 
 Until that evidence exists, `delta == 0` remains intentionally strict.
