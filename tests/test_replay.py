@@ -372,4 +372,4 @@ def test_replay_uses_source_span_availability_end_to_end():
     assert len(snapshots[0].claims) == 1
     assert snapshots[0].claims[0].assertion_id == "assertion-001"
     assert snapshots[0].claims[0].state == ClaimState.FIRST_REPORTED
-    assert snapshots[0].claims[0].evidence_span_ids == (span.span_id,) 
+    assert snapshots[0].claims[0].evidence_span_ids == (span.span_id,)

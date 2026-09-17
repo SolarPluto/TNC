@@ -170,7 +170,7 @@ def test_claim_state_at_returns_state_visible_at_timestamp():
 
 
 
-        
+
 
 
 
