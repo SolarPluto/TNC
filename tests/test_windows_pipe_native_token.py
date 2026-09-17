@@ -87,8 +87,10 @@ def _server(control, name, scenario, challenge):
         endpoint.close()
         assert not n._OWNERS
         del inspector  # Release the inspector-owned Python lock handle.
+        delta, samples = checks.sample_handle_delta(baseline)
         pipe._send(control, kind='done', result=result, query_calls=queries,
-                   counts=counts, delta=checks.handles()-baseline, sid=identity.user_sid, reverted=True)
+                   counts=counts, delta=delta, handle_samples=samples,
+                   sid=identity.user_sid, reverted=True)
     except BaseException as error:
         try:
             pipe._send(control, kind='error', detail=type(error).__name__+':'+str(error)[:600],
@@ -156,11 +158,13 @@ def _finish_client(harness, client, channel):
 def test_native_token_capture_and_reversion(harness, scenario):
     server, control, client, channel, _ = _start(harness, scenario)
     done = pipe._receive(control)
+    samples = done.pop('handle_samples', None)
     # Reliability inventory: docs/TNC_Test_Reliability.md. On 2026-09-16 the
     # [impersonation] case reported delta=1 once in a deliberate three-attempt window;
     # two reruns passed and identification did not reproduce it. Keep delta == 0 strict:
     # narrowing before identifying the live handle could hide a real leak.
-    assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
+    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
+        assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
     result = done['result']
     assert result['status'] == 'CAPTURED', done
     assert result['source'] == 'NATIVE_TOKEN_API' and not result['authorization_granted']
@@ -179,7 +183,9 @@ def test_native_token_capture_and_reversion(harness, scenario):
 def test_native_capture_denials_revert_without_evidence(harness, scenario):
     server, control, client, channel, _ = _start(harness, scenario)
     done = pipe._receive(control)
-    assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
+    samples = done.pop('handle_samples', None)
+    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
+        assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
     assert done['result']['status'] == 'INDETERMINATE'
     assert not done['result'].get('facts')
     harness.join(server)
@@ -200,7 +206,10 @@ def test_native_impersonation_fault_terminates_worker(harness, scenario):
     _finish_client(harness, client, channel)
     replacement, replacement_control, _ = pipe._start(harness, 'idle', name=info['name'])
     pipe._send(replacement_control, kind='close')
-    assert pipe._receive(replacement_control) == {'kind': 'closed', 'delta': 0}
+    done = pipe._receive(replacement_control)
+    samples = done.pop('handle_samples', None)
+    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
+        assert done == {'kind': 'closed', 'delta': 0}
     harness.join(replacement)
 
 
@@ -210,5 +219,8 @@ def test_anonymous_identity_is_denied_by_unchanged_native_dacl(harness):
     assert pipe._receive(channel) == {'kind': 'denied', 'error': 5, 'reverted': True}
     harness.join(client)
     pipe._send(control, kind='close')
-    assert pipe._receive(control) == {'kind': 'closed', 'delta': 0}
+    done = pipe._receive(control)
+    samples = done.pop('handle_samples', None)
+    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
+        assert done == {'kind': 'closed', 'delta': 0}
     harness.join(server)
