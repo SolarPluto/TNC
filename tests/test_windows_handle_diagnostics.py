@@ -63,7 +63,19 @@ def test_sample_handle_delta_exercises_persistent_failure_path(monkeypatch):
     assert clock.now == pytest.approx(1.0)
 
 
-def test_handle_delta_diagnostic_preserves_assertion_and_adds_note():
+def test_handle_delta_diagnostic_notes_assertion_failure():
+    samples = {'baseline': 42, 'T': 1, '+100ms': 0, '+1000ms': 0}
+
+    with pytest.raises(AssertionError) as raised:
+        with pipe._handle_delta_diagnostic(samples):
+            assert 1 == 0
+
+    assert raised.value.__notes__ == [
+        'handle persistence (baseline=42): T=1, +100ms=0, +1000ms=0'
+    ]
+
+
+def test_handle_delta_diagnostic_preserves_exception_identity():
     samples = {'baseline': 42, 'T': 1, '+100ms': 0, '+1000ms': 0}
     error = AssertionError('original failure')
 
@@ -72,6 +84,3 @@ def test_handle_delta_diagnostic_preserves_assertion_and_adds_note():
             raise error
 
     assert raised.value is error
-    assert raised.value.__notes__ == [
-        'handle persistence (baseline=42): T=1, +100ms=0, +1000ms=0'
-    ]
