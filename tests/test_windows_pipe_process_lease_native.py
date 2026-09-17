@@ -201,8 +201,9 @@ def _native_server(control, name, expected):
             api=process_api, clock=lambda: time.monotonic_ns() // 1_000_000)
         result = owned.finish()
         endpoint.close()
+        delta, samples = checks.sample_handle_delta(baseline)
         pipe_test._send(control, kind='done', status=result.status, source=result.source,
-            authorized=result.authorization_granted, delta=checks.handles()-baseline)
+            authorized=result.authorization_granted, delta=delta, handle_samples=samples)
     finally:
         control.close()
 
@@ -221,8 +222,10 @@ def test_real_named_pipe_process_lease_correlates_and_cleans_up():
         pipe_test._send(client_control, kind='open')
         assert pipe_test._receive(client_control)['kind'] == 'opened'
         done = pipe_test._receive(server_control)
-        assert done == {'kind': 'done', 'status': 'CORRELATED', 'source': 'NATIVE_PROCESS_API',
-                        'authorized': False, 'delta': 0}
+        samples = done.pop('handle_samples', None)
+        with pipe_test._handle_delta_diagnostic(samples if done.get('delta') else None):
+            assert done == {'kind': 'done', 'status': 'CORRELATED', 'source': 'NATIVE_PROCESS_API',
+                            'authorized': False, 'delta': 0}
         pipe_test._send(client_control, kind='close')
         assert pipe_test._receive(client_control)['kind'] == 'closed'
         harness.join(client)
