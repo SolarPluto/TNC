@@ -407,6 +407,8 @@ def test_native_pending_io_cancellation_or_disconnect(harness, scenario):
         assert _receive(client_control)['kind'] == 'done'
     harness.join(client)
     _send(control, kind='close')
+    # Reliability inventory: docs/TNC_Test_Reliability.md. The [cancel_write] case
+    # reported delta=1 in run 35121176638 attempt 1 and passed on attempt 2; keep strict.
     assert _receive(control) == {'kind': 'closed', 'delta': 0}
     harness.join(server)
 
