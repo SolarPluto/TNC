@@ -12,6 +12,7 @@ import sys
 import time
 import traceback
 import uuid
+from contextlib import contextmanager
 
 import pytest
 
@@ -34,6 +35,17 @@ def _receive(control, timeout=15):
     message = json.loads(control.recv_bytes(4096))
     assert message.get('kind') != 'error', message
     return message
+
+
+@contextmanager
+def _handle_delta_diagnostic(samples):
+    try:
+        yield
+    except AssertionError as error:
+        if samples is not None:
+            error.add_note(
+                'handle persistence (baseline={baseline}): T={T}, +100ms={+100ms}, +1000ms={+1000ms}'.format(**samples))
+        raise
 
 
 def _tick():
@@ -113,6 +125,18 @@ class _NativeChecks:
         assert self.kernel.GetProcessHandleCount(self.kernel.GetCurrentProcess(), c.byref(value))
         return value.value
 
+    def sample_handle_delta(self, baseline):
+        """Sample this child before exit; concurrent handle activity may make samples fluctuate."""
+        delta = self.handles() - baseline
+        if delta == 0:
+            return 0, None
+        started = time.monotonic()
+        time.sleep(max(0.0, 0.1 - (time.monotonic() - started)))
+        after_100ms = self.handles() - baseline
+        time.sleep(max(0.0, 1.0 - (time.monotonic() - started)))
+        after_1000ms = self.handles() - baseline
+        return delta, {'baseline': baseline, 'T': delta, '+100ms': after_100ms, '+1000ms': after_1000ms}
+
     def open_client(self, name):
         # Exact minimal data/query rights; no client create-instance or generic write.
         handle = self.kernel.CreateFileW(name, n.CLIENT_RIGHTS, 0, None, 3,
@@ -177,7 +201,8 @@ def _server(control, name, scenario):
         command = _receive(control)
         if command['kind'] == 'close':
             endpoint.close()
-            _send(control, kind='closed', delta=checks.handles()-baseline)
+            delta, samples = checks.sample_handle_delta(baseline)
+            _send(control, kind='closed', delta=delta, handle_samples=samples)
             return
         assert command['kind'] == 'connect'
         op = endpoint.begin_connect(_plan('CONNECT', 1))
@@ -198,7 +223,8 @@ def _server(control, name, scenario):
             assert state.terminal == 'ABORTED' and not state.result_available
             op.dispose()
             endpoint.close()
-            _send(control, kind='done', terminal=state.terminal, delta=checks.handles()-baseline)
+            delta, samples = checks.sample_handle_delta(baseline)
+            _send(control, kind='done', terminal=state.terminal, delta=delta, handle_samples=samples)
             return
         assert op.wait_until(op._plan.request_deadline)
         assert op.result_bytes() == b''
@@ -245,7 +271,8 @@ def _server(control, name, scenario):
         assert _receive(control)['kind'] == 'close'
         endpoint.close()
         assert not n._OWNERS
-        _send(control, kind='closed', delta=checks.handles()-baseline)
+        delta, samples = checks.sample_handle_delta(baseline)
+        _send(control, kind='closed', delta=delta, handle_samples=samples)
     except BaseException as error:
         try:
             _send(control, kind='error', detail=type(error).__name__+':'+str(error)[:500],
@@ -376,7 +403,10 @@ def test_native_roundtrip_and_kernel_peer_lifetimes(harness, scenario):
     assert _receive(client_control)['kind'] == 'done'
     harness.join(client)
     _send(control, kind='close')
-    assert _receive(control) == {'kind': 'closed', 'delta': 0}
+    closed = _receive(control)
+    samples = closed.pop('handle_samples', None)
+    with _handle_delta_diagnostic(samples if closed.get('delta') else None):
+        assert closed == {'kind': 'closed', 'delta': 0}
     harness.join(server)
 
 
@@ -384,7 +414,10 @@ def test_native_cancel_pending_connect(harness):
     server, control, _ = _start(harness, 'cancel_connect')
     _send(control, kind='connect')
     assert _receive(control)['pending']
-    assert _receive(control) == {'kind': 'done', 'terminal': 'ABORTED', 'delta': 0}
+    done = _receive(control)
+    samples = done.pop('handle_samples', None)
+    with _handle_delta_diagnostic(samples if done.get('delta') else None):
+        assert done == {'kind': 'done', 'terminal': 'ABORTED', 'delta': 0}
     harness.join(server)
 
 
@@ -409,7 +442,10 @@ def test_native_pending_io_cancellation_or_disconnect(harness, scenario):
     _send(control, kind='close')
     # Reliability inventory: docs/TNC_Test_Reliability.md. The [cancel_write] case
     # reported delta=1 in run 35121176638 attempt 1 and passed on attempt 2; keep strict.
-    assert _receive(control) == {'kind': 'closed', 'delta': 0}
+    closed = _receive(control)
+    samples = closed.pop('handle_samples', None)
+    with _handle_delta_diagnostic(samples if closed.get('delta') else None):
+        assert closed == {'kind': 'closed', 'delta': 0}
     harness.join(server)
 
 
@@ -422,7 +458,9 @@ def test_native_first_instance_collision_fails_closed(harness):
     assert collision_result['reason'] in ('PIPE_CREATION_FAILED:5', 'PIPE_CREATION_FAILED:231')
     harness.join(collision)
     _send(control, kind='close')
-    assert _receive(control)['kind'] == 'closed'
+    closed = _receive(control)
+    closed.pop('handle_samples', None)
+    assert closed['kind'] == 'closed'
     harness.join(server)
 
 
@@ -434,7 +472,9 @@ def test_native_server_pin_mismatch_rejects_before_data(harness, field):
     assert _receive(channel) == {'kind': 'mismatch'}
     harness.join(client)
     _send(control, kind='close')
-    assert _receive(control)['kind'] == 'closed'
+    closed = _receive(control)
+    closed.pop('handle_samples', None)
+    assert closed['kind'] == 'closed'
     harness.join(server)
 
 
@@ -444,7 +484,9 @@ def test_native_anonymous_client_denied_and_reverted(harness):
     assert _receive(channel) == {'kind': 'denied', 'error': 5, 'reverted': True}
     harness.join(client)
     _send(control, kind='close')
-    assert _receive(control)['kind'] == 'closed'
+    closed = _receive(control)
+    closed.pop('handle_samples', None)
+    assert closed['kind'] == 'closed'
     harness.join(server)
 
 
@@ -460,5 +502,7 @@ def test_supervisor_termination_reclaims_pending_pipe(harness, scenario):
     assert not server.is_alive() and server.exitcode != 0
     replacement, channel, _ = _start(harness, 'idle', name=info['name'])
     _send(channel, kind='close')
-    assert _receive(channel)['kind'] == 'closed'
+    closed = _receive(channel)
+    closed.pop('handle_samples', None)
+    assert closed['kind'] == 'closed'
     harness.join(replacement)
