@@ -10,7 +10,7 @@ The native Windows tests use `_NativeChecks.handles()` in `tests/test_windows_pi
 
 `GetProcessHandleCount` counts live entries in the process handle table. A `delta=1` observed after a user-facing `CloseHandle` therefore should not be described as delayed kernel-object destruction after the process handle was closed. At sample time, the extra count instead means that a process handle is still open, a new handle was created after the baseline and remains open, or a runtime mechanism closed/re-opened or otherwise introduced another live handle.
 
-This makes whole-process `delta == 0` a deliberately strong invariant. Do not weaken it or add silent retries until failure-path instrumentation distinguishes a real leak, a sample-point race, and an invariant that is broader than the TNC-owned resources it intends to police.
+This makes whole-process `delta == 0` a deliberately strong invariant. Do not weaken it or add silent retries until failure-path instrumentation distinguishes a real leak candidate, a sample-point race, and an invariant that is broader than the TNC-owned resources it intends to police.
 
 ## Recorded surfaces
 
@@ -41,15 +41,27 @@ This makes whole-process `delta == 0` a deliberately strong invariant. Do not we
 - **Status:** **pending investigation**. A code-level comment immediately above the strict assertion in `tests/test_windows_pipe_process.py` points to this inventory; the failure was discovered while validating docstring-only #25 and is unrelated to that diff.
 - **Relationship to handle-count semantics:** because this path exercises cancellation of pending overlapped I/O, its mechanism may differ from `[impersonation]` even though both report `delta=1`. A still-open event/pipe/runtime handle at the sample point is plausible, but must be identified rather than inferred.
 
-## Next reliability investigation
+## Current handle-count instrumentation
 
-The first reliability change should be **instrumentation-only**. Do not change invariants, add retry-based acceptance, or introduce synchronization as a fix before observing the extra handle.
+Native handle-count producers now keep `_NativeChecks.handles()` as the raw `GetProcessHandleCount` primitive and use a separate failure-path sampler before the measured child exits. The sampler takes the original **T** measurement immediately. If `delta == 0`, it returns without sleeping or changing happy-path timing. If `delta != 0`, it samples again at approximately **T+100ms** and **T+1000ms** using a monotonic elapsed-time clock.
 
-On a `delta != 0` failure path, capture:
+The child reports the original delta and the persistence samples to the parent. The parent removes the diagnostic field before evaluating the existing assertion, so the assertion expression and expected payload shape remain unchanged. When the assertion is specifically failing with a nonzero handle delta, the parent attaches the samples to the original `AssertionError` with `BaseException.add_note()` and re-raises the same exception.
 
-1. **Extra handle identity.** Enumerate the current process handle table, preferably with `NtQuerySystemInformation(SystemExtendedHandleInformation)`, and record enough type/name information to distinguish token, event, pipe, process/thread, section, and other handles.
-2. **Persistence.** Sample the handle delta and identified extra handles at failure time **T**, **T+100ms**, and **T+1000ms**. Persistence to +1000ms is evidence against a short sample-point race; disappearance is evidence that steady-state synchronization may matter.
-3. **Concurrent activity.** Record relevant worker/thread/finalizer state available to the test harness so a live handle can be correlated with pending async completion, thread cleanup, or runtime activity.
+Interpret persistence conservatively:
+
+- **nonzero at T, zero later:** transient handle-count behavior; the original strict assertion still fails and the later zero is diagnostic only;
+- **nonzero through T+1000ms:** a persistent handle-count difference and therefore a stronger leak candidate, but **not a confirmed leak** until handle ownership/type is identified;
+- **fluctuating values** such as `1 -> 2 -> 0`: concurrent handle activity occurred during the diagnostic window and should be recorded rather than smoothed into a monotonic story.
+
+The sampler runs in the measured child because parent-side persistence sampling would be meaningless once that child exits. Tests that only assert a control-message kind, rather than a handle-count invariant, discard the diagnostic transport field and do not attach handle notes to unrelated failures.
+
+Synthetic tests force the nonzero sampler path and the parent annotation path so the diagnostic machinery is exercised without waiting for an intermittent CI failure.
+
+## Next reliability escalation
+
+Do not treat the persistence sampler as the fix. Its purpose is to determine whether the next observed nonzero delta is transient, persistent, or fluctuating while preserving the strict invariant.
+
+If a failure remains nonzero through T+1000ms, the next diagnostic step is **handle identity**: enumerate the current process handle table, preferably with `NtQuerySystemInformation(SystemExtendedHandleInformation)`, and resolve enough type/name information to distinguish token, event, pipe, process/thread, section, and unrelated/runtime handles. That evidence is required before deciding whether the eventual change is synchronization, invariant narrowing, or a mechanism-specific leak fix.
 
 The evidence should determine the eventual fix:
 
@@ -59,7 +71,7 @@ The evidence should determine the eventual fix:
 
 ## What not to do
 
-Until the instrumentation above identifies the mechanism, do **not**:
+Until the instrumentation identifies the mechanism, do **not**:
 
 - silently narrow or weaken `delta == 0` assertions;
 - add retry-until-zero behavior to `_NativeChecks.handles()` or its callers;
