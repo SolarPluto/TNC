@@ -49,3 +49,51 @@ jobs:
 
       - name: Run full test suite
         run: uv run pytest -q
+
+
+  handle-enumeration-scope:
+    runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.scope.outputs.enabled }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect native-token diagnostic scope
+        id: scope
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" > changed.txt
+          if grep -Eq '^(tests/test_windows_pipe_native_token\.py|tests/test_windows_pipe_process\.py|src/tnc/provenance/windows_pipe_token\.py|src/tnc/provenance/windows_pipe_native\.py)$' changed.txt; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  handle-enumeration-diagnostic:
+    needs: handle-enumeration-scope
+    if: needs.handle-enumeration-scope.outputs.enabled == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      TNC_HANDLE_ENUMERATION: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Sync locked environment
+        run: uv sync --locked
+
+      - name: Run native-token handle diagnostic
+        run: uv run pytest -q -s tests/test_windows_pipe_native_token.py
