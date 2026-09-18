@@ -57,6 +57,7 @@ def _server(control, name, scenario, challenge):
         read = endpoint.begin_read(pipe._plan('READ', 2, t.PREAMBLE_SIZE))
         assert read.wait_until(read._plan.request_deadline)
         counts = [baseline, checks.handles()]
+        lifecycle_counts = {'pre_inspect': checks.handles() - baseline}
         handle_baseline = checks.handle_values()
         inspector = t.PipeTokenInspector(token_api)
         counts.append(checks.handles())
@@ -97,6 +98,7 @@ def _server(control, name, scenario, challenge):
             result = inspector.inspect(boundary).model_dump(mode='json')
         # Freeze the inspect/capture phase before retry/probe work. Handles created
         # by the boundary-consumption retry are intentionally outside this snapshot.
+        lifecycle_counts['post_inspect'] = checks.handles() - baseline
         handle_pre_cleanup = checks.handle_values()
         if scenario != 'bad_preamble':
             # Successful and rejected boundaries alike must be consumed.
@@ -113,14 +115,15 @@ def _server(control, name, scenario, challenge):
         del inspector  # Release the inspector-owned Python lock handle.
         sample_started = time.monotonic()
         delta_at_t = checks.handles() - baseline
+        lifecycle_counts['post_cleanup'] = delta_at_t
         handle_post_cleanup = checks.handle_values()
         delta, samples = checks.sample_handle_delta(
             baseline, initial=(delta_at_t, sample_started))
         identity_diagnostic = checks.handle_identity_diagnostic(
             handle_baseline, handle_pre_cleanup, handle_post_cleanup) if delta else None
         pipe._send(control, kind='done', result=result, query_calls=queries,
-                   counts=counts, delta=delta, handle_samples=samples,
-                   handle_identity=identity_diagnostic,
+                   counts=counts, lifecycle_counts=lifecycle_counts,
+                   delta=delta, handle_samples=samples, handle_identity=identity_diagnostic,
                    sid=identity.user_sid, reverted=True)
     except BaseException as error:
         try:
@@ -191,6 +194,12 @@ def test_native_token_capture_and_reversion(harness, scenario):
     done = pipe._receive(control)
     samples = done.pop('handle_samples', None)
     identity_diagnostic = done.pop('handle_identity', None)
+    lifecycle_counts = done.pop('lifecycle_counts', None)
+    if done.get('delta') and lifecycle_counts is not None:
+        identity_diagnostic = (
+            'handle lifecycle deltas: pre_inspect={pre_inspect}, '
+            'post_inspect={post_inspect}, post_cleanup={post_cleanup}'.format(**lifecycle_counts)
+            + ('\n' + identity_diagnostic if identity_diagnostic else ''))
     # Reliability inventory: docs/TNC_Test_Reliability.md. On 2026-09-16 the
     # [impersonation] case reported delta=1 once in a deliberate three-attempt window;
     # two reruns passed and identification did not reproduce it. Keep delta == 0 strict:
@@ -223,6 +232,12 @@ def test_native_capture_denials_revert_without_evidence(harness, scenario):
     done = pipe._receive(control)
     samples = done.pop('handle_samples', None)
     identity_diagnostic = done.pop('handle_identity', None)
+    lifecycle_counts = done.pop('lifecycle_counts', None)
+    if done.get('delta') and lifecycle_counts is not None:
+        identity_diagnostic = (
+            'handle lifecycle deltas: pre_inspect={pre_inspect}, '
+            'post_inspect={post_inspect}, post_cleanup={post_cleanup}'.format(**lifecycle_counts)
+            + ('\n' + identity_diagnostic if identity_diagnostic else ''))
     captured = _record_handle_diagnostic(done, samples, identity_diagnostic)
     if captured:
         assert done['kind'] == 'done' and done['reverted'], done
