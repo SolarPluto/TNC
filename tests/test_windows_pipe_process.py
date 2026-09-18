@@ -286,12 +286,15 @@ class _NativeChecks:
         except BaseException as error:
             return 'enumeration unavailable: ' + type(error).__name__ + ': ' + str(error)[:200]
 
-    def sample_handle_delta(self, baseline):
+    def sample_handle_delta(self, baseline, initial=None):
         """Sample this child before exit; concurrent handle activity may make samples fluctuate."""
-        delta = self.handles() - baseline
+        if initial is None:
+            delta = self.handles() - baseline
+            started = time.monotonic()
+        else:
+            delta, started = initial
         if delta == 0:
             return 0, None
-        started = time.monotonic()
         time.sleep(max(0.0, 0.1 - (time.monotonic() - started)))
         after_100ms = self.handles() - baseline
         time.sleep(max(0.0, 1.0 - (time.monotonic() - started)))
