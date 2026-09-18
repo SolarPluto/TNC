@@ -77,12 +77,15 @@ def _server(control, name, scenario, challenge):
             elif scenario == 'preexisting':
                 assert token_api.impersonate(endpoint._handle)
             result = inspector.inspect(boundary).model_dump(mode='json')
+        # Freeze the inspect/capture phase before retry/probe work. Handles created
+        # by the boundary-consumption retry are intentionally outside this snapshot.
+        handle_pre_cleanup = checks.handle_values()
+        if scenario != 'bad_preamble':
             # Successful and rejected boundaries alike must be consumed.
             before_retry = len(calls)
             assert inspector.inspect(boundary).reason == 'BOUNDARY_UNAVAILABLE'
             assert len(calls) == before_retry
         counts.append(checks.handles())
-        handle_pre_cleanup = checks.handle_values()
         assert token_api.open_thread_token() is None
         assert read_windows_operator_identity().user_sid == identity.user_sid
         assert calls and all(rights == t.TOKEN_QUERY and as_self for rights, as_self in calls)
@@ -211,7 +214,7 @@ def test_native_capture_denials_revert_without_evidence(harness, scenario):
 @pytest.mark.parametrize('scenario', ['revert_failure', 'close_failure', 'preexisting'])
 def test_native_impersonation_fault_terminates_worker(harness, scenario):
     server, control, client, channel, info = _start(harness, scenario)
-    server.join(10)
+    server.join(pipe._diagnostic_timeout(10))
     assert not server.is_alive() and server.exitcode == 78
     # No successful audit result escaped the fatal worker.
     with pytest.raises((EOFError, BrokenPipeError)):
