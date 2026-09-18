@@ -117,7 +117,14 @@ def test_wrong_operation_or_order_rejected(ledger,field,value):
 @pytest.mark.parametrize('value',[True,-1,2**63,1.5])
 def test_strict_clock_types(ledger,value):
     bad=event(ledger,'SUBMIT','PENDING').model_copy(update={'tick':value})
-    assert propose_pipe_event(ledger,bad).status=='REJECTED'
+    if isinstance(value,float):
+        # Serializing a float into a strict int field makes Pydantic warn before
+        # validation rejects it. Pin the warning so behavior changes stay legible.
+        with pytest.warns(UserWarning,match='Pydantic serializer warnings'):
+            result=propose_pipe_event(ledger,bad)
+    else:
+        result=propose_pipe_event(ledger,bad)
+    assert result.status=='REJECTED'
 
 
 @pytest.mark.parametrize('outcome,count',[('PENDING',1),('ERROR',1),('SUCCESS',129)])
