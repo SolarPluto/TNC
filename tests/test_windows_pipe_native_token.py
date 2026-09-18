@@ -7,6 +7,7 @@ induced by corrupting OS handles or changing privileges.
 import ctypes as c
 import os
 import sys
+import time
 import traceback
 import uuid
 
@@ -89,8 +90,11 @@ def _server(control, name, scenario, challenge):
         endpoint.close()
         assert not n._OWNERS
         del inspector  # Release the inspector-owned Python lock handle.
+        sample_started = time.monotonic()
+        delta_at_t = checks.handles() - baseline
         handle_post_cleanup = checks.handle_values()
-        delta, samples = checks.sample_handle_delta(baseline)
+        delta, samples = checks.sample_handle_delta(
+            baseline, initial=(delta_at_t, sample_started))
         identity_diagnostic = checks.handle_identity_diagnostic(
             handle_baseline, handle_pre_cleanup, handle_post_cleanup) if delta else None
         pipe._send(control, kind='done', result=result, query_calls=queries,
