@@ -49,4 +49,3 @@ jobs:
 
       - name: Run full test suite
         run: uv run pytest -q
-
