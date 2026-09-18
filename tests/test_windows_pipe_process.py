@@ -169,7 +169,7 @@ class _NativeChecks:
         return c.c_ulong(status).value
 
     def handle_values(self):
-        """Best-effort value-only snapshot of this process handle table."""
+        """Best-effort opaque handle-instance snapshot for this process."""
         if os.environ.get('TNC_HANDLE_ENUMERATION') != '1':
             return None, 'enumeration disabled'
         started = time.monotonic()
@@ -194,17 +194,19 @@ class _NativeChecks:
             if header + count * entry_size > len(buffer):
                 return None, 'SystemExtendedHandleInformation returned truncated table'
             pid = os.getpid()
-            values = set()
+            identities = set()
             for index in range(count):
                 start = header + index * entry_size
                 entry = _SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX.from_buffer_copy(
                     buffer.raw[start:start + entry_size])
                 if entry.pid == pid:
-                    values.add(int(entry.handle))
+                    # Keep the kernel object pointer only as an opaque equality token.
+                    # It never leaves this snapshot/analysis path or appears in output.
+                    identities.add((int(entry.handle), int(entry.object or 0)))
             elapsed_ms = (time.monotonic() - started) * 1000
             print('TNC handle enumeration: %.1f ms (%d current-process handles)' % (
-                elapsed_ms, len(values)), flush=True)
-            return values, None
+                elapsed_ms, len(identities)), flush=True)
+            return identities, None
         except BaseException as error:
             elapsed_ms = (time.monotonic() - started) * 1000
             print('TNC handle enumeration failed after %.1f ms: %s: %s' % (
@@ -258,17 +260,26 @@ class _NativeChecks:
             unavailable = [reason for _, reason in (baseline, pre_cleanup, post_cleanup) if reason]
             if unavailable:
                 return 'enumeration unavailable: ' + '; '.join(unavailable)
-            baseline_values, pre_values, post_values = (
+            baseline_ids, pre_ids, post_ids = (
                 baseline[0], pre_cleanup[0], post_cleanup[0])
-            added = pre_values - baseline_values
-            released = pre_values - post_values
-            persisted = post_values - baseline_values
+            added = pre_ids - baseline_ids
+            released = pre_ids - post_ids
+            persisted = post_ids - baseline_ids
             expected = added - released
             cleanup_created = persisted - expected
-            overlap = baseline_values & post_values
+            overlap = baseline_ids & post_ids
 
-            def fmt(values):
-                return '[' + ', '.join('0x%X' % value for value in sorted(values)) + ']'
+            def values(identities):
+                return sorted({value for value, _ in identities})
+
+            def fmt(identities):
+                return '[' + ', '.join('0x%X' % value for value in values(identities)) + ']'
+
+            baseline_by_value = {value: object_id for value, object_id in baseline_ids}
+            post_by_value = {value: object_id for value, object_id in post_ids}
+            reused_values = sorted(
+                value for value in baseline_by_value.keys() & post_by_value.keys()
+                if baseline_by_value[value] != post_by_value[value])
 
             lines = [
                 'handle identity snapshots:',
@@ -280,10 +291,13 @@ class _NativeChecks:
                 lines.append('  phase invariant: persisted_past_cleanup == added_during_inspect - released_by_cleanup')
             else:
                 lines.append('  cleanup-originated survivors=' + fmt(cleanup_created))
+            for value in reused_values:
+                lines.append(
+                    '  0x%X: prior instance closed, new instance opened (different object)' % value)
 
-            # Resolve full metadata only for strict survivors. Baseline/post overlap is
-            # type-checked only to detect a suspicious TOKEN occupying a pre-inspect slot.
-            for value in sorted(persisted):
+            # Resolve metadata only after reducing opaque identities back to handle
+            # values. Kernel object pointers never enter diagnostic output structures.
+            for value in values(persisted):
                 object_type, error = self._object_type(value)
                 if error:
                     lines.append('  0x%X: %s' % (value, error))
@@ -291,7 +305,7 @@ class _NativeChecks:
                     lines.append('  0x%X: %s' % (value, self._token_metadata(value)))
                 else:
                     lines.append('  0x%X: type=%s' % (value, object_type))
-            for value in sorted(overlap):
+            for value in values(overlap):
                 object_type, error = self._object_type(value)
                 if not error and object_type.upper() == 'TOKEN':
                     lines.append('  suspicious baseline/post-cleanup TOKEN slot 0x%X: %s' % (
