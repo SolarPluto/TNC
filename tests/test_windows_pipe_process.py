@@ -38,13 +38,15 @@ def _receive(control, timeout=15):
 
 
 @contextmanager
-def _handle_delta_diagnostic(samples):
+def _handle_delta_diagnostic(samples, identity=None):
     try:
         yield
     except AssertionError as error:
         if samples is not None:
             error.add_note(
                 'handle persistence (baseline={baseline}): T={T}, +100ms={+100ms}, +1000ms={+1000ms}'.format(**samples))
+        if identity is not None:
+            error.add_note(identity)
         raise
 
 
