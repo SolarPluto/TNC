@@ -30,7 +30,12 @@ def _send(control, **message):
     control.send_bytes(raw)
 
 
-def _receive(control, timeout=15):
+def _diagnostic_timeout(default):
+    return 60 if os.environ.get('TNC_HANDLE_ENUMERATION') == '1' else default
+
+
+def _receive(control, timeout=None):
+    timeout = _diagnostic_timeout(15) if timeout is None else timeout
     assert control.poll(timeout), 'Child control deadline exceeded'
     message = json.loads(control.recv_bytes(4096))
     assert message.get('kind') != 'error', message
@@ -38,13 +43,15 @@ def _receive(control, timeout=15):
 
 
 @contextmanager
-def _handle_delta_diagnostic(samples):
+def _handle_delta_diagnostic(samples, identity=None):
     try:
         yield
     except AssertionError as error:
         if samples is not None:
             error.add_note(
                 'handle persistence (baseline={baseline}): T={T}, +100ms={+100ms}, +1000ms={+1000ms}'.format(**samples))
+        if identity is not None:
+            error.add_note(identity)
         raise
 
 
@@ -65,11 +72,37 @@ class _FILETIME(c.Structure):
     _fields_ = [('low', n.DWORD), ('high', n.DWORD)]
 
 
+class _SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX(c.Structure):
+    _fields_ = [
+        ('object', c.c_void_p),
+        ('pid', c.c_size_t),
+        ('handle', c.c_size_t),
+        ('granted_access', n.DWORD),
+        ('creator_backtrace_index', c.c_ushort),
+        ('object_type_index', c.c_ushort),
+        ('attributes', n.DWORD),
+        ('reserved', n.DWORD),
+    ]
+
+
+class _UNICODE_STRING(c.Structure):
+    _fields_ = [('length', c.c_ushort), ('maximum_length', c.c_ushort), ('buffer', c.c_void_p)]
+
+
+_SYSTEM_EXTENDED_HANDLE_INFORMATION = 0x40
+_OBJECT_TYPE_INFORMATION = 2
+_STATUS_INFO_LENGTH_MISMATCH = 0xC0000004
+_STATUS_INVALID_HANDLE = 0xC0000008
+_TOKEN_TYPE = 8
+_TOKEN_IMPERSONATION_LEVEL = 9
+
+
 class _NativeChecks:
     def __init__(self, api):
         self.api = api
         self.kernel = api._dll
         self.security = c.WinDLL('advapi32.dll', use_last_error=True, winmode=0x800)
+        self.ntdll = c.WinDLL('ntdll.dll', winmode=0x800)
         p = c.POINTER
         for name, args, result in (
             ('CreateFileW', [c.c_wchar_p, n.DWORD, n.DWORD, c.c_void_p, n.DWORD, n.DWORD, n.HANDLE], n.HANDLE),
@@ -88,6 +121,12 @@ class _NativeChecks:
         ):
             fn = getattr(self.security, name)
             fn.argtypes, fn.restype = args, n.BOOL
+        self.security.GetTokenInformation.argtypes = [n.HANDLE, n.DWORD, c.c_void_p, n.DWORD, p(n.DWORD)]
+        self.security.GetTokenInformation.restype = n.BOOL
+        self.ntdll.NtQuerySystemInformation.argtypes = [n.DWORD, c.c_void_p, n.DWORD, p(n.DWORD)]
+        self.ntdll.NtQuerySystemInformation.restype = c.c_long
+        self.ntdll.NtQueryObject.argtypes = [n.HANDLE, n.DWORD, c.c_void_p, n.DWORD, p(n.DWORD)]
+        self.ntdll.NtQueryObject.restype = c.c_long
 
     def birth(self, pid):
         process = self.kernel.OpenProcess(0x1000, False, pid)
@@ -125,12 +164,165 @@ class _NativeChecks:
         assert self.kernel.GetProcessHandleCount(self.kernel.GetCurrentProcess(), c.byref(value))
         return value.value
 
-    def sample_handle_delta(self, baseline):
+    @staticmethod
+    def _status(status):
+        return c.c_ulong(status).value
+
+    def handle_values(self):
+        """Best-effort opaque handle-instance snapshot for this process."""
+        if os.environ.get('TNC_HANDLE_ENUMERATION') != '1':
+            return None, 'enumeration disabled'
+        started = time.monotonic()
+        try:
+            size = 65536
+            for _ in range(8):
+                buffer = c.create_string_buffer(size)
+                needed = n.DWORD()
+                status = self.ntdll.NtQuerySystemInformation(
+                    _SYSTEM_EXTENDED_HANDLE_INFORMATION, buffer, len(buffer), c.byref(needed))
+                code = self._status(status)
+                if code == 0:
+                    break
+                if code != _STATUS_INFO_LENGTH_MISMATCH:
+                    return None, 'SystemExtendedHandleInformation status=0x%08X' % code
+                size = max(size * 2, int(needed.value) + 4096)
+            else:
+                return None, 'SystemExtendedHandleInformation buffer sizing did not converge'
+            header = c.sizeof(c.c_size_t) * 2
+            count = c.c_size_t.from_buffer_copy(buffer.raw[:c.sizeof(c.c_size_t)]).value
+            entry_size = c.sizeof(_SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX)
+            if header + count * entry_size > len(buffer):
+                return None, 'SystemExtendedHandleInformation returned truncated table'
+            pid = os.getpid()
+            identities = set()
+            for index in range(count):
+                start = header + index * entry_size
+                entry = _SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX.from_buffer_copy(
+                    buffer.raw[start:start + entry_size])
+                if entry.pid == pid:
+                    # Keep the kernel object pointer only as an opaque equality token.
+                    # It never leaves this snapshot/analysis path or appears in output.
+                    identities.add((int(entry.handle), int(entry.object or 0)))
+            elapsed_ms = (time.monotonic() - started) * 1000
+            print('TNC handle enumeration: %.1f ms (%d current-process handles)' % (
+                elapsed_ms, len(identities)), flush=True)
+            return identities, None
+        except BaseException as error:
+            elapsed_ms = (time.monotonic() - started) * 1000
+            print('TNC handle enumeration failed after %.1f ms: %s: %s' % (
+                elapsed_ms, type(error).__name__, str(error)[:200]), flush=True)
+            return None, type(error).__name__ + ': ' + str(error)[:200]
+
+    def _object_type(self, value):
+        try:
+            size = 256
+            for _ in range(5):
+                buffer = c.create_string_buffer(size)
+                needed = n.DWORD()
+                status = self.ntdll.NtQueryObject(
+                    n.HANDLE(value), _OBJECT_TYPE_INFORMATION, buffer, len(buffer), c.byref(needed))
+                code = self._status(status)
+                if code == 0:
+                    name = _UNICODE_STRING.from_buffer_copy(buffer.raw[:c.sizeof(_UNICODE_STRING)])
+                    if not name.buffer or not name.length:
+                        return '<unnamed-type>', None
+                    return c.wstring_at(name.buffer, name.length // c.sizeof(c.c_wchar)), None
+                if code == _STATUS_INVALID_HANDLE:
+                    return None, 'vanished between snapshot and resolution'
+                if code != _STATUS_INFO_LENGTH_MISMATCH:
+                    return None, 'NtQueryObject status=0x%08X' % code
+                size = max(size * 2, int(needed.value) + 64)
+            return None, 'NtQueryObject buffer sizing did not converge'
+        except BaseException as error:
+            return None, type(error).__name__ + ': ' + str(error)[:200]
+
+    def _token_metadata(self, value):
+        kind = n.DWORD()
+        needed = n.DWORD()
+        if not self.security.GetTokenInformation(
+                n.HANDLE(value), _TOKEN_TYPE, c.byref(kind), c.sizeof(kind), c.byref(needed)):
+            return 'TOKEN metadata unavailable error=%d' % c.get_last_error()
+        if kind.value == 1:
+            return 'TOKEN type=PRIMARY'
+        if kind.value != 2:
+            return 'TOKEN type=%d' % kind.value
+        level = n.DWORD()
+        if not self.security.GetTokenInformation(
+                n.HANDLE(value), _TOKEN_IMPERSONATION_LEVEL,
+                c.byref(level), c.sizeof(level), c.byref(needed)):
+            return 'TOKEN type=IMPERSONATION level=unavailable error=%d' % c.get_last_error()
+        names = {0: 'ANONYMOUS', 1: 'IDENTIFICATION', 2: 'IMPERSONATION', 3: 'DELEGATION'}
+        return 'TOKEN type=IMPERSONATION level=' + names.get(level.value, str(level.value))
+
+    def handle_identity_diagnostic(self, baseline, pre_cleanup, post_cleanup):
+        """Describe phase-localized survivors without changing the count invariant."""
+        try:
+            unavailable = [reason for _, reason in (baseline, pre_cleanup, post_cleanup) if reason]
+            if unavailable:
+                return 'enumeration unavailable: ' + '; '.join(unavailable)
+            baseline_ids, pre_ids, post_ids = (
+                baseline[0], pre_cleanup[0], post_cleanup[0])
+            added = pre_ids - baseline_ids
+            released = pre_ids - post_ids
+            persisted = post_ids - baseline_ids
+            expected = added - released
+            cleanup_created = persisted - expected
+            overlap = baseline_ids & post_ids
+
+            def values(identities):
+                return sorted({value for value, _ in identities})
+
+            def fmt(identities):
+                return '[' + ', '.join('0x%X' % value for value in values(identities)) + ']'
+
+            baseline_by_value = {value: object_id for value, object_id in baseline_ids}
+            post_by_value = {value: object_id for value, object_id in post_ids}
+            reused_values = sorted(
+                value for value in baseline_by_value.keys() & post_by_value.keys()
+                if baseline_by_value[value] != post_by_value[value])
+
+            lines = [
+                'handle identity snapshots:',
+                '  added_during_inspect=' + fmt(added),
+                '  released_by_cleanup=' + fmt(released),
+                '  persisted_past_cleanup=' + fmt(persisted),
+            ]
+            if persisted == expected:
+                lines.append('  phase invariant: persisted_past_cleanup == added_during_inspect - released_by_cleanup')
+            else:
+                lines.append('  cleanup-originated survivors=' + fmt(cleanup_created))
+            for value in reused_values:
+                lines.append(
+                    '  0x%X: prior instance closed, new instance opened (different object)' % value)
+
+            # Resolve metadata only after reducing opaque identities back to handle
+            # values. Kernel object pointers never enter diagnostic output structures.
+            for value in values(persisted):
+                object_type, error = self._object_type(value)
+                if error:
+                    lines.append('  0x%X: %s' % (value, error))
+                elif object_type.upper() == 'TOKEN':
+                    lines.append('  0x%X: %s' % (value, self._token_metadata(value)))
+                else:
+                    lines.append('  0x%X: type=%s' % (value, object_type))
+            for value in values(overlap):
+                object_type, error = self._object_type(value)
+                if not error and object_type.upper() == 'TOKEN':
+                    lines.append('  suspicious baseline/post-cleanup TOKEN slot 0x%X: %s' % (
+                        value, self._token_metadata(value)))
+            return '\n'.join(lines)
+        except BaseException as error:
+            return 'enumeration unavailable: ' + type(error).__name__ + ': ' + str(error)[:200]
+
+    def sample_handle_delta(self, baseline, initial=None):
         """Sample this child before exit; concurrent handle activity may make samples fluctuate."""
-        delta = self.handles() - baseline
+        if initial is None:
+            delta = self.handles() - baseline
+            started = time.monotonic()
+        else:
+            delta, started = initial
         if delta == 0:
             return 0, None
-        started = time.monotonic()
         time.sleep(max(0.0, 0.1 - (time.monotonic() - started)))
         after_100ms = self.handles() - baseline
         time.sleep(max(0.0, 1.0 - (time.monotonic() - started)))

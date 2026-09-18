@@ -7,6 +7,7 @@ induced by corrupting OS handles or changing privileges.
 import ctypes as c
 import os
 import sys
+import time
 import traceback
 import uuid
 
@@ -18,6 +19,24 @@ from tnc.provenance import windows_pipe_token as t
 from tnc.provenance.windows_identity import read_windows_operator_identity
 
 pytestmark = pytest.mark.skipif(sys.platform != 'win32', reason='Native Windows token processes')
+
+
+def _record_handle_diagnostic(done, samples, identity_diagnostic):
+    if done.get('delta') == 0 or os.environ.get('TNC_HANDLE_DIAGNOSTIC_SOFT_FAIL') != '1':
+        return False
+    lines = ['handle diagnostic captured: delta=%s' % done.get('delta')]
+    if samples is not None:
+        lines.append(
+            'handle persistence (baseline={baseline}): T={T}, +100ms={+100ms}, +1000ms={+1000ms}'.format(**samples))
+    if identity_diagnostic is not None:
+        lines.append(identity_diagnostic)
+    payload = '\n'.join(lines)
+    print(payload, flush=True)
+    path = os.environ.get('TNC_HANDLE_DIAGNOSTIC_PATH')
+    if path:
+        with open(path, 'a', encoding='utf-8', newline='\n') as stream:
+            stream.write(payload + '\n---\n')
+    return True
 
 
 def _server(control, name, scenario, challenge):
@@ -38,6 +57,8 @@ def _server(control, name, scenario, challenge):
         read = endpoint.begin_read(pipe._plan('READ', 2, t.PREAMBLE_SIZE))
         assert read.wait_until(read._plan.request_deadline)
         counts = [baseline, checks.handles()]
+        lifecycle_counts = {'pre_inspect': checks.handles() - baseline}
+        handle_baseline = checks.handle_values()
         inspector = t.PipeTokenInspector(token_api)
         counts.append(checks.handles())
         calls, queries = [], []
@@ -75,6 +96,11 @@ def _server(control, name, scenario, challenge):
             elif scenario == 'preexisting':
                 assert token_api.impersonate(endpoint._handle)
             result = inspector.inspect(boundary).model_dump(mode='json')
+        # Freeze the inspect/capture phase before retry/probe work. Handles created
+        # by the boundary-consumption retry are intentionally outside this snapshot.
+        lifecycle_counts['post_inspect'] = checks.handles() - baseline
+        handle_pre_cleanup = checks.handle_values()
+        if scenario != 'bad_preamble':
             # Successful and rejected boundaries alike must be consumed.
             before_retry = len(calls)
             assert inspector.inspect(boundary).reason == 'BOUNDARY_UNAVAILABLE'
@@ -87,9 +113,17 @@ def _server(control, name, scenario, challenge):
         endpoint.close()
         assert not n._OWNERS
         del inspector  # Release the inspector-owned Python lock handle.
-        delta, samples = checks.sample_handle_delta(baseline)
+        sample_started = time.monotonic()
+        delta_at_t = checks.handles() - baseline
+        lifecycle_counts['post_cleanup'] = delta_at_t
+        handle_post_cleanup = checks.handle_values()
+        delta, samples = checks.sample_handle_delta(
+            baseline, initial=(delta_at_t, sample_started))
+        identity_diagnostic = checks.handle_identity_diagnostic(
+            handle_baseline, handle_pre_cleanup, handle_post_cleanup) if delta else None
         pipe._send(control, kind='done', result=result, query_calls=queries,
-                   counts=counts, delta=delta, handle_samples=samples,
+                   counts=counts, lifecycle_counts=lifecycle_counts,
+                   delta=delta, handle_samples=samples, handle_identity=identity_diagnostic,
                    sid=identity.user_sid, reverted=True)
     except BaseException as error:
         try:
@@ -159,12 +193,25 @@ def test_native_token_capture_and_reversion(harness, scenario):
     server, control, client, channel, _ = _start(harness, scenario)
     done = pipe._receive(control)
     samples = done.pop('handle_samples', None)
+    identity_diagnostic = done.pop('handle_identity', None)
+    lifecycle_counts = done.pop('lifecycle_counts', None)
+    if done.get('delta') and lifecycle_counts is not None:
+        identity_diagnostic = (
+            'handle lifecycle deltas: pre_inspect={pre_inspect}, '
+            'post_inspect={post_inspect}, post_cleanup={post_cleanup}'.format(**lifecycle_counts)
+            + ('\n' + identity_diagnostic if identity_diagnostic else ''))
     # Reliability inventory: docs/TNC_Test_Reliability.md. On 2026-09-16 the
     # [impersonation] case reported delta=1 once in a deliberate three-attempt window;
     # two reruns passed and identification did not reproduce it. Keep delta == 0 strict:
     # narrowing before identifying the live handle could hide a real leak.
-    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
-        assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
+    captured = _record_handle_diagnostic(done, samples, identity_diagnostic)
+    if captured:
+        assert done['kind'] == 'done' and done['reverted'], done
+    else:
+        with pipe._handle_delta_diagnostic(
+                samples if done.get('delta') else None,
+                identity_diagnostic if done.get('delta') else None):
+            assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
     result = done['result']
     assert result['status'] == 'CAPTURED', done
     assert result['source'] == 'NATIVE_TOKEN_API' and not result['authorization_granted']
@@ -184,8 +231,21 @@ def test_native_capture_denials_revert_without_evidence(harness, scenario):
     server, control, client, channel, _ = _start(harness, scenario)
     done = pipe._receive(control)
     samples = done.pop('handle_samples', None)
-    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
-        assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
+    identity_diagnostic = done.pop('handle_identity', None)
+    lifecycle_counts = done.pop('lifecycle_counts', None)
+    if done.get('delta') and lifecycle_counts is not None:
+        identity_diagnostic = (
+            'handle lifecycle deltas: pre_inspect={pre_inspect}, '
+            'post_inspect={post_inspect}, post_cleanup={post_cleanup}'.format(**lifecycle_counts)
+            + ('\n' + identity_diagnostic if identity_diagnostic else ''))
+    captured = _record_handle_diagnostic(done, samples, identity_diagnostic)
+    if captured:
+        assert done['kind'] == 'done' and done['reverted'], done
+    else:
+        with pipe._handle_delta_diagnostic(
+                samples if done.get('delta') else None,
+                identity_diagnostic if done.get('delta') else None):
+            assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
     assert done['result']['status'] == 'INDETERMINATE'
     assert not done['result'].get('facts')
     harness.join(server)
@@ -195,7 +255,7 @@ def test_native_capture_denials_revert_without_evidence(harness, scenario):
 @pytest.mark.parametrize('scenario', ['revert_failure', 'close_failure', 'preexisting'])
 def test_native_impersonation_fault_terminates_worker(harness, scenario):
     server, control, client, channel, info = _start(harness, scenario)
-    server.join(10)
+    server.join(pipe._diagnostic_timeout(10))
     assert not server.is_alive() and server.exitcode == 78
     # No successful audit result escaped the fatal worker.
     with pytest.raises((EOFError, BrokenPipeError)):
