@@ -38,6 +38,7 @@ def _server(control, name, scenario, challenge):
         read = endpoint.begin_read(pipe._plan('READ', 2, t.PREAMBLE_SIZE))
         assert read.wait_until(read._plan.request_deadline)
         counts = [baseline, checks.handles()]
+        handle_baseline = checks.handle_values()
         inspector = t.PipeTokenInspector(token_api)
         counts.append(checks.handles())
         calls, queries = [], []
@@ -80,6 +81,7 @@ def _server(control, name, scenario, challenge):
             assert inspector.inspect(boundary).reason == 'BOUNDARY_UNAVAILABLE'
             assert len(calls) == before_retry
         counts.append(checks.handles())
+        handle_pre_cleanup = checks.handle_values()
         assert token_api.open_thread_token() is None
         assert read_windows_operator_identity().user_sid == identity.user_sid
         assert calls and all(rights == t.TOKEN_QUERY and as_self for rights, as_self in calls)
@@ -87,9 +89,13 @@ def _server(control, name, scenario, challenge):
         endpoint.close()
         assert not n._OWNERS
         del inspector  # Release the inspector-owned Python lock handle.
+        handle_post_cleanup = checks.handle_values()
         delta, samples = checks.sample_handle_delta(baseline)
+        identity_diagnostic = checks.handle_identity_diagnostic(
+            handle_baseline, handle_pre_cleanup, handle_post_cleanup) if delta else None
         pipe._send(control, kind='done', result=result, query_calls=queries,
                    counts=counts, delta=delta, handle_samples=samples,
+                   handle_identity=identity_diagnostic,
                    sid=identity.user_sid, reverted=True)
     except BaseException as error:
         try:
@@ -159,11 +165,14 @@ def test_native_token_capture_and_reversion(harness, scenario):
     server, control, client, channel, _ = _start(harness, scenario)
     done = pipe._receive(control)
     samples = done.pop('handle_samples', None)
+    identity_diagnostic = done.pop('handle_identity', None)
     # Reliability inventory: docs/TNC_Test_Reliability.md. On 2026-09-16 the
     # [impersonation] case reported delta=1 once in a deliberate three-attempt window;
     # two reruns passed and identification did not reproduce it. Keep delta == 0 strict:
     # narrowing before identifying the live handle could hide a real leak.
-    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
+    with pipe._handle_delta_diagnostic(
+            samples if done.get('delta') else None,
+            identity_diagnostic if done.get('delta') else None):
         assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
     result = done['result']
     assert result['status'] == 'CAPTURED', done
@@ -184,7 +193,10 @@ def test_native_capture_denials_revert_without_evidence(harness, scenario):
     server, control, client, channel, _ = _start(harness, scenario)
     done = pipe._receive(control)
     samples = done.pop('handle_samples', None)
-    with pipe._handle_delta_diagnostic(samples if done.get('delta') else None):
+    identity_diagnostic = done.pop('handle_identity', None)
+    with pipe._handle_delta_diagnostic(
+            samples if done.get('delta') else None,
+            identity_diagnostic if done.get('delta') else None):
         assert done['kind'] == 'done' and done['delta'] == 0 and done['reverted'], done
     assert done['result']['status'] == 'INDETERMINATE'
     assert not done['result'].get('facts')
