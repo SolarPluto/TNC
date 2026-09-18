@@ -87,6 +87,23 @@ The evidence should determine the eventual fix:
 - narrow the invariant to TNC-owned handle classes if unrelated process/runtime handles make whole-process equality overspecified; or
 - fix a real leak if a TNC-owned handle remains persistently open.
 
+## Zero-step Actions failures
+
+A GitHub Actions job that completes in a few seconds with `steps: []`, `runner_id: 0`, and an empty runner name failed before any runner executed workflow logic. When the same shape appears across independent jobs and runner labels, do not start by debugging pytest or individual workflow steps.
+
+Use this discriminator first:
+
+1. Create a scratch branch from the default branch.
+2. Add a minimal independent push-triggered workflow with one `ubuntu-latest` job that only runs `echo hello`.
+3. Push once and inspect the resulting job.
+
+Interpretation:
+
+- if the smoke job receives a real runner and executes steps, the original workflow is implicated; inspect workflow schema, expressions, `needs:`, permissions, environment references, reusable workflows, and trigger structure;
+- if the smoke job also finishes with zero steps and `runner_id: 0`, the failure is upstream of workflow content; investigate account/repository Actions state such as included minutes or spending limits, Actions enablement/policy, organization restrictions, account holds, or a GitHub-hosted runner provisioning incident.
+
+This smoke test is the preferred first discriminator because it separates workflow-content failures from account/repository runner-provisioning failures with one minimal run. Do not repeatedly retry an unchanged zero-step workflow after the shape has reproduced.
+
 ## What not to do
 
 Until the instrumentation identifies the mechanism, do **not**:
