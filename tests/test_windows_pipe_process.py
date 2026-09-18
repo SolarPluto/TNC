@@ -30,7 +30,12 @@ def _send(control, **message):
     control.send_bytes(raw)
 
 
-def _receive(control, timeout=15):
+def _diagnostic_timeout(default):
+    return 60 if os.environ.get('TNC_HANDLE_ENUMERATION') == '1' else default
+
+
+def _receive(control, timeout=None):
+    timeout = _diagnostic_timeout(15) if timeout is None else timeout
     assert control.poll(timeout), 'Child control deadline exceeded'
     message = json.loads(control.recv_bytes(4096))
     assert message.get('kind') != 'error', message
@@ -165,6 +170,9 @@ class _NativeChecks:
 
     def handle_values(self):
         """Best-effort value-only snapshot of this process handle table."""
+        if os.environ.get('TNC_HANDLE_ENUMERATION') != '1':
+            return None, 'enumeration disabled'
+        started = time.monotonic()
         try:
             size = 65536
             for _ in range(8):
@@ -193,8 +201,14 @@ class _NativeChecks:
                     buffer.raw[start:start + entry_size])
                 if entry.pid == pid:
                     values.add(int(entry.handle))
+            elapsed_ms = (time.monotonic() - started) * 1000
+            print('TNC handle enumeration: %.1f ms (%d current-process handles)' % (
+                elapsed_ms, len(values)), flush=True)
             return values, None
         except BaseException as error:
+            elapsed_ms = (time.monotonic() - started) * 1000
+            print('TNC handle enumeration failed after %.1f ms: %s: %s' % (
+                elapsed_ms, type(error).__name__, str(error)[:200]), flush=True)
             return None, type(error).__name__ + ': ' + str(error)[:200]
 
     def _object_type(self, value):
