@@ -57,11 +57,23 @@ The sampler runs in the measured child because parent-side persistence sampling 
 
 Synthetic tests force the nonzero sampler path and the parent annotation path so the diagnostic machinery is exercised without waiting for an intermittent CI failure.
 
-## Next reliability escalation
+## Handle identity escalation
 
 Do not treat the persistence sampler as the fix. Its purpose is to determine whether the next observed nonzero delta is transient, persistent, or fluctuating while preserving the strict invariant.
 
-If a failure remains nonzero through T+1000ms, the next diagnostic step is **handle identity**: enumerate the current process handle table, preferably with `NtQuerySystemInformation(SystemExtendedHandleInformation)`, and resolve enough type/name information to distinguish token, event, pipe, process/thread, section, and unrelated/runtime handles. That evidence is required before deciding whether the eventual change is synchronization, invariant narrowing, or a mechanism-specific leak fix.
+The native-token surface now also takes three value-only current-process handle snapshots with `NtQuerySystemInformation(SystemExtendedHandleInformation)`: immediately before inspector construction, immediately before cleanup, and immediately after cleanup. For sets `baseline`, `pre_cleanup`, and `post_cleanup`, diagnostics report:
+
+- `added_during_inspect = pre_cleanup - baseline`;
+- `released_by_cleanup = pre_cleanup - post_cleanup`; and
+- `persisted_past_cleanup = post_cleanup - baseline`.
+
+Normally `persisted_past_cleanup == added_during_inspect - released_by_cleanup`. A difference is reported separately as a cleanup-originated survivor rather than being mislabeled as an inspect leak. This is the main reason the pre-cleanup snapshot exists: it localizes the phase that created the surviving value, in addition to reducing ambiguity from value reuse.
+
+Only a failing strict handle-count assertion triggers metadata resolution. Strict survivors receive `ObjectTypeInformation`; TOKEN survivors additionally receive `TokenType` and, for impersonation tokens, `TokenImpersonationLevel`. A handle that returns `STATUS_INVALID_HANDLE` during this later resolution is retained in the note as "vanished between snapshot and resolution": it was live at the post-cleanup snapshot even if asynchronous cleanup closed it milliseconds later. Baseline/post-cleanup overlap is type-checked only for the special suspicious case where a TOKEN occupies a value that predates inspector work, which can indicate reuse or unexpected pre-existing token state.
+
+Enumeration and metadata are supporting evidence only. Buffer negotiation failures, `NtQuerySystemInformation` failures, unexpected `NtQueryObject` errors, or other diagnostic exceptions are converted into an `enumeration unavailable: <reason>` note; they never replace the original assertion failure. The original `GetProcessHandleCount` delta at T remains the test signal and `delta == 0` remains unchanged.
+
+Runtime-thread transients require no synchronization. A worker, GC, or runtime handle that exists in only one snapshot naturally falls out of the survivor set; only values present after cleanup relative to the pre-inspect value baseline are treated as persistent candidates.
 
 The evidence should determine the eventual fix:
 
