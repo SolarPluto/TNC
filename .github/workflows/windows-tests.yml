@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [master]
   workflow_dispatch:
+  # Scheduled workflows execute from the default branch. GitHub may disable
+  # schedules after prolonged repository inactivity; re-enable this diagnostic
+  # if the repository has been dormant long enough for that to happen.
   schedule:
     - cron: "17 6 * * *"
 
@@ -85,6 +88,8 @@ jobs:
     timeout-minutes: 30
     env:
       TNC_HANDLE_ENUMERATION: "1"
+      TNC_HANDLE_DIAGNOSTIC_SOFT_FAIL: "1"
+      TNC_HANDLE_DIAGNOSTIC_PATH: ${{ github.workspace }}\handle-enumeration-evidence.txt
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -97,10 +102,38 @@ jobs:
       - name: Sync locked environment
         run: uv sync --locked
 
-      - name: Run native-token handle diagnostic
-        if: github.event_name != 'schedule'
-        run: uv run pytest -q -s tests/test_windows_pipe_native_token.py
+      # PR/manual coverage catches regressions near native-path changes; the
+      # nightly master run catches probabilistic failures independent of a PR.
+      - name: Run handle enumeration diagnostic
+        id: diagnostic
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "schedule") {
+            uv run pytest -q -s
+          } else {
+            uv run pytest -q -s tests/test_windows_pipe_native_token.py
+          }
 
-      - name: Run nightly full-suite handle diagnostic
-        if: github.event_name == 'schedule'
-        run: uv run pytest -q -s
+      - name: Summarize handle diagnostic
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path $env:TNC_HANDLE_DIAGNOSTIC_PATH) {
+            "## Handle enumeration diagnostic" >> $env:GITHUB_STEP_SUMMARY
+            "Survivor data captured. See the handle-enumeration-evidence artifact." >> $env:GITHUB_STEP_SUMMARY
+          } elseif ("${{ steps.diagnostic.outcome }}" -eq "success") {
+            "## Handle enumeration diagnostic" >> $env:GITHUB_STEP_SUMMARY
+            "Ran clean: no nonzero T event was observed." >> $env:GITHUB_STEP_SUMMARY
+          } else {
+            "## Handle enumeration diagnostic" >> $env:GITHUB_STEP_SUMMARY
+            "Diagnostic execution failed before producing survivor evidence." >> $env:GITHUB_STEP_SUMMARY
+          }
+
+      - name: Upload handle enumeration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: handle-enumeration-evidence
+          path: ${{ env.TNC_HANDLE_DIAGNOSTIC_PATH }}
+          if-no-files-found: ignore
+          retention-days: 30
