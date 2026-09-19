@@ -95,6 +95,7 @@ _STATUS_INFO_LENGTH_MISMATCH = 0xC0000004
 _STATUS_INVALID_HANDLE = 0xC0000008
 _TOKEN_TYPE = 8
 _TOKEN_IMPERSONATION_LEVEL = 9
+_HANDLE_ENUMERATION_MAX_BYTES = 64 * 1024 * 1024
 
 
 class _NativeChecks:
@@ -166,52 +167,91 @@ class _NativeChecks:
 
     @staticmethod
     def _status(status):
-        return c.c_ulong(status).value
+        return c.c_uint32(status).value
 
     def handle_values(self):
-        """Best-effort opaque handle-instance snapshot for this process."""
+        """Best-effort opaque snapshot; timings contain no handle/object identities.
+
+        Require a nonzero returned payload length and the exact known table extent
+        before reading entries. Allocation capacity is not a payload length.
+        This private-ABI sanity check cannot detect same-size field rearrangements.
+        """
         if os.environ.get('TNC_HANDLE_ENUMERATION') != '1':
             return None, 'enumeration disabled'
-        started = time.monotonic()
+        started = time.perf_counter()
+        metrics = {'query_calls': 0, 'resize_retries': 0, 'query_ms': 0.0,
+                   'parse_ms': 0.0, 'system_entries': None, 'process_handles': None,
+                   'buffer_bytes': 0, 'outcome': 'unavailable', 'calls': []}
         try:
-            size = 65536
+            size = 65536  # Unchanged so before/after measurements isolate parsing.
             for _ in range(8):
+                if size > _HANDLE_ENUMERATION_MAX_BYTES:
+                    return None, 'SystemExtendedHandleInformation buffer limit exceeded'
                 buffer = c.create_string_buffer(size)
+                metrics['buffer_bytes'] = len(buffer)
                 needed = n.DWORD()
-                status = self.ntdll.NtQuerySystemInformation(
-                    _SYSTEM_EXTENDED_HANDLE_INFORMATION, buffer, len(buffer), c.byref(needed))
+                metrics['query_calls'] += 1
+                code = None
+                query_started = time.perf_counter()
+                try:
+                    status = self.ntdll.NtQuerySystemInformation(
+                        _SYSTEM_EXTENDED_HANDLE_INFORMATION, buffer, len(buffer), c.byref(needed))
+                finally:
+                    elapsed = (time.perf_counter() - query_started) * 1000
+                    metrics['query_ms'] += elapsed
+                    metrics['calls'].append({'duration_ms': elapsed, 'buffer_bytes': len(buffer),
+                        'returned_bytes': int(needed.value),
+                        'status': None})
                 code = self._status(status)
+                metrics['calls'][-1]['status'] = '0x%08X' % code
                 if code == 0:
                     break
                 if code != _STATUS_INFO_LENGTH_MISMATCH:
                     return None, 'SystemExtendedHandleInformation status=0x%08X' % code
+                metrics['resize_retries'] += 1
                 size = max(size * 2, int(needed.value) + 4096)
             else:
                 return None, 'SystemExtendedHandleInformation buffer sizing did not converge'
-            header = c.sizeof(c.c_size_t) * 2
-            count = c.c_size_t.from_buffer_copy(buffer.raw[:c.sizeof(c.c_size_t)]).value
-            entry_size = c.sizeof(_SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX)
-            if header + count * entry_size > len(buffer):
-                return None, 'SystemExtendedHandleInformation returned truncated table'
-            pid = os.getpid()
-            identities = set()
-            for index in range(count):
-                start = header + index * entry_size
-                entry = _SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX.from_buffer_copy(
-                    buffer.raw[start:start + entry_size])
-                if entry.pid == pid:
-                    # Keep the kernel object pointer only as an opaque equality token.
-                    # It never leaves this snapshot/analysis path or appears in output.
-                    identities.add((int(entry.handle), int(entry.object or 0)))
-            elapsed_ms = (time.monotonic() - started) * 1000
-            print('TNC handle enumeration: %.1f ms (%d current-process handles)' % (
-                elapsed_ms, len(identities)), flush=True)
-            return identities, None
+
+            parse_started = time.perf_counter()
+            try:
+                header = c.sizeof(c.c_size_t) * 2
+                valid_length = int(needed.value)
+                if valid_length == 0:
+                    return None, 'SystemExtendedHandleInformation returned no payload length'
+                if not header <= valid_length <= len(buffer):
+                    return None, 'SystemExtendedHandleInformation returned invalid length'
+                count = c.c_size_t.from_buffer_copy(buffer).value
+                metrics['system_entries'] = count
+                entry_size = c.sizeof(_SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX)
+                expected_length = header + count * entry_size
+                if expected_length > valid_length:
+                    return None, 'SystemExtendedHandleInformation returned truncated table'
+                if expected_length != valid_length:
+                    return None, 'SystemExtendedHandleInformation table extent mismatch; unsupported layout'
+                pid = os.getpid()
+                identities = set()
+                for index in range(count):
+                    start = header + index * entry_size
+                    # Copy one structure, not buffer.raw (the entire system table).
+                    entry = _SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX.from_buffer_copy(buffer, start)
+                    if entry.pid == pid:
+                        identities.add((int(entry.handle), int(entry.object or 0)))
+                metrics['process_handles'] = len(identities)
+                metrics['outcome'] = 'success'
+                return identities, None
+            finally:
+                metrics['parse_ms'] = (time.perf_counter() - parse_started) * 1000
         except BaseException as error:
-            elapsed_ms = (time.monotonic() - started) * 1000
-            print('TNC handle enumeration failed after %.1f ms: %s: %s' % (
-                elapsed_ms, type(error).__name__, str(error)[:200]), flush=True)
-            return None, type(error).__name__ + ': ' + str(error)[:200]
+            # Arbitrary exception text/repr may contain opaque object identities.
+            return None, type(error).__name__
+        finally:
+            metrics['total_ms'] = (time.perf_counter() - started) * 1000
+            self._last_handle_snapshot_metrics = metrics
+            try:
+                print('TNC handle enumeration: ' + json.dumps(metrics, sort_keys=True), flush=True)
+            except Exception:
+                pass  # Logging must not become a failure source in the observed test.
 
     def _object_type(self, value):
         try:
@@ -234,7 +274,7 @@ class _NativeChecks:
                 size = max(size * 2, int(needed.value) + 64)
             return None, 'NtQueryObject buffer sizing did not converge'
         except BaseException as error:
-            return None, type(error).__name__ + ': ' + str(error)[:200]
+            return None, type(error).__name__
 
     def _token_metadata(self, value):
         kind = n.DWORD()
@@ -307,12 +347,14 @@ class _NativeChecks:
                     lines.append('  0x%X: type=%s' % (value, object_type))
             for value in values(overlap):
                 object_type, error = self._object_type(value)
-                if not error and object_type.upper() == 'TOKEN':
+                if error:
+                    lines.append('  baseline/post-cleanup 0x%X: %s' % (value, error))
+                elif object_type.upper() == 'TOKEN':
                     lines.append('  suspicious baseline/post-cleanup TOKEN slot 0x%X: %s' % (
                         value, self._token_metadata(value)))
             return '\n'.join(lines)
         except BaseException as error:
-            return 'enumeration unavailable: ' + type(error).__name__ + ': ' + str(error)[:200]
+            return 'enumeration unavailable: ' + type(error).__name__
 
     def sample_handle_delta(self, baseline, initial=None):
         """Sample this child before exit; concurrent handle activity may make samples fluctuate."""
