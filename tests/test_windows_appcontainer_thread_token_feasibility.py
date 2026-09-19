@@ -2,6 +2,7 @@
 import ctypes as c
 import os
 import sys
+import threading
 import uuid
 
 import pytest
@@ -26,13 +27,17 @@ def _advapi():
     a.DuplicateTokenEx.restype = h.BOOL
     a.SetThreadToken.argtypes = [c.POINTER(h.HANDLE), h.HANDLE]
     a.SetThreadToken.restype = h.BOOL
+    a.OpenThreadToken.argtypes = [h.HANDLE, h.DWORD, h.BOOL, c.POINTER(h.HANDLE)]
+    a.OpenThreadToken.restype = h.BOOL
     a.RevertToSelf.argtypes = []
     a.RevertToSelf.restype = h.BOOL
     return a
 
 
-def test_appcontainer_token_can_be_assigned_to_non_appcontainer_thread(emit_observation):
+def test_appcontainer_thread_token_construction_feasibility(emit_observation):
     k = h._kernel32()
+    k.GetCurrentThread.argtypes = []
+    k.GetCurrentThread.restype = h.HANDLE
     advapi = _advapi()
     userenv = h._userenv()
 
@@ -41,10 +46,29 @@ def test_appcontainer_token_can_be_assigned_to_non_appcontainer_thread(emit_obse
     attr_buffer = None
     attr_list = None
     pi = h.PROCESS_INFORMATION()
+    oracle = h.HANDLE()
     source = h.HANDLE()
     duplicate = h.HANDLE()
+    installed = h.HANDLE()
     profile_created = False
     thread_token_set = False
+    owner_thread = threading.get_ident()
+
+    def same_thread():
+        assert threading.get_ident() == owner_thread, 'construction moved to a different Python thread'
+
+    def outcome(stage, *, ok, error=None, detail=None):
+        parts = [
+            'TNC_APPCONTAINER_THREAD_TOKEN_FEASIBILITY',
+            f'stage={stage}',
+            f'ok={ok!r}',
+            'source_oracle_is_appcontainer=True',
+        ]
+        if error is not None:
+            parts.append(f'winerror={error}')
+        if detail is not None:
+            parts.append(f'detail={detail!r}')
+        emit_observation(' '.join(parts))
 
     try:
         hr = int(userenv.CreateAppContainerProfile(
@@ -105,25 +129,22 @@ def test_appcontainer_token_can_be_assigned_to_non_appcontainer_thread(emit_obse
             c.byref(pi),
         ), c.get_last_error()
 
+        same_thread()
+
+        # Establish the source independently with TOKEN_QUERY alone so a later
+        # TOKEN_DUPLICATE access denial remains an interpretable experiment result.
+        assert advapi.OpenProcessToken(pi.hProcess, TOKEN_QUERY, c.byref(oracle)), c.get_last_error()
+        assert oracle.value
+        h._raw_primary_oracle(advapi, k, oracle, expected_sid)
+
+        same_thread()
         source_access = TOKEN_QUERY | TOKEN_DUPLICATE
         if not advapi.OpenProcessToken(pi.hProcess, source_access, c.byref(source)):
-            error = c.get_last_error()
-            pytest.fail(f'OpenProcessToken(TOKEN_QUERY|TOKEN_DUPLICATE) failed: WinError {error}')
+            outcome('OpenProcessToken_TOKEN_DUPLICATE', ok=False, error=c.get_last_error())
+            return
         assert source.value
 
-        # Independent raw oracle before duplication.
-        flag = h.DWORD()
-        returned = h.DWORD()
-        assert advapi.GetTokenInformation(
-            source,
-            h.TOKEN_IS_APPCONTAINER,
-            c.byref(flag),
-            c.sizeof(flag),
-            c.byref(returned),
-        ), c.get_last_error()
-        assert returned.value == c.sizeof(flag)
-        assert flag.value == 1, 'source token oracle is not AppContainer'
-
+        same_thread()
         duplicate_access = TOKEN_QUERY | TOKEN_IMPERSONATE
         if not advapi.DuplicateTokenEx(
             source,
@@ -133,31 +154,64 @@ def test_appcontainer_token_can_be_assigned_to_non_appcontainer_thread(emit_obse
             TOKEN_IMPERSONATION,
             c.byref(duplicate),
         ):
-            error = c.get_last_error()
-            pytest.fail(f'DuplicateTokenEx(SecurityImpersonation) failed: WinError {error}')
+            outcome('DuplicateTokenEx', ok=False, error=c.get_last_error())
+            return
         assert duplicate.value
 
+        # Duplication itself must preserve the independently established
+        # AppContainer identity before the token is installed on this thread.
+        try:
+            h._raw_primary_oracle(advapi, k, duplicate, expected_sid)
+        except AssertionError as error:
+            outcome('DuplicateTokenOracle', ok=False, detail=str(error)[:200])
+            return
+
+        same_thread()
         # NULL ThreadHandle means the calling thread.
         if not advapi.SetThreadToken(None, duplicate):
-            error = c.get_last_error()
-            pytest.fail(f'SetThreadToken(AppContainer impersonation token) failed: WinError {error}')
+            outcome('SetThreadToken', ok=False, error=c.get_last_error())
+            return
         thread_token_set = True
 
-        # Do not perform unrelated work while impersonating. The only operation
-        # before reversion is the reversion itself.
-        if not advapi.RevertToSelf():
+        # Verify the actual effective token on the same thread before interpreting
+        # the construction as feasible. OpenAsSelf=True avoids using the newly
+        # impersonated client context for the token-handle access check.
+        same_thread()
+        if not advapi.OpenThreadToken(
+            k.GetCurrentThread(), TOKEN_QUERY, True, c.byref(installed)
+        ):
             error = c.get_last_error()
-            os._exit(90 if error == 0 else 91)
-        thread_token_set = False
+            if not advapi.RevertToSelf():
+                os._exit(90)
+            thread_token_set = False
+            outcome('OpenThreadTokenVerify', ok=False, error=error)
+            return
+        assert installed.value
 
-        emit_observation(
-            'TNC_APPCONTAINER_THREAD_TOKEN_FEASIBILITY '
-            'source_oracle_is_appcontainer=True '
-            'open_process_token_duplicate=True '
-            'duplicate_token_ex=True '
-            'set_thread_token=True '
-            f'source_sid={expected_sid!r}'
-        )
+        try:
+            h._raw_primary_oracle(advapi, k, installed, expected_sid)
+        except AssertionError as error:
+            if not k.CloseHandle(installed):
+                os._exit(91)
+            installed = h.HANDLE()
+            if not advapi.RevertToSelf():
+                os._exit(92)
+            thread_token_set = False
+            outcome('InstalledThreadTokenOracle', ok=False, detail=str(error)[:200])
+            return
+
+        same_thread()
+        if not k.CloseHandle(installed):
+            os._exit(93)
+        installed = h.HANDLE()
+
+        # Revert before emitting or doing unrelated pytest work.
+        if not advapi.RevertToSelf():
+            os._exit(94)
+        thread_token_set = False
+        same_thread()
+
+        outcome('COMPLETE', ok=True, detail=f'source_sid={expected_sid}')
     finally:
         failure = sys.exception()
         cleanup_errors = []
@@ -166,6 +220,8 @@ def test_appcontainer_token_can_be_assigned_to_non_appcontainer_thread(emit_obse
             if not ok:
                 cleanup_errors.append(f'{label}: WinError {c.get_last_error()}')
 
+        if installed.value:
+            check(k.CloseHandle(installed), 'CloseHandle installed thread token')
         if thread_token_set:
             # Continuing pytest under an unconfirmed impersonation context is unsafe.
             try:
@@ -178,6 +234,8 @@ def test_appcontainer_token_can_be_assigned_to_non_appcontainer_thread(emit_obse
             check(k.CloseHandle(duplicate), 'CloseHandle duplicate token')
         if source.value:
             check(k.CloseHandle(source), 'CloseHandle source token')
+        if oracle.value:
+            check(k.CloseHandle(oracle), 'CloseHandle source oracle token')
         if pi.hProcess:
             check(k.TerminateProcess(pi.hProcess, 1), 'TerminateProcess source child')
             check(k.WaitForSingleObject(pi.hProcess, 5000) == h.WAIT_OBJECT_0, 'wait source child')
