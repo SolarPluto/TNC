@@ -1,6 +1,6 @@
 # TNC Windows Test Reliability Inventory
 
-**As of 2026-09-16.** Update this inventory as reliability investigations progress, fixes accumulate validation runs, or new flaky surfaces are observed.
+**As of 2026-09-19.** Update this inventory as reliability investigations progress, fixes accumulate validation runs, or new flaky surfaces are observed.
 
 This document records intermittent or timing-sensitive Windows test surfaces so that a retry does not erase diagnostic evidence. It is an inventory, not a waiver: strict assertions remain strict until a mechanism is identified.
 
@@ -71,7 +71,7 @@ Normally `persisted_past_cleanup == added_during_inspect - released_by_cleanup`.
 
 Only a failing strict handle-count assertion triggers metadata resolution. Strict survivors receive `ObjectTypeInformation`; TOKEN survivors additionally receive `TokenType` and, for impersonation tokens, `TokenImpersonationLevel`. A handle that returns `STATUS_INVALID_HANDLE` during this later resolution is retained in the note as "vanished between snapshot and resolution": it was live at the post-cleanup snapshot even if asynchronous cleanup closed it milliseconds later. Baseline/post-cleanup overlap is type-checked only for the special suspicious case where a TOKEN occupies a value that predates inspector work, which can indicate reuse or unexpected pre-existing token state.
 
-Enumeration and metadata are supporting evidence only. Buffer negotiation failures, `NtQuerySystemInformation` failures, unexpected `NtQueryObject` errors, or other diagnostic exceptions are converted into an `enumeration unavailable: <reason>` note; they never replace the original assertion failure. The original `GetProcessHandleCount` delta at T remains the test signal and `delta == 0` remains unchanged. Each enabled enumeration logs its elapsed time even on a passing path so runner-specific cost or blocking is observable.
+In the real-flake path, enumeration and metadata are supporting evidence only: the scalar `delta == 0` assertion is the gate, and the identity diagnostic attaches as an assertion note without independently failing a passing test. Buffer negotiation failures, `NtQuerySystemInformation` failures, unexpected `NtQueryObject` errors, ABI/extent mismatches, or other diagnostic exceptions are converted into an `enumeration unavailable: <reason>` note; they never replace the original assertion failure. The original `GetProcessHandleCount` delta at T remains the test signal and `delta == 0` remains unchanged. In the isolated self-test, enumeration is the mechanism under test: snapshot availability and identity invariants are enforced with `_require(...)`, so bad output fails the self-test. Each enabled enumeration logs its elapsed time even on a passing path so runner-specific cost or blocking is observable.
 
 ### Snapshot-cost attribution and validation
 
@@ -107,7 +107,7 @@ On 2026-09-19, run `35448301113`, attempt 1, completed **3309 passed in 856.64s*
 
 Each successful native response reported exactly `16 + 40 * system_entries` bytes (1852336, 1852456, 1852416), independently of the larger allocation. This is an observed compatible payload, not a guarantee about other Windows versions. The controlled test observed `T=2, +100ms=1, +1000ms=1`, with three added instances, one released instance, and two post-cleanup candidates. It identified the retained Event, recorded the deliberately vanished handle, checked both the assertion note and evidence file for pointer leakage, and reported `snapshot_budget_met=true`. The evidence file was checked in the test's temporary directory; no workflow artifact uploader was added.
 
-This run demonstrates the copy fix and controlled diagnostic paths under this runner's load. It predates the exact-extent guard, so it does not validate that amendment. All three snapshots met the reported 100ms target, but this does not establish busy-day performance, diagnose the original intermittent flake, or authorize enabling enumeration in ordinary native-token CI. The guard amendment requires its own fresh Windows run.
+This run demonstrates the copy fix and controlled diagnostic paths under this runner's load. It predates the exact-extent guard, so it does not validate that amendment. All three snapshots met the reported 100ms target, but this does not establish busy-day performance, diagnose the original intermittent flake, or authorize enabling enumeration in ordinary native-token CI. The exact-extent amendment was subsequently validated on exact head `75781253e93eedeb08d84ef26ba47161336a4824` by run `35449327822`, where `pytest-windows` passed with 3314 tests and `text-hygiene` passed.
 
 Gating enumeration only after a count mismatch cannot preserve the frozen three-snapshot identity algebra: by the time the final mismatch is known, the pre-inspect object identities no longer exist retroactively. A post-failure enumeration could identify current handles but could not reliably distinguish pre-existing instances, inspect-created survivors, cleanup-created survivors, or numeric slot reuse.
 
