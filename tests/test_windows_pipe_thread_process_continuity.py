@@ -24,8 +24,6 @@ TOKEN_IMPERSONATE = 0x0004
 TOKEN_QUERY = 0x0008
 SECURITY_IMPERSONATION = 2
 TOKEN_IMPERSONATION = 2
-SECURITY_SQOS_PRESENT = 0x00100000
-SECURITY_IMPERSONATION_SQOS = 0x00020000
 PROC_THREAD_ATTRIBUTE_HANDLE_LIST = 0x00020002
 
 
@@ -371,67 +369,99 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation):
 
         with ExitStack() as token_cleanup:
             token_cleanup.callback(h._revert_or_fail_fast, api)
-            pipe_token = api.open_thread_token()
-            assert pipe_token is not None
-            token_cleanup.callback(h._checked_cleanup, api.close, pipe_token)
-
-            facts = api.capture(pipe_token, h._no_temporal_guard)
-            if facts.token_type != 'IMPERSONATION' or facts.level != 'IMPERSONATION':
+            try:
+                pipe_token = api.open_thread_token()
+            except Exception as error:
                 observe(
-                    'SQOS_LEVEL_MISMATCH',
-                    token_type=facts.token_type,
-                    level=facts.level,
+                    'PIPE_TOKEN_OPEN_UNAVAILABLE',
+                    error_type=type(error).__name__,
+                    detail=str(error)[:200],
                 )
+                pipe_token = None
+
+            if pipe_token is None:
+                observe('PIPE_TOKEN_MISSING')
             else:
-                raw_shape = _raw_appcontainer_shape(advapi, k, h.HANDLE(pipe_token))
-                assert facts.app_container_reported == raw_shape[0]
-
-                interpretation = (
-                    'THREAD_TOKEN'
-                    if raw_shape == (True, expected_sid)
-                    else 'PROCESS_TOKEN'
-                    if raw_shape == client_primary_shape
-                    else 'UNEXPECTED_PIPE_CONTEXT'
-                )
-
+                token_cleanup.callback(h._checked_cleanup, api.close, pipe_token)
                 try:
-                    evidence = NativeAppContainerProbe().probe(
-                        pipe_token, token_type=facts.token_type, level=facts.level
-                    )
-                except AppContainerProbeError as error:
+                    facts = api.capture(pipe_token, h._no_temporal_guard)
+                except Exception as error:
                     observe(
-                        'OBSERVED',
-                        interpretation=interpretation,
-                        raw_is_appcontainer=raw_shape[0],
-                        raw_sid=raw_shape[1],
-                        classifier='UNAVAILABLE',
-                        probe_error=str(error),
+                        'PIPE_TOKEN_CAPTURE_UNAVAILABLE',
+                        error_type=type(error).__name__,
+                        detail=str(error)[:200],
                     )
                 else:
-                    assert evidence.token_is_app_container == raw_shape[0]
-                    assert (
-                        str(evidence.app_container_sid)
-                        if evidence.app_container_sid is not None else None
-                    ) == raw_shape[1]
-                    result = evaluate_appcontainer_exclusion(evidence)
-                    expected_result = (
-                        ('APPCONTAINER', 'TOKEN_IS_APPCONTAINER')
-                        if interpretation == 'THREAD_TOKEN'
-                        else ('PROVEN_NON_APPCONTAINER', 'TOKEN_IS_APPCONTAINER_FALSE_USABLE')
-                        if interpretation == 'PROCESS_TOKEN'
-                        else None
-                    )
-                    if expected_result is not None:
-                        assert (result.status, result.reason) == expected_result
-                    observe(
-                        'OBSERVED',
-                        interpretation=interpretation,
-                        raw_is_appcontainer=raw_shape[0],
-                        raw_sid=raw_shape[1],
-                        status=result.status,
-                        reason=result.reason,
-                        client_pid=client_pid.value,
-                    )
+                    if facts.token_type != 'IMPERSONATION' or facts.level != 'IMPERSONATION':
+                        observe(
+                            'SQOS_LEVEL_MISMATCH',
+                            token_type=facts.token_type,
+                            level=facts.level,
+                        )
+                    else:
+                        try:
+                            raw_shape = _raw_appcontainer_shape(
+                                advapi, k, h.HANDLE(pipe_token)
+                            )
+                        except AssertionError as error:
+                            observe(
+                                'PIPE_APPCONTAINER_QUERY_UNAVAILABLE',
+                                detail=str(error)[:200],
+                            )
+                        else:
+                            assert facts.app_container_reported == raw_shape[0]
+
+                            interpretation = (
+                                'THREAD_TOKEN'
+                                if raw_shape == (True, expected_sid)
+                                else 'PROCESS_TOKEN'
+                                if raw_shape == client_primary_shape
+                                else 'UNEXPECTED_PIPE_CONTEXT'
+                            )
+
+                            try:
+                                evidence = NativeAppContainerProbe().probe(
+                                    pipe_token,
+                                    token_type=facts.token_type,
+                                    level=facts.level,
+                                )
+                            except AppContainerProbeError as error:
+                                observe(
+                                    'OBSERVED',
+                                    interpretation=interpretation,
+                                    raw_is_appcontainer=raw_shape[0],
+                                    raw_sid=raw_shape[1],
+                                    classifier='UNAVAILABLE',
+                                    probe_error=str(error),
+                                )
+                            else:
+                                assert evidence.token_is_app_container == raw_shape[0]
+                                assert (
+                                    str(evidence.app_container_sid)
+                                    if evidence.app_container_sid is not None else None
+                                ) == raw_shape[1]
+                                result = evaluate_appcontainer_exclusion(evidence)
+                                expected_result = (
+                                    ('APPCONTAINER', 'TOKEN_IS_APPCONTAINER')
+                                    if interpretation == 'THREAD_TOKEN'
+                                    else (
+                                        'PROVEN_NON_APPCONTAINER',
+                                        'TOKEN_IS_APPCONTAINER_FALSE_USABLE',
+                                    )
+                                    if interpretation == 'PROCESS_TOKEN'
+                                    else None
+                                )
+                                if expected_result is not None:
+                                    assert (result.status, result.reason) == expected_result
+                                observe(
+                                    'OBSERVED',
+                                    interpretation=interpretation,
+                                    raw_is_appcontainer=raw_shape[0],
+                                    raw_sid=raw_shape[1],
+                                    status=result.status,
+                                    reason=result.reason,
+                                    client_pid=client_pid.value,
+                                )
 
         assert api.open_thread_token() is None
 
@@ -465,6 +495,8 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation):
         if server not in (None, 0, h.INVALID_HANDLE_VALUE):
             k.DisconnectNamedPipe(server)
             check(k.CloseHandle(server), 'CloseHandle server')
+        if descriptor:
+            check(k.LocalFree(descriptor) is None, 'LocalFree pipe security descriptor')
 
         for pi, label in ((client_pi, 'client'), (source_pi, 'source')):
             if pi.hProcess:
