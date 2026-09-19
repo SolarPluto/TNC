@@ -290,13 +290,17 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation):
         ), c.get_last_error()
         h._raw_primary_oracle(advapi, k, duplicate, expected_sid)
 
-        # Create the server before the client starts.
+        # The client will open the pipe while carrying the AppContainer thread
+        # token, so use the same user+package ACL shape as the positive controls.
+        descriptor, pipe_security = h._pipe_security(
+            advapi, expected_sid, h._current_user_sid(advapi, k)
+        )
         pipe_name = rf'\\.\pipe\tnc-thread-process-continuity-{os.getpid()}-{uuid.uuid4().hex}'
         server = k.CreateNamedPipeW(
             pipe_name,
             h.PIPE_ACCESS_DUPLEX | h.FILE_FLAG_OVERLAPPED,
             h.PIPE_REJECT_REMOTE_CLIENTS,
-            1, 4096, 4096, 0, None,
+            1, 4096, 4096, 0, c.byref(pipe_security),
         )
         assert server not in (None, 0, h.INVALID_HANDLE_VALUE), c.get_last_error()
 
