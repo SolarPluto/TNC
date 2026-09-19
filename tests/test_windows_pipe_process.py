@@ -170,7 +170,12 @@ class _NativeChecks:
         return c.c_uint32(status).value
 
     def handle_values(self):
-        """Best-effort opaque snapshot; timings contain no handle/object identities."""
+        """Best-effort opaque snapshot; timings contain no handle/object identities.
+
+        Require a nonzero returned payload length and the exact known table extent
+        before reading entries. Allocation capacity is not a payload length.
+        This private-ABI sanity check cannot detect same-size field rearrangements.
+        """
         if os.environ.get('TNC_HANDLE_ENUMERATION') != '1':
             return None, 'enumeration disabled'
         started = time.perf_counter()
@@ -211,14 +216,19 @@ class _NativeChecks:
             parse_started = time.perf_counter()
             try:
                 header = c.sizeof(c.c_size_t) * 2
-                valid_length = int(needed.value) or len(buffer)
+                valid_length = int(needed.value)
+                if valid_length == 0:
+                    return None, 'SystemExtendedHandleInformation returned no payload length'
                 if not header <= valid_length <= len(buffer):
                     return None, 'SystemExtendedHandleInformation returned invalid length'
                 count = c.c_size_t.from_buffer_copy(buffer).value
                 metrics['system_entries'] = count
                 entry_size = c.sizeof(_SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX)
-                if header + count * entry_size > valid_length:
+                expected_length = header + count * entry_size
+                if expected_length > valid_length:
                     return None, 'SystemExtendedHandleInformation returned truncated table'
+                if expected_length != valid_length:
+                    return None, 'SystemExtendedHandleInformation table extent mismatch; unsupported layout'
                 pid = os.getpid()
                 identities = set()
                 for index in range(count):
