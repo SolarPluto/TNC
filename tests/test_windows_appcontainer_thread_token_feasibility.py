@@ -19,6 +19,25 @@ SECURITY_IMPERSONATION = 2
 TOKEN_IMPERSONATION = 2
 
 
+def _raw_non_appcontainer_oracle(advapi, kernel, token):
+    returned = h.DWORD()
+    flag = h.DWORD()
+    assert advapi.GetTokenInformation(
+        token, h.TOKEN_IS_APPCONTAINER,
+        c.byref(flag), c.sizeof(flag), c.byref(returned),
+    ), c.get_last_error()
+    assert returned.value == c.sizeof(flag)
+    assert flag.value == 0, 'server process unexpectedly reports AppContainer'
+
+    info = h.TOKEN_APPCONTAINER_INFORMATION()
+    assert advapi.GetTokenInformation(
+        token, h.TOKEN_APPCONTAINER_SID,
+        c.byref(info), c.sizeof(info), c.byref(returned),
+    ), c.get_last_error()
+    assert returned.value == c.sizeof(info)
+    assert not info.TokenAppContainer, 'server process unexpectedly has an AppContainer SID'
+
+
 def _advapi():
     a = h._advapi32()
     a.DuplicateTokenEx.argtypes = [
@@ -46,6 +65,7 @@ def test_appcontainer_thread_token_construction_feasibility(emit_observation):
     attr_buffer = None
     attr_list = None
     pi = h.PROCESS_INFORMATION()
+    server_oracle = h.HANDLE()
     oracle = h.HANDLE()
     source = h.HANDLE()
     duplicate = h.HANDLE()
@@ -62,6 +82,7 @@ def test_appcontainer_thread_token_construction_feasibility(emit_observation):
             'TNC_APPCONTAINER_THREAD_TOKEN_FEASIBILITY',
             f'stage={stage}',
             f'ok={ok!r}',
+            'server_oracle_is_appcontainer=False',
             'source_oracle_is_appcontainer=True',
         ]
         if error is not None:
@@ -131,6 +152,16 @@ def test_appcontainer_thread_token_construction_feasibility(emit_observation):
 
         same_thread()
 
+        # Establish the negative side of the asymmetry independently: the pytest
+        # process itself must be an ordinary non-AppContainer process.
+        assert advapi.OpenProcessToken(
+            k.GetCurrentProcess(), TOKEN_QUERY, c.byref(server_oracle)
+        ), c.get_last_error()
+        assert server_oracle.value
+        _raw_non_appcontainer_oracle(advapi, k, server_oracle)
+
+        same_thread()
+
         # Establish the source independently with TOKEN_QUERY alone so a later
         # TOKEN_DUPLICATE access denial remains an interpretable experiment result.
         assert advapi.OpenProcessToken(pi.hProcess, TOKEN_QUERY, c.byref(oracle)), c.get_last_error()
@@ -158,12 +189,13 @@ def test_appcontainer_thread_token_construction_feasibility(emit_observation):
             return
         assert duplicate.value
 
-        # Duplication itself must preserve the independently established
-        # AppContainer identity before the token is installed on this thread.
+        # A successful duplication that changes the AppContainer shape is itself
+        # an experiment result: this construction cannot establish the intended
+        # asymmetry on this runner, but the harness is not corrupt.
         try:
             h._raw_primary_oracle(advapi, k, duplicate, expected_sid)
         except AssertionError as error:
-            outcome('DuplicateTokenOracle', ok=False, detail=str(error)[:200])
+            outcome('DuplicateTokenSemanticDivergence', ok=False, detail=str(error)[:200])
             return
 
         same_thread()
@@ -188,17 +220,11 @@ def test_appcontainer_thread_token_construction_feasibility(emit_observation):
             return
         assert installed.value
 
-        try:
-            h._raw_primary_oracle(advapi, k, installed, expected_sid)
-        except AssertionError as error:
-            if not k.CloseHandle(installed):
-                os._exit(91)
-            installed = h.HANDLE()
-            if not advapi.RevertToSelf():
-                os._exit(92)
-            thread_token_set = False
-            outcome('InstalledThreadTokenOracle', ok=False, detail=str(error)[:200])
-            return
+        # SetThreadToken reported success; the actual current-thread token must
+        # now match the already-verified duplicate. A mismatch is a harness/state
+        # violation, not a construction-denial result, so it hard-fails after the
+        # finally block safely reverts the thread.
+        h._raw_primary_oracle(advapi, k, installed, expected_sid)
 
         same_thread()
         if not k.CloseHandle(installed):
@@ -236,6 +262,8 @@ def test_appcontainer_thread_token_construction_feasibility(emit_observation):
             check(k.CloseHandle(source), 'CloseHandle source token')
         if oracle.value:
             check(k.CloseHandle(oracle), 'CloseHandle source oracle token')
+        if server_oracle.value:
+            check(k.CloseHandle(server_oracle), 'CloseHandle server oracle token')
         if pi.hProcess:
             check(k.TerminateProcess(pi.hProcess, 1), 'TerminateProcess source child')
             check(k.WaitForSingleObject(pi.hProcess, 5000) == h.WAIT_OBJECT_0, 'wait source child')
