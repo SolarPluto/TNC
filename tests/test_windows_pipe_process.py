@@ -603,7 +603,7 @@ def harness():
 
 def _start(harness, scenario, name=None):
     name = name or r'\\.\pipe\TNC-' + uuid.uuid4().hex
-    process, control, = harness.spawn(_server, name, scenario)
+    process, control = harness.spawn(_server, name, scenario)
     info = _receive(control)
     assert info['kind'] == 'ready' and info['pid'] == process.pid
     return process, control, info
@@ -692,7 +692,7 @@ def test_native_first_instance_collision_fails_closed(harness):
 def test_native_server_pin_mismatch_rejects_before_data(harness, field):
     server, control, info = _start(harness, 'idle')
     changed = {**info, field: info[field]+1}
-    client, channel = harness.spawn(_client, info, 'mismatch')
+    client, channel = harness.spawn(_client, changed, 'mismatch')
     assert _receive(channel) == {'kind': 'mismatch'}
     harness.join(client)
     _send(control, kind='close')
