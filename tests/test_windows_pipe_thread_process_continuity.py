@@ -15,10 +15,8 @@ from tnc.provenance.windows_appcontainer_probe import (
     AppContainerProbeError,
     NativeAppContainerProbe,
 )
-from tnc.provenance.windows_pipe_token import NativePipeTokenAPI, TokenCaptureError
+from tnc.provenance.windows_pipe_token import NativePipeTokenAPI, TokenCaptureError, SID_AND_ATTRIBUTES
 
-
-pytestmark = pytest.mark.skipif(os.name != 'nt', reason='Windows named-pipe continuity experiment only')
 
 TOKEN_DUPLICATE = 0x0002
 TOKEN_IMPERSONATE = 0x0004
@@ -87,40 +85,118 @@ def _raw_appcontainer_shape(advapi, kernel, token):
     return bool(flag), sid
 
 
+def _raw_integrity(advapi, token):
+    """Read class 25 with bounded SID validation; return RID, SID and attributes."""
+    # TOKEN_MANDATORY_LABEL contains one SID_AND_ATTRIBUTES, not a DWORD.
+    minimum = c.sizeof(SID_AND_ATTRIBUTES)
+    size, returned = h.DWORD(), h.DWORD()
+    ok = advapi.GetTokenInformation(token, 25, None, 0, c.byref(size))
+    error = 0 if ok else c.get_last_error()
+    if ok or error != h.ERROR_INSUFFICIENT_BUFFER:
+        raise _QueryFailure(25, 'size_probe', error)
+    if not minimum <= size.value <= 65536:
+        raise _QueryFailure(25, 'allocation_bound')
+    buffer = c.create_string_buffer(size.value)
+    if not advapi.GetTokenInformation(token, 25, buffer, size.value, c.byref(returned)):
+        raise _QueryFailure(25, 'query', c.get_last_error())
+    if not minimum <= returned.value <= size.value:
+        raise _QueryFailure(25, 'return_length')
+    label = SID_AND_ATTRIBUTES.from_buffer(buffer)
+    start, end = c.addressof(buffer), c.addressof(buffer) + returned.value
+    pointer = label.Sid
+    if not pointer or not start + minimum <= pointer <= end - 8:
+        raise _QueryFailure(25, 'sid_pointer')
+    offset = pointer - start
+    header = bytes(buffer[offset:offset + 8])
+    if header[0] != 1 or not 1 <= header[1] <= 15 or pointer + 8 + 4 * header[1] > end:
+        raise _QueryFailure(25, 'sid_extent')
+    if int.from_bytes(header[2:8], 'big') != 16 or header[1] != 1:
+        raise _QueryFailure(25, 'integrity_sid')
+    rid = int.from_bytes(buffer[offset + 8:offset + 12], 'little')
+    return rid, f'S-1-16-{rid}', int(label.Attributes)
+
+
+def _empty_metadata():
+    # None never means zero/anonymous/untrusted. Per-class status distinguishes
+    # no query in this observation from a failed query or an observed zero.
+    return dict(raw_token_type=None, raw_impersonation_level=None,
+                raw_integrity_level=None, raw_integrity_sid=None,
+                raw_integrity_attributes=None,
+                metadata_queries={kind: dict(status='NOT_ATTEMPTED') for kind in (8, 9, 25)})
+
+
+def _raw_metadata(advapi, token):
+    """Attempt every metadata class independently before applying outcome gates."""
+    values = _empty_metadata()
+    for kind, field in ((8, 'raw_token_type'), (9, 'raw_impersonation_level'),
+                        (25, 'raw_integrity_level')):
+        try:
+            if kind == 25:
+                rid, sid, attributes = _raw_integrity(advapi, token)
+                values.update(raw_integrity_level=rid, raw_integrity_sid=sid,
+                              raw_integrity_attributes=attributes)
+            else:
+                values[field] = _raw_scalar(advapi, token, kind)
+        except _QueryFailure as error:
+            values['metadata_queries'][kind] = dict(status='UNAVAILABLE', **error.details)
+        else:
+            values['metadata_queries'][kind] = dict(status='OBSERVED')
+    return values
+
+
+def _observation_line(stage, **values):
+    """Client thread IDs are harness self-attestation, not server verification."""
+    version = sys.getwindowsversion()
+    record = _empty_metadata()
+    record.update(values)
+    fields = ['TNC_PIPE_THREAD_PROCESS_CONTINUITY', f'stage={stage}',
+              f'windows_build={version.build}',
+              f'windows_build_string={f"{version.major}.{version.minor}.{version.build}"!r}',
+              "client_thread_id_evidence='HARNESS_SELF_ATTESTED'"]
+    fields.extend(f'{key}={value!r}' for key, value in record.items())
+    return ' '.join(fields)
+
+
 def _pipe_reading(api, advapi, kernel, server, expected_sid, primary_shape):
     """Return a provisional reading; publish only after client completion."""
+    values = _empty_metadata()
     with ExitStack() as cleanup:
         # No application work is allowed on any exit with uncertain reversion.
         cleanup.callback(h._revert_or_fail_fast, api)
         if not api.impersonate(server):
-            return 'IMPERSONATE_FAILED', dict(winerror=c.get_last_error())
+            return 'IMPERSONATE_FAILED', dict(values, winerror=c.get_last_error())
         try:
             token = api.open_thread_token()
         except TokenCaptureError as error:
-            return 'PIPE_TOKEN_OPEN_UNAVAILABLE', dict(reason=str(error))
+            return 'PIPE_TOKEN_OPEN_UNAVAILABLE', dict(values, reason=str(error))
         if token is None:
-            return 'PIPE_TOKEN_MISSING', {}
+            return 'PIPE_TOKEN_MISSING', values
         cleanup.callback(h._checked_cleanup, api.close, token)
 
-        # Full NativePipeTokenAPI.capture would already read class 29. Use raw
-        # type/level gates first so downgraded tokens never reach classes 29/31.
-        try:
-            kind = _raw_scalar(advapi, h.HANDLE(token), 8)
-            if kind != TOKEN_IMPERSONATION:
-                return 'TOKEN_TYPE_MISMATCH', dict(token_type=kind)
-            level = _raw_scalar(advapi, h.HANDLE(token), 9)
-        except _QueryFailure as error:
-            return 'PIPE_TOKEN_METADATA_UNAVAILABLE', error.details
+        # Full NativePipeTokenAPI.capture would already read class 29. Record
+        # 8/9/25 independently first; a mismatch must not suppress observations.
+        values = _raw_metadata(advapi, h.HANDLE(token))
+        kind, level = values['raw_token_type'], values['raw_impersonation_level']
+        if kind is None:
+            return 'PIPE_TOKEN_METADATA_UNAVAILABLE', values
+        if kind != TOKEN_IMPERSONATION:
+            # Class 9 is documented to fail on a PRIMARY token. Preserve its
+            # failure, but keep the known type mismatch as the primary outcome.
+            return 'TOKEN_TYPE_MISMATCH', values
+        if level is None:
+            return 'PIPE_TOKEN_METADATA_UNAVAILABLE', values
         if level != SECURITY_IMPERSONATION:
-            return 'SQOS_LEVEL_MISMATCH', dict(token_type=kind, level=level)
+            return 'SQOS_LEVEL_MISMATCH', values
+        # Class 25 is diagnostic here, not a new admission/discriminator gate.
+        # Its unavailability stays explicit without hiding usable 8/9/29/31 facts.
         try:
             raw = _raw_appcontainer_shape(advapi, kernel, h.HANDLE(token))
         except _QueryFailure as error:
-            return 'PIPE_APPCONTAINER_QUERY_UNAVAILABLE', error.details
+            return 'PIPE_APPCONTAINER_QUERY_UNAVAILABLE', dict(values, **error.details)
 
         match = ('THREAD_TOKEN' if raw == (True, expected_sid) else
                  'PROCESS_TOKEN' if raw == primary_shape else 'UNEXPECTED_PIPE_CONTEXT')
-        values = dict(token_type='IMPERSONATION', level='IMPERSONATION',
+        values.update(token_type='IMPERSONATION', level='IMPERSONATION',
                       raw_is_appcontainer=raw[0], raw_sid=raw[1])
         try:
             evidence = NativeAppContainerProbe().probe(
@@ -349,6 +425,7 @@ def _client_command(pipe_name, inherited_token, expected_sid, report_path):
     )
 
 
+@pytest.mark.skipif(os.name != 'nt', reason='Windows named-pipe continuity experiment only')
 def test_pipe_impersonation_uses_thread_or_process_context(emit_observation, tmp_path):
     k = h._kernel32()
     advapi = _advapi()
@@ -385,13 +462,8 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation, tmp
         return value
 
     def observe(stage, **values):
-        fields = [
-            'TNC_PIPE_THREAD_PROCESS_CONTINUITY',
-            f'stage={stage}',
-            f'windows_build={sys.getwindowsversion().build}',
-        ]
-        fields.extend(f'{key}={value!r}' for key, value in values.items())
-        emit_observation(' '.join(fields))
+        """Thread IDs are trusted child reports, not cross-process attestation."""
+        emit_observation(_observation_line(stage, **values))
 
     try:
         assert api.open_thread_token() is None
@@ -635,3 +707,142 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation, tmp
                 failure.add_note(message)
             else:
                 pytest.fail(message)
+
+
+class _MetadataAPIForTesting:
+    """Native-shaped buffers without DLL calls; error values stay class-specific."""
+    def __init__(self, failed=(), kind=2, level=2, rid=4096, fault=None):
+        self.failed, self.kind, self.level, self.rid = failed, kind, level, rid
+        self.fault, self.error, self.calls = fault, 0, []
+
+    def GetTokenInformation(self, token, kind, buffer, capacity, returned):
+        self.calls.append(kind)
+        out = c.cast(returned, c.POINTER(h.DWORD)).contents
+        if kind in self.failed:
+            self.error, out.value = 5, 0
+            return False
+        if kind in (8, 9):
+            c.cast(buffer, c.POINTER(h.DWORD)).contents.value = self.kind if kind == 8 else self.level
+            out.value = 4
+            return True
+        assert kind == 25
+        minimum = c.sizeof(SID_AND_ATTRIBUTES)
+        size = minimum + 12
+        if buffer is None:
+            if self.fault == 'size_probe':
+                self.error, out.value = 5, 0
+            else:
+                self.error = 122
+                out.value = 65537 if self.fault == 'allocation_bound' else size
+            return False
+        if self.fault == 'query':
+            self.error, out.value = 5, 0
+            return False
+        assert capacity == size
+        out.value = size + 1 if self.fault == 'return_length' else size
+        label = SID_AND_ATTRIBUTES.from_buffer(buffer)
+        label.Sid = c.addressof(buffer) + minimum
+        label.Attributes = 0x20
+        sid = bytes((1, 1)) + (16).to_bytes(6, 'big') + self.rid.to_bytes(4, 'little')
+        c.memmove(label.Sid, sid, len(sid))
+        if self.fault == 'sid_pointer':
+            label.Sid = c.addressof(buffer) + size + 8
+        elif self.fault == 'sid_extent':
+            buffer[minimum + 1] = b'\x02'
+        elif self.fault == 'integrity_sid':
+            buffer[minimum + 7] = b'\x05'
+        return True
+
+
+@pytest.mark.parametrize('failed', [(), (8,), (9,), (25,), (8, 9), (8, 25), (9, 25), (8, 9, 25)])
+def test_continuity_metadata_queries_do_not_short_circuit(failed, monkeypatch):
+    native = _MetadataAPIForTesting(failed=failed)
+    monkeypatch.setattr(c, 'get_last_error', lambda: native.error, raising=False)
+    values = _raw_metadata(native, h.HANDLE(42))
+    assert native.calls == ([8, 9, 25] if 25 in failed else [8, 9, 25, 25])
+    for kind, field, expected in ((8, 'raw_token_type', 2), (9, 'raw_impersonation_level', 2),
+                                  (25, 'raw_integrity_level', 4096)):
+        assert values[field] == (None if kind in failed else expected)
+        query = values['metadata_queries'][kind]
+        assert query['status'] == ('UNAVAILABLE' if kind in failed else 'OBSERVED')
+        if kind in failed:
+            assert query['information_class'] == kind and query['winerror'] == 5
+    assert values['raw_integrity_sid'] == (None if 25 in failed else 'S-1-16-4096')
+
+
+@pytest.mark.parametrize('fault', ['size_probe', 'allocation_bound', 'query', 'return_length',
+                                   'sid_pointer', 'sid_extent', 'integrity_sid'])
+def test_continuity_integrity_payload_failures_are_explicit(fault, monkeypatch):
+    native = _MetadataAPIForTesting(fault=fault)
+    monkeypatch.setattr(c, 'get_last_error', lambda: native.error, raising=False)
+    values = _raw_metadata(native, h.HANDLE(42))
+    assert values['raw_token_type'] == values['raw_impersonation_level'] == 2
+    assert values['raw_integrity_level'] is None and values['raw_integrity_sid'] is None
+    assert values['metadata_queries'][25]['status'] == 'UNAVAILABLE'
+    assert values['metadata_queries'][25]['query_step'] == fault
+
+
+@pytest.mark.parametrize('rid', [0, 4096, 8192, 12288])
+def test_continuity_integrity_values_are_not_availability_sentinels(rid, monkeypatch):
+    native = _MetadataAPIForTesting(rid=rid)
+    monkeypatch.setattr(c, 'get_last_error', lambda: native.error, raising=False)
+    values = _raw_metadata(native, h.HANDLE(42))
+    assert values['raw_integrity_level'] == rid
+    assert values['raw_integrity_sid'] == f'S-1-16-{rid}'
+    assert values['raw_integrity_attributes'] == 0x20
+    assert values['metadata_queries'][25] == dict(status='OBSERVED')
+
+
+@pytest.mark.parametrize('kind,level,failed,stage', [
+    (1, 1, (), 'TOKEN_TYPE_MISMATCH'),
+    (1, 2, (9,), 'TOKEN_TYPE_MISMATCH'),
+    (2, 1, (), 'SQOS_LEVEL_MISMATCH'),
+    (2, 0, (), 'SQOS_LEVEL_MISMATCH'),
+    (2, 2, (8,), 'PIPE_TOKEN_METADATA_UNAVAILABLE'),
+    (2, 2, (9,), 'PIPE_TOKEN_METADATA_UNAVAILABLE'),
+    (2, 2, (8, 9, 25), 'PIPE_TOKEN_METADATA_UNAVAILABLE'),
+    (2, 2, (25,), 'OBSERVED'),
+    (2, 2, (), 'OBSERVED'),
+])
+def test_continuity_gates_preserve_all_metadata(kind, level, failed, stage, monkeypatch):
+    from types import SimpleNamespace
+    from tnc.provenance.windows_appcontainer_evidence import AppContainerTokenEvidence
+
+    native = _MetadataAPIForTesting(failed=failed, kind=kind, level=level)
+    monkeypatch.setattr(c, 'get_last_error', lambda: native.error, raising=False)
+    events = []
+    api = SimpleNamespace(impersonate=lambda _: True, open_thread_token=lambda: 42,
+                          close=lambda _: events.append('close') or True,
+                          revert=lambda: events.append('revert') or True)
+
+    def raw_shape(*args):
+        events.append('appcontainer_query')
+        return False, None
+
+    evidence = AppContainerTokenEvidence(source='FAKE_TOKEN_API', token_type='IMPERSONATION',
+                                        level='IMPERSONATION', token_is_app_container=False)
+    monkeypatch.setitem(globals(), '_raw_appcontainer_shape', raw_shape)
+    monkeypatch.setitem(globals(), 'NativeAppContainerProbe',
+                        lambda: SimpleNamespace(probe=lambda *args, **kwargs: evidence))
+    result, values = _pipe_reading(api, native, None, 7, 'S-1-15-2-123', (False, None))
+    assert result == stage
+    assert native.calls == ([8, 9, 25] if 25 in failed else [8, 9, 25, 25])
+    assert values['raw_token_type'] == (None if 8 in failed else kind)
+    assert values['raw_impersonation_level'] == (None if 9 in failed else level)
+    assert values['raw_integrity_level'] == (None if 25 in failed else 4096)
+    assert events == (['appcontainer_query', 'close', 'revert'] if stage == 'OBSERVED'
+                      else ['close', 'revert'])
+
+
+def test_continuity_observation_stamps_build_and_trust_boundary(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(sys, 'getwindowsversion',
+                        lambda: SimpleNamespace(major=10, minor=0, build=26100), raising=False)
+    line = _observation_line('PIPE_TOKEN_MISSING')
+    assert 'windows_build=26100' in line
+    assert "windows_build_string='10.0.26100'" in line
+    assert "client_thread_id_evidence='HARNESS_SELF_ATTESTED'" in line
+    for name in ('raw_token_type', 'raw_impersonation_level', 'raw_integrity_level'):
+        assert f'{name}=None' in line
+    assert line.count("'NOT_ATTEMPTED'") == 3
