@@ -71,6 +71,10 @@ def test_disabled_snapshot_is_a_noop(monkeypatch):
 
 
 def test_snapshot_uses_offsets_and_pid_filter_without_raw_copies(monkeypatch, capsys):
+    """Use a real ctypes array/memmove and the real from_buffer_copy offset path.
+
+    Only .raw is forbidden: a Python buffer fake would not test this ctypes call.
+    """
     pid = os.getpid()
     entries = [(pid + 1, i * 4 + 16, _POINTERS[0]) for i in range(3000)]
     entries += [(pid, 4, _POINTERS[1]), (pid, 8, _POINTERS[2])]
@@ -178,6 +182,74 @@ def test_snapshot_failures_are_diagnostic_only(fault, reason, monkeypatch, tmp_p
     assert note.startswith('enumeration unavailable: ')
     _both_outputs(note, monkeypatch, tmp_path)
     _no_pointers(capsys.readouterr().out)
+
+
+@pytest.mark.parametrize('shape,reason', [
+    ('zero_length', 'returned no payload length'),
+    ('larger_entries', 'table extent mismatch; unsupported layout'),
+    ('extra_payload', 'table extent mismatch; unsupported layout'),
+])
+def test_snapshot_rejects_unknown_extent_before_parsing_entries(
+        shape, reason, monkeypatch, tmp_path, capsys):
+    """Feed native-shaped buffers to the real parser, not an arithmetic surrogate."""
+    entries = [(os.getpid(), 4, _POINTERS[0]), (os.getpid(), 8, _POINTERS[1])]
+    table = _table(entries)
+    if shape == 'larger_entries':
+        # On a 64-bit host this is a real 48-byte stride against an assumed 40.
+        # The old <= check passes; parsing with the old stride would misalign entry 2.
+        table = bytes(c.c_size_t(len(entries))) + bytes(c.c_size_t())
+        for entry in entries:
+            table += _table([entry])[2 * c.sizeof(c.c_size_t):] + b'\xA5' * 8
+    elif shape == 'extra_payload':
+        table += b'\xA5' * 8
+    parse_offsets = []
+    entry_type = pipe._SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX
+    original = entry_type.from_buffer_copy
+
+    def parse(source, offset=0):
+        parse_offsets.append(offset)
+        return original(source, offset)
+
+    def query(kind, buffer, size, returned):
+        c.memmove(buffer, table, len(table))
+        _needed(returned, 0 if shape == 'zero_length' else len(table))
+        return 0
+
+    monkeypatch.setenv('TNC_HANDLE_ENUMERATION', '1')
+    monkeypatch.setattr(entry_type, 'from_buffer_copy', staticmethod(parse))
+    checks = _checks(query)
+    snapshot = checks.handle_values()
+    assert snapshot == (None, 'SystemExtendedHandleInformation ' + reason)
+    assert parse_offsets == []  # Reject before reading even the first entry.
+    metrics = checks._last_handle_snapshot_metrics
+    assert metrics['outcome'] == 'unavailable' and metrics['process_handles'] is None
+    assert metrics['query_calls'] == 1
+    assert metrics['calls'][0]['returned_bytes'] == (0 if shape == 'zero_length' else len(table))
+    note = checks.handle_identity_diagnostic(snapshot, (set(), None), (set(), None))
+    assert note == 'enumeration unavailable: SystemExtendedHandleInformation ' + reason
+    _both_outputs(note, monkeypatch, tmp_path)
+    _no_pointers(capsys.readouterr().out)
+
+
+@pytest.mark.parametrize('count', [0, 2])
+def test_snapshot_accepts_exact_payload_in_oversized_allocation(count, monkeypatch):
+    """Compare the table extent to ReturnLength, not the 64 KiB allocation."""
+    entries = [(os.getpid(), 4 * (i + 1), _POINTERS[i]) for i in range(count)]
+    table = _table(entries)
+
+    def query(kind, buffer, size, returned):
+        assert size > len(table)
+        c.memmove(buffer, table, len(table))
+        _needed(returned, len(table))
+        return 0
+
+    monkeypatch.setenv('TNC_HANDLE_ENUMERATION', '1')
+    checks = _checks(query)
+    snapshot = checks.handle_values()
+    assert snapshot == ({(value, pointer) for _, value, pointer in entries}, None)
+    metrics = checks._last_handle_snapshot_metrics
+    assert metrics['outcome'] == 'success'
+    assert metrics['system_entries'] == metrics['process_handles'] == count
 
 
 @pytest.mark.parametrize('shape', ['inspect', 'cleanup', 'reused', 'released', 'empty'])
