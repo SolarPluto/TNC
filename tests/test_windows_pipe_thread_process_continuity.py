@@ -389,6 +389,8 @@ try:
     # X is emitted only after successful installation, independent oracle and
     # same-native-thread CreateFile. Carry the client's own native PID in the
     # ready preamble so the server can bind this handshake to the connected peer.
+    # PID width is assumed to be 4 bytes on supported Windows x64/arm64 runners;
+    # widen this framing if Windows PID width ever changes.
     ready = b'X' + int(k.GetCurrentProcessId()).to_bytes(4, 'little')
     transfer(pipe, k.WriteFile, c.create_string_buffer(ready), len(ready))
     report['ready'] = True
