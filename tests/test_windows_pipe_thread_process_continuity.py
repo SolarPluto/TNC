@@ -612,7 +612,7 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation, tmp
         ready = c.create_string_buffer(5)
         try:
             h._pipe_io(k, server, 'connect')
-            assert h._pipe_io(k, server, 'read', ready) == 5 and ready.raw[:1] == b'X'
+            assert h._pipe_io(k, server, 'read', ready, length=5) == 5 and ready.raw[:1] == b'X'
         except AssertionError:
             # No X means no interpreted pipe result, even if the child opened a
             # pipe before failing. Collect the child's controlled stage/error.
