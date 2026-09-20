@@ -8,6 +8,7 @@ fresh per call; callers mutate ``argtypes`` for experiment-specific APIs.
 # switching to --import-mode=importlib will break every consumer.
 import ctypes as c
 import sys
+import time
 
 import pytest
 
@@ -160,57 +161,81 @@ def _kernel32():
     return k
 
 
-def _pipe_io(k, server, operation, buffer=None, *, timeout_ms=IO_TIMEOUT_MS):
-    """Complete one pipe operation, with bounded waiting and cancellation."""
-    overlapped = OVERLAPPED()
-    overlapped.hEvent = k.CreateEventW(None, True, False, None)
-    assert overlapped.hEvent, c.get_last_error()
-    transferred = DWORD()
-    pending = False
-    try:
-        if operation == 'connect':
-            ok = k.ConnectNamedPipe(server, c.byref(overlapped))
-        else:
-            function = {'read': k.ReadFile, 'write': k.WriteFile}[operation]
-            ok = function(server, buffer, 1, c.byref(transferred), c.byref(overlapped))
-        if not ok:
-            error = c.get_last_error()
-            if operation == 'connect' and error == ERROR_PIPE_CONNECTED:
-                return 0
-            assert error == ERROR_IO_PENDING, f'pipe {operation}: WinError {error}'
-            pending = True
-            wait = k.WaitForSingleObject(overlapped.hEvent, timeout_ms)
-            assert wait == WAIT_OBJECT_0, (
-                f'pipe {operation} did not complete within {timeout_ms}ms; wait={wait:#x}'
+def _pipe_io(k, server, operation, buffer=None, *, length=1, timeout_ms=IO_TIMEOUT_MS):
+    """Complete bounded pipe I/O; reads accumulate exactly length bytes in byte mode."""
+    assert isinstance(length, int) and length >= 1
+
+    def once(target, requested, wait_ms):
+        overlapped = OVERLAPPED()
+        overlapped.hEvent = k.CreateEventW(None, True, False, None)
+        assert overlapped.hEvent, c.get_last_error()
+        transferred = DWORD()
+        pending = False
+        try:
+            if operation == 'connect':
+                ok = k.ConnectNamedPipe(server, c.byref(overlapped))
+            else:
+                function = {'read': k.ReadFile, 'write': k.WriteFile}[operation]
+                ok = function(server, target, requested, c.byref(transferred), c.byref(overlapped))
+            if not ok:
+                error = c.get_last_error()
+                if operation == 'connect' and error == ERROR_PIPE_CONNECTED:
+                    return 0
+                assert error == ERROR_IO_PENDING, f'pipe {operation}: WinError {error}'
+                pending = True
+                wait = k.WaitForSingleObject(overlapped.hEvent, wait_ms)
+                assert wait == WAIT_OBJECT_0, (
+                    f'pipe {operation} did not complete within {wait_ms}ms; wait={wait:#x}'
+                )
+                pending = False
+            assert k.GetOverlappedResult(server, c.byref(overlapped), c.byref(transferred), False), (
+                f'pipe {operation} completion: WinError {c.get_last_error()}'
             )
-            pending = False
-        assert k.GetOverlappedResult(server, c.byref(overlapped), c.byref(transferred), False), (
-            f'pipe {operation} completion: WinError {c.get_last_error()}'
-        )
-        return transferred.value
-    finally:
-        if pending:
-            cancelled = k.CancelIoEx(server, c.byref(overlapped))
-            error = c.get_last_error()
-            # ERROR_NOT_FOUND is benign when cancellation raced completion;
-            # still wait for the event before releasing native storage.
-            drained = k.WaitForSingleObject(overlapped.hEvent, CANCEL_TIMEOUT_MS) == WAIT_OBJECT_0
-            if not drained:
-                _undrained_io.append((overlapped, buffer, transferred))
-            failure = sys.exception()
-            if failure is not None and (not drained or (not cancelled and error != ERROR_NOT_FOUND)):
-                failure.add_note(f'pipe cancellation: cancelled={bool(cancelled)}, error={error}, drained={drained}')
-            if not drained:
-                # Keep the event and buffers alive while the OS may still use them.
-                overlapped = None
-        if overlapped is not None:
-            if not k.CloseHandle(overlapped.hEvent):
-                message = f'CloseHandle pipe event: WinError {c.get_last_error()}'
+            return transferred.value
+        finally:
+            if pending:
+                cancelled = k.CancelIoEx(server, c.byref(overlapped))
+                error = c.get_last_error()
+                # ERROR_NOT_FOUND is benign when cancellation raced completion;
+                # still wait for the event before releasing native storage.
+                drained = k.WaitForSingleObject(overlapped.hEvent, CANCEL_TIMEOUT_MS) == WAIT_OBJECT_0
+                if not drained:
+                    _undrained_io.append((overlapped, buffer, transferred))
                 failure = sys.exception()
-                if failure is not None:
-                    failure.add_note(message)
-                else:
-                    pytest.fail(message)
+                if failure is not None and (
+                    not drained or (not cancelled and error != ERROR_NOT_FOUND)
+                ):
+                    failure.add_note(
+                        f'pipe cancellation: cancelled={bool(cancelled)}, '
+                        f'error={error}, drained={drained}'
+                    )
+                if not drained:
+                    # Keep the event and buffers alive while the OS may still use them.
+                    overlapped = None
+            if overlapped is not None:
+                if not k.CloseHandle(overlapped.hEvent):
+                    message = f'CloseHandle pipe event: WinError {c.get_last_error()}'
+                    failure = sys.exception()
+                    if failure is not None:
+                        failure.add_note(message)
+                    else:
+                        pytest.fail(message)
+
+    if operation != 'read' or length == 1:
+        return once(buffer, length, timeout_ms)
+
+    # All current pipes are byte-mode. A multi-byte ReadFile may legally complete
+    # short, so accumulate under one overall deadline rather than assuming framing.
+    deadline = time.monotonic() + timeout_ms / 1000
+    total = 0
+    while total < length:
+        remaining = deadline - time.monotonic()
+        assert remaining > 0, f'pipe read did not complete {length} bytes within {timeout_ms}ms'
+        wait_ms = max(1, int(remaining * 1000))
+        count = once(c.byref(buffer, total), length - total, wait_ms)
+        assert count > 0, 'pipe read completed with zero bytes before frame was complete'
+        total += count
+    return total
 
 
 def _advapi32():
