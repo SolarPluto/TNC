@@ -163,7 +163,8 @@ def _observation_line(stage, **values):
     fields = ['TNC_PIPE_THREAD_PROCESS_CONTINUITY', f'stage={stage}',
               f'windows_build={version.build}',
               f'windows_build_string={f"{version.major}.{version.minor}.{version.build}"!r}',
-              "client_thread_id_evidence='HARNESS_SELF_ATTESTED'"]
+              "client_thread_id_evidence='HARNESS_SELF_ATTESTED'",
+              "client_pid_evidence='HARNESS_SELF_ATTESTED'"]
     fields.extend(f'{key}={value!r}' for key, value in record.items())
     return ' '.join(fields)
 
@@ -886,6 +887,7 @@ def test_continuity_observation_stamps_build_and_trust_boundary(monkeypatch):
     assert 'windows_build=26100' in line
     assert "windows_build_string='10.0.26100'" in line
     assert "client_thread_id_evidence='HARNESS_SELF_ATTESTED'" in line
+    assert "client_pid_evidence='HARNESS_SELF_ATTESTED'" in line
     for name in ('raw_token_type', 'raw_impersonation_level', 'raw_integrity_level'):
         assert f'{name}=None' in line
     assert line.count("'NOT_ATTEMPTED'") == 3
