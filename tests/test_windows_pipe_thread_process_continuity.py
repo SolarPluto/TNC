@@ -144,6 +144,17 @@ def _raw_metadata(advapi, token):
     return values
 
 
+def _pid_binding(launcher_pid, client_attested_pid, pipe_client_pid):
+    """Keep launcher identity diagnostic; bind the connection to client self-attestation."""
+    return dict(
+        launcher_pid=int(launcher_pid),
+        client_attested_pid=int(client_attested_pid),
+        pipe_client_pid=int(pipe_client_pid),
+        pid_binding=('MATCHED' if int(client_attested_pid) == int(pipe_client_pid)
+                     else 'MISMATCHED'),
+    )
+
+
 def _observation_line(stage, **values):
     """Client thread IDs are harness self-attestation, not server verification."""
     version = sys.getwindowsversion()
@@ -240,6 +251,7 @@ a = c.WinDLL('advapi32.dll', use_last_error=True, winmode=0x800)
 for library, name, args, restype in (
     (k, 'GetCurrentThread', [], HANDLE),
     (k, 'GetCurrentThreadId', [], DWORD),
+    (k, 'GetCurrentProcessId', [], DWORD),
     (k, 'CreateFileW', [c.c_wchar_p, DWORD, DWORD, c.c_void_p, DWORD, DWORD, HANDLE], HANDLE),
     (k, 'ReadFile', [HANDLE, c.c_void_p, DWORD, c.POINTER(DWORD), c.c_void_p], BOOL),
     (k, 'WriteFile', [HANDLE, c.c_void_p, DWORD, c.POINTER(DWORD), c.c_void_p], BOOL),
@@ -374,8 +386,10 @@ try:
     same_thread('thread_after_open')
     report['stage'] = 'WriteReady'
     # X is emitted only after successful installation, independent oracle and
-    # same-native-thread CreateFile. No process-token fallback connection exists.
-    transfer(pipe, k.WriteFile, c.create_string_buffer(b'X'), 1)
+    # same-native-thread CreateFile. Carry the client's own native PID in the
+    # ready preamble so the server can bind this handshake to the connected peer.
+    ready = b'X' + int(k.GetCurrentProcessId()).to_bytes(4, 'little')
+    transfer(pipe, k.WriteFile, c.create_string_buffer(ready), len(ready))
     report['ready'] = True
     report['stage'] = 'ReadAcknowledgement'
     byte = c.create_string_buffer(1)
@@ -594,10 +608,10 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation, tmp
 
         assert k.ResumeThread(client_pi.hThread) != 0xFFFFFFFF, c.get_last_error()
 
-        byte = c.create_string_buffer(1)
+        ready = c.create_string_buffer(5)
         try:
             h._pipe_io(k, server, 'connect')
-            assert h._pipe_io(k, server, 'read', byte) == 1 and byte.raw == b'X'
+            assert h._pipe_io(k, server, 'read', ready) == 5 and ready.raw[:1] == b'X'
         except AssertionError:
             # No X means no interpreted pipe result, even if the child opened a
             # pipe before failing. Collect the child's controlled stage/error.
@@ -612,16 +626,29 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation, tmp
             raise
         handshake_complete = True
 
-        client_pid = h.DWORD()
-        assert k.GetNamedPipeClientProcessId(server, c.byref(client_pid)), c.get_last_error()
-        assert client_pid.value == client_pi.dwProcessId and client_pid.value != os.getpid()
+        client_attested_pid = int.from_bytes(ready.raw[1:5], 'little')
+        pipe_client_pid = h.DWORD()
+        assert k.GetNamedPipeClientProcessId(server, c.byref(pipe_client_pid)), c.get_last_error()
+        pid_values = _pid_binding(
+            client_pi.dwProcessId, client_attested_pid, pipe_client_pid.value
+        )
+        assert pipe_client_pid.value != os.getpid()
+
+        # A PID mismatch invalidates the continuity interpretation. Complete the
+        # bounded client handshake, emit the diagnostic binding, then fail below.
+        pid_matched = pid_values['pid_binding'] == 'MATCHED'
 
         # Both parent-owned handles are retained through the entire exchange.
         # Recheck them immediately before measuring the pipe's security context.
         assert _raw_appcontainer_shape(advapi, k, client_primary) == client_primary_shape
         assert _raw_appcontainer_shape(advapi, k, duplicate) == (True, expected_sid)
-        stage, values = _pipe_reading(api, advapi, k, server, expected_sid, client_primary_shape)
-        assert api.open_thread_token() is None
+        if pid_matched:
+            stage, values = _pipe_reading(
+                api, advapi, k, server, expected_sid, client_primary_shape
+            )
+            assert api.open_thread_token() is None
+        else:
+            stage, values = 'PID_BINDING_MISMATCH', _empty_metadata()
 
         # The client has its own 30s I/O timeout. A timeout/revert must invalidate
         # the reading rather than masquerading as a PROCESS_TOKEN observation.
@@ -639,8 +666,10 @@ def test_pipe_impersonation_uses_thread_or_process_context(emit_observation, tmp
             'thread_before_set', 'thread_before_open', 'thread_after_open', 'thread_after_ack',
         )]
         assert all(type(tid) is int and tid > 0 for tid in tids) and len(set(tids)) == 1, report
-        observe(stage, client_pid=client_pid.value, client_thread_ids=tids,
-                primary_oracle=client_primary_shape, thread_oracle=(True, expected_sid), **values)
+        observe(stage, client_thread_ids=tids,
+                primary_oracle=client_primary_shape, thread_oracle=(True, expected_sid),
+                **pid_values, **values)
+        assert pid_matched, pid_values
     finally:
         failure = sys.exception()
         cleanup_errors = []
@@ -832,6 +861,20 @@ def test_continuity_gates_preserve_all_metadata(kind, level, failed, stage, monk
     assert values['raw_integrity_level'] == (None if 25 in failed else 4096)
     assert events == (['appcontainer_query', 'close', 'revert'] if stage == 'OBSERVED'
                       else ['close', 'revert'])
+
+
+@pytest.mark.parametrize('launcher,attested,pipe,binding', [
+    (101, 202, 202, 'MATCHED'),
+    (101, 202, 303, 'MISMATCHED'),
+])
+def test_continuity_pid_binding_preserves_all_identities(launcher, attested, pipe, binding):
+    values = _pid_binding(launcher, attested, pipe)
+    assert values == dict(
+        launcher_pid=launcher,
+        client_attested_pid=attested,
+        pipe_client_pid=pipe,
+        pid_binding=binding,
+    )
 
 
 def test_continuity_observation_stamps_build_and_trust_boundary(monkeypatch):
