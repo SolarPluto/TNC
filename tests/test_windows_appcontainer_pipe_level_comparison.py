@@ -106,7 +106,7 @@ def test_same_ordinary_client_at_both_pipe_levels(emit_observation):
                         f'level={facts.level} oracle_is_appcontainer=False '
                         f'is_appcontainer={evidence.token_is_app_container!r} '
                         f'appcontainer_sid={evidence.app_container_sid!r} '
-                        f'capability_count={len(evidence.capability_sids)} '
+                        f'{harness._capability_observation_fields(evidence)} '
                         f'status={result.status} reason={result.reason}'
                     )
                     # Security is independent of the expected experimental result.

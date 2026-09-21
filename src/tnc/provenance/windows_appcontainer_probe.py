@@ -94,10 +94,13 @@ class NativeAppContainerProbe:
             raise AppContainerProbeError('APPCONTAINER_SID_INVALID') from exc
 
     def _capabilities(self, token):
+        # Class 30 is audit-only. Preserve the existing bounded query/retry shape,
+        # but represent any unusable class-30 result as unavailable telemetry
+        # instead of invalidating otherwise usable classes 29/31.
         try:
             return tuple(sid for sid, _ in _groups(*self._variable(token, TOKEN_CAPABILITIES)))
         except AppContainerProbeError:
-            raise
+            return None
         except Exception as exc:
             raise AppContainerProbeError('CAPABILITY_GROUPS_INVALID') from exc
 

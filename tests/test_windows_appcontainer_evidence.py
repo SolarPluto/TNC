@@ -21,6 +21,7 @@ def evidence(**update):
         token_type='IMPERSONATION',
         level='IDENTIFICATION',
         token_is_app_container=False,
+        capability_sids=(),
     )
     data.update(update)
     return AppContainerTokenEvidence(**data)
@@ -210,3 +211,22 @@ def test_result_schema_has_no_admitted_state():
     result = evaluate_appcontainer_exclusion(evidence())
     schema = type(result).model_json_schema()
     assert 'ADMITTED' not in schema['properties']['status']['enum']
+
+@pytest.mark.parametrize('capability_sids', [(), None])
+def test_capability_availability_does_not_change_appcontainer_classification(capability_sids):
+    item = evidence(
+        token_is_app_container=True,
+        app_container_sid=OBSERVED_APPCONTAINER_PROFILE_SID,
+        capability_sids=capability_sids,
+    )
+    result = evaluate_appcontainer_exclusion(item)
+    assert (result.status, result.reason) == ('APPCONTAINER', 'TOKEN_IS_APPCONTAINER')
+
+
+@pytest.mark.parametrize('capability_sids', [(), None])
+def test_capability_availability_does_not_change_unproven_classification(capability_sids):
+    item = evidence(capability_sids=capability_sids)
+    result = evaluate_appcontainer_exclusion(item)
+    assert (result.status, result.reason) == (
+        'UNPROVEN', 'IDENTIFICATION_LEVEL_EXCLUSION_UNPROVEN'
+    )

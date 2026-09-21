@@ -156,7 +156,7 @@ def test_named_pipe_identification_token_appcontainer_diagnostic(emit_observatio
             'TNC_APPCONTAINER_IDENTIFICATION_OBSERVATION '
             f'is_appcontainer={evidence.token_is_app_container!r} '
             f'appcontainer_sid={evidence.app_container_sid!r} '
-            f'capability_count={len(evidence.capability_sids)} '
+            f'{harness._capability_observation_fields(evidence)} '
             f'status={result.status} reason={result.reason}'
         )
 
