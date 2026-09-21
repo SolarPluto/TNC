@@ -110,6 +110,37 @@ Before authoritative admission adopts a continuity object:
 Ownership transfers only after successful one-shot adoption and completed authority
 construction.
 
+The authoritative path represents adoption with a single field,
+`_adopted_by: None | _AuthoritativePeerAdmission`. `None` is IDLE; storing the
+exact already-complete authority is ADOPTED. The adoption method validates every
+precondition before mutation, performs that assignment as its first and only
+state-bearing mutation, and the adoption helper performs no fallible work between
+that assignment and returning the authority.
+
+### Close, containment, and point-in-time use
+
+`close()` distinguishes successful closure from containment. Its state checks are
+ordered: containment first, then successful closure. A contained object must never
+return the ordinary already-closed result.
+
+Successful close publishes `_closed=True` only after continuity-owned native
+release has completed successfully. If release becomes failed or uncertain,
+continuity enters terminal `_contained` state, records the containment reason, and
+raises `AdmissionContinuityContainment`. Subsequent `close()`, mint, consume,
+enter, revalidation, or adoption calls fail immediately with containment and perform
+no retry of native release. Containment is terminal; it is not a recoverable close
+attempt.
+
+Normal successful close remains idempotent: the first completed close returns
+`True`; a later close returns `False` without additional native release.
+
+Closing continuity burns any outstanding minted-but-unconsumed use token. A later
+consume fails and cannot authorize an operation. By contrast, once a use token has
+already been successfully consumed, the privileged operation has crossed the
+point-in-time authorization boundary. Later close does not revoke, abort, or wait
+for that already-started operation; operation lifetime is owned by the operation's
+own contract.
+
 Use-token minting is an internal continuity primitive. Production callers do not
 treat bare continuity as authority; after authority integration the underlying mint
 entry point is internal (for example `_mint_use_token(...)`) and enforces the same

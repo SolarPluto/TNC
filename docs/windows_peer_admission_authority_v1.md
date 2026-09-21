@@ -79,12 +79,19 @@ A successful evaluation may produce:
 only when every required predicate in this document has passed and a matching live
 continuity object has been adopted into the authoritative admission object.
 
-Admission is not general authorization. The initial positive state means:
+Admission is not general authorization. Live admission authority exists only in the
+separately returned authoritative object. The durable audit is a projection of the
+terminal outcome, not an authority carrier, so all of its admission/grant/signing
+flags are permanently inert on every terminal, including `ADMITTED`:
 
-- `admission_granted=True`;
+- `admission_granted=False`;
 - `authorization_granted=False`;
 - `grants_evaluated=False`;
 - `signing_evaluated=False`.
+
+The `ADMITTED / ADMISSION_REQUIREMENTS_MET` pair records that phase 7.1 completed
+and a live authority was returned; the audit itself never grants admission and can
+never be promoted or replayed into authority.
 
 ## Complete positive predicate
 
@@ -414,8 +421,23 @@ V1 uses the stronger construction shape: the evaluator returns the durable audit
 projection plus `authority_or_none`. No standalone construction capability is
 returned to callers.
 
-The authority is constructed inside the evaluator's successful phase-7 path from
-the already-live continuity object. The public constructor is disabled.
+The authority is constructed inside the evaluator's successful phase-7 path. The
+public constructor is disabled.
+
+The construction barrier is bidirectional. The audit is never mutated or promoted
+into authority, and authority is never reconstructed from an audit. After phases
+1-6 succeed, the evaluator creates one private, non-serializable
+`_ValidatedAdmissionState` containing only already-validated durable facts plus
+the exact live `AdmissionContinuity` and an exact immutable copy of the evaluated
+policy snapshot. The durable audit and live authority are sibling outputs projected
+from that internal state; neither is an input to construction of the other.
+
+`_ValidatedAdmissionState` has no public constructor or external factory, rejects
+copy/deepcopy/pickle/subclass construction paths, and is created at exactly one
+module-private evaluator factory. The state is not a Pydantic/durable record and is
+never serialized. Runtime construction still relies on exact live continuity
+identity/lifecycle state rather than claiming hostile same-process Python code
+cannot forge private objects.
 
 The authority must reject or prevent all enumerated current reconstruction paths:
 
@@ -444,40 +466,88 @@ hostile code already executing inside the trusted Python process.
 V1 assumes synchronous, single-threaded evaluation ownership from successful
 continuity preparation through authority adoption.
 
-The orchestrator retains ownership of the live `AdmissionContinuity` until phase
-7.1 adoption succeeds. Passing continuity into the evaluator does not itself
-transfer ownership. On every denied or indeterminate operational terminal, and on
-every `AdmissionEvaluatorInvariantError` or other evaluator exception before
-successful adoption, ownership remains with the orchestrator and the evaluator must
-not close, consume, or otherwise dispose of continuity. The orchestrator is
-responsible for closing unused continuity on those paths. Ownership transfers only
-after the successful `IDLE -> ADOPTED` transition and completed authority
-construction.
+The orchestrator retains ownership of the exact live `AdmissionContinuity` until
+phase 7.1 commits. Passing continuity into the evaluator does not transfer
+ownership. Denied/indeterminate terminals and exceptions before adoption commit do
+not close or consume continuity inside the evaluator; the orchestrator remains
+responsible for unused continuity.
 
-During that interval, callers must not concurrently close, mutate, mint from,
-transfer, or otherwise operate on the continuity object. This is a caller contract,
-not a runtime-detected `ADOPTING` state.
+Phase 7.1 is a transaction with two distinct boundaries:
 
-Under that ownership rule, phase-7 adoption and authority construction have no
-externally observable intermediate state.
+1. the **adoption commit**, where continuity moves from IDLE to ownership by the
+   already-complete authority object; and
+2. the **caller handoff**, where the already-constructed
+   `(PeerAdmissionAuditRecord, authority)` tuple is returned.
 
-Continuity has an explicit two-state adoption lifecycle: `IDLE` before adoption
-and terminal `ADOPTED` after successful authority construction. Adoption performs
-the single `IDLE -> ADOPTED` transition. Public mutating lifecycle/use methods
-check the terminal `ADOPTED` state and reject direct external mutation after
-adoption; authority-bound private operations are the production path. V1 introduces
-no observable intermediate `ADOPTING` state.
+The caller handoff is the ownership commit to the caller. Between adoption commit
+and caller handoff, the evaluator owns the authority and must dispose of it on every
+abnormal exit.
 
-Phase 6.3 is a defensive adoption-start guard under this model, not a claim that
-normal single-threaded evaluation permits an external lifecycle transition between
-phases 6.1 and 6.3. It catches continuity that is already closed/invalid when
-adoption actually begins, including an evaluator-side lifecycle bug or a violation
-of the caller ownership contract. The check is retained as an operational guard
-because adoption must never consume an invalid continuity, but v1 does not model a
-concurrent state change as normal behavior.
+The implementation obeys all of these rules:
 
-If concurrent evaluation ownership is introduced later, this contract must be
-amended with an explicit synchronization and state-transition mechanism.
+1. `AuthorityConstructionUnavailable` has a closed operational vocabulary. The
+   evaluator catches exactly that type; it does not widen the clause to
+   `OSError`, `RuntimeError`, `Exception`, or `BaseException`. New expected
+   operational adoption failures are classified by the adoption helper.
+2. Raising `AuthorityConstructionUnavailable` certifies that no authority exists
+   and continuity ownership is not ambiguous: continuity is either still valid,
+   IDLE, and orchestrator-owned, or has been completely and successfully closed.
+   Failed or uncertain cleanup is containment/fatal and cannot be represented by
+   this operational exception.
+3. Construction of the pre-adoption
+   `INDETERMINATE / AUTHORITY_CONSTRUCTION_FAILED` audit is deliberately not
+   transaction-wrapped. No authority exists on that path; if audit projection
+   itself is broken, the original exception propagates directly.
+4. Every potentially failing validation, allocation, allowed-use-kind construction,
+   callback construction, native/liveness check, and authority initialization is
+   completed before adoption commit.
+5. Adoption is represented by one state-bearing field on continuity,
+   `_adopted_by: None | _AuthoritativePeerAdmission`. `None` means IDLE;
+   storing the exact already-complete authority means ADOPTED. This makes
+   "ADOPTED but ownerless" structurally unrepresentable.
+6. `AdmissionContinuity._adopt(authority)` performs all precondition validation
+   before any state mutation. The `None -> authority` assignment is its first and
+   only state-bearing mutation.
+7. The adoption assignment is the adoption helper's last executable operation other
+   than `return authority`. No allocation, logging, metric, callback, lazy
+   attribute access, formatting, or other fallible work occurs between the
+   assignment and helper return.
+8. Post-adoption construction of the
+   `ADMITTED / ADMISSION_REQUIREMENTS_MET` audit and construction of the frozen
+   two-element return tuple are transaction-protected. If either raises, the
+   evaluator closes the authority before propagating.
+9. If that authority close succeeds, including the ordinary already-successfully-
+   closed idempotent return, the original handoff exception is re-raised unchanged.
+10. If the handoff operation fails and authority cleanup also fails, the evaluator
+    raises `AdmissionHandoffFailure`, a `BaseExceptionGroup` subclass containing
+    both failures. The subclass identity is regression-tested because CPython's
+    exact-base `BaseExceptionGroup` constructor otherwise demotes all-Exception
+    groups to `ExceptionGroup`. The raise uses `from None` only to suppress the
+    redundant outer exception context; neither contained failure is discarded.
+11. After the protected audit and tuple construction succeeds, `return outcome`
+    is the final success-path statement. No fallible telemetry, logging, allocation,
+    callback, or correlation work occurs between tuple creation and return.
+12. Only successful return of that tuple transfers authority ownership from the
+    evaluator to the caller.
+
+The phase-7 property is therefore: **there is no representable intermediate state
+in which adoption succeeded but no complete owner exists.**
+
+`AuthorityConstructionUnavailable` may cover only known recoverable adoption
+refusals for which its ownership postcondition can be certified, including an
+expected adoption-start continuity/liveness refusal. Generic programming failures,
+`MemoryError`, impossible state, and containment are not normalized into this
+terminal. The helper owns the translation from its explicitly enumerated
+operational causes to `AuthorityConstructionUnavailable`.
+
+During evaluation ownership, callers must not concurrently close, mutate, mint
+from, transfer, or otherwise operate on continuity. V1 introduces no observable
+`ADOPTING` state.
+
+Phase 6.3 remains the defensive check that continuity is valid/open immediately
+before phase-7 construction begins. If concurrent evaluation ownership is
+introduced later, this contract must be amended with an explicit synchronization
+and transition model.
 
 ## Continuity semantics
 
@@ -531,8 +601,14 @@ token minted 900 ms before continuity expiry has at most 100 ms of usable life.
 
 The token must be consumed successfully before its deadline. Successful consumption
 authorizes that specific operation to begin. Subsequent continuity expiry, policy
-change, connection loss, or other continuity invalidation does not retroactively
-cancel that already-started operation through this subsystem.
+change, connection loss, explicit continuity/authority closure, or other continuity
+invalidation does not retroactively cancel, abort, or wait for that already-started
+operation through this subsystem.
+
+Explicit close invalidates and burns any outstanding token that has been minted but
+not yet consumed. Consumption attempted after close fails and does not authorize
+the operation. A successfully consumed token is the point-in-time boundary; close
+affects only future admission-side use and releases continuity-owned resources.
 
 Any intrinsic deadline, cancellation, rollback, or failure during the operation is
 owned by the privileged operation's own contract.
@@ -667,8 +743,7 @@ It contains at least these fields:
   pair `(status, reason)` required to be a member of `LEGAL_RESULT_PAIRS`;
 - `terminal_phase: Literal['1', '2.1', '2.2', '2.3', '3.1', '3.2', '3.3',
   '4.1a', '4.1b', '4.2', '5.1a', '5.1b', '5.2', '6.1', '6.2', '6.3', '7.1']`;
-- `admission_granted: bool`, strictly equal to whether the pair is
-  `ADMITTED / ADMISSION_REQUIREMENTS_MET`;
+- `admission_granted: Literal[False]`;
 - `authorization_granted: Literal[False]`;
 - `grants_evaluated: Literal[False]`;
 - `signing_evaluated: Literal[False]`;
@@ -682,19 +757,20 @@ It contains at least these fields:
   `process_creation_filetime`, and `capture_ordinal`;
 - `evaluated_policy_revision` and `evaluated_policy_digest`.
 
-On this audit type, `admission_granted` is a historical outcome flag: it records
-whether this evaluation completed successful phase-7.1 admission and authority
-construction. It is `True` on the sole `ADMITTED` terminal and `False` on every
-other terminal; the model validator rejects either direction of disagreement.
-Unlike a live authority object, this field does not confer or attest to current
-permission to act. The audit remains inert even with `admission_granted=True`:
-no production admission/use path may accept the audit, its boolean flags, its
-status/reason, or a deserialized copy in place of the exact live authority and its
-continuity gate. Later authority closure or invalidation does not rewrite this
-historical outcome. `authorization_granted`, `grants_evaluated`, and
-`signing_evaluated` remain `False` on every terminal, including `ADMITTED`.
-The old `NativePeerAdmissionResult` was an all-negative evaluator result; its
-fixed-false `admission_granted` field is not the semantics of this new audit type.
+`PeerAdmissionAuditRecord` is a durable projection of the evaluator terminal, not
+an authorization capability. It records that admission occurred through its
+`status/reason` pair but never grants admission or authorization itself.
+Accordingly, `admission_granted`, `authorization_granted`,
+`grants_evaluated`, and `signing_evaluated` are permanently inert
+(`Literal[False]`) on every terminal, including `ADMITTED`. Live admission
+authority exists only in the separately returned authoritative object. No
+production admission/use path may accept the audit, its flags, its status/reason,
+or a deserialized copy in place of that exact live authority and its continuity
+gate. Later authority closure or invalidation does not rewrite the durable audit.
+
+The legacy `NativePeerAdmissionResult` is retired by the evaluator/authority
+integration rather than widened. `PeerAdmissionAuditRecord` becomes the sole
+durable evaluator terminal record.
 
 `terminal_phase` is the closed string Literal above, not a free-form string or
 numeric phase number. It records the phase that selected the terminal, not the
