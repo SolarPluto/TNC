@@ -945,9 +945,10 @@ Before the positive path becomes reachable, the test suite must pin at least:
 - phase-6.2 mismatch retains the validated evaluated-policy values without adoption;
 - unavailable validated evidence is `UNAVAILABLE`, while unvalidated phase-1 fields
   are `None`;
-- `admission_granted` is an exact boolean equal to positive-pair membership, and all
-  other audit flags remain false even on successful admission;
-- authority closure does not alter the historical positive audit flag;
+- `admission_granted`, `authorization_granted`, `grants_evaluated`, and
+  `signing_evaluated` remain exactly `False` on every durable audit terminal,
+  including `ADMITTED`;
+- authority closure does not rewrite the durable positive status/reason audit;
 - `terminal_phase` accepts only the closed Literal vocabulary, with `'3.3'`
   representing its documented terminal sub-checks and `'7.1'` the sole positive phase;
 - durable audit is never accepted as authority;

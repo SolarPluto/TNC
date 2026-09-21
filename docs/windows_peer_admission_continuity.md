@@ -51,7 +51,10 @@ V1 has three distinct artifact roles with deliberately different semantics:
 | Durable admission audit projection | Durable | Yes | Records that an admission evaluation occurred, including an `ADMITTED` outcome when applicable, but is never authority to act. |
 | Authoritative positive admission paired with the admission-continuity object | Live transaction-scoped | **No** | In-process authority to proceed, valid only while paired with the live continuity resources and only after successful use-time revalidation. |
 
-The current serializable `NativePeerAdmissionResult` model must not simply gain a replayable authoritative `ADMITTED` value. Before the positive path lands, implementation must split durable audit from live authority.
+The legacy serializable `NativePeerAdmissionResult` model is retired by the
+positive integration rather than widened with a replayable authoritative
+`ADMITTED` value. The production split is `PeerAdmissionAuditRecord` for durable
+terminal projection plus a separate live authority object.
 
 V1 chooses a structural split:
 
@@ -178,14 +181,14 @@ A durable audit projection is inert and cannot substitute for that live pair. Th
 
 The initial `ADMITTED / ADMISSION_REQUIREMENTS_MET` result means only that peer admission requirements were satisfied.
 
-For this first positive state:
+For the separately returned live authority, the positive state means that peer
+admission succeeded. The durable audit does not carry that authority: its
+`admission_granted`, `authorization_granted`, `grants_evaluated`, and
+`signing_evaluated` fields all remain exactly `False`, including on
+`ADMITTED / ADMISSION_REQUIREMENTS_MET`.
 
-- `admission_granted = True`;
-- `authorization_granted = False`;
-- `grants_evaluated = False`;
-- `signing_evaluated = False`.
-
-Admission therefore does not smuggle grant evaluation, authorization, custody, or signing into the peer gate. Those remain separate phases with their own contracts.
+Admission therefore does not smuggle grant evaluation, authorization, custody, or
+signing into the peer gate. Those remain separate phases with their own contracts.
 
 ### 4. Invalidation
 
@@ -239,17 +242,18 @@ The two phases have different outputs and must not be conflated.
 
 ### Evaluation phase
 
-`evaluate_native_peer_admission` remains the sole producer of `NativePeerAdmissionResult`.
+`evaluate_native_peer_admission` is the sole production evaluator for the
+`(PeerAdmissionAuditRecord, authority_or_none)` outcome.
 
-Before continuity integration, an otherwise successful evaluation returns:
+The legacy pre-integration placeholder
+`INDETERMINATE / PEER_ADMISSION_NOT_IMPLEMENTED` is retired. The all-requirements-
+passed path becomes exactly:
 
-`INDETERMINATE / PEER_ADMISSION_NOT_IMPLEMENTED`.
+`ADMITTED / ADMISSION_REQUIREMENTS_MET`
 
-After continuity integration, that path may become:
-
-`ADMITTED / ADMISSION_REQUIREMENTS_MET`.
-
-The positive pair is legal only when a live continuity object has already been established for the same producer binding and is available to the caller as part of the same in-process transaction.
+and returns the separate exact live authority. The positive pair is legal only when
+a live continuity object has already been established for the same producer binding
+and is adopted during the same in-process transaction.
 
 Failure to establish required continuity at evaluation time must remain non-admitted. The implementation should use a distinct fail-closed reason such as `ADMISSION_CONTINUITY_UNAVAILABLE` rather than misreporting an identity denial or pretending the frozen audit provides continuity.
 
@@ -321,11 +325,12 @@ The continuity implementation PR must, before `ADMITTED` exists, pin at least:
 - concurrent minting allows at most one outstanding token and token consumption is atomic under the continuity lock;
 - no revalidation path reacquires or substitutes a process PRIMARY token for the original pipe-token classification.
 
-The later ADMITTED integration PR must pin:
+The ADMITTED integration pins:
 
 - `PEER_ADMISSION_NOT_IMPLEMENTED` is replaced only on the all-requirements-passed path;
 - the sole positive pair is `ADMITTED / ADMISSION_REQUIREMENTS_MET`;
-- positive admission sets `admission_granted=True` while leaving authorization/grants/signing unevaluated;
+- all durable audit admission/grant/signing flags remain inert `False`, while live
+  admission authority exists only in the separately returned object;
 - no positive result is emitted without a matching live continuity object;
 - no authoritative positive result can be serialized or reconstructed across a process/persistence boundary, and the durable audit projection alone cannot authorize a use;
 - every privileged-use integration requires a fresh exact continuity-use-token type, rejects audit/result/binding substitutes, and consumes the token once;
