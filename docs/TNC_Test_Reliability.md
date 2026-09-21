@@ -57,6 +57,14 @@ The sampler runs in the measured child because parent-side persistence sampling 
 
 Synthetic tests force the nonzero sampler path and the parent annotation path so the diagnostic machinery is exercised without waiting for an intermittent CI failure.
 
+## Python runtime handles and strict process baselines
+
+Windows `GetProcessHandleCount` observes kernel-backed handles created by the Python runtime as well as handles opened explicitly by TNC native adapters. Resource-owning objects that remain alive at the measurement point can therefore move a strict process baseline even after their explicit native cleanup has completed. In particular, synchronization and worker primitives such as `threading.Lock`, `threading.Event`, `threading.Semaphore`, `threading.Condition`, `queue.Queue`, `multiprocessing` primitives, and `concurrent.futures` executors may allocate Windows kernel objects depending on the CPython implementation and version.
+
+On Python 3.12.10 for Windows, a direct `GetProcessHandleCount` probe around `threading.Lock()` observed one additional handle at construction, no further change across acquire/release, and return to baseline only after the lock object was deleted and collected. This means a strict `delta == 0` assertion can correctly detect a new per-instance runtime handle even when there is no leaked pipe, process, token, or overlapped-I/O handle.
+
+Do not weaken the strict invariant or force garbage collection to hide such changes. Prefer designs that keep long-lived synchronization resources outside per-instance native-resource accounting when that preserves the same locking semantics, and verify the affected native tests return to exact `delta == 0` after any change. Treat that rerun as a residual audit: a remaining nonzero delta means another kernel-backed allocation or cleanup defect is still present.
+
 ## Handle identity escalation
 
 Do not treat the persistence sampler as the fix. Its purpose is to determine whether the next observed nonzero delta is transient, persistent, or fluctuating while preserving the strict invariant.

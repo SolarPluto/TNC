@@ -1,4 +1,4 @@
-"""Test-only event-based pipe adapter. Import performs no native allocation.
+"""Test-only event-based pipe adapter.
 
 The ledger is an audit projection. The private registry, not a Python finalizer,
 owns every potentially pending native allocation until explicit safe disposal.
@@ -32,6 +32,9 @@ MAX_ENDPOINTS = 16
 MAX_OPERATIONS = 64
 _OWNERS = {}
 _OWNERS_LOCK = threading.Lock()
+# Shared so endpoint construction does not add a per-instance Windows runtime
+# synchronization handle after native handle-count baselines are captured.
+_CONTINUITY_CLAIM_LOCK = threading.Lock()
 
 
 class _Offsets(c.Structure):
@@ -202,6 +205,9 @@ class OwnedPipeEndpoint:
         self._operations = {}
         self._connect_started = False
         self._connected = False
+        self._continuity_claim_lock = _CONTINUITY_CLAIM_LOCK
+        self._continuity_active = False
+        self._continuity_owner = None
         with _OWNERS_LOCK:
             if len(_OWNERS) >= MAX_ENDPOINTS:
                 raise PipeAdapterError('ENDPOINT_CAPACITY')
@@ -279,6 +285,9 @@ class OwnedPipeEndpoint:
         self._guard()
         if getattr(self, '_process_lease_active', False):
             raise PipeAdapterError('PROCESS_LEASE_ACTIVE')
+        with self._continuity_claim_lock:
+            if self._continuity_active:
+                raise PipeAdapterError('ADMISSION_CONTINUITY_ACTIVE')
         if self._active is not None:
             raise PipeAdapterError('OPERATION_NOT_DISPOSED')
         try:

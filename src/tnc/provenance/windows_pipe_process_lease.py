@@ -73,6 +73,23 @@ class OwnedProcessLease:
     def __reduce__(self):
         raise TypeError('Process leases cannot be serialized')
 
+    def prepare_continuity(self, *, pipe_context, provider, continuity_deadline):
+        """Prepare continuity on the lease owner thread only.
+
+        The lease is intentionally process/thread-bound. finish(), abort(), and
+        continuity preparation all enforce the same owner identity, so another
+        worker thread cannot race lease consumption against continuity setup.
+        """
+        from tnc.provenance.windows_peer_admission_continuity import (
+            prepare_continuity_from_live_lease,
+        )
+        return prepare_continuity_from_live_lease(
+            self,
+            pipe_context=pipe_context,
+            provider=provider,
+            continuity_deadline=continuity_deadline,
+        )
+
     def _owner_check(self):
         if self._owner != (os.getpid(), threading.get_ident()):
             raise ProcessLeaseError('WRONG_OWNER')
@@ -175,6 +192,7 @@ def _prepare_lease(endpoint, pin, plan, *, api, clock, source):
     lease._pin, lease._plan, lease._pipe, lease._source = pin, plan, endpoint._handle, source
     lease._owner = (os.getpid(), threading.get_ident())
     lease._handle, lease._consumed, lease._fatal = None, False, False
+    lease._continuity_prepared = False
     lease._last_tick = plan.created_tick
     lease._clock_check()
     with _LOCK:
