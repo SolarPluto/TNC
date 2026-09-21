@@ -292,23 +292,21 @@ def _adopt_and_build_authority_from_state(state):
     authority._containment_reason = None
 
     try:
-        continuity._adoption_preflight()
+        return continuity._adopt(authority)
     except AdmissionContinuityError as exc:
-        # Pre-adoption refusal has no authority owner. Publish successful closure
-        # if the preflight already invalidated/released continuity; containment
-        # remains loud and is never normalized into an operational terminal.
-        continuity.close()
+        # Every operational adoption refusal occurs before the single adoption
+        # assignment. Normalize it only after proving cleanup/ownership is known.
+        try:
+            continuity.close()
+        except AdmissionContinuityContainment:
+            raise
+        except AdmissionContinuityError as cleanup_exc:
+            raise AdmissionEvaluatorInvariantError(
+                "adoption refusal left ambiguous continuity ownership"
+            ) from cleanup_exc
         raise AuthorityConstructionUnavailable(
             "CONTINUITY_UNAVAILABLE_AT_ADOPTION"
         ) from exc
-
-    try:
-        continuity._adopt(authority)
-    except AdmissionContinuityError as exc:
-        raise AdmissionEvaluatorInvariantError(
-            "continuity changed after successful adoption preflight"
-        ) from exc
-    return authority
 
 
 def evaluate_native_peer_admission(
