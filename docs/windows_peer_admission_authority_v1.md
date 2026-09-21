@@ -149,12 +149,15 @@ capture unavailable) and therefore stay mechanically distinct from conflict.
 
 Other classifier `INDETERMINATE` or `UNPROVEN` reasons are not automatically
 relabelled as conflict. Their producer mapping must be explicitly specified before
-they can become authority evidence. The wrapper itself does not invent conflicts by
-reinterpreting raw facts independently of the classifier.
+they can become authority evidence. If the producer receives a classifier
+status/reason pair for which no mapping is defined, that is a producer/classifier
+programming-contract failure and the producer raises its invariant error; it must
+not silently convert the unknown mapping to unavailable evidence.
 
-This keeps the classifier as the owner of raw-fact consistency semantics while the
-producer owns the translation from classifier vocabulary into the admission
-evidence vocabulary.
+The wrapper itself does not invent conflicts by reinterpreting raw facts
+independently of the classifier. This keeps the classifier as the owner of raw-fact
+consistency semantics while the producer owns the explicit translation from
+classifier vocabulary into the admission evidence vocabulary.
 
 ## Evaluation order and terminal table
 
@@ -175,10 +178,10 @@ earlier terminal reason.
 | 3.3b | Bridge reason `APP_CONTAINER_EXCLUSION_UNPROVEN` is the expected handoff to the authority AppContainer phases | success -> continue to phase 4 |
 | 3.3c | Any other allowed bridge `INDETERMINATE` reason | propagate that exact existing `INDETERMINATE` reason |
 | 4.1a | Pipe-token classification evidence is available and validated | failure -> `INDETERMINATE / PEER_EVIDENCE_UNAVAILABLE` |
-| 4.1b | Pipe-token classifier yields one unique model-valid outcome | failure -> `INDETERMINATE / PIPE_CONTEXT_CLASSIFICATION_CONFLICT` |
+| 4.1b | Pipe-token classifier outcome maps to a defined axis variant | `CLASSIFICATION_CONFLICT` -> `INDETERMINATE / PIPE_CONTEXT_CLASSIFICATION_CONFLICT` |
 | 4.2 | Pipe context is proven non-AppContainer | AppContainer -> `DENIED / PIPE_CONTEXT_APP_CONTAINER_DENIED` |
 | 5.1a | Process-primary classification evidence is available and validated | failure -> `INDETERMINATE / PEER_EVIDENCE_UNAVAILABLE` |
-| 5.1b | Process-primary classifier yields one unique model-valid outcome | failure -> `INDETERMINATE / PROCESS_PRIMARY_CLASSIFICATION_CONFLICT` |
+| 5.1b | Process-primary classifier outcome maps to a defined axis variant | `CLASSIFICATION_CONFLICT` -> `INDETERMINATE / PROCESS_PRIMARY_CLASSIFICATION_CONFLICT` |
 | 5.2 | Process PRIMARY is proven non-AppContainer | AppContainer -> `DENIED / PROCESS_PRIMARY_APP_CONTAINER_DENIED` |
 | 6.1 | Matching live continuity is established and bound | failure -> `INDETERMINATE / ADMISSION_CONTINUITY_UNAVAILABLE` |
 | 6.2 | Exact evaluated-policy binding is proven | failure -> `INDETERMINATE / POLICY_BINDING_UNAVAILABLE` |
