@@ -101,9 +101,33 @@ Process-primary classification is captured by the producer, not by the evaluator
 The evaluator performs no native token acquisition.
 
 The producer uses the existing live `OwnedProcessLease` process handle and opens
-the process token with `OpenProcessToken(..., TOKEN_QUERY)`. It classifies the
-PRIMARY token while the same process instance is retained and correlated, closes
-the token, and emits both classifications in one immutable evidence record bound to:
+the process token with `OpenProcessToken(..., TOKEN_QUERY)`.
+
+The acquisition/classification sequence is fixed:
+
+1. impersonate the named-pipe client;
+2. open the exact pipe-client thread token;
+3. perform the mandatory `RevertToSelf`;
+4. only after successful revert, register the retained pipe-token handle in one
+   post-revert structured cleanup scope and classify it;
+5. open the correlated process PRIMARY token from the live lease process handle;
+6. register that process-primary token in the same cleanup scope, classify it, and
+   build the process-primary axis;
+7. construct the immutable `PeerAdmissionEvidence` wrapper;
+8. close the process-primary token and then the pipe token as the cleanup scope
+   unwinds.
+
+The post-revert cleanup scope uses `contextlib.ExitStack` (or an equivalent single
+structured ownership scope). The lease-owned process handle is not registered
+because the producer does not own it. `RevertToSelf` failure remains the unique
+process-fatal path with exit code `0xE401` and performs no subsequent Python
+cleanup/evidence/classification work. Process-primary acquisition/query failure
+occurs only after successful revert and therefore produces unavailable process-axis
+evidence where explicitly mapped; it is not process-fatal.
+
+It classifies the PRIMARY token while the same process instance is retained and
+correlated, closes the token, and emits both classifications in one immutable
+evidence record bound to:
 
 - `connection_operation_id`;
 - `pipe_lease_id`;
@@ -114,6 +138,213 @@ the token, and emits both classifications in one immutable evidence record bound
 
 V1 treats the process-primary AppContainer classification as a stable fact of that
 correlated process instance and does not re-query it at use time.
+
+`PeerAdmissionEvidence` uses containment, not extension:
+
+- `pipe_context: PipePeerAdmissionEvidence`;
+- `process_primary: ProcessPrimaryAppContainerEvidence`.
+
+The existing `PipePeerAdmissionEvidence` schema remains the pipe-axis record and
+keeps its current fields, including `classification_source='PIPE_TOKEN'`.
+`ProcessPrimaryAppContainerEvidence` is a discriminated union of separate frozen
+Pydantic variants mirroring the existing pipe-axis pattern:
+
+- `CAPTURED_APPCONTAINER`;
+- `CAPTURED_NON_APPCONTAINER`;
+- `CAPTURED_CLASSIFICATION_CONFLICT`;
+- `CAPTURED_CLASSIFICATION_UNAVAILABLE`.
+
+Every process-primary variant carries
+`classification_source='PROCESS_PRIMARY_TOKEN'`. Both axes carry the full common
+binding tuple:
+
+- `connection_operation_id`;
+- `pipe_lease_id`;
+- `process_lease_operation_id`;
+- `process_pid`;
+- `process_creation_filetime`;
+- `capture_ordinal=1`.
+
+The ordinal identifies the single v1 evidence transaction, not sequential capture
+order. The wrapper validates exact equality of the complete binding tuple across
+both axes. Source fields are retained even though wrapper position already implies
+the axis so that each durable axis record remains self-describing; their Literal
+types make an axis/source mismatch invalid.
+
+For process-primary `CAPTURED_CLASSIFICATION_UNAVAILABLE`, the diagnostic payload
+is structured:
+
+- `failed_stage: Literal['OPEN_PROCESS_TOKEN', 'GET_TOKEN_INFORMATION']`;
+- `information_class: Literal[29, 31] | None`;
+- `failure_reason: ProcessPrimaryFailureReason`;
+- `winerror: int | None`.
+
+`ProcessPrimaryFailureReason` is a closed Literal vocabulary rather than the
+general-purpose `Identifier` alias:
+
+- `OPEN_PROCESS_TOKEN_FAILED`;
+- `QUERY_FAILED`;
+- `QUERY_LENGTH_INVALID`;
+- `QUERY_BOOLEAN_INVALID`;
+- `QUERY_SIZE_PROBE_FAILED`;
+- `QUERY_BOUND_INVALID`;
+- `QUERY_RETURN_LENGTH_INVALID`;
+- `APPCONTAINER_INFO_HEADER_INVALID`;
+- `APPCONTAINER_SID_INVALID`.
+
+The existing `Identifier` type remains the repository-wide constrained identifier
+string (`^[A-Za-z0-9][A-Za-z0-9_.:@/-]{0,127}# Native Windows Peer Admission Authority v1
+
+Version: 0.1-draft
+Effective date: 2026-09-21
+Frozen by: pre-implementation authority-contract workstream
+Supersedes: none
+Reviewed against implementation: N/A — positive path not yet reachable
+
+## Normative status
+
+This document is the normative specification for the first reachable positive native
+Windows peer-admission result and its live authority object.
+
+**The failure table in this document is the specification of the evaluator's branch
+structure. The implementation must conform to the table; the table is not derived
+from the implementation.**
+
+Any decision that arises during implementation but is not determined by this
+contract is a contract gap. The contract must be amended before code chooses a new
+semantic rule.
+
+The document and the runtime legal-pair sets are independent artifacts. Neither is
+mechanically generated from the other. Any change to this failure table, the bridge
+violation vocabulary, or the evaluator's legal result-pair set requires coordinated
+contract review.
+
+Internal programming/invariant failures are outside the operational terminal table.
+They raise `AdmissionEvaluatorInvariantError`; they are bugs, not peer-admission
+outcomes.
+
+## Scope
+
+V1 introduces the first authoritative positive peer admission while preserving the
+existing separation between durable evidence and live authority.
+
+A successful evaluation may produce:
+
+`ADMITTED / ADMISSION_REQUIREMENTS_MET`
+
+only when every required predicate in this document has passed and a matching live
+continuity object has been adopted into the authoritative admission object.
+
+Admission is not general authorization. The initial positive state means:
+
+- `admission_granted=True`;
+- `authorization_granted=False`;
+- `grants_evaluated=False`;
+- `signing_evaluated=False`.
+
+## Complete positive predicate
+
+Positive admission requires all of the following:
+
+1. the native process lease is the exact required native source and has the exact
+   successful pair `CORRELATED / AUDIT_MATCHED`;
+2. the existing native peer audit has no concrete violation and all existing
+   identity, retained-read, endpoint, descriptor, integrity, token-profile,
+   process-correlation, scope, and freshness checks have passed;
+3. the exact pipe-client token classification proves non-AppContainer;
+4. the correlated process PRIMARY token classification independently proves
+   non-AppContainer;
+5. live admission continuity exists for the same connection/process binding;
+6. the continuity object is bound to the exact policy snapshot under which the
+   admission evaluation is performed;
+7. authority adoption/construction succeeds.
+
+No subset is sufficient.
+
+## Dual AppContainer evidence
+
+The producer must emit two distinct classifications under one live process-lease
+boundary:
+
+- pipe-client token classification;
+- correlated process PRIMARY-token classification.
+
+The two axes answer different questions and must never be collapsed into one
+generic classification.
+
+The pipe classification describes the security context presented by the thread that
+established this specific named-pipe connection. The process-primary classification
+describes the sandbox state of the correlated process instance.
+
+PR #37 established that a non-AppContainer process can connect while carrying an
+AppContainer thread token and that the pipe observes the thread context. Therefore
+process-primary exclusion cannot substitute for pipe-context exclusion.
+
+The inverse case must also be excluded: a process whose PRIMARY token is
+AppContainer does not become admissible merely because its connecting thread
+presents a non-AppContainer impersonation token.
+
+Only:
+
+`pipe = PROVEN_NON_APPCONTAINER AND process_primary = PROVEN_NON_APPCONTAINER`
+
+may proceed beyond the AppContainer phases.
+
+### Producer requirements
+
+Process-primary classification is captured by the producer, not by the evaluator.
+The evaluator performs no native token acquisition.
+
+The producer uses the existing live `OwnedProcessLease` process handle and opens
+the process token with `OpenProcessToken(..., TOKEN_QUERY)`.
+
+The acquisition/classification sequence is fixed:
+
+1. impersonate the named-pipe client;
+2. open the exact pipe-client thread token;
+3. perform the mandatory `RevertToSelf`;
+4. only after successful revert, register the retained pipe-token handle in one
+   post-revert structured cleanup scope and classify it;
+5. open the correlated process PRIMARY token from the live lease process handle;
+6. register that process-primary token in the same cleanup scope, classify it, and
+   build the process-primary axis;
+7. construct the immutable `PeerAdmissionEvidence` wrapper;
+8. close the process-primary token and then the pipe token as the cleanup scope
+   unwinds.
+
+The post-revert cleanup scope uses `contextlib.ExitStack` (or an equivalent single
+structured ownership scope). The lease-owned process handle is not registered
+because the producer does not own it. `RevertToSelf` failure remains the unique
+process-fatal path with exit code `0xE401` and performs no subsequent Python
+cleanup/evidence/classification work. Process-primary acquisition/query failure
+occurs only after successful revert and therefore produces unavailable process-axis
+evidence where explicitly mapped; it is not process-fatal.
+
+It classifies the PRIMARY token while the same process instance is retained and
+correlated, closes the token, and emits both classifications in one immutable
+evidence record bound to:
+
+- `connection_operation_id`;
+- `pipe_lease_id`;
+- `process_lease_operation_id`;
+- `process_pid`;
+- `process_creation_filetime`;
+- the producer capture ordinal.
+
+), but it is intentionally too open
+for this failure vocabulary. Native error numbers are stored separately in
+`winerror`; they are not embedded into `failure_reason`.
+
+The variant validator requires `information_class is None` for
+`OPEN_PROCESS_TOKEN` and `information_class in {29,31}` for
+`GET_TOKEN_INFORMATION`. Class-30 capability telemetry remains audit-only and does
+not create a classification-unavailable terminal.
+
+Only expected native/probe failures are translated into this unavailable variant.
+Unexpected exception types propagate as producer errors. Likewise, an unmapped
+classifier result, impossible classifier result, or wrapper/model validation failure
+is a producer programming-contract error and raises; none may be laundered into
+unavailable evidence or a partially populated wrapper.
 
 ## Classification outcomes
 
