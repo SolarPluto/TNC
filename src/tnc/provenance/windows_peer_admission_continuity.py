@@ -354,7 +354,7 @@ class _AuthoritativePeerAdmission:
             return self._close_locked()
 
 
-def prepare_continuity_from_live_lease(def prepare_continuity_from_live_lease(
+def prepare_continuity_from_live_lease(
     lease, *, pipe_context, provider, continuity_deadline
 ):
     """Prepare independent continuity while the original process lease is live."""
