@@ -5,7 +5,7 @@ import pytest
 
 from tnc.provenance.windows_peer_admission_gate import AdmissionEvaluatorInvariantError
 from tnc.provenance.windows_pipe_auth_bridge import NATIVE_PEER_AUDIT_RESULT_PAIRS
-from tests._windows_peer_admission_contract_driver import (
+from _windows_peer_admission_contract_driver import (
     evaluate_case,
     evaluator_under_contract,
     make_continuity,
