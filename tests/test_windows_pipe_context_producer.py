@@ -443,16 +443,22 @@ def test_process_probe_error_family_maps_exhaustively(
     )
 
 
-def test_unmapped_process_probe_error_is_fail_loud():
+@pytest.mark.parametrize(
+    'raw,expected_error',
+    [
+        ('FUTURE_PROBE_REASON', 'UNEXPECTED_PROCESS_PRIMARY_PROBE_FAILURE'),
+        ('QUERY_29_FUTURE', 'UNMAPPED_PROCESS_PRIMARY_PROBE_FAILURE'),
+        ('QUERY_31_FUTURE', 'UNMAPPED_PROCESS_PRIMARY_PROBE_FAILURE'),
+        ('QUERY_29_FAILED_NOT_AN_INT', 'MALFORMED_PROCESS_PRIMARY_PROBE_FAILURE'),
+    ],
+)
+def test_unmapped_process_probe_error_is_fail_loud(raw, expected_error):
     from tnc.provenance import windows_pipe_context_producer as producer_module
 
-    with pytest.raises(
-        PipeContextProducerError,
-        match='UNEXPECTED_PROCESS_PRIMARY_PROBE_FAILURE',
-    ):
+    with pytest.raises(PipeContextProducerError, match=expected_error):
         producer_module._process_probe_failure(
             object(),
-            ap.AppContainerProbeError('FUTURE_PROBE_REASON'),
+            ap.AppContainerProbeError(raw),
         )
 
 
