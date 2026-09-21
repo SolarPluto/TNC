@@ -145,7 +145,7 @@ The token contract is fixed as follows:
 - **Clock/bound:** token time is measured only with the continuity object's monotonic clock. `MAX_CONTINUITY_USE_TOKEN_MS = 1000`; `use_deadline = min(minted_tick + 1000, continuity_deadline, operation_deadline)`. Wall clock is not consulted for token age. A token at or past `use_deadline` is invalid and consumed as a failure.
 - **Operation binding:** the token carries an exact host-issued `operation_id` plus a closed `ContinuityUseKind` enum owned by the continuity module. Callers cannot supply arbitrary free-form operation-kind strings. The integration PR that introduces a privileged consumer must add its explicit enum member and require a matching kind at consumption.
 - **Single use:** consumption atomically changes the token from `UNUSED` to `CONSUMED`; any second consume fails closed.
-- **Concurrency:** each continuity object permits at most one outstanding unconsumed token. Mint and consume run under the continuity object's `threading.Lock`. A concurrent mint while a token is outstanding fails closed with `USE_TOKEN_OUTSTANDING`; it does not mint a second token. After successful consumption, a later operation may request a new token only after fresh revalidation.
+- **Concurrency:** each continuity object permits at most one outstanding unconsumed token. Mint and consume run under the continuity object's `threading.Lock`. A concurrent mint while a token is outstanding fails closed with `USE_TOKEN_OUTSTANDING`; it does not mint a second token. This intentionally serializes privileged-use authorization per continuity object: two operations on the same admitted connection cannot both hold valid use tokens concurrently. After successful consumption, a later operation may request a new token only after fresh revalidation.
 
 The token is also bound by object identity to the exact continuity object that minted it. It cannot be refreshed or recreated from serialized fields.
 
@@ -154,7 +154,7 @@ Every privileged consumer covered by this admission contract must require the ex
 The gate revalidation checks the facts that can change after evaluation while preserving capture-time facts that cannot be meaningfully reacquired on the original connection. At minimum it must verify:
 
 1. the continuity object is open and internally valid;
-2. the retained process instance is still live;
+2. the retained process instance is still live, established by `WaitForSingleObject(process_handle, 0) == WAIT_TIMEOUT`; `WAIT_OBJECT_0` means the process exited and invalidates continuity, while `WAIT_FAILED` or any unexpected wait result is an inability to prove liveness and also invalidates continuity;
 3. the intended use targets the same admitted pipe connection;
 4. the supplied immutable binding identity matches the continuity object's binding;
 5. the current trusted policy snapshot matches the admitted policy snapshot;
@@ -208,7 +208,7 @@ The current native peer policy models do not expose a stable revision source, so
 
 PR 1 must introduce a host-owned `PeerAdmissionPolicyProvider` boundary and immutable `PeerAdmissionPolicySnapshot`. The snapshot contains at least a monotonically increasing policy revision and the canonical digest of the exact native peer-admission policy used for evaluation.
 
-Provider ownership is constructor-time injection, not a module singleton and not a per-revalidation argument. The trusted host passes the provider to `prepare_continuity(...)`; the continuity object stores a strong reference to that exact provider for its entire lifetime. Evaluation captures the provider's exact current snapshot and binds it into continuity state. Every later use-token gate consults the stored provider reference and requires exact revision-and-digest equality with the captured snapshot before minting a token. A caller cannot swap providers between evaluation and use by passing a different provider to revalidation.
+Provider ownership is constructor-time injection, not a module singleton and not a per-revalidation argument. The trusted host passes the provider to `prepare_continuity(...)`; the continuity object stores a strong reference to that exact provider for its entire lifetime. Evaluation captures the provider's exact current snapshot and stores that evaluated-policy revision and canonical digest immutably in continuity state. Every later use-token gate asks the same stored provider object for its **current** snapshot and compares current-vs-evaluated: both revision and digest must exactly equal the stored evaluation-time values. Revalidation never adopts or substitutes the provider's newer policy for the policy under which admission was evaluated. Any policy change therefore invalidates the existing continuity object and requires a new admission evaluation. A caller cannot swap providers between evaluation and use by passing a different provider to revalidation.
 
 Production construction must accept only the trusted production provider boundary; tests use an explicit test-only provider path rather than subclassing or relabelling arbitrary caller objects as trusted. Provider replacement in the host therefore affects only newly prepared continuity objects unless the existing provider object's current snapshot changes; replacing the reference itself does not retarget already-live continuity objects.
 
@@ -244,9 +244,10 @@ The continuity implementation PR must, before `ADMITTED` exists, pin at least:
 - no revocation claim exists in initial v1 and the review store is not consulted as an admission revocation oracle;
 - explicit close is terminal and native resources close exactly once;
 - `prepare_continuity()` is one-shot, occurs before `finish()`, and does not execute caller callbacks;
-- the continuity object, authoritative positive artifact, and continuity-use token each reject `pickle.dumps()` via explicit reduction guards and cannot be reconstructed;
+- the continuity object, authoritative positive artifact, and continuity-use token each reject `pickle.dumps()`, `copy.copy()`, and `copy.deepcopy()` via explicit reduction guards and cannot be reconstructed;
 - the second `OpenProcess` requests exactly `0x00101000` with inheritance disabled and no broader-rights retry exists;
 - use-token deadline uses the continuity monotonic clock, is capped at 1000 ms and by continuity/operation deadlines;
+- liveness revalidation pins `WaitForSingleObject(handle, 0) == WAIT_TIMEOUT` as the only alive result; signaled, failed, or unexpected wait results invalidate continuity;
 - operation kind is a closed `ContinuityUseKind`, not a caller free-form string;
 - concurrent minting allows at most one outstanding token and token consumption is atomic under the continuity lock;
 - no revalidation path reacquires or substitutes a process PRIMARY token for the original pipe-token classification.
