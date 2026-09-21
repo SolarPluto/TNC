@@ -6,7 +6,7 @@ unchanged.
 """
 from dataclasses import replace
 
-from tests._windows_peer_admission_contract_stub import (
+from _windows_peer_admission_contract_stub import (
     StubContinuity,
     StubDualAppContainerEvidence,
     StubLeaseAudit,
