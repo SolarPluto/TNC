@@ -96,3 +96,20 @@ def test_evaluator_layer_does_not_import_native_producer_module():
 
 def test_legacy_result_type_is_retired():
     assert not hasattr(gate, "NativePeerAdmissionResult")
+
+
+
+def test_authority_construction_unavailable_reason_vocabulary_is_closed():
+    from tnc.provenance.windows_peer_admission_gate import (
+        AuthorityConstructionUnavailable,
+    )
+
+    value = AuthorityConstructionUnavailable(
+        "CONTINUITY_UNAVAILABLE_AT_ADOPTION"
+    )
+    assert value.reason == "CONTINUITY_UNAVAILABLE_AT_ADOPTION"
+    with pytest.raises(
+        ValueError,
+        match="UNKNOWN_AUTHORITY_CONSTRUCTION_UNAVAILABLE_REASON",
+    ):
+        AuthorityConstructionUnavailable("OTHER")

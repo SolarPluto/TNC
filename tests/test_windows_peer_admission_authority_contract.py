@@ -503,3 +503,59 @@ def test_handoff_and_cleanup_failure_preserve_both_and_poison_authority(monkeypa
     with pytest.raises(AdmissionContinuityContainment):
         authority.close()
     assert sum(1 for call in continuity._api.calls if call[0] == "close") == close_calls
+
+
+
+def test_validated_state_runtime_barrier_on_evaluator_created_state(monkeypatch):
+    import copy
+    import pickle
+
+    import tnc.provenance.windows_peer_admission_gate as gate
+
+    captured = []
+
+    def refuse(state):
+        captured.append(state)
+        raise gate.AuthorityConstructionUnavailable(
+            "CONTINUITY_UNAVAILABLE_AT_ADOPTION"
+        )
+
+    monkeypatch.setattr(gate, "_adopt_and_build_authority_from_state", refuse)
+    audit, authority = evaluate_case()
+    assert authority is None
+    assert audit.reason == "AUTHORITY_CONSTRUCTION_FAILED"
+    assert len(captured) == 1
+
+    state = captured[0]
+    with pytest.raises(TypeError):
+        copy.copy(state)
+    with pytest.raises(TypeError):
+        copy.deepcopy(state)
+    with pytest.raises(TypeError):
+        pickle.dumps(state)
+    with pytest.raises(TypeError):
+        type("ForbiddenValidatedAdmissionStateSubclass", (type(state),), {})
+
+
+def test_representative_caller_handles_all_admission_terminals():
+    def representative_caller(result):
+        audit, authority = result
+        if audit.status == "DENIED":
+            assert authority is None
+            return "denied"
+        if audit.status == "INDETERMINATE":
+            assert authority is None
+            return "indeterminate"
+        if audit.status == "ADMITTED":
+            assert authority is not None
+            authority.close()
+            return "admitted"
+        raise AssertionError(f"unhandled admission status {audit.status!r}")
+
+    assert representative_caller(
+        evaluate_case(evidence=make_evidence(pipe="APPCONTAINER"))
+    ) == "denied"
+    assert representative_caller(
+        evaluate_case(lease=make_lease(source="FAKE_PROCESS_API"))
+    ) == "indeterminate"
+    assert representative_caller(evaluate_case()) == "admitted"
