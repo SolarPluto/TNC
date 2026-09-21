@@ -395,6 +395,66 @@ Correspondence between the full normative table, the bridge's closed violation
 vocabulary, and runtime legal-pair set is a required review invariant on changes to
 any of them.
 
+## Evaluator interface exercised by the contract stub
+
+The contract-test step pins the eventual evaluator call shape before native
+integration:
+
+`evaluate_native_peer_admission(*, lease, peer, peer_evidence, continuity, evaluated_policy)`
+
+The inputs are owned as follows:
+
+- `lease`: exact `ProcessLeaseAudit` from the process-lease module;
+- `peer`: exact `NativePeerAuditResult` from the authentication bridge;
+- `peer_evidence`: the producer-owned immutable dual-AppContainer evidence record
+  for the exact connection/process binding; the later producer/schema step replaces
+  the current pipe-only evidence shape with this dual-axis record;
+- `continuity`: the exact live `AdmissionContinuity` object for that same binding;
+- `evaluated_policy`: the exact `PeerAdmissionPolicySnapshot` under which this
+  admission evaluation is being performed.
+
+The explicit `evaluated_policy` input closes phase 6.2: the evaluator must be able
+to prove that the continuity was prepared under the exact policy snapshot being
+evaluated rather than merely trusting an opaque continuity object to assert that
+fact.
+
+The eventual evaluator returns:
+
+`(PeerAdmissionAuditRecord, authority_or_none)`
+
+The durable audit record owns the terminal `status` and `reason`. Every denied
+or indeterminate result has `authority_or_none is None`. Only successful phase
+7.1 may return the exact live authoritative admission object.
+
+The contract tests are permanent. The temporary branch stub is only a phase-table
+exerciser. The same contract-test file must run unchanged against the real evaluator
+when it lands; only the test driver/factories that construct real production inputs
+may change. Tests therefore assert the evaluator's call signature, durable terminal
+pair, phase precedence, and authority presence/absence, not private stub object
+shape.
+
+### Stub coverage boundary and disposal
+
+The temporary stub exercises phases 1 through 6 using synthetic exact input
+objects. It deliberately does not model authority construction. Phase 7.1,
+construction-barrier behavior, and evaluator-internal authority adoption require
+the real evaluator and are marked `requires-real-evaluator` in the test plan.
+
+Likewise, tests that deliberately induce internal implementation corruption rather
+than malformed external inputs may require the real evaluator. The bridge
+out-of-vocabulary invariant is stub-reachable because it is an explicit phase-3
+contract check; arbitrary internal evaluator bugs are not claimed as stub coverage.
+
+The stub is deleted when the real evaluator lands. It is not a maintained parallel
+evaluator or general-purpose test double. A thin contract-test driver may remain
+only to construct production inputs while keeping the permanent test file
+unchanged.
+
+The stub's job is to force every phase-1-through-6 input to be named, every covered
+terminal to be representable, and module ownership to be concrete. If that exercise
+requires a semantic or interface choice not specified here, implementation stops
+and this contract is amended first.
+
 ## Required contract and implementation tests
 
 Before the positive path becomes reachable, the test suite must pin at least:
