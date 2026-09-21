@@ -291,6 +291,14 @@ check the terminal `ADOPTED` state and reject direct external mutation after
 adoption; authority-bound private operations are the production path. V1 introduces
 no observable intermediate `ADOPTING` state.
 
+Phase 6.3 is a defensive adoption-start guard under this model, not a claim that
+normal single-threaded evaluation permits an external lifecycle transition between
+phases 6.1 and 6.3. It catches continuity that is already closed/invalid when
+adoption actually begins, including an evaluator-side lifecycle bug or a violation
+of the caller ownership contract. The check is retained as an operational guard
+because adoption must never consume an invalid continuity, but v1 does not model a
+concurrent state change as normal behavior.
+
 If concurrent evaluation ownership is introduced later, this contract must be
 amended with an explicit synchronization and state-transition mechanism.
 
@@ -407,17 +415,23 @@ The inputs are owned as follows:
 
 - `lease`: exact `ProcessLeaseAudit` from the process-lease module;
 - `peer`: exact `NativePeerAuditResult` from the authentication bridge;
-- `peer_evidence`: the producer-owned immutable dual-AppContainer evidence record
-  for the exact connection/process binding; the later producer/schema step replaces
-  the current pipe-only evidence shape with this dual-axis record;
+- `peer_evidence`: exact `PeerAdmissionEvidence`, a new producer-owned immutable
+  wrapper for the exact connection/process binding. It contains the existing
+  `PipePeerAdmissionEvidence` as its pipe-context component plus a distinct
+  process-primary AppContainer-classification component. The existing
+  `PipePeerAdmissionEvidence` remains the pipe-axis record and is not silently
+  redefined to mean both axes; callers must pass the wrapper to the evaluator;
 - `continuity`: the exact live `AdmissionContinuity` object for that same binding;
 - `evaluated_policy`: the exact `PeerAdmissionPolicySnapshot` under which this
   admission evaluation is being performed.
 
-The explicit `evaluated_policy` input closes phase 6.2: the evaluator must be able
-to prove that the continuity was prepared under the exact policy snapshot being
-evaluated rather than merely trusting an opaque continuity object to assert that
-fact.
+The explicit `evaluated_policy` input closes phase 6.2. The caller obtains the
+policy snapshot used to construct the peer-audit/evaluation inputs and passes that
+same immutable snapshot to the evaluator. Continuity independently retains the
+snapshot captured from its stored provider at preparation time. Phase 6.2 compares
+those two independently held references by exact revision and digest. The evaluator
+does not pull the evaluation policy from continuity and does not accept continuity's
+policy binding as a self-assertion.
 
 The eventual evaluator returns:
 
@@ -428,16 +442,35 @@ or indeterminate result has `authority_or_none is None`. Only successful phase
 7.1 may return the exact live authoritative admission object.
 
 The contract tests are permanent. The temporary branch stub is only a phase-table
-exerciser. The same contract-test file must run unchanged against the real evaluator
-when it lands; only the test driver/factories that construct real production inputs
-may change. Tests therefore assert the evaluator's call signature, durable terminal
-pair, phase precedence, and authority presence/absence, not private stub object
-shape.
+exerciser. Every test that exists in the stub PR must continue to pass unchanged
+against the real evaluator; only the test driver/factories that construct production
+inputs may change. The same file may grow with additional tests for phase 7.1,
+authority construction barriers, and other behavior that is genuinely unreachable
+under the stub. Adding those previously-unreachable tests does not relax the
+unchanged-passing requirement for the existing assertions. Tests therefore assert
+the evaluator's call signature, durable terminal pair, phase precedence, and
+authority presence/absence, not private stub object shape.
 
 ### Stub coverage boundary and disposal
 
 The temporary stub exercises phases 1 through 6 using synthetic exact input
-objects. It deliberately does not model authority construction. Phase 7.1,
+objects. Its reachable operational terminals are:
+
+- phase 1: `INVALID_ADMISSION_EVIDENCE`;
+- phase 2.1: `NATIVE_PROCESS_LEASE_REQUIRED`;
+- phase 2.2: `PROCESS_LEASE_NOT_CORRELATED`;
+- phase 2.3: `PROCESS_LEASE_CONTRACT_VIOLATION`;
+- phase 3.1: `PEER_AUDIT_CONTRACT_VIOLATION`;
+- phase 3.2: every authority-compatible bridge `VIOLATIONS` reason plus the
+  out-of-vocabulary `AdmissionEvaluatorInvariantError` path;
+- phase 3.3: `PEER_EVIDENCE_UNAVAILABLE`, the AppContainer handoff, and exact
+  propagation of the other allowed bridge-indeterminate reasons;
+- phases 4-5: both axis-specific AppContainer denials, both classifier conflicts,
+  and required-evidence unavailability;
+- phases 6.1 and 6.3: `ADMISSION_CONTINUITY_UNAVAILABLE`;
+- phase 6.2: `POLICY_BINDING_UNAVAILABLE`.
+
+It deliberately does not model authority construction. Phase 7.1,
 construction-barrier behavior, and evaluator-internal authority adoption require
 the real evaluator and are marked `requires-real-evaluator` in the test plan.
 
