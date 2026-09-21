@@ -202,6 +202,9 @@ class OwnedPipeEndpoint:
         self._operations = {}
         self._connect_started = False
         self._connected = False
+        self._continuity_claim_lock = threading.Lock()
+        self._continuity_active = False
+        self._continuity_owner = None
         with _OWNERS_LOCK:
             if len(_OWNERS) >= MAX_ENDPOINTS:
                 raise PipeAdapterError('ENDPOINT_CAPACITY')
@@ -279,6 +282,9 @@ class OwnedPipeEndpoint:
         self._guard()
         if getattr(self, '_process_lease_active', False):
             raise PipeAdapterError('PROCESS_LEASE_ACTIVE')
+        with self._continuity_claim_lock:
+            if self._continuity_active:
+                raise PipeAdapterError('ADMISSION_CONTINUITY_ACTIVE')
         if self._active is not None:
             raise PipeAdapterError('OPERATION_NOT_DISPOSED')
         try:
