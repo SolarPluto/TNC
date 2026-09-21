@@ -98,9 +98,17 @@ lifecycle boundary.
 Before authoritative admission adopts a continuity object:
 
 - the orchestrator owns the continuity reference;
+- merely passing continuity to `evaluate_native_peer_admission(...)` does not
+  transfer ownership;
 - `close()` is a public explicit cleanup operation;
-- the orchestrator must close continuity on denied/indeterminate evaluation or other
-  paths that do not transfer ownership.
+- the orchestrator must close continuity on denied/indeterminate evaluation and on
+  evaluator exceptions, including `AdmissionEvaluatorInvariantError`, whenever
+  successful authority adoption has not completed;
+- the evaluator must not close or dispose of continuity on those pre-adoption
+  terminal/exception paths.
+
+Ownership transfers only after successful one-shot adoption and completed authority
+construction.
 
 Use-token minting is an internal continuity primitive. Production callers do not
 treat bare continuity as authority; after authority integration the underlying mint
