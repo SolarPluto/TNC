@@ -307,6 +307,9 @@ def test_class_30_unavailability_is_audit_only_on_both_axes():
     'kind,expected_reason,expected_winerror',
     [
         (ap.TOKEN_IS_APPCONTAINER, 'QUERY_FAILED', 5),
+        # Class 31 is variable-sized. This injected failure occurs on the required
+        # size-probe call before any data query; the producer records the structural
+        # size-probe failure reason, so there is no data-query Win32 error to retain.
         (ap.TOKEN_APPCONTAINER_SID, 'QUERY_SIZE_PROBE_FAILED', None),
     ],
 )
