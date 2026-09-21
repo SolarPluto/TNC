@@ -303,16 +303,26 @@ def test_class_30_unavailability_is_audit_only_on_both_axes():
     assert events[-2:] == [('close', 43), ('close', 42)]
 
 
-@pytest.mark.parametrize('kind', [ap.TOKEN_IS_APPCONTAINER, ap.TOKEN_APPCONTAINER_SID])
-def test_process_primary_required_query_failure_is_structured_unavailable(kind):
+@pytest.mark.parametrize(
+    'kind,expected_reason,expected_winerror',
+    [
+        (ap.TOKEN_IS_APPCONTAINER, 'QUERY_FAILED', 5),
+        (ap.TOKEN_APPCONTAINER_SID, 'QUERY_SIZE_PROBE_FAILED', None),
+    ],
+)
+def test_process_primary_required_query_failure_is_structured_unavailable(
+    kind,
+    expected_reason,
+    expected_winerror,
+):
     item, events, _ = produce(probe_options={'process_fail_kind': kind})
     process = item.process_primary
     assert item.pipe_context.status == 'CAPTURED_NON_APPCONTAINER'
     assert process.status == 'CAPTURED_CLASSIFICATION_UNAVAILABLE'
     assert process.failed_stage == 'GET_TOKEN_INFORMATION'
     assert process.information_class == kind
-    assert process.failure_reason == 'QUERY_FAILED'
-    assert process.winerror == 5
+    assert process.failure_reason == expected_reason
+    assert process.winerror == expected_winerror
     assert events[-2:] == [('close', 43), ('close', 42)]
 
 
