@@ -28,6 +28,16 @@ Internal programming/invariant failures are outside the operational terminal tab
 They raise `AdmissionEvaluatorInvariantError`; they are bugs, not peer-admission
 outcomes.
 
+
+The `Reviewed against implementation` field remains
+`N/A — positive path not yet reachable` through all contract-only and
+producer-only work. It flips only in the evaluator/authority integration PR, and
+only after one exact PR head both makes
+`ADMITTED / ADMISSION_REQUIREMENTS_MET` reachable and passes the complete
+contract gate. The field is then set to that exact CI-validated PR-head SHA, not to
+a later merge commit. The referenced SHA must therefore have directly verifiable
+check-run history for the full enabling matrix.
+
 ## Scope
 
 V1 introduces the first authoritative positive peer admission while preserving the
@@ -543,6 +553,16 @@ hostile code already executing inside the trusted Python process.
 V1 assumes synchronous, single-threaded evaluation ownership from successful
 continuity preparation through authority adoption.
 
+The orchestrator retains ownership of the live `AdmissionContinuity` until phase
+7.1 adoption succeeds. Passing continuity into the evaluator does not itself
+transfer ownership. On every denied or indeterminate operational terminal, and on
+every `AdmissionEvaluatorInvariantError` or other evaluator exception before
+successful adoption, ownership remains with the orchestrator and the evaluator must
+not close, consume, or otherwise dispose of continuity. The orchestrator is
+responsible for closing unused continuity on those paths. Ownership transfers only
+after the successful `IDLE -> ADOPTED` transition and completed authority
+construction.
+
 During that interval, callers must not concurrently close, mutate, mint from,
 transfer, or otherwise operate on the continuity object. This is a caller contract,
 not a runtime-detected `ADOPTING` state.
@@ -705,6 +725,22 @@ those two independently held references by exact revision and digest. The evalua
 does not pull the evaluation policy from continuity and does not accept continuity's
 policy binding as a self-assertion.
 
+
+The evaluator is a pure admission-composition layer over already-captured inputs.
+It must not import, instantiate, or invoke `PipeContextProducer`,
+`NativeAppContainerProbe`, `NativePipeTokenAPI`, or any other native evidence
+acquisition component. `peer_evidence` is captured before evaluator entry and is
+supplied by the caller as an exact input. A production import dependency from the
+evaluator module to the producer module is a layering violation.
+
+Core evaluator contract tests are platform-independent. They construct exact
+production record types and deterministic continuity fixtures without invoking
+native acquisition, so phases 1-7 ordering, legal-pair closure, precedence,
+construction barriers, and authority lifecycle logic run on non-Windows CI as well
+as Windows. Windows-only tests are reserved for end-to-end native acquisition and
+continuity integration that actually requires Win32 resources. The integration PR
+must not make the evaluator's branch-structure test suite Windows-only.
+
 The eventual evaluator returns:
 
 `(PeerAdmissionAuditRecord, authority_or_none)`
@@ -713,15 +749,57 @@ The durable audit record owns the terminal `status` and `reason`. Every denied
 or indeterminate result has `authority_or_none is None`. Only successful phase
 7.1 may return the exact live authoritative admission object.
 
+### PeerAdmissionAuditRecord schema
+
+`PeerAdmissionAuditRecord` is a frozen Pydantic durable projection. Its production
+shape is part of this contract and is not left to evaluator implementation choice.
+
+It contains at least these fields:
+
+- `status: Literal['DENIED', 'INDETERMINATE', 'ADMITTED']`;
+- `reason`, from the evaluator's closed operational reason vocabulary, with the
+  pair `(status, reason)` required to be a member of `LEGAL_RESULT_PAIRS`;
+- `terminal_phase: Literal['1', '2.1', '2.2', '2.3', '3.1', '3.2', '3.3',
+  '4.1a', '4.1b', '4.2', '5.1a', '5.1b', '5.2', '6.1', '6.2', '6.3', '7.1']`;
+- `admission_granted`, which is true only for
+  `ADMITTED / ADMISSION_REQUIREMENTS_MET`;
+- `authorization_granted: Literal[False]`;
+- `grants_evaluated: Literal[False]`;
+- `signing_evaluated: Literal[False]`;
+- both AppContainer-axis audit dispositions, projected independently as
+  `pipe_context_classification` and `process_primary_classification`, each one
+  of `APPCONTAINER`, `NON_APPCONTAINER`, `CLASSIFICATION_CONFLICT`, or
+  `UNAVAILABLE`;
+- the exact evidence binding fields:
+  `connection_operation_id`, `pipe_lease_id`,
+  `process_lease_operation_id`, `process_pid`,
+  `process_creation_filetime`, and `capture_ordinal`;
+- `evaluated_policy_revision` and `evaluated_policy_digest`.
+
+For a phase-1 `INVALID_ADMISSION_EVIDENCE` terminal, exact input validation has
+not completed. The audit must not partially trust or mix fields from invalid
+inputs. In that one case, both classification projections, all binding fields, and
+the evaluated-policy revision/digest are `None`. For every terminal after phase 1,
+exact input validation has completed and those fields are populated from the exact
+validated `peer_evidence` and `evaluated_policy`, even when an earlier phase
+determines the terminal. This preserves both AppContainer axes in the durable audit
+without allowing later facts to override phase precedence.
+
+The audit record contains no live continuity reference, authority object, use token,
+native handle, callable, or reconstruction capability.
+
 The contract tests are permanent. The temporary branch stub is only a phase-table
 exerciser. Every test that exists in the stub PR must continue to pass unchanged
 against the real evaluator; only the test driver/factories that construct production
-inputs may change. The same file may grow with additional tests for phase 7.1,
-authority construction barriers, and other behavior that is genuinely unreachable
-under the stub. Adding those previously-unreachable tests does not relax the
-unchanged-passing requirement for the existing assertions. Tests therefore assert
-the evaluator's call signature, durable terminal pair, phase precedence, and
-authority presence/absence, not private stub object shape.
+inputs may change. The same permanent test file is expected to grow with additional
+tests for phase 7.1, the construction barrier, authority lifecycle, and authority
+use-kind behavior that are genuinely unreachable under the stub. Those additions
+are required integration coverage, not a violation of the unchanged-passing
+criterion. Adding previously-unreachable tests does not relax the requirement that
+all pre-existing phase-1-through-6 test bodies and assertions continue to pass
+unchanged against the production evaluator. Tests therefore assert the evaluator's
+call signature, durable terminal pair, phase precedence, and authority
+presence/absence, not private stub object shape.
 
 ### Stub coverage boundary and disposal
 
