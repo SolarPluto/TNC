@@ -25,7 +25,19 @@ Three possible meanings of "lease-bound admission" are not equivalent:
 - **Keep `OwnedProcessLease` live after `finish()`: rejected.** This changes `finish()` from an ownership-release boundary and conflates durable audit production with transient authorization lifetime.
 - **Create a separate continuity object: required.** The audit remains durable evidence; the continuity object owns the transient native resources required to revalidate the same process/connection at use time.
 
-The continuity object must acquire its independent native ownership **before** `OwnedProcessLease.finish()` releases the original lease ownership. The implementation may use a safe ownership transfer or duplicated native handle(s), but the resulting continuity object must have independent, exception-safe ownership. Merely copying PID, creation time, operation IDs, or audit fields is not continuity.
+The continuity object must acquire its independent native ownership **before** `OwnedProcessLease.finish()` releases the original lease ownership.
+
+V1 chooses an explicit two-phase lease API rather than a callback inside `finish()` or a shared-handle handoff:
+
+1. while the original `OwnedProcessLease` is still live, call a one-shot `prepare_continuity(...)` operation on that lease;
+2. `prepare_continuity(...)` opens a **new** process handle with the minimum continuity rights against the pinned PID while the original retained handle still prevents that process instance from disappearing and its PID from being reused;
+3. before returning, it verifies the new handle's process ID and creation FILETIME against the lease pin, rechecks pipe-client PID/endpoint identity, and establishes the continuity object's independent endpoint claim;
+4. only after `prepare_continuity(...)` succeeds may the caller invoke `OwnedProcessLease.finish()`; `finish()` keeps its existing semantics and releases only the original lease ownership;
+5. after `finish()`, the continuity object alone owns the independent process handle and continuity claim until terminal close/invalidation.
+
+`prepare_continuity(...)` is not a general callback hook and must not execute caller-supplied code while the lease is live. Native acquisition uses the exact trusted native API boundary, with the same no-broader-rights/no-PID-reopen discipline as the lease. Failure to prepare continuity leaves no positive admission path; the original lease must still be finished or aborted through its ordinary cleanup contract.
+
+Merely copying PID, creation time, operation IDs, or audit fields is not continuity.
 
 ## Artifact roles
 
@@ -37,7 +49,14 @@ V1 has three distinct artifact roles with deliberately different semantics:
 | Durable admission audit projection | Durable | Yes | Records that an admission evaluation occurred, including an `ADMITTED` outcome when applicable, but is never authority to act. |
 | Authoritative positive admission paired with the admission-continuity object | Live transaction-scoped | **No** | In-process authority to proceed, valid only while paired with the live continuity resources and only after successful use-time revalidation. |
 
-The current serializable `NativePeerAdmissionResult` model must not simply gain a replayable authoritative `ADMITTED` value. Before the positive path lands, implementation must split durable audit from live authority or otherwise make the authoritative positive object non-serializable and non-reconstructible from fields. No public validation/deserialization path may manufacture authoritative `ADMITTED` from bytes, JSON, database rows, IPC payloads, or copied identifiers.
+The current serializable `NativePeerAdmissionResult` model must not simply gain a replayable authoritative `ADMITTED` value. Before the positive path lands, implementation must split durable audit from live authority.
+
+V1 chooses a structural split:
+
+- `PeerAdmissionAuditRecord` is the frozen Pydantic audit projection. It may record the historical evaluation status/reason, but it contains no live continuity reference, use token, grant, signing, custody, or authorization capability and is never accepted by a privileged decision path.
+- the authoritative positive admission is a plain in-process live object, not a Pydantic `Model`. It uses a closed runtime type (for example `__slots__`), holds a strong reference to the exact live admission-continuity object, rejects pickling/reduction, exposes no JSON/model-dump reconstruction surface, and is created only by the evaluator's private positive constructor.
+
+The authoritative positive artifact therefore cannot exist without the live continuity object and cannot be reconstructed from serialized state. No public validation/deserialization path may manufacture authoritative `ADMITTED` from bytes, JSON, database rows, IPC payloads, or copied identifiers.
 
 The admission-continuity object likewise must not be reconstructible from serialized IDs or from a saved audit record. A caller cannot regain authority by deserializing an old result.
 
@@ -104,35 +123,35 @@ Continuity becomes invalid when any required live invariant can no longer be est
 - the retained process instance has exited or the retained process handle is unusable;
 - the admitted pipe connection is closed, disconnected, replaced, or no longer the use target;
 - immutable binding metadata presented with the use request does not match the continuity object;
-- the admission policy revision no longer matches the revision under which admission was evaluated;
-- the current revocation view says the admission/peer/transaction is revoked;
+- the trusted current admission-policy snapshot no longer matches the revision and canonical digest captured at evaluation;
 - the admission/evidence freshness deadline has expired;
 - continuity ownership has been explicitly closed or released;
 - a native revalidation query fails in a way that prevents proof of continuity.
 
 Invalidation is fail-closed and terminal for that continuity object. A new connection requires a new capture, evidence set, continuity object, and admission evaluation.
 
-Revocation is effective at the next privileged-use boundary. A revocation observed after an irreversible native operation has already crossed its authorization boundary cannot retroactively undo that completed side effect; callers must therefore revalidate immediately before each privileged operation.
+Peer-admission revocation is not part of initial continuity v1 because no authoritative source exists yet. A later revocation contract must define its own use-boundary semantics; it must not be inferred from the review store or from caller input.
 
 ### 5. Revalidation contract
 
-V1 uses **revalidation at use**, not full re-evaluation at use.
+V1 uses **revalidation at use**, not full re-evaluation at use, and does not rely on callers remembering to invoke a boolean check.
 
-A privileged consumer must call the continuity revalidation function immediately before crossing each privileged-use boundary. Revalidation checks the facts that can change after evaluation while preserving the capture-time facts that cannot be meaningfully reacquired on the original connection.
+The continuity object exposes a gate operation that revalidates continuity and, on success, mints exactly one **single-use, non-serializable continuity-use token**. The token is bound to the exact continuity object, intended privileged operation identity, and a bounded monotonic use deadline. Its maximum lifetime is fixed by implementation policy and cannot exceed the enclosing operation/admission freshness deadline. It cannot be refreshed from serialized fields.
 
-At minimum, use-time revalidation must verify:
+Every privileged consumer covered by this admission contract must require the exact continuity-use-token type as an input and consume it exactly once before beginning the privileged operation. A durable audit record, the authoritative positive admission object by itself, a binding-ID tuple, or a prior successful revalidation is not accepted as a substitute. This creates an enforceable gate without running arbitrary caller callbacks while native continuity resources are live.
+
+The gate revalidation checks the facts that can change after evaluation while preserving capture-time facts that cannot be meaningfully reacquired on the original connection. At minimum it must verify:
 
 1. the continuity object is open and internally valid;
 2. the retained process instance is still live;
 3. the intended use targets the same admitted pipe connection;
 4. the supplied immutable binding identity matches the continuity object's binding;
-5. the current policy revision is the admitted revision;
-6. the current time remains within the admitted freshness/expiry bound;
-7. the current revocation view does not invalidate the admission.
+5. the current trusted policy snapshot matches the admitted policy snapshot;
+6. the current time remains within the admitted freshness/expiry bound.
 
 Revalidation must not re-query the original pipe-client token after the capture window. The original token classification is immutable evidence bound to the connection; continuity protects the identity of the connection/process from evaluation through use.
 
-A failure to prove any required item yields a use-time continuity failure. The coarse reason is `CONTINUITY_INVALID`; implementations may retain more specific diagnostic metadata internally or in a separate audit record, but no failure may degrade into permission to proceed.
+A failure to prove any required item yields a use-time continuity failure. The coarse reason is `CONTINUITY_INVALID`; implementations may retain more specific diagnostic metadata internally or in a separate audit record, but no failure may degrade into permission to proceed. A failed gate call terminally invalidates the continuity object.
 
 ## Evaluation phase versus use phase
 
@@ -158,9 +177,9 @@ Failure to establish required continuity at evaluation time must remain non-admi
 
 Use-time revalidation consumes the existing continuity object. It does **not** mint a new `ADMITTED` result and does not regenerate the original evidence chain.
 
-A successful use-time check means only "the continuity requirements for this already-admitted transaction still hold now." A failed check returns `CONTINUITY_INVALID`, terminally invalidates that continuity object, and the privileged operation must not begin. It does not rewrite the durable evaluation audit: "admission passed at evaluation time" and "continuity failed at use time" are separate facts.
+A successful use-time gate means only "the continuity requirements for this already-admitted transaction hold now for this specific imminent operation" and returns one continuity-use token. A failed gate returns `CONTINUITY_INVALID`, terminally invalidates that continuity object, and the privileged operation must not begin. It does not rewrite the durable evaluation audit: "admission passed at evaluation time" and "continuity failed at use time" are separate facts.
 
-The use-time result must be a separate type from the evaluation result/audit so an evaluation decision cannot be confused with a continuity check.
+The continuity-use token is a separate live type from the evaluation result/audit, is single-use, and is required by the privileged consumer.
 
 ## Single-producer rule for ADMITTED
 
@@ -172,13 +191,21 @@ A validator that only checks the string pair is insufficient: if a caller can de
 
 Even an authoritative `ADMITTED` result remains non-transferable: use still requires successful revalidation of the paired live continuity object.
 
-## Policy revision and revocation view
+## Policy-state source
 
-Admission must bind to a stable policy revision identifier. Revalidation compares that captured revision with the current revision before use. A policy change invalidates the continuity object rather than silently applying a different policy to an old admission.
+The current native peer policy models do not expose a stable revision source, so continuity must not invent one from process-local object identity or timestamps.
 
-Revocation must be checked through a current trusted view at use time. This document does not prescribe the storage implementation, but the interface must make freshness and failure behavior explicit. An unavailable revocation check is fail-closed.
+PR 1 must introduce a host-owned `PeerAdmissionPolicyProvider` boundary and immutable `PeerAdmissionPolicySnapshot`. The snapshot contains at least a monotonically increasing policy revision and the canonical digest of the exact native peer-admission policy used for evaluation. The evaluator captures that exact snapshot when continuity is prepared. The use-token gate obtains the current snapshot from the same trusted provider and requires exact revision-and-digest equality before minting a token.
 
-A later design may distinguish revocation classes or permit narrowly defined policy changes that do not invalidate existing admissions. V1 does not: any relevant revision mismatch invalidates continuity.
+The provider is infrastructure, not caller evidence: ordinary request data cannot nominate its own policy revision/digest. Provider unavailability, malformed snapshots, rollback, or mismatch invalidates continuity fail-closed.
+
+## Revocation source
+
+There is currently no peer-admission revocation store or other authoritative peer-admission revocation source. The existing review store is scoped to review/release records and must not be repurposed as an admission revocation oracle.
+
+Accordingly, **peer-admission revocation is deferred from the initial continuity v1 implementation**. PR 1 must not add a placeholder callback, caller-supplied boolean, or synthetic "not revoked" field. The initial continuity object therefore implements process/connection/binding/policy/freshness invalidation only.
+
+Adding revocation later requires a separate contract amendment that names the authoritative store/interface, its lookup key and freshness semantics, and fail-closed behavior. Once such a source exists, it becomes an additional mandatory use-token-gate check; until then, documentation and code must not claim revocation is checked.
 
 ## Concurrency and transfer
 
@@ -186,7 +213,7 @@ The continuity object is an in-process owned resource, not a serialized capabili
 
 It may move between threads after construction if its native handles and implementation are thread-safe, but it must not cross a process boundary by serialization, IPC, database storage, or reconstruction from identifiers. If ownership is transferred between components in the same process, that transfer must preserve exactly-one live owner or another explicit ownership discipline that prevents double close and use-after-close.
 
-Concurrent privileged uses require independent revalidation at each use boundary. Closing or invalidating the continuity object races conservatively: once closure/invalidation is observed, no new privileged operation may start.
+Concurrent privileged uses require independently minted single-use tokens. Token mint/consume and continuity close/invalidation must use an ownership discipline that prevents double consumption and post-close minting. Closing or invalidating the continuity object races conservatively: once closure/invalidation is observed, no new token may be minted and no unconsumed token may authorize a new privileged operation.
 
 ## Required implementation tests
 
@@ -197,11 +224,12 @@ The continuity implementation PR must, before `ADMITTED` exists, pin at least:
 - process exit causes fail-closed `CONTINUITY_INVALID`;
 - pipe disconnect/close causes fail-closed `CONTINUITY_INVALID`;
 - binding substitution between connections/process instances is rejected;
-- policy revision mismatch is rejected;
+- policy-provider unavailability, rollback, revision mismatch, and digest mismatch are rejected;
 - expiry is rejected;
-- revocation is rejected and revocation-check failure is fail-closed;
+- no revocation claim exists in initial v1 and the review store is not consulted as an admission revocation oracle;
 - explicit close is terminal and native resources close exactly once;
-- the object cannot be serialized into an authorization capability;
+- `prepare_continuity()` is one-shot, occurs before `finish()`, and does not execute caller callbacks;
+- the authoritative positive artifact and continuity-use token cannot be serialized or reconstructed;
 - no revalidation path reacquires or substitutes a process PRIMARY token for the original pipe-token classification.
 
 The later ADMITTED integration PR must pin:
@@ -211,7 +239,8 @@ The later ADMITTED integration PR must pin:
 - positive admission sets `admission_granted=True` while leaving authorization/grants/signing unevaluated;
 - no positive result is emitted without a matching live continuity object;
 - no authoritative positive result can be serialized or reconstructed across a process/persistence boundary, and the durable audit projection alone cannot authorize a use;
-- every privileged-use integration performs continuity revalidation immediately before use.
+- every privileged-use integration requires a fresh exact continuity-use-token type, rejects audit/result/binding substitutes, and consumes the token once;
+- expired, reused, wrong-operation, wrong-continuity, and post-invalidation tokens are rejected.
 
 ## Non-goals
 
@@ -223,6 +252,7 @@ This contract does not:
 - permit a saved `ADMITTED` record to be replayed;
 - require a new pipe-token capture at every use;
 - define cross-process transfer of continuity;
+- claim peer-admission revocation checking before an authoritative revocation source is separately specified;
 - make `ProcessLeaseAudit` itself a live lease;
 - make `OwnedProcessLease.finish()` retain native resources.
 
