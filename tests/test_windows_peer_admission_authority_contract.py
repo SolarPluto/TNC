@@ -128,9 +128,9 @@ def test_phase_3_3_capture_unavailable_maps_to_peer_evidence_unavailable():
 
 
 def test_phase_3_3_appcontainer_unproven_hands_off_to_phase_4():
-    assert pair(evaluate_case(evidence=make_evidence(pipe="UNAVAILABLE"))) == (
-        "INDETERMINATE",
-        "PEER_EVIDENCE_UNAVAILABLE",
+    assert pair(evaluate_case(evidence=make_evidence(pipe="APPCONTAINER"))) == (
+        "DENIED",
+        "PIPE_CONTEXT_APP_CONTAINER_DENIED",
     )
 
 
@@ -150,6 +150,7 @@ def test_phase_3_3_other_indeterminate_reasons_propagate(reason):
         ("APPCONTAINER", "UNAVAILABLE", ("DENIED", "PIPE_CONTEXT_APP_CONTAINER_DENIED")),
         ("UNAVAILABLE", "APPCONTAINER", ("INDETERMINATE", "PEER_EVIDENCE_UNAVAILABLE")),
         ("UNAVAILABLE", "UNAVAILABLE", ("INDETERMINATE", "PEER_EVIDENCE_UNAVAILABLE")),
+        ("NON_APPCONTAINER", "UNAVAILABLE", ("INDETERMINATE", "PEER_EVIDENCE_UNAVAILABLE")),
         ("CONFLICT", "NON_APPCONTAINER", ("INDETERMINATE", "PIPE_CONTEXT_CLASSIFICATION_CONFLICT")),
         ("NON_APPCONTAINER", "CONFLICT", ("INDETERMINATE", "PROCESS_PRIMARY_CLASSIFICATION_CONFLICT")),
     ],
@@ -169,6 +170,30 @@ def test_phases_4_and_5_dual_classification_matrix(
     ) == expected
 
 
+def test_phase_2_1_precedes_phase_2_2():
+    assert pair(
+        evaluate_case(
+            lease=make_lease(
+                source="FAKE_PROCESS_API",
+                status="INDETERMINATE",
+                reason="ABORTED",
+            )
+        )
+    ) == ("INDETERMINATE", "NATIVE_PROCESS_LEASE_REQUIRED")
+
+
+def test_phase_2_2_precedes_phase_2_3():
+    assert pair(
+        evaluate_case(
+            lease=make_lease(
+                status="INDETERMINATE",
+                reason="ABORTED",
+                audit_only=False,
+            )
+        )
+    ) == ("DENIED", "PROCESS_LEASE_NOT_CORRELATED")
+
+
 def test_phase_2_precedes_later_pipe_denial():
     assert pair(
         evaluate_case(
@@ -176,6 +201,18 @@ def test_phase_2_precedes_later_pipe_denial():
             evidence=make_evidence(pipe="APPCONTAINER"),
         )
     ) == ("DENIED", "PROCESS_LEASE_NOT_CORRELATED")
+
+
+def test_phase_3_1_precedes_phase_3_2():
+    assert pair(
+        evaluate_case(
+            peer=make_peer(
+                status="VIOLATIONS",
+                reason="TOKEN_IDENTITY_MISMATCH",
+                audit_only=False,
+            )
+        )
+    ) == ("INDETERMINATE", "PEER_AUDIT_CONTRACT_VIOLATION")
 
 
 def test_phase_3_precedes_later_pipe_denial():
@@ -230,6 +267,17 @@ def test_phase_6_3_requires_continuity_open_at_adoption_start():
     assert pair(
         evaluate_case(continuity=make_continuity(open_at_adoption_start=False))
     ) == ("INDETERMINATE", "ADMISSION_CONTINUITY_UNAVAILABLE")
+
+
+def test_phase_6_2_precedes_phase_6_3():
+    evaluated = make_policy(revision=2, policy_digest="evaluated")
+    continuity = make_continuity(
+        policy=make_policy(revision=1, policy_digest="captured"),
+        open_at_adoption_start=False,
+    )
+    assert pair(
+        evaluate_case(evaluated_policy=evaluated, continuity=continuity)
+    ) == ("INDETERMINATE", "POLICY_BINDING_UNAVAILABLE")
 
 
 def test_phase_6_subcheck_precedence_binding_before_policy_before_open():
