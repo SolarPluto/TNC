@@ -157,3 +157,35 @@ Until the instrumentation identifies the mechanism, do **not**:
 Those changes can erase the distinction between a real TNC-owned leak, cleanup that is still legitimately in flight, and an invariant that is measuring unrelated process/runtime handles.
 
 Until that evidence exists, `delta == 0` remains intentionally strict.
+
+
+## Contract-test branch-structure review
+
+For contract tests that are intended to remain unchanged when a temporary stub is
+replaced by a real evaluator, green CI and aggregate test counts are necessary but
+not sufficient evidence of coverage.
+
+Review each ordinary terminal test with the following rule:
+
+- every earlier phase and earlier sub-check must pass;
+- only the phase/sub-check being asserted should fail;
+- when practical, the asserted terminal reason should be unique enough that an
+  earlier broken phase cannot accidentally produce the same expected result.
+
+A test that reaches the expected `(status, reason)` through the wrong earlier
+phase is not independent coverage of the claimed terminal, even if CI is green.
+
+Precedence tests use the inverse construction deliberately: two or more relevant
+phases/sub-checks must be made eligible to fail at the same time, and the assertion
+must prove that the earlier normative phase wins. For ordered sub-checks within one
+phase, an N-way case where all listed checks could fire is stronger evidence of the
+total order than adjacent pairwise tests alone.
+
+Before relying on a claim that a contract-test file will pass unchanged against a
+later real implementation, perform both reviews:
+
+1. minimal-input/unique-terminal review for each ordinary terminal test;
+2. explicit multi-failure review for each precedence test.
+
+This review is a code-review requirement, not something inferred from pytest's
+aggregate passed/skipped counts.
