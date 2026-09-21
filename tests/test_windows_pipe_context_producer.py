@@ -446,10 +446,37 @@ def test_process_probe_error_family_maps_exhaustively(
 @pytest.mark.parametrize(
     'raw,expected_error',
     [
+        ('FUTURE_PROBE_REASON', 'UNEXPECTED_PIPE_PROBE_FAILURE'),
+        ('QUERY_29_FUTURE', 'UNMAPPED_PIPE_PROBE_FAILURE'),
+        ('QUERY_31_FUTURE', 'UNMAPPED_PIPE_PROBE_FAILURE'),
+        pytest.param(
+            'QUERY_31_FAILED_NOT_AN_INT',
+            'MALFORMED_PIPE_PROBE_FAILURE',
+            id='defensive-corrupt-probe-output-not-native-mode',
+        ),
+    ],
+)
+def test_unmapped_pipe_probe_error_is_fail_loud(raw, expected_error):
+    from tnc.provenance import windows_pipe_context_producer as producer_module
+
+    with pytest.raises(PipeContextProducerError, match=expected_error):
+        producer_module._probe_failure(
+            object(),
+            ap.AppContainerProbeError(raw),
+        )
+
+
+@pytest.mark.parametrize(
+    'raw,expected_error',
+    [
         ('FUTURE_PROBE_REASON', 'UNEXPECTED_PROCESS_PRIMARY_PROBE_FAILURE'),
         ('QUERY_29_FUTURE', 'UNMAPPED_PROCESS_PRIMARY_PROBE_FAILURE'),
         ('QUERY_31_FUTURE', 'UNMAPPED_PROCESS_PRIMARY_PROBE_FAILURE'),
-        ('QUERY_29_FAILED_NOT_AN_INT', 'MALFORMED_PROCESS_PRIMARY_PROBE_FAILURE'),
+        pytest.param(
+            'QUERY_29_FAILED_NOT_AN_INT',
+            'MALFORMED_PROCESS_PRIMARY_PROBE_FAILURE',
+            id='defensive-corrupt-probe-output-not-native-mode',
+        ),
     ],
 )
 def test_unmapped_process_probe_error_is_fail_loud(raw, expected_error):
