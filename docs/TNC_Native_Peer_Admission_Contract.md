@@ -39,7 +39,7 @@ At minimum, v1 must preserve these categories:
 
 The validator error for an illegal pair must include the rejected `(status, reason)` values and the legal pairs, rather than returning a generic invalid-combination message.
 
-The initial positive pair is reserved as exactly `ADMITTED / ADMISSION_REQUIREMENTS_MET`. It may become reachable only after the continuity contract is implemented. The evaluator is the sole producer of that pair, and it may synthesize it only after all required facts pass and a live admission-continuity object has been established and bound to the same connection/process instance. The serialized result alone is never an authorization capability.
+The initial positive pair is reserved as exactly `ADMITTED / ADMISSION_REQUIREMENTS_MET`. It may become reachable only after the continuity contract is implemented. The evaluator is the sole producer of the authoritative positive artifact, and it may synthesize it only after all required facts pass and a live admission-continuity object has been established and bound to the same connection/process instance. The authoritative positive artifact is non-serializable and non-reconstructible; a separate durable audit projection may record that admission occurred but never authorizes later use.
 
 
 ### Evaluator input and result shape
@@ -128,7 +128,7 @@ V1 admission requires all of the following facts to be established:
 | Identity and scope binding | Native pipe token capture plus peer-correlation audit | Obtainable |
 | Process-instance/lease correlation | Retained native process handle, PID, creation time, liveness, and pipe-client PID checks | Obtainable |
 | Supported peer-process class | Process/token observations under the v1 policy above | Policy defined; producer details incomplete |
-| AppContainer exclusion for the actual pipe-client security context | Captured pipe token at `SecurityImpersonation`, classified after successful revert | Producer contract defined; implementation pending |
+| AppContainer exclusion for the actual pipe-client security context | Captured pipe token at `SecurityImpersonation`, classified after successful revert | Implemented |
 | Evidence freshness | Policy timestamp/expiry, observation time, evaluation time | Obtainable |
 | Continuity through privileged release/use | Separate live admission-continuity object acquired from the bound connection/process instance before `OwnedProcessLease.finish()`; see `windows_peer_admission_continuity.md` | Contract defined; implementation pending |
 | Revocation state at release/use | Use-time continuity revalidation against the current revocation/policy view | Contract defined; implementation pending |

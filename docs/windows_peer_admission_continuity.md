@@ -29,17 +29,19 @@ The continuity object must acquire its independent native ownership **before** `
 
 ## Artifact roles
 
-V1 has three distinct artifacts with deliberately different semantics:
+V1 has three distinct artifact roles with deliberately different semantics:
 
 | Artifact | Lifetime | Serializable | Meaning |
 | --- | --- | --- | --- |
 | `ProcessLeaseAudit`, peer audit, and `PipePeerAdmissionEvidence` | Durable | Yes | Frozen evidence about what was established during evaluation. |
-| `NativePeerAdmissionResult` | Evaluation record | May be serialized for audit | Coarse policy result. Even when `ADMITTED`, it is not a capability and cannot authorize use by itself. |
-| Admission continuity object | Live transaction-scoped | **No** | Runtime proof carrier that owns the native continuity resources and can be revalidated before each privileged use. |
+| Durable admission audit projection | Durable | Yes | Records that an admission evaluation occurred, including an `ADMITTED` outcome when applicable, but is never authority to act. |
+| Authoritative positive admission paired with the admission-continuity object | Live transaction-scoped | **No** | In-process authority to proceed, valid only while paired with the live continuity resources and only after successful use-time revalidation. |
 
-The continuity object must not be reconstructible from serialized IDs or from a saved `ADMITTED` result. A caller cannot regain authority by deserializing an old result.
+The current serializable `NativePeerAdmissionResult` model must not simply gain a replayable authoritative `ADMITTED` value. Before the positive path lands, implementation must split durable audit from live authority or otherwise make the authoritative positive object non-serializable and non-reconstructible from fields. No public validation/deserialization path may manufacture authoritative `ADMITTED` from bytes, JSON, database rows, IPC payloads, or copied identifiers.
 
-The persistent audit may record that admission occurred and may record the immutable continuity binding identifiers for diagnosis, but replaying that audit must never recreate live authority.
+The admission-continuity object likewise must not be reconstructible from serialized IDs or from a saved audit record. A caller cannot regain authority by deserializing an old result.
+
+The persistent admission audit may record that admission occurred and may record immutable continuity binding identifiers for diagnosis, but replaying that audit must never recreate live authority.
 
 ## Binding identity
 
@@ -78,12 +80,9 @@ The object is transaction-scoped, not account-scoped, process-scoped across reco
 
 `ADMITTED` is a policy decision, not an authorization token.
 
-The caller may proceed to a privileged operation only while it holds both:
+The caller may proceed to a privileged operation only while it holds the authoritative in-process positive admission artifact paired with the live continuity object for this evaluation.
 
-- the positive admission result produced for this evaluation; and
-- the live continuity object paired with that result.
-
-The result alone is inert. The continuity object alone is also insufficient: it carries continuity, not proof that the full admission policy passed.
+A durable audit projection is inert and cannot substitute for that live pair. The continuity object alone is also insufficient: it carries continuity, not proof that the full admission policy passed.
 
 ### 3. Grants and signing axes
 
@@ -159,19 +158,19 @@ Failure to establish required continuity at evaluation time must remain non-admi
 
 Use-time revalidation consumes the existing continuity object. It does **not** mint a new `ADMITTED` result and does not regenerate the original evidence chain.
 
-A successful use-time check means only "the continuity requirements for this already-admitted transaction still hold now." A failed check returns `CONTINUITY_INVALID` and the privileged operation must not begin.
+A successful use-time check means only "the continuity requirements for this already-admitted transaction still hold now." A failed check returns `CONTINUITY_INVALID`, terminally invalidates that continuity object, and the privileged operation must not begin. It does not rewrite the durable evaluation audit: "admission passed at evaluation time" and "continuity failed at use time" are separate facts.
 
-The use-time result should be a separate type from `NativePeerAdmissionResult` so an evaluation decision cannot be confused with a continuity check.
+The use-time result must be a separate type from the evaluation result/audit so an evaluation decision cannot be confused with a continuity check.
 
 ## Single-producer rule for ADMITTED
 
-The public model must not permit arbitrary callers to manufacture an authoritative positive admission.
+Public schema construction must not permit arbitrary callers to manufacture an authoritative positive admission.
 
-The implementation must ensure that `evaluate_native_peer_admission` is the only production path that can synthesize `ADMITTED / ADMISSION_REQUIREMENTS_MET`. Acceptable enforcement mechanisms include a private positive-result constructor/factory or an equivalent module-internal capability that cannot be reconstructed from serialized fields.
+The implementation must ensure that `evaluate_native_peer_admission` is the only production path that can synthesize the authoritative `ADMITTED / ADMISSION_REQUIREMENTS_MET` artifact. The positive constructor/factory must be module-private or guarded by an equivalent in-process capability that cannot be reconstructed from serialized fields.
 
-A validator that only checks the string pair is insufficient by itself: if any caller can instantiate the model with those two strings, the object is forgeable as a positive-looking record. The design must distinguish "schema-valid positive-looking data" from "an authoritative result emitted by the evaluator."
+A validator that only checks the string pair is insufficient: if a caller can deserialize or directly instantiate the authoritative positive object from those two strings, the object is forgeable. The durable admission-audit schema may record the pair, but that record is explicitly non-authoritative. The live positive artifact must reject serialization/reconstruction and must remain paired with the matching continuity object.
 
-Even an authoritative `ADMITTED` result remains non-transferable: use still requires the paired live continuity object.
+Even an authoritative `ADMITTED` result remains non-transferable: use still requires successful revalidation of the paired live continuity object.
 
 ## Policy revision and revocation view
 
@@ -211,7 +210,7 @@ The later ADMITTED integration PR must pin:
 - the sole positive pair is `ADMITTED / ADMISSION_REQUIREMENTS_MET`;
 - positive admission sets `admission_granted=True` while leaving authorization/grants/signing unevaluated;
 - no positive result is emitted without a matching live continuity object;
-- the serialized result alone cannot authorize a use;
+- no authoritative positive result can be serialized or reconstructed across a process/persistence boundary, and the durable audit projection alone cannot authorize a use;
 - every privileged-use integration performs continuity revalidation immediately before use.
 
 ## Non-goals
