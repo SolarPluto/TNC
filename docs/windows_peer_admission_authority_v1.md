@@ -133,6 +133,29 @@ Different results on the two independent axes are not a conflict. For example,
 pipe AppContainer plus process-primary non-AppContainer is a valid quadrant and is
 a denial.
 
+### Conflict production
+
+V1 does not add a new public `CONFLICT` member to
+`AppContainerExclusionResult.status`. The existing classifier remains closed over
+`PROVEN_NON_APPCONTAINER`, `APPCONTAINER`, `UNPROVEN`, and `INDETERMINATE`.
+
+A classification-conflict terminal is produced by the evidence producer when the
+classifier returns the specific model-valid contradiction outcome
+`INDETERMINATE / APPCONTAINER_SIGNAL_CONFLICT`. The producer normalizes that
+classifier result into the axis-specific evidence variant
+`CLASSIFICATION_CONFLICT`; the wrapper then preserves which axis produced it.
+Required-query/acquisition failures remain `CLASSIFICATION_UNAVAILABLE` (or
+capture unavailable) and therefore stay mechanically distinct from conflict.
+
+Other classifier `INDETERMINATE` or `UNPROVEN` reasons are not automatically
+relabelled as conflict. Their producer mapping must be explicitly specified before
+they can become authority evidence. The wrapper itself does not invent conflicts by
+reinterpreting raw facts independently of the classifier.
+
+This keeps the classifier as the owner of raw-fact consistency semantics while the
+producer owns the translation from classifier vocabulary into the admission
+evidence vocabulary.
+
 ## Evaluation order and terminal table
 
 Evaluation uses phase precedence. Phases and sub-checks execute in the listed
