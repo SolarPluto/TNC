@@ -222,7 +222,10 @@ class AdmissionContinuity:
 
     def _invalidate_locked(self, reason):
         self._invalid = True
-        self._outstanding = None
+        if self._outstanding is not None:
+            with self._outstanding._lock:
+                self._outstanding._consumed = True
+            self._outstanding = None
         self._release_endpoint_claim_locked()
         self._release_process_locked()
         raise AdmissionContinuityError(reason)

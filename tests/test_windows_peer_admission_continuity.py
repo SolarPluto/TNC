@@ -271,6 +271,7 @@ def test_consume_rechecks_liveness_after_mint(env):
             operation_id="op",
             kind=ContinuityUseKind.RESERVED_FOR_TESTING,
         )
+    assert token._consumed is True
     assert env[1].closed == [500, 600]
     env[0].close()
 
@@ -292,6 +293,7 @@ def test_consume_rechecks_policy_after_mint(env):
             operation_id="op",
             kind=ContinuityUseKind.RESERVED_FOR_TESTING,
         )
+    assert token._consumed is True
     assert env[1].closed == [500, 600]
     env[0].close()
 
