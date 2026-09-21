@@ -75,6 +75,9 @@ _AUTHORITY_BRIDGE_PAIRS = frozenset(
     if pair != ("VIOLATIONS", "APP_CONTAINER_DENIED")
 )
 _V1_ALLOWED_USE_KINDS = frozenset()
+_AUTHORITY_CONSTRUCTION_UNAVAILABLE_REASONS = frozenset({
+    "CONTINUITY_UNAVAILABLE_AT_ADOPTION",
+})
 _STATE_SEAL = object()
 
 _PROJECTION_FIELDS = (
@@ -96,12 +99,19 @@ class AdmissionEvaluatorInvariantError(RuntimeError):
 
 
 class AuthorityConstructionUnavailable(RuntimeError):
-    """Recoverable adoption refusal with unambiguous continuity ownership.
+    """Closed-vocabulary recoverable adoption refusal.
 
-    Raising this certifies that no authority exists and continuity is either still
-    valid/IDLE/orchestrator-owned or has been completely and successfully closed.
-    Cleanup uncertainty must raise containment instead.
+    V1 permits only CONTINUITY_UNAVAILABLE_AT_ADOPTION. Raising this certifies that
+    no authority exists and continuity is either still valid/IDLE/orchestrator-owned
+    or has been completely and successfully closed. Cleanup uncertainty must raise
+    containment instead.
     """
+
+    def __init__(self, reason):
+        if reason not in _AUTHORITY_CONSTRUCTION_UNAVAILABLE_REASONS:
+            raise ValueError("UNKNOWN_AUTHORITY_CONSTRUCTION_UNAVAILABLE_REASON")
+        self.reason = reason
+        super().__init__(reason)
 
 
 class AdmissionHandoffFailure(BaseExceptionGroup):
@@ -276,9 +286,27 @@ def _make_validated_admission_state(projection, continuity, evaluated_policy):
     return value
 
 
-def _adopt_and_build_authority_from_state(state):
-    if type(state) is not _ValidatedAdmissionState or getattr(state, "_seal", None) is not _STATE_SEAL:
+def _require_validated_admission_state(state):
+    if (
+        type(state) is not _ValidatedAdmissionState
+        or getattr(state, "_seal", None) is not _STATE_SEAL
+    ):
         raise AdmissionEvaluatorInvariantError("VALIDATED_ADMISSION_STATE_REQUIRED")
+    return state
+
+
+def _build_phase_7_audit(state, *, status, reason):
+    state = _require_validated_admission_state(state)
+    return _build_audit(
+        state._projection,
+        status=status,
+        reason=reason,
+        terminal_phase="7.1",
+    )
+
+
+def _adopt_and_build_authority_from_state(state):
+    state = _require_validated_admission_state(state)
     continuity = state._continuity
     if type(continuity) is not AdmissionContinuity:
         raise AdmissionEvaluatorInvariantError("EXACT_CONTINUITY_REQUIRED")
@@ -432,21 +460,19 @@ def evaluate_native_peer_admission(
     except AuthorityConstructionUnavailable:
         # No authority exists on this path, so audit bugs propagate directly.
         return (
-            _build_audit(
-                projection,
+            _build_phase_7_audit(
+                state,
                 status="INDETERMINATE",
                 reason="AUTHORITY_CONSTRUCTION_FAILED",
-                terminal_phase="7.1",
             ),
             None,
         )
 
     try:
-        audit = _build_audit(
-            projection,
+        audit = _build_phase_7_audit(
+            state,
             status="ADMITTED",
             reason="ADMISSION_REQUIREMENTS_MET",
-            terminal_phase="7.1",
         )
         outcome = (audit, authority)
     except BaseException as handoff_exc:
