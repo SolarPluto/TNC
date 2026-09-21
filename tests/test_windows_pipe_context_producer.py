@@ -236,6 +236,13 @@ def test_native_sequence_reverts_before_process_primary_and_closes_lifo():
     ]
 
 
+def test_process_primary_evidence_is_primary_token_evidence():
+    item, _, _ = produce()
+    evidence = item.process_primary.evidence
+    assert evidence.token_type == 'PRIMARY'
+    assert evidence.level is None
+
+
 def test_both_axes_are_bound_to_same_transaction():
     item, _, _ = produce()
     assert axis_binding(item.pipe_context) == (
@@ -322,9 +329,17 @@ def test_process_primary_open_failure_is_structured_unavailable_and_pipe_closes(
     assert ('close', 43) not in events
 
 
-def test_unexpected_process_primary_open_exception_is_not_laundered():
+def test_unexpected_process_primary_open_exception_is_not_laundered_and_pipe_closes():
+    events = []
+    app_probe, _ = probe()
+    producer = PipeContextProducer(
+        api=native_api(events, process_open_exception=RuntimeError('boom')),
+        probe=app_probe,
+    )
     with pytest.raises(RuntimeError, match='boom'):
-        produce(process_open_exception=RuntimeError('boom'))
+        producer.produce(live_lease())
+    assert events[-1] == ('close', 42)
+    assert ('close', 43) not in events
 
 
 @pytest.mark.parametrize(
@@ -395,7 +410,9 @@ def test_process_primary_real_classifier_conflict_routes_to_process_conflict(mon
     assert events[-2:] == [('close', 43), ('close', 42)]
 
 
-def test_unmapped_process_primary_classifier_output_is_fail_loud(monkeypatch):
+def test_unmapped_process_primary_classifier_output_is_fail_loud_and_closes_tokens(
+    monkeypatch,
+):
     from tnc.provenance import windows_pipe_context_producer as producer_module
 
     real = producer_module.evaluate_appcontainer_exclusion
@@ -413,11 +430,15 @@ def test_unmapped_process_primary_classifier_output_is_fail_loud(monkeypatch):
         return real(evidence)
 
     monkeypatch.setattr(producer_module, 'evaluate_appcontainer_exclusion', classify)
+    events = []
+    app_probe, _ = probe()
+    producer = PipeContextProducer(api=native_api(events), probe=app_probe)
     with pytest.raises(
         PipeContextProducerError,
         match='UNEXPECTED_PROCESS_PRIMARY_CLASSIFIER_OUTCOME',
     ):
-        produce()
+        producer.produce(live_lease())
+    assert events[-2:] == [('close', 43), ('close', 42)]
 
 
 def test_unmapped_pipe_classifier_output_is_fail_loud(monkeypatch):
@@ -478,6 +499,27 @@ def test_process_unavailable_schema_rejects_class_30_and_stage_mismatch():
                 failure_reason='OPEN_PROCESS_TOKEN_FAILED',
             )
         )
+
+
+def test_wrapper_validation_failure_is_fail_loud_and_closes_both_tokens(monkeypatch):
+    from tnc.provenance import windows_pipe_context_producer as producer_module
+
+    real = producer_module._classify_process_primary_axis
+
+    def mismatched(*args, **kwargs):
+        value = real(*args, **kwargs)
+        return value.model_copy(update={'process_pid': value.process_pid + 1})
+
+    monkeypatch.setattr(producer_module, '_classify_process_primary_axis', mismatched)
+    events = []
+    app_probe, _ = probe()
+    producer = PipeContextProducer(api=native_api(events), probe=app_probe)
+    with pytest.raises(
+        PipeContextProducerError,
+        match='PEER_ADMISSION_EVIDENCE_VALIDATION_FAILED',
+    ):
+        producer.produce(live_lease())
+    assert events[-2:] == [('close', 43), ('close', 42)]
 
 
 def test_wrapper_rejects_cross_axis_binding_mismatch():
