@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document defines the v1 decision contract for native Windows peer admission. It is a policy and schema contract, not a description of a completed `ADMITTED` implementation. In particular, the class-30 audit-only treatment below is a target state: the current native AppContainer probe still treats classes 29, 30, and 31 as all-or-nothing and must change before `ADMITTED` is implemented.
+This document defines the v1 decision contract for native Windows peer admission. It is a policy and schema contract. The pipe-context producer and fail-closed evaluator are implemented; the terminal `ADMITTED` path remains intentionally absent until the separate continuity contract in [`windows_peer_admission_continuity.md`](windows_peer_admission_continuity.md) is implemented.
 
 The existing AppContainer evidence rules remain normative in
 [`TNC_AppContainer_Evidence_Model.md`](TNC_AppContainer_Evidence_Model.md). This document references that classifier rather than duplicating its truth table.
@@ -19,7 +19,7 @@ The coarse status axis represents whether the gate reached a definitive policy d
 | `DENIED` | Sufficient evidence establishes a disqualifying fact. |
 | `ADMITTED` | Reserved for the future successful path after every required admission fact has been evaluated and passed. It is not implemented by the current gate. |
 
-Before pipe-context producer integration, the ordinary peer path terminated at `INDETERMINATE / APP_CONTAINER_EXCLUSION_UNPROVEN`. PR B retires that evaluator terminal reason: unresolved AppContainer acquisition maps to `PEER_EVIDENCE_UNAVAILABLE`, conflicting AppContainer facts map to `PIPE_CONTEXT_CLASSIFICATION_CONFLICT`, and a proven non-AppContainer pipe context that passes every other implemented check terminates at `PEER_ADMISSION_NOT_IMPLEMENTED` until `ADMITTED` exists.
+Before pipe-context producer integration, the ordinary peer path terminated at `INDETERMINATE / APP_CONTAINER_EXCLUSION_UNPROVEN`. The current evaluator retires that terminal reason: unresolved AppContainer acquisition maps to `PEER_EVIDENCE_UNAVAILABLE`, conflicting AppContainer facts map to `PIPE_CONTEXT_CLASSIFICATION_CONFLICT`, and a proven non-AppContainer pipe context that passes every other implemented check terminates at `PEER_ADMISSION_NOT_IMPLEMENTED` until the continuity-backed `ADMITTED` path exists.
 
 ## Closed status/reason relation
 
@@ -39,8 +39,7 @@ At minimum, v1 must preserve these categories:
 
 The validator error for an illegal pair must include the rejected `(status, reason)` values and the legal pairs, rather than returning a generic invalid-combination message.
 
-If `ADMITTED` is added, its initial legal positive pair should be singular, for example
-`ADMITTED / ADMISSION_REQUIREMENTS_MET`. That positive result must be synthesized only by the evaluator success path after all required facts pass.
+The initial positive pair is reserved as exactly `ADMITTED / ADMISSION_REQUIREMENTS_MET`. It may become reachable only after the continuity contract is implemented. The evaluator is the sole producer of that pair, and it may synthesize it only after all required facts pass and a live admission-continuity object has been established and bound to the same connection/process instance. The serialized result alone is never an authorization capability.
 
 
 ### Evaluator input and result shape
@@ -52,9 +51,9 @@ The evaluator's result is a coarse policy projection, not a standalone audit rec
 `CAPTURED_CLASSIFICATION_CONFLICT` is not an availability failure. It maps to `INDETERMINATE / PIPE_CONTEXT_CLASSIFICATION_CONFLICT`, while the producer record preserves the underlying classifier reason such as `APPCONTAINER_SIGNAL_CONFLICT`.
 
 
-### PR B terminal-state mapping
+### Current terminal-state mapping
 
-PR B requires `pipe_context: PipePeerAdmissionEvidence` and maps the producer statuses as follows:
+The evaluator requires `pipe_context: PipePeerAdmissionEvidence` and maps the producer statuses as follows:
 
 | Pipe-context status | Evaluator behavior |
 | --- | --- |
@@ -64,19 +63,25 @@ PR B requires `pipe_context: PipePeerAdmissionEvidence` and maps the producer st
 | `CAPTURED_CLASSIFICATION_UNAVAILABLE` | `INDETERMINATE / PEER_EVIDENCE_UNAVAILABLE` |
 | `CAPTURE_UNAVAILABLE` | `INDETERMINATE / PEER_EVIDENCE_UNAVAILABLE` |
 
-`APP_CONTAINER_EXCLUSION_UNPROVEN` is retired from the native peer admission evaluator once this mapping lands. It described the old IDENTIFICATION-level blocker and would be factually incorrect after a `CAPTURED_NON_APPCONTAINER` result. The closed status/reason relation therefore adds `(INDETERMINATE, PIPE_CONTEXT_CLASSIFICATION_CONFLICT)` and `(INDETERMINATE, PEER_ADMISSION_NOT_IMPLEMENTED)` and removes `(INDETERMINATE, APP_CONTAINER_EXCLUSION_UNPROVEN)`.
+`APP_CONTAINER_EXCLUSION_UNPROVEN` is retired from the native peer admission evaluator. It described the old IDENTIFICATION-level blocker and would be factually incorrect after a `CAPTURED_NON_APPCONTAINER` result. The closed status/reason relation therefore adds `(INDETERMINATE, PIPE_CONTEXT_CLASSIFICATION_CONFLICT)` and `(INDETERMINATE, PEER_ADMISSION_NOT_IMPLEMENTED)` and removes `(INDETERMINATE, APP_CONTAINER_EXCLUSION_UNPROVEN)`.
 
 
 
 ### Post-finish lease-binding boundary
 
-`PipePeerAdmissionEvidence` is bound by its producer to the live `OwnedProcessLease` before that lease is finished. The current `ProcessLeaseAudit` intentionally projects only correlation status/reason/source and does not serialize the lease operation ID, pipe lease ID, PID, or creation time. Consequently, PR B cannot recompute or independently cross-check the producer snapshot's connection/process binding from `ProcessLeaseAudit` after `finish()`.
+`PipePeerAdmissionEvidence` is bound by its producer to the live `OwnedProcessLease` before that lease is finished. The current `ProcessLeaseAudit` intentionally projects only correlation status/reason/source and does not serialize the lease operation ID, pipe lease ID, PID, or creation time. Consequently, the current evaluator cannot recompute or independently cross-check the producer snapshot's connection/process binding from `ProcessLeaseAudit` after `finish()`.
 
-PR B therefore requires an exact `ProcessLeaseAudit` and an exact producer `PipePeerAdmissionEvidence`, while relying on the producer's live-object binding as the provenance link between them. Adding a second evaluator-side binding check would require a future `ProcessLeaseAudit` schema extension carrying matching identity fields; the evaluator must not fabricate such a comparison from absent data.
+The evaluator therefore requires an exact `ProcessLeaseAudit` and an exact producer `PipePeerAdmissionEvidence`, while relying on the producer's live-object binding as the provenance link between them. Adding a second evaluator-side binding check would require a future `ProcessLeaseAudit` schema extension carrying matching identity fields; the evaluator must not fabricate such a comparison from absent data.
+
+### Admission continuity boundary
+
+A future positive admission must not be represented by a frozen audit/result alone. `OwnedProcessLease.finish()` releases the lease's native ownership and returns a durable `ProcessLeaseAudit`; therefore a post-`finish()` audit record cannot establish live process continuity at use time.
+
+Before `ADMITTED` becomes reachable, the implementation must introduce a separate, non-serializable admission-continuity object. It must acquire independent ownership of the native resources needed for use-time continuity before the original process lease is finished, bind itself to the same connection/process identity carried by the producer evidence, and remain live until the privileged transaction is complete or explicitly released. The exact lifecycle, revalidation requirements, invalidation events, and phase separation are normative in [`windows_peer_admission_continuity.md`](windows_peer_admission_continuity.md).
 
 ### Evaluator precedence
 
-PR B must preserve the existing non-AppContainer failure behavior one-for-one. The evaluator therefore uses this precedence after exact input validation:
+The evaluator must preserve the existing non-AppContainer failure behavior one-for-one. The evaluator therefore uses this precedence after exact input validation:
 
 1. A positively classified pipe context (`CAPTURED_APPCONTAINER`) is an unconditional hard exclusion and returns `DENIED / APP_CONTAINER_DENIED`.
 2. Existing lease and peer-audit violations retain their current specific reasons. A pipe-context conflict or unavailable state must not mask an already-established identity, process-correlation, endpoint, descriptor, integrity, restriction, or peer-class denial.
@@ -125,8 +130,8 @@ V1 admission requires all of the following facts to be established:
 | Supported peer-process class | Process/token observations under the v1 policy above | Policy defined; producer details incomplete |
 | AppContainer exclusion for the actual pipe-client security context | Captured pipe token at `SecurityImpersonation`, classified after successful revert | Producer contract defined; implementation pending |
 | Evidence freshness | Policy timestamp/expiry, observation time, evaluation time | Obtainable |
-| Continuity through privileged release/use | Immutable classification evidence bound to the connection and `OwnedProcessLease`; process lease remains live for process-instance correlation | Contract defined; implementation pending |
-| Revocation state at release/use | Future review/revocation input | Design unresolved |
+| Continuity through privileged release/use | Separate live admission-continuity object acquired from the bound connection/process instance before `OwnedProcessLease.finish()`; see `windows_peer_admission_continuity.md` | Contract defined; implementation pending |
+| Revocation state at release/use | Use-time continuity revalidation against the current revocation/policy view | Contract defined; implementation pending |
 
 AppContainer exclusion is a hard v1 requirement. It is not a tier gate in this version because no admitted-profile or grant-tier schema exists yet.
 
@@ -163,7 +168,7 @@ The immutable snapshot must be self-describing enough to reject substitution bet
 
 ## Required versus audit-only token evidence
 
-Whether a token information class is admission-required is a fixed evaluator policy declaration, not a per-call option supplied by callers. The native probe remains a fact collector: it should report which classes were observed and which were unavailable, while the evaluator decides whether a missing fact is fatal to admission.
+Whether a token information class is admission-required is a fixed evaluator policy declaration, not a per-call option supplied by callers. The native probe remains a fact collector: it reports which classes were observed and which were unavailable, while the evaluator decides whether a missing fact is fatal to admission.
 
 For the current AppContainer classifier:
 
@@ -173,18 +178,7 @@ For the current AppContainer classifier:
 
 A required-fact acquisition failure produces an indeterminate admission result. Failure of audit-only telemetry must not, by itself, invalidate an otherwise sufficient admission decision.
 
-This is a future producer/evidence-contract change, not current probe behavior. Today `NativeAppContainerProbe` fails loudly on query failures for any of classes 29, 30, or 31, and its tests pin the exact query sequence `29, 30, 30, 31, 31`. The target shape therefore requires `AppContainerTokenEvidence.capability_sids` to become `tuple[SID, ...] | None`: `()` means class 30 was successfully queried and the capability set was observed empty; `None` means class 30 was unavailable. A silent fallback from query failure to `()` would manufacture the false fact `no capabilities`. Any implementation must update the probe, `AppContainerTokenEvidence`, classifier pins, and the AppContainer evidence truth-table notes together. The classifier must accept both tuple and `None` capability states and produce the same status/reason for otherwise identical records; capability availability remains outside the classification decision. Existing observed-empty pins remain `()`, while new unavailable-class-30 pins use `None`. Classifier regression coverage must use matched `()` versus `None` evidence pairs in the classifier test file for every classification branch exercised by capability-bearing evidence, including at least `APPCONTAINER` and `UNPROVEN`, and require identical status/reason outcomes.
-
-### Expected implementation scope for class-30 audit-only
-
-The class-30 change is bounded but cross-layer. At minimum it affects:
-
-- `src/tnc/provenance/windows_appcontainer_probe.py` — preserve partial acquisition instead of raising solely for class 30;
-- `src/tnc/provenance/windows_appcontainer_evidence.py` — represent capability acquisition unavailability distinctly from an observed empty capability set;
-- `tests/test_windows_appcontainer_probe.py` and classifier pins — pin both the new partial-evidence shape and unchanged classification semantics;
-- `docs/TNC_AppContainer_Evidence_Model.md` — state that unavailable class-30 telemetry does not alter classification because class 30 is audit-only.
-
-Do not implement this as a caller-supplied `required_classes` option. That would move admission policy into call sites and permit semantic drift.
+The implemented evidence shape uses `AppContainerTokenEvidence.capability_sids: tuple[SID, ...] | None`: `()` means class 30 was successfully queried and the capability set was observed empty; `None` means class 30 was unavailable. Class-30 failure does not alter AppContainer classification. A silent fallback from query failure to `()` would manufacture the false fact `no capabilities`. Class 29/31 failures remain classification-unavailable outcomes. This policy is fixed in the producer/evaluator contract and is not caller-configurable.
 
 ## Producer ownership boundary
 
