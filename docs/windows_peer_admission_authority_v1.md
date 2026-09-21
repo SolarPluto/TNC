@@ -513,4 +513,3 @@ V1 does not:
 - make durable audit records bearer authority;
 - make arbitrary in-process hostile Python code part of the supported threat model;
 - introduce concurrent evaluation/adoption ownership.
-
