@@ -209,18 +209,7 @@ def _optional_winerror(value):
     return value if type(value) is int and 0 < value <= MAX_WINERROR else None
 
 
-def _probe_failure(probe, error):
-    reason = str(error)
-    if reason.startswith('QUERY_29_'):
-        information_class = 29
-    elif reason.startswith('QUERY_31_') or reason.startswith('APPCONTAINER_'):
-        information_class = 31
-    else:
-        raise PipeContextProducerError('UNEXPECTED_PROBE_FAILURE') from error
-    return information_class, reason, _optional_winerror(probe._error())
-
-
-def _process_probe_failure(probe, error):
+def _required_probe_failure(error, *, axis):
     raw = str(error)
     if raw.startswith('QUERY_29_'):
         information_class = 29
@@ -229,20 +218,18 @@ def _process_probe_failure(probe, error):
         information_class = 31
         detail = raw[len('QUERY_31_'):]
     elif raw == 'APPCONTAINER_INFO_HEADER':
-        return 31, 'APPCONTAINER_INFO_HEADER_INVALID', None
+        return raw, 31, 'APPCONTAINER_INFO_HEADER_INVALID', None
     elif raw == 'APPCONTAINER_SID_INVALID':
-        return 31, 'APPCONTAINER_SID_INVALID', None
+        return raw, 31, 'APPCONTAINER_SID_INVALID', None
     else:
-        # Class 30 is swallowed by NativeAppContainerProbe because it is audit-only.
-        # Any other probe reason is outside the producer/probe contract.
-        raise PipeContextProducerError('UNEXPECTED_PROCESS_PRIMARY_PROBE_FAILURE') from error
+        raise PipeContextProducerError(f'UNEXPECTED_{axis}_PROBE_FAILURE') from error
 
     if detail.startswith('FAILED_'):
-        reason = 'QUERY_FAILED'
         try:
             winerror = int(detail[len('FAILED_'):])
         except ValueError as exc:
-            raise PipeContextProducerError('MALFORMED_PROCESS_PRIMARY_PROBE_FAILURE') from exc
+            raise PipeContextProducerError(f'MALFORMED_{axis}_PROBE_FAILURE') from exc
+        reason = 'QUERY_FAILED'
     else:
         winerror = None
         reason = {
@@ -253,8 +240,25 @@ def _process_probe_failure(probe, error):
             'RETURN_LENGTH': 'QUERY_RETURN_LENGTH_INVALID',
         }.get(detail)
         if reason is None:
-            raise PipeContextProducerError('UNMAPPED_PROCESS_PRIMARY_PROBE_FAILURE') from error
-    return information_class, reason, _optional_winerror(winerror)
+            raise PipeContextProducerError(f'UNMAPPED_{axis}_PROBE_FAILURE') from error
+    return raw, information_class, reason, _optional_winerror(winerror)
+
+
+def _probe_failure(probe, error):
+    raw, information_class, _reason, parsed_winerror = _required_probe_failure(
+        error,
+        axis='PIPE',
+    )
+    observed_winerror = _optional_winerror(probe._error())
+    return information_class, raw, parsed_winerror or observed_winerror
+
+
+def _process_probe_failure(probe, error):
+    _raw, information_class, reason, winerror = _required_probe_failure(
+        error,
+        axis='PROCESS_PRIMARY',
+    )
+    return information_class, reason, winerror
 
 
 def _binding_from_live_lease(lease):
