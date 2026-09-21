@@ -131,7 +131,8 @@ V1 admission requires all of the following facts to be established:
 | AppContainer exclusion for the actual pipe-client security context | Captured pipe token at `SecurityImpersonation`, classified after successful revert | Implemented |
 | Evidence freshness | Policy timestamp/expiry, observation time, evaluation time | Obtainable |
 | Continuity through privileged release/use | Separate live admission-continuity object acquired from the bound connection/process instance before `OwnedProcessLease.finish()`; see `windows_peer_admission_continuity.md` | Contract defined; implementation pending |
-| Revocation state at release/use | Use-time continuity revalidation against the current revocation/policy view | Contract defined; implementation pending |
+| Policy continuity at release/use | Trusted `PeerAdmissionPolicyProvider` revision + canonical policy digest rechecked by the continuity-use gate | Contract defined; implementation pending |
+| Peer-admission revocation | No authoritative source exists yet; review-store revocation is out of scope | Explicitly deferred from initial continuity v1 |
 
 AppContainer exclusion is a hard v1 requirement. It is not a tier gate in this version because no admitted-profile or grant-tier schema exists yet.
 

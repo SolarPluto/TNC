@@ -35,7 +35,7 @@ V1 chooses an explicit two-phase lease API rather than a callback inside `finish
 4. only after `prepare_continuity(...)` succeeds may the caller invoke `OwnedProcessLease.finish()`; `finish()` keeps its existing semantics and releases only the original lease ownership;
 5. after `finish()`, the continuity object alone owns the independent process handle and continuity claim until terminal close/invalidation.
 
-`prepare_continuity(...)` is not a general callback hook and must not execute caller-supplied code while the lease is live. Native acquisition uses the exact trusted native API boundary, with the same no-broader-rights/no-PID-reopen discipline as the lease. Failure to prepare continuity leaves no positive admission path; the original lease must still be finished or aborted through its ordinary cleanup contract.
+`prepare_continuity(...)` is not a general callback hook and must not execute caller-supplied code while the lease is live. Native acquisition uses the exact trusted native API boundary and requests no broader rights than continuity needs. The fresh `OpenProcess` performed by `prepare_continuity(...)` is the **sole permitted second open** for this process instance: it occurs while the original retained handle is still live, is immediately checked against the pinned PID/creation FILETIME and pipe PID, and is never retried with broader rights. No process reopen is permitted after `prepare_continuity(...)` returns or after `finish()`. Failure to prepare continuity leaves no positive admission path; the original lease must still be finished or aborted through its ordinary cleanup contract.
 
 Merely copying PID, creation time, operation IDs, or audit fields is not continuity.
 
