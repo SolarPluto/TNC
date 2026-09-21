@@ -410,6 +410,52 @@ def test_process_primary_real_classifier_conflict_routes_to_process_conflict(mon
     assert events[-2:] == [('close', 43), ('close', 42)]
 
 
+@pytest.mark.parametrize(
+    'raw,expected_class,expected_reason,expected_winerror',
+    [
+        ('QUERY_29_FAILED_5', 29, 'QUERY_FAILED', 5),
+        ('QUERY_29_LENGTH', 29, 'QUERY_LENGTH_INVALID', None),
+        ('QUERY_29_BOOLEAN', 29, 'QUERY_BOOLEAN_INVALID', None),
+        ('QUERY_31_SIZE_PROBE', 31, 'QUERY_SIZE_PROBE_FAILED', None),
+        ('QUERY_31_BOUND', 31, 'QUERY_BOUND_INVALID', None),
+        ('QUERY_31_FAILED_5', 31, 'QUERY_FAILED', 5),
+        ('QUERY_31_RETURN_LENGTH', 31, 'QUERY_RETURN_LENGTH_INVALID', None),
+        ('APPCONTAINER_INFO_HEADER', 31, 'APPCONTAINER_INFO_HEADER_INVALID', None),
+        ('APPCONTAINER_SID_INVALID', 31, 'APPCONTAINER_SID_INVALID', None),
+    ],
+)
+def test_process_probe_error_family_maps_exhaustively(
+    raw,
+    expected_class,
+    expected_reason,
+    expected_winerror,
+):
+    from tnc.provenance import windows_pipe_context_producer as producer_module
+
+    class Probe:
+        _error = staticmethod(lambda: 5)
+
+    error = ap.AppContainerProbeError(raw)
+    assert producer_module._process_probe_failure(Probe(), error) == (
+        expected_class,
+        expected_reason,
+        expected_winerror,
+    )
+
+
+def test_unmapped_process_probe_error_is_fail_loud():
+    from tnc.provenance import windows_pipe_context_producer as producer_module
+
+    with pytest.raises(
+        PipeContextProducerError,
+        match='UNEXPECTED_PROCESS_PRIMARY_PROBE_FAILURE',
+    ):
+        producer_module._process_probe_failure(
+            object(),
+            ap.AppContainerProbeError('FUTURE_PROBE_REASON'),
+        )
+
+
 def test_unmapped_process_primary_classifier_output_is_fail_loud_and_closes_tokens(
     monkeypatch,
 ):
@@ -441,7 +487,9 @@ def test_unmapped_process_primary_classifier_output_is_fail_loud_and_closes_toke
     assert events[-2:] == [('close', 43), ('close', 42)]
 
 
-def test_unmapped_pipe_classifier_output_is_fail_loud(monkeypatch):
+def test_unmapped_pipe_classifier_output_is_fail_loud_and_closes_pipe_token(
+    monkeypatch,
+):
     from tnc.provenance import windows_pipe_context_producer as producer_module
 
     real = producer_module.evaluate_appcontainer_exclusion
@@ -459,8 +507,13 @@ def test_unmapped_pipe_classifier_output_is_fail_loud(monkeypatch):
         return real(evidence)
 
     monkeypatch.setattr(producer_module, 'evaluate_appcontainer_exclusion', classify)
+    events = []
+    app_probe, _ = probe()
+    producer = PipeContextProducer(api=native_api(events), probe=app_probe)
     with pytest.raises(PipeContextProducerError, match='UNEXPECTED_CLASSIFIER_OUTCOME'):
-        produce()
+        producer.produce(live_lease())
+    assert events[-1] == ('close', 42)
+    assert ('open_process_token', 88, 8) not in events
 
 
 def test_capture_is_one_shot_per_live_lease():
