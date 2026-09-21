@@ -340,6 +340,15 @@ The variant validator requires `information_class is None` for
 `GET_TOKEN_INFORMATION`. Class-30 capability telemetry remains audit-only and does
 not create a classification-unavailable terminal.
 
+This is an existing implementation baseline, not a new schema expansion in this PR:
+`AppContainerTokenEvidence.capability_sids` is already
+`tuple[SID, ...] | None`; the native probe already converts unusable class-30
+telemetry to `None` while continuing classes 29 and 31; and the probe tests already
+pin class-30 bound/query failure as audit-only without changing classifier
+disposition. The dual-classification producer therefore inherits that behavior and
+must not reinterpret class-30 unavailability as a process-axis classification
+failure.
+
 Only expected native/probe failures are translated into this unavailable variant.
 Unexpected exception types propagate as producer errors. Likewise, an unmapped
 classifier result, impossible classifier result, or wrapper/model validation failure
