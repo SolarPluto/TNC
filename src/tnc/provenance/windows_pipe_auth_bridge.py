@@ -5,7 +5,7 @@ Current capture records cannot prove AppContainer exclusion; no allow path exist
 """
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from tnc.provenance.authorization_models import Model, Identifier, Digest
 from tnc.provenance.windows_custody_peer import (
     WindowsPeerPolicy, PeerProcess, PeerToken, PipeEndpoint,
@@ -39,12 +39,43 @@ class NativePeerAuditPolicy(Model):
     minimum_integrity_rid: int = Field(default=0x2000, strict=True, ge=0x2000, le=2**32-1)
 
 
+NATIVE_PEER_AUDIT_RESULT_PAIRS = frozenset({
+    ('VIOLATIONS', 'APP_CONTAINER_DENIED'),
+    ('VIOLATIONS', 'DESCRIPTOR_CHANGED'),
+    ('VIOLATIONS', 'DESCRIPTOR_MISMATCH'),
+    ('VIOLATIONS', 'ENDPOINT_CORRELATION_MISMATCH'),
+    ('VIOLATIONS', 'INTEGRITY_LEVEL_DENIED'),
+    ('VIOLATIONS', 'PROCESS_CORRELATION_MISMATCH'),
+    ('VIOLATIONS', 'PROCESS_LIFETIME_MISMATCH'),
+    ('VIOLATIONS', 'READ_BINDING_MISMATCH'),
+    ('VIOLATIONS', 'RESTRICTED_CONTEXT_DENIED'),
+    ('VIOLATIONS', 'SCOPE_MISMATCH'),
+    ('VIOLATIONS', 'TIME_MISMATCH'),
+    ('VIOLATIONS', 'TOKEN_IDENTITY_MISMATCH'),
+    ('VIOLATIONS', 'TOKEN_PROFILE_DENIED'),
+    ('INDETERMINATE', 'APP_CONTAINER_EXCLUSION_UNPROVEN'),
+    ('INDETERMINATE', 'CAPTURE_UNAVAILABLE'),
+    ('INDETERMINATE', 'INVALID_RECORD'),
+    ('INDETERMINATE', 'NATIVE_CAPTURE_REQUIRED'),
+})
+
+
 class NativePeerAuditResult(Model):
     status: Literal['VIOLATIONS', 'INDETERMINATE']
     reason: Identifier
     audit_only: Literal[True] = True
     authorization_granted: Literal[False] = False
     grants_evaluated: Literal[False] = False
+
+    @model_validator(mode='after')
+    def legal_pair(self):
+        pair = (self.status, self.reason)
+        if pair not in NATIVE_PEER_AUDIT_RESULT_PAIRS:
+            raise ValueError(
+                f'illegal peer-audit result pair {pair!r}; '
+                f'legal pairs={sorted(NATIVE_PEER_AUDIT_RESULT_PAIRS)!r}'
+            )
+        return self
 
 
 class WindowsPipeAuthBridge:
