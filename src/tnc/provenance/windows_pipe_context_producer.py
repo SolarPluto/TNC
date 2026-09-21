@@ -1,19 +1,19 @@
-"""Bound pipe-client AppContainer evidence producer for native Windows admission.
+"""Bound dual AppContainer evidence producer for native Windows admission.
 
-The snapshot exists because PR #37 / Windows Server 2025 build 26100 produced a
-bound THREAD_TOKEN counterexample: a non-AppContainer process primary token did
-not describe the AppContainer token carried by the thread that connected to the
-pipe. The producer therefore classifies the exact captured pipe-client token.
+The pipe axis classifies the exact token carried by the thread that established the
+named-pipe connection. The process-primary axis independently classifies the PRIMARY
+token of the correlated process instance retained by OwnedProcessLease.
 
 This module produces immutable facts only. It does not evaluate admission.
 """
 import ctypes as c
+from contextlib import ExitStack
 import os
 import threading
 import weakref
 from typing import Annotated, Literal
 
-from pydantic import Field
+from pydantic import Field, ValidationError, model_validator
 
 from tnc.provenance.authorization_models import Identifier, Model
 from tnc.provenance.windows_appcontainer_evidence import (
@@ -35,6 +35,15 @@ MAX_WINERROR = 2**32 - 1
 _CLAIMED = weakref.WeakKeyDictionary()
 _CLAIM_LOCK = threading.Lock()
 
+_BINDING_FIELDS = (
+    'connection_operation_id',
+    'pipe_lease_id',
+    'process_lease_operation_id',
+    'process_pid',
+    'process_creation_filetime',
+    'capture_ordinal',
+)
+
 
 class PipeContextProducerError(RuntimeError):
     """Caller misuse, producer invariant failure, or upstream contract violation."""
@@ -50,28 +59,28 @@ class _Binding(Model):
 
 
 class _CapturedAppContainer(_Binding):
-    """Producer-only variant. Do not construct from caller-supplied facts."""
+    """Producer-only pipe-axis variant."""
     status: Literal['CAPTURED_APPCONTAINER'] = 'CAPTURED_APPCONTAINER'
     classification_source: Literal['PIPE_TOKEN'] = 'PIPE_TOKEN'
     evidence: AppContainerTokenEvidence
 
 
 class _CapturedNonAppContainer(_Binding):
-    """Producer-only variant. Do not construct from caller-supplied facts."""
+    """Producer-only pipe-axis variant."""
     status: Literal['CAPTURED_NON_APPCONTAINER'] = 'CAPTURED_NON_APPCONTAINER'
     classification_source: Literal['PIPE_TOKEN'] = 'PIPE_TOKEN'
     evidence: AppContainerTokenEvidence
 
 
 class _CapturedClassificationConflict(_Binding):
-    """Captured pipe-token facts were valid but produced a classifier conflict."""
+    """Captured pipe-token facts were valid but produced the pinned conflict."""
     status: Literal['CAPTURED_CLASSIFICATION_CONFLICT'] = 'CAPTURED_CLASSIFICATION_CONFLICT'
     classification_source: Literal['PIPE_TOKEN'] = 'PIPE_TOKEN'
     reason: Identifier
 
 
 class _CapturedClassificationUnavailable(_Binding):
-    """Post-revert server-side classification failure on a captured pipe token."""
+    """Required class-29/31 pipe-token query could not be completed."""
     status: Literal['CAPTURED_CLASSIFICATION_UNAVAILABLE'] = (
         'CAPTURED_CLASSIFICATION_UNAVAILABLE'
     )
@@ -99,11 +108,95 @@ PipePeerAdmissionEvidence = Annotated[
     Field(discriminator='status'),
 ]
 
+
+ProcessPrimaryFailureReason = Literal[
+    'OPEN_PROCESS_TOKEN_FAILED',
+    'QUERY_FAILED',
+    'QUERY_LENGTH_INVALID',
+    'QUERY_BOOLEAN_INVALID',
+    'QUERY_SIZE_PROBE_FAILED',
+    'QUERY_BOUND_INVALID',
+    'QUERY_RETURN_LENGTH_INVALID',
+    'APPCONTAINER_INFO_HEADER_INVALID',
+    'APPCONTAINER_SID_INVALID',
+]
+
+
+class _ProcessPrimaryCapturedAppContainer(_Binding):
+    status: Literal['CAPTURED_APPCONTAINER'] = 'CAPTURED_APPCONTAINER'
+    classification_source: Literal['PROCESS_PRIMARY_TOKEN'] = 'PROCESS_PRIMARY_TOKEN'
+    evidence: AppContainerTokenEvidence
+
+
+class _ProcessPrimaryCapturedNonAppContainer(_Binding):
+    status: Literal['CAPTURED_NON_APPCONTAINER'] = 'CAPTURED_NON_APPCONTAINER'
+    classification_source: Literal['PROCESS_PRIMARY_TOKEN'] = 'PROCESS_PRIMARY_TOKEN'
+    evidence: AppContainerTokenEvidence
+
+
+class _ProcessPrimaryClassificationConflict(_Binding):
+    status: Literal['CAPTURED_CLASSIFICATION_CONFLICT'] = 'CAPTURED_CLASSIFICATION_CONFLICT'
+    classification_source: Literal['PROCESS_PRIMARY_TOKEN'] = 'PROCESS_PRIMARY_TOKEN'
+    reason: Literal['APPCONTAINER_SIGNAL_CONFLICT'] = 'APPCONTAINER_SIGNAL_CONFLICT'
+
+
+class _ProcessPrimaryClassificationUnavailable(_Binding):
+    status: Literal['CAPTURED_CLASSIFICATION_UNAVAILABLE'] = (
+        'CAPTURED_CLASSIFICATION_UNAVAILABLE'
+    )
+    classification_source: Literal['PROCESS_PRIMARY_TOKEN'] = 'PROCESS_PRIMARY_TOKEN'
+    failed_stage: Literal['OPEN_PROCESS_TOKEN', 'GET_TOKEN_INFORMATION']
+    information_class: Literal[29, 31] | None = None
+    failure_reason: ProcessPrimaryFailureReason
+    winerror: int | None = Field(default=None, strict=True, ge=0, le=MAX_WINERROR)
+
+    @model_validator(mode='after')
+    def stage_matches_information_class(self):
+        if self.failed_stage == 'OPEN_PROCESS_TOKEN':
+            if self.information_class is not None:
+                raise ValueError('OPEN_PROCESS_TOKEN_HAS_NO_INFORMATION_CLASS')
+            if self.failure_reason != 'OPEN_PROCESS_TOKEN_FAILED':
+                raise ValueError('OPEN_PROCESS_TOKEN_FAILURE_REASON_REQUIRED')
+        else:
+            if self.information_class not in (29, 31):
+                raise ValueError('GET_TOKEN_INFORMATION_CLASS_REQUIRED')
+            if self.failure_reason == 'OPEN_PROCESS_TOKEN_FAILED':
+                raise ValueError('QUERY_FAILURE_REASON_REQUIRED')
+        return self
+
+
+ProcessPrimaryAppContainerEvidence = Annotated[
+    _ProcessPrimaryCapturedAppContainer
+    | _ProcessPrimaryCapturedNonAppContainer
+    | _ProcessPrimaryClassificationConflict
+    | _ProcessPrimaryClassificationUnavailable,
+    Field(discriminator='status'),
+]
+
+
+class PeerAdmissionEvidence(Model):
+    """Two-axis evidence from one exact connection/process capture transaction."""
+
+    pipe_context: PipePeerAdmissionEvidence
+    process_primary: ProcessPrimaryAppContainerEvidence
+
+    @model_validator(mode='after')
+    def exact_cross_axis_binding(self):
+        pipe_binding = tuple(getattr(self.pipe_context, name) for name in _BINDING_FIELDS)
+        process_binding = tuple(getattr(self.process_primary, name) for name in _BINDING_FIELDS)
+        if pipe_binding != process_binding:
+            raise ValueError('CROSS_AXIS_BINDING_MISMATCH')
+        return self
+
+
 __all__ = [
     'EXIT_REVERT_FAILED',
+    'PeerAdmissionEvidence',
     'PipeContextProducer',
     'PipeContextProducerError',
     'PipePeerAdmissionEvidence',
+    'ProcessPrimaryAppContainerEvidence',
+    'ProcessPrimaryFailureReason',
 ]
 
 
@@ -112,16 +205,59 @@ def _winerror(api):
     return value if type(value) is int and 0 <= value <= MAX_WINERROR else 0
 
 
-def _probe_failure(probe, error):
-    reason = str(error)
-    if reason.startswith('QUERY_29_'):
+def _optional_winerror(value):
+    return value if type(value) is int and 0 < value <= MAX_WINERROR else None
+
+
+def _required_probe_failure(error, *, axis):
+    raw = str(error)
+    if raw.startswith('QUERY_29_'):
         information_class = 29
-    elif reason.startswith('QUERY_31_') or reason.startswith('APPCONTAINER_'):
+        detail = raw[len('QUERY_29_'):]
+    elif raw.startswith('QUERY_31_'):
         information_class = 31
+        detail = raw[len('QUERY_31_'):]
+    elif raw == 'APPCONTAINER_INFO_HEADER':
+        return raw, 31, 'APPCONTAINER_INFO_HEADER_INVALID', None
+    elif raw == 'APPCONTAINER_SID_INVALID':
+        return raw, 31, 'APPCONTAINER_SID_INVALID', None
     else:
-        raise PipeContextProducerError('UNEXPECTED_PROBE_FAILURE') from error
-    raw_error = probe._error()
-    winerror = raw_error if type(raw_error) is int and 0 < raw_error <= MAX_WINERROR else None
+        raise PipeContextProducerError(f'UNEXPECTED_{axis}_PROBE_FAILURE') from error
+
+    if detail.startswith('FAILED_'):
+        try:
+            winerror = int(detail[len('FAILED_'):])
+        except ValueError as exc:
+            raise PipeContextProducerError(f'MALFORMED_{axis}_PROBE_FAILURE') from exc
+        reason = 'QUERY_FAILED'
+    else:
+        winerror = None
+        reason = {
+            'LENGTH': 'QUERY_LENGTH_INVALID',
+            'BOOLEAN': 'QUERY_BOOLEAN_INVALID',
+            'SIZE_PROBE': 'QUERY_SIZE_PROBE_FAILED',
+            'BOUND': 'QUERY_BOUND_INVALID',
+            'RETURN_LENGTH': 'QUERY_RETURN_LENGTH_INVALID',
+        }.get(detail)
+        if reason is None:
+            raise PipeContextProducerError(f'UNMAPPED_{axis}_PROBE_FAILURE') from error
+    return raw, information_class, reason, _optional_winerror(winerror)
+
+
+def _probe_failure(probe, error):
+    raw, information_class, _reason, parsed_winerror = _required_probe_failure(
+        error,
+        axis='PIPE',
+    )
+    observed_winerror = _optional_winerror(probe._error())
+    return information_class, raw, parsed_winerror or observed_winerror
+
+
+def _process_probe_failure(probe, error):
+    _raw, information_class, reason, winerror = _required_probe_failure(
+        error,
+        axis='PROCESS_PRIMARY',
+    )
     return information_class, reason, winerror
 
 
@@ -150,95 +286,182 @@ def _binding_from_live_lease(lease):
         process_lease_operation_id=lease._plan.operation_id,
         process_pid=lease._pin.pid,
         process_creation_filetime=lease._pin.creation_filetime,
+        capture_ordinal=1,
     )
 
 
-class PipeContextProducer:
-    """One-capture-per-connection producer; capture_ordinal is always 1 in v1.
+def _classify_pipe_axis(probe, token, binding):
+    try:
+        evidence = probe.probe(token, token_type='IMPERSONATION', level='IMPERSONATION')
+    except AppContainerProbeError as error:
+        kind, reason, winerror = _probe_failure(probe, error)
+        return _CapturedClassificationUnavailable(
+            **binding,
+            information_class=kind,
+            failure_reason=reason,
+            winerror=winerror,
+        )
 
-    Substitution resistance comes from the internally read connection/lease/process
-    binding. The ordinal is an explicit v1 invariant and reserves schema space for
-    a future multi-capture design; it is not the current substitution mechanism.
-    A lease is claimed once on entry and remains claimed after every later failure,
-    including token-close failure; the producer never retries the same connection.
-    """
+    result = evaluate_appcontainer_exclusion(evidence)
+    if result.status == 'APPCONTAINER':
+        return _CapturedAppContainer(**binding, evidence=evidence)
+    if result.status == 'PROVEN_NON_APPCONTAINER':
+        return _CapturedNonAppContainer(**binding, evidence=evidence)
+    if (
+        result.status == 'INDETERMINATE'
+        and result.reason == 'APPCONTAINER_SIGNAL_CONFLICT'
+    ):
+        return _CapturedClassificationConflict(**binding, reason=result.reason)
+    raise PipeContextProducerError('UNEXPECTED_CLASSIFIER_OUTCOME')
+
+
+def _classify_process_primary_axis(probe, token, binding):
+    try:
+        evidence = probe.probe(token, token_type='PRIMARY', level=None)
+    except AppContainerProbeError as error:
+        kind, reason, winerror = _process_probe_failure(probe, error)
+        return _ProcessPrimaryClassificationUnavailable(
+            **binding,
+            failed_stage='GET_TOKEN_INFORMATION',
+            information_class=kind,
+            failure_reason=reason,
+            winerror=winerror,
+        )
+
+    result = evaluate_appcontainer_exclusion(evidence)
+    if result.status == 'APPCONTAINER':
+        return _ProcessPrimaryCapturedAppContainer(**binding, evidence=evidence)
+    if result.status == 'PROVEN_NON_APPCONTAINER':
+        return _ProcessPrimaryCapturedNonAppContainer(**binding, evidence=evidence)
+    if (
+        result.status == 'INDETERMINATE'
+        and result.reason == 'APPCONTAINER_SIGNAL_CONFLICT'
+    ):
+        return _ProcessPrimaryClassificationConflict(**binding)
+    raise PipeContextProducerError('UNEXPECTED_PROCESS_PRIMARY_CLASSIFIER_OUTCOME')
+
+
+class PipeContextProducer:
+    """One dual-axis evidence transaction per live connection/lease."""
 
     def __init__(self, *, api, probe):
         if type(api) is not NativePipeTokenAPI or type(probe) is not NativeAppContainerProbe:
             raise TypeError('EXACT_NATIVE_COMPONENTS_REQUIRED')
-        # The real API explicitly binds OpenThreadToken(..., TOKEN_QUERY, TRUE, ...).
-        # Bind fatal-revert calls here so the failure branch itself performs only
-        # the required native termination statement.
+
+        # Fatal-revert calls are pre-bound so the failure branch itself performs
+        # only the required native termination statement.
         api.kernel.GetCurrentProcess.argtypes = []
         api.kernel.GetCurrentProcess.restype = c.c_void_p
         api.kernel.TerminateProcess.argtypes = [c.c_void_p, c.c_uint32]
         api.kernel.TerminateProcess.restype = c.c_int32
         self._self_process = api.kernel.GetCurrentProcess()
+
+        # The process PRIMARY token is opened from the already-retained lease
+        # process handle. Binding it here keeps token acquisition in this producer.
+        process_token = api.security.OpenProcessToken
+        process_token.argtypes = [c.c_void_p, c.c_uint32, c.POINTER(c.c_void_p)]
+        process_token.restype = c.c_int32
         self._api, self._probe = api, probe
 
-    def produce(self, lease) -> PipePeerAdmissionEvidence:
+    def _close_token(self, token):
+        if not self._api.close(token):
+            raise PipeContextProducerError('TOKEN_CLOSE_FAILED')
+
+    def _open_process_primary_token(self, lease, binding):
+        token = c.c_void_p()
+        try:
+            ok = self._api.security.OpenProcessToken(
+                lease._handle,
+                TOKEN_QUERY,
+                c.byref(token),
+            )
+        except OSError as error:
+            return None, _ProcessPrimaryClassificationUnavailable(
+                **binding,
+                failed_stage='OPEN_PROCESS_TOKEN',
+                information_class=None,
+                failure_reason='OPEN_PROCESS_TOKEN_FAILED',
+                winerror=_optional_winerror(getattr(error, 'winerror', None)),
+            )
+        if not ok:
+            return None, _ProcessPrimaryClassificationUnavailable(
+                **binding,
+                failed_stage='OPEN_PROCESS_TOKEN',
+                information_class=None,
+                failure_reason='OPEN_PROCESS_TOKEN_FAILED',
+                winerror=_optional_winerror(_winerror(self._api)),
+            )
+        value = token.value
+        if type(value) is not int or not 0 < value < c.c_void_p(-1).value:
+            raise PipeContextProducerError('INVALID_PROCESS_PRIMARY_TOKEN_HANDLE')
+        return value, None
+
+    def produce(self, lease) -> PeerAdmissionEvidence:
         binding = _binding_from_live_lease(lease)
         with _CLAIM_LOCK:
             if lease in _CLAIMED:
                 raise PipeContextProducerError('CONNECTION_ALREADY_CAPTURED')
-            binding['capture_ordinal'] = 1
-            # Claims are one-shot: failed capture does not permit retry on this lease.
             _CLAIMED[lease] = True
 
         owner = threading.get_ident()
-        pipe = lease._pipe
-        if not self._api.impersonate(pipe):
-            return _CaptureUnavailable(
-                **binding, failed_stage='IMPERSONATE', winerror=_winerror(self._api)
-            )
+        pipe_token = None
+        pipe_axis = None
 
-        token = None
-        capture_error = None
-        try:
-            if threading.get_ident() != owner:
-                raise PipeContextProducerError('THREAD_AFFINITY_VIOLATION')
-            try:
-                token = self._api.open_thread_token()
-                if token is None:
-                    capture_error = _winerror(self._api)
-            except TokenCaptureError:
-                capture_error = _winerror(self._api)
-        finally:
-            # Microsoft: after RevertToSelf failure execution remains in the
-            # client's context; terminate immediately rather than run Python
-            # cleanup/logging. https://learn.microsoft.com/windows/win32/api/securitybaseapi/nf-securitybaseapi-reverttoself
-            if not self._api.revert():
-                self._api.kernel.TerminateProcess(self._self_process, EXIT_REVERT_FAILED)
-
-        if token is None:
-            return _CaptureUnavailable(
+        if not self._api.impersonate(lease._pipe):
+            pipe_axis = _CaptureUnavailable(
                 **binding,
-                failed_stage='OPEN_THREAD_TOKEN',
-                winerror=capture_error,
+                failed_stage='IMPERSONATE',
+                winerror=_winerror(self._api),
             )
+        else:
+            capture_error = None
+            try:
+                if threading.get_ident() != owner:
+                    raise PipeContextProducerError('THREAD_AFFINITY_VIOLATION')
+                try:
+                    pipe_token = self._api.open_thread_token()
+                    if pipe_token is None:
+                        capture_error = _winerror(self._api)
+                except TokenCaptureError:
+                    capture_error = _winerror(self._api)
+            finally:
+                # After RevertToSelf failure execution remains in the client's
+                # context. Terminate immediately: no ExitStack or Python cleanup.
+                if not self._api.revert():
+                    self._api.kernel.TerminateProcess(
+                        self._self_process,
+                        EXIT_REVERT_FAILED,
+                    )
+            if pipe_token is None:
+                pipe_axis = _CaptureUnavailable(
+                    **binding,
+                    failed_stage='OPEN_THREAD_TOKEN',
+                    winerror=capture_error,
+                )
 
         try:
-            try:
-                evidence = self._probe.probe(
-                    token, token_type='IMPERSONATION', level='IMPERSONATION'
-                )
-            except AppContainerProbeError as error:
-                kind, reason, winerror = _probe_failure(self._probe, error)
-                return _CapturedClassificationUnavailable(
-                    **binding,
-                    information_class=kind,
-                    failure_reason=reason,
-                    winerror=winerror,
-                )
+            with ExitStack() as cleanup:
+                if pipe_token is not None:
+                    cleanup.callback(self._close_token, pipe_token)
+                    pipe_axis = _classify_pipe_axis(self._probe, pipe_token, binding)
 
-            result = evaluate_appcontainer_exclusion(evidence)
-            if result.status == 'APPCONTAINER':
-                return _CapturedAppContainer(**binding, evidence=evidence)
-            if result.status == 'PROVEN_NON_APPCONTAINER':
-                return _CapturedNonAppContainer(**binding, evidence=evidence)
-            if result.status == 'INDETERMINATE':
-                return _CapturedClassificationConflict(**binding, reason=result.reason)
-            raise PipeContextProducerError('UNEXPECTED_CLASSIFIER_OUTCOME')
-        finally:
-            if not self._api.close(token):
-                raise PipeContextProducerError('TOKEN_CLOSE_FAILED')
+                process_token, process_axis = self._open_process_primary_token(lease, binding)
+                if process_token is not None:
+                    cleanup.callback(self._close_token, process_token)
+                    process_axis = _classify_process_primary_axis(
+                        self._probe,
+                        process_token,
+                        binding,
+                    )
+
+                try:
+                    return PeerAdmissionEvidence(
+                        pipe_context=pipe_axis,
+                        process_primary=process_axis,
+                    )
+                except ValidationError as error:
+                    raise PipeContextProducerError(
+                        'PEER_ADMISSION_EVIDENCE_VALIDATION_FAILED'
+                    ) from error
+        except PipeContextProducerError:
+            raise
