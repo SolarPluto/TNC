@@ -235,7 +235,7 @@ def _exact_contract_record(kind, value):
         raise ValueError("EXACT_RECORD_REQUIRED")
     try:
         payload = value.model_dump(mode="json", warnings=False)
-    except BaseException as exc:
+    except (ValueError, TypeError, AttributeError) as exc:
         raise ValueError("EXACT_RECORD_REQUIRED") from exc
     if set(payload) != set(kind.model_fields):
         raise ValueError("EXACT_RECORD_REQUIRED")
