@@ -159,6 +159,7 @@ earlier terminal reason.
 | 5.2 | Process PRIMARY is proven non-AppContainer | AppContainer -> `DENIED / PROCESS_PRIMARY_APP_CONTAINER_DENIED` |
 | 6.1 | Matching live continuity is established and bound | failure -> `INDETERMINATE / ADMISSION_CONTINUITY_UNAVAILABLE` |
 | 6.2 | Exact evaluated-policy binding is proven | failure -> `INDETERMINATE / POLICY_BINDING_UNAVAILABLE` |
+| 6.3 | Continuity remains valid/open at authority-adoption start | failure -> `INDETERMINATE / ADMISSION_CONTINUITY_UNAVAILABLE` |
 | 7.1 | Atomically adopt continuity and construct authoritative admission | failure -> `INDETERMINATE / AUTHORITY_CONSTRUCTION_FAILED`; success -> `ADMITTED / ADMISSION_REQUIREMENTS_MET` |
 
 ### Phase 1 reachability
@@ -483,6 +484,7 @@ Before the positive path becomes reachable, the test suite must pin at least:
 - a bridge result outside `NATIVE_PEER_AUDIT_RESULT_PAIRS` raises
   `AdmissionEvaluatorInvariantError`;
 - phase-4 failure prevents phase-5 terminal selection;
+- phase 6.1 binding/unavailability precedes 6.2 policy binding, which precedes 6.3 adoption-start liveness;
 - within phases 2, 3, and 6, listed sub-check ordering determines the terminal.
 
 ### Producer binding
