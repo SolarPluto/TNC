@@ -35,7 +35,9 @@ V1 chooses an explicit two-phase lease API rather than a callback inside `finish
 4. only after `prepare_continuity(...)` succeeds may the caller invoke `OwnedProcessLease.finish()`; `finish()` keeps its existing semantics and releases only the original lease ownership;
 5. after `finish()`, the continuity object alone owns the independent process handle and continuity claim until terminal close/invalidation.
 
-`prepare_continuity(...)` is not a general callback hook and must not execute caller-supplied code while the lease is live. Native acquisition uses the exact trusted native API boundary and requests no broader rights than continuity needs. The fresh `OpenProcess` performed by `prepare_continuity(...)` is the **sole permitted second open** for this process instance: it occurs while the original retained handle is still live, is immediately checked against the pinned PID/creation FILETIME and pipe PID, and is never retried with broader rights. No process reopen is permitted after `prepare_continuity(...)` returns or after `finish()`. Failure to prepare continuity leaves no positive admission path; the original lease must still be finished or aborted through its ordinary cleanup contract.
+`prepare_continuity(...)` is not a general callback hook and must not execute caller-supplied code while the lease is live. Native acquisition uses the exact trusted native API boundary. The second process open requests exactly `PROCESS_QUERY_LIMITED_INFORMATION | SYNCHRONIZE` (`0x00101000`), non-inheritable — the same rights as the current process lease. `PROCESS_QUERY_LIMITED_INFORMATION` is sufficient for `GetProcessId` and `GetProcessTimes`; `SYNCHRONIZE` is required for zero-time `WaitForSingleObject` liveness checks. `PROCESS_QUERY_INFORMATION`, `PROCESS_ALL_ACCESS`, and any other broader rights are forbidden.
+
+The fresh `OpenProcess` performed by `prepare_continuity(...)` is the **sole permitted second open** for this process instance: it occurs while the original retained handle is still live, is immediately checked against the pinned PID/creation FILETIME and pipe PID, and is never retried with broader rights. No process reopen is permitted after `prepare_continuity(...)` returns or after `finish()`. Failure to prepare continuity leaves no positive admission path; the original lease must still be finished or aborted through its ordinary cleanup contract.
 
 Merely copying PID, creation time, operation IDs, or audit fields is not continuity.
 
@@ -56,7 +58,7 @@ V1 chooses a structural split:
 - `PeerAdmissionAuditRecord` is the frozen Pydantic audit projection. It may record the historical evaluation status/reason, but it contains no live continuity reference, use token, grant, signing, custody, or authorization capability and is never accepted by a privileged decision path.
 - the authoritative positive admission is a plain in-process live object, not a Pydantic `Model`. It uses a closed runtime type (for example `__slots__`), holds a strong reference to the exact live admission-continuity object, rejects pickling/reduction, exposes no JSON/model-dump reconstruction surface, and is created only by the evaluator's private positive constructor.
 
-The authoritative positive artifact therefore cannot exist without the live continuity object and cannot be reconstructed from serialized state. No public validation/deserialization path may manufacture authoritative `ADMITTED` from bytes, JSON, database rows, IPC payloads, or copied identifiers.
+The authoritative positive artifact therefore cannot exist without the live continuity object and cannot be reconstructed from serialized state. Both the authoritative positive artifact and the continuity-use token must implement `__reduce__` and `__reduce_ex__` that raise `TypeError`; the continuity object itself must do the same. Each live object also owns a `threading.Lock`, which is intentionally non-picklable and provides the synchronization primitive for lifecycle/token state. Tests must assert that `pickle.dumps(...)` fails for all three live artifact types. No public validation/deserialization path may manufacture authoritative `ADMITTED` from bytes, JSON, database rows, IPC payloads, pickle, or copied identifiers.
 
 The admission-continuity object likewise must not be reconstructible from serialized IDs or from a saved audit record. A caller cannot regain authority by deserializing an old result.
 
@@ -136,7 +138,16 @@ Peer-admission revocation is not part of initial continuity v1 because no author
 
 V1 uses **revalidation at use**, not full re-evaluation at use, and does not rely on callers remembering to invoke a boolean check.
 
-The continuity object exposes a gate operation that revalidates continuity and, on success, mints exactly one **single-use, non-serializable continuity-use token**. The token is bound to the exact continuity object, intended privileged operation identity, and a bounded monotonic use deadline. Its maximum lifetime is fixed by implementation policy and cannot exceed the enclosing operation/admission freshness deadline. It cannot be refreshed from serialized fields.
+The continuity object exposes a gate operation that revalidates continuity and, on success, mints exactly one **single-use, non-serializable continuity-use token**.
+
+The token contract is fixed as follows:
+
+- **Clock/bound:** token time is measured only with the continuity object's monotonic clock. `MAX_CONTINUITY_USE_TOKEN_MS = 1000`; `use_deadline = min(minted_tick + 1000, continuity_deadline, operation_deadline)`. Wall clock is not consulted for token age. A token at or past `use_deadline` is invalid and consumed as a failure.
+- **Operation binding:** the token carries an exact host-issued `operation_id` plus a closed `ContinuityUseKind` enum owned by the continuity module. Callers cannot supply arbitrary free-form operation-kind strings. The integration PR that introduces a privileged consumer must add its explicit enum member and require a matching kind at consumption.
+- **Single use:** consumption atomically changes the token from `UNUSED` to `CONSUMED`; any second consume fails closed.
+- **Concurrency:** each continuity object permits at most one outstanding unconsumed token. Mint and consume run under the continuity object's `threading.Lock`. A concurrent mint while a token is outstanding fails closed with `USE_TOKEN_OUTSTANDING`; it does not mint a second token. After successful consumption, a later operation may request a new token only after fresh revalidation.
+
+The token is also bound by object identity to the exact continuity object that minted it. It cannot be refreshed or recreated from serialized fields.
 
 Every privileged consumer covered by this admission contract must require the exact continuity-use-token type as an input and consume it exactly once before beginning the privileged operation. A durable audit record, the authoritative positive admission object by itself, a binding-ID tuple, or a prior successful revalidation is not accepted as a substitute. This creates an enforceable gate without running arbitrary caller callbacks while native continuity resources are live.
 
@@ -195,7 +206,11 @@ Even an authoritative `ADMITTED` result remains non-transferable: use still requ
 
 The current native peer policy models do not expose a stable revision source, so continuity must not invent one from process-local object identity or timestamps.
 
-PR 1 must introduce a host-owned `PeerAdmissionPolicyProvider` boundary and immutable `PeerAdmissionPolicySnapshot`. The snapshot contains at least a monotonically increasing policy revision and the canonical digest of the exact native peer-admission policy used for evaluation. The evaluator captures that exact snapshot when continuity is prepared. The use-token gate obtains the current snapshot from the same trusted provider and requires exact revision-and-digest equality before minting a token.
+PR 1 must introduce a host-owned `PeerAdmissionPolicyProvider` boundary and immutable `PeerAdmissionPolicySnapshot`. The snapshot contains at least a monotonically increasing policy revision and the canonical digest of the exact native peer-admission policy used for evaluation.
+
+Provider ownership is constructor-time injection, not a module singleton and not a per-revalidation argument. The trusted host passes the provider to `prepare_continuity(...)`; the continuity object stores a strong reference to that exact provider for its entire lifetime. Evaluation captures the provider's exact current snapshot and binds it into continuity state. Every later use-token gate consults the stored provider reference and requires exact revision-and-digest equality with the captured snapshot before minting a token. A caller cannot swap providers between evaluation and use by passing a different provider to revalidation.
+
+Production construction must accept only the trusted production provider boundary; tests use an explicit test-only provider path rather than subclassing or relabelling arbitrary caller objects as trusted. Provider replacement in the host therefore affects only newly prepared continuity objects unless the existing provider object's current snapshot changes; replacing the reference itself does not retarget already-live continuity objects.
 
 The provider is infrastructure, not caller evidence: ordinary request data cannot nominate its own policy revision/digest. Provider unavailability, malformed snapshots, rollback, or mismatch invalidates continuity fail-closed.
 
@@ -224,12 +239,16 @@ The continuity implementation PR must, before `ADMITTED` exists, pin at least:
 - process exit causes fail-closed `CONTINUITY_INVALID`;
 - pipe disconnect/close causes fail-closed `CONTINUITY_INVALID`;
 - binding substitution between connections/process instances is rejected;
-- policy-provider unavailability, rollback, revision mismatch, and digest mismatch are rejected;
+- the same provider object captured by `prepare_continuity()` is consulted at use; provider substitution is impossible through the gate API; provider unavailability, rollback, revision mismatch, and digest mismatch are rejected;
 - expiry is rejected;
 - no revocation claim exists in initial v1 and the review store is not consulted as an admission revocation oracle;
 - explicit close is terminal and native resources close exactly once;
 - `prepare_continuity()` is one-shot, occurs before `finish()`, and does not execute caller callbacks;
-- the authoritative positive artifact and continuity-use token cannot be serialized or reconstructed;
+- the continuity object, authoritative positive artifact, and continuity-use token each reject `pickle.dumps()` via explicit reduction guards and cannot be reconstructed;
+- the second `OpenProcess` requests exactly `0x00101000` with inheritance disabled and no broader-rights retry exists;
+- use-token deadline uses the continuity monotonic clock, is capped at 1000 ms and by continuity/operation deadlines;
+- operation kind is a closed `ContinuityUseKind`, not a caller free-form string;
+- concurrent minting allows at most one outstanding token and token consumption is atomic under the continuity lock;
 - no revalidation path reacquires or substitutes a process PRIMARY token for the original pipe-token classification.
 
 The later ADMITTED integration PR must pin:
@@ -251,6 +270,7 @@ This contract does not:
 - retain the pipe-client token for transaction lifetime;
 - permit a saved `ADMITTED` record to be replayed;
 - require a new pipe-token capture at every use;
+- use module-global policy-provider state or accept a caller-selected provider at revalidation time;
 - define cross-process transfer of continuity;
 - claim peer-admission revocation checking before an authoritative revocation source is separately specified;
 - make `ProcessLeaseAudit` itself a live lease;
