@@ -346,6 +346,14 @@ Examples include wrong concrete model type, dict/duck-typed input, malformed
 serialized reconstruction routed through the evaluator boundary, or failure of an
 evaluator-specific exact-copy requirement.
 
+For exact `ProcessLeaseAudit` and `NativePeerAuditResult` instances, phase 1
+checks exact concrete type, complete declared field shape, bounded JSON
+serializability, and evaluator input requirements without re-running the semantic
+contract validators that phases 2.3 and 3.1/3.2 own. In particular,
+`audit_only`/grant-flag violations and an out-of-vocabulary bridge pair must remain
+reachable by their specified later phase. Exact evidence and evaluated-policy
+records continue to use their evaluator-specific validated-copy requirements.
+
 ### Bridge vocabulary coupling and AppContainer handoff
 
 Phase 3.2 preserves the bridge's exact single violation reason unchanged only when

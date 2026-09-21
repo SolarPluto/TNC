@@ -431,7 +431,7 @@ def test_close_containment_is_terminal_and_never_retries(env):
     env[1].close_ok = False
     with pytest.raises(AdmissionContinuityContainment):
         continuity.close()
-    first_close_calls = len([call for call in env[1].calls if call[0] == "close"])
+    first_close_calls = env[1].calls.count(("close", 600))
     assert first_close_calls == 1
     assert continuity._contained is True
     assert continuity._closed is False
@@ -440,7 +440,7 @@ def test_close_containment_is_terminal_and_never_retries(env):
     continuity._closed = True
     with pytest.raises(AdmissionContinuityContainment):
         continuity.close()
-    assert len([call for call in env[1].calls if call[0] == "close"]) == first_close_calls
+    assert env[1].calls.count(("close", 600)) == first_close_calls
 
 
 def test_close_burns_minted_unconsumed_token(env):

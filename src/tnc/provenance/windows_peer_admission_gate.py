@@ -1,4 +1,5 @@
 """Native Windows peer-admission evaluator and live authority handoff."""
+import json
 import threading
 from typing import Literal
 
@@ -222,9 +223,34 @@ def _validated_copy(kind, value):
 
 
 def _exact_contract_record(kind, value):
+    """Snapshot exact record shape/bound without re-running phase-specific semantics.
+
+    ProcessLeaseAudit and NativePeerAuditResult deliberately carry contract
+    invariants that belong to phases 2.3 and 3.1/3.2. Revalidating those Literals
+    here would collapse those phases into phase 1 and make their terminals
+    unreachable. Exact concrete type, complete field shape, JSON-serializability,
+    and the evaluator record bound are phase-1 concerns.
+    """
     if type(value) is not kind:
         raise ValueError("EXACT_RECORD_REQUIRED")
-    _record_bound(value)
+    try:
+        payload = value.model_dump(mode="json", warnings=False)
+    except BaseException as exc:
+        raise ValueError("EXACT_RECORD_REQUIRED") from exc
+    if set(payload) != set(kind.model_fields):
+        raise ValueError("EXACT_RECORD_REQUIRED")
+    try:
+        raw = json.dumps(
+            payload,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode("utf-8")
+    except (TypeError, ValueError, UnicodeError) as exc:
+        raise ValueError("EXACT_RECORD_REQUIRED") from exc
+    if len(raw) > MAX_RECORD:
+        raise ValueError("RECORD_BOUND")
     return value
 
 
