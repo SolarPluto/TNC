@@ -5,6 +5,10 @@ on:
     branches: [master]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -12,6 +16,36 @@ env:
   UV_FROZEN: "1"
 
 jobs:
+  classify-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      run-windows: ${{ steps.scope.outputs.run-windows }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Classify PR scope
+        id: scope
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ "$EVENT_NAME" != "pull_request" ]]; then
+            echo "run-windows=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > "$RUNNER_TEMP/changed-files.txt"
+          if grep -qvE '^(docs/|.*\.md$)' "$RUNNER_TEMP/changed-files.txt"; then
+            echo "run-windows=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run-windows=false" >> "$GITHUB_OUTPUT"
+          fi
+
   text-hygiene:
     runs-on: ubuntu-latest
     steps:
@@ -33,19 +67,28 @@ jobs:
         run: pre-commit run --all-files --show-diff-on-failure
 
   pytest-windows:
-    runs-on: windows-latest
+    needs: classify-changes
+    runs-on: ${{ needs.classify-changes.outputs.run-windows == 'true' && 'windows-latest' || 'ubuntu-latest' }}
     timeout-minutes: 30
     steps:
+      - name: Mark docs-only PR as Windows-safe
+        if: needs.classify-changes.outputs.run-windows != 'true'
+        run: echo "Only docs/** and Markdown files changed; Windows suite not required."
+
       - name: Check out repository
+        if: needs.classify-changes.outputs.run-windows == 'true'
         uses: actions/checkout@v4
 
       - name: Install uv
+        if: needs.classify-changes.outputs.run-windows == 'true'
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
 
       - name: Sync locked environment
+        if: needs.classify-changes.outputs.run-windows == 'true'
         run: uv sync --locked
 
       - name: Run full test suite
+        if: needs.classify-changes.outputs.run-windows == 'true'
         run: uv run pytest -q
