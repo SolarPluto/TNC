@@ -10,10 +10,10 @@ The central decision is:
 
 The continuity object is a separate runtime artifact with a shorter lifetime than the durable audit records. It exists to bridge the gap between evaluation time and privileged use time without pretending that a frozen record can prove the peer is still the same live process and connection.
 
-This contract deliberately precedes implementation. The expected implementation sequence is:
+The continuity object and use-time revalidation described here are implemented as of PR #40. The remaining implementation sequence is:
 
-1. continuity object and use-time revalidation, without an `ADMITTED` status;
-2. `ADMITTED` integration only after the continuity artifact exists and its invariants are tested.
+1. preserve the continuity invariants and API boundary in this document;
+2. integrate `ADMITTED` only under the separate authority contract after its additional prerequisites and tests are satisfied.
 
 ## Why a separate continuity object is required
 
@@ -89,6 +89,36 @@ The pipe-client token handle is **not** retained for the whole transaction. AppC
 
 The continuity object's resources must be closed exactly once. Closure is terminal: a closed continuity object cannot be reactivated or replaced from its serialized binding fields.
 
+## Authority adoption API boundary
+
+The authority contract in `docs/windows_peer_admission_authority_v1.md` owns the
+positive-admission semantics. This document owns the continuity object's API and
+lifecycle boundary.
+
+Before authoritative admission adopts a continuity object:
+
+- the orchestrator owns the continuity reference;
+- `close()` is a public explicit cleanup operation;
+- the orchestrator must close continuity on denied/indeterminate evaluation or other
+  paths that do not transfer ownership.
+
+Use-token minting is an internal continuity primitive. Production callers do not
+treat bare continuity as authority; after authority integration the underlying mint
+entry point is internal (for example `_mint_use_token(...)`) and enforces the same
+allowed-`ContinuityUseKind` restriction as the authoritative admission.
+
+Successful authority adoption is one-shot and transfers production lifecycle/use
+ownership to the exact authoritative admission object. Continuity is `IDLE` before
+adoption and terminal `ADOPTED` afterward. Public mutating lifecycle/use methods
+reject direct external mutation once `ADOPTED`; authority-bound private operations
+are the production path. V1 relies on the synchronous single-threaded evaluation
+ownership contract for adoption and introduces no observable intermediate
+`ADOPTING` state.
+
+The authority's explicit `close()`/context-manager path performs the continuity
+release after adoption. Garbage collection is never a native-resource cleanup
+mechanism.
+
 ## Five continuity axes
 
 ### 1. Lifetime
@@ -142,7 +172,7 @@ The continuity object exposes a gate operation that revalidates continuity and, 
 
 The token contract is fixed as follows:
 
-- **Clock/bound:** token time is measured only with the continuity object's monotonic clock. `MAX_CONTINUITY_USE_TOKEN_MS = 1000`; `use_deadline = min(minted_tick + 1000, continuity_deadline, operation_deadline)`. Wall clock is not consulted for token age. A token at or past `use_deadline` is invalid and consumed as a failure.
+- **Clock/bound:** token time is measured only with the continuity object's monotonic clock. `MAX_CONTINUITY_USE_TOKEN_MS = 1000`; `use_deadline = min(minted_tick + 1000, continuity_deadline, operation_deadline)`. Wall clock is not consulted for token age. A token at or past `use_deadline` is invalid and consumed as a failure. This is point-in-time capability authorization: successful token consumption authorizes that specific operation to begin; later continuity expiry does not retroactively cancel the already-started operation.
 - **Operation binding:** the token carries an exact host-issued `operation_id` plus a closed `ContinuityUseKind` enum owned by the continuity module. Callers cannot supply arbitrary free-form operation-kind strings. The integration PR that introduces a privileged consumer must add its explicit enum member and require a matching kind at consumption.
 - **Single use:** consumption atomically changes the token from `UNUSED` to `CONSUMED`; any second consume fails closed.
 - **Concurrency:** each continuity object permits at most one outstanding unconsumed token. Mint and consume run under the continuity object's `threading.Lock`. A concurrent mint while a token is outstanding fails closed with `USE_TOKEN_OUTSTANDING`; it does not mint a second token. This intentionally serializes privileged-use authorization per continuity object: two operations on the same admitted connection cannot both hold valid use tokens concurrently. After successful consumption, a later operation may request a new token only after fresh revalidation.
@@ -206,7 +236,7 @@ Even an authoritative `ADMITTED` result remains non-transferable: use still requ
 
 The current native peer policy models do not expose a stable revision source, so continuity must not invent one from process-local object identity or timestamps.
 
-PR 1 must introduce a host-owned `PeerAdmissionPolicyProvider` boundary and immutable `PeerAdmissionPolicySnapshot`. The snapshot contains at least a monotonically increasing policy revision and the canonical digest of the exact native peer-admission policy used for evaluation.
+V1 provides a host-owned `PeerAdmissionPolicyProvider` boundary and immutable `PeerAdmissionPolicySnapshot`. The snapshot contains at least a monotonically increasing policy revision and the canonical digest of the exact native peer-admission policy used for evaluation.
 
 Provider ownership is constructor-time injection, not a module singleton and not a per-revalidation argument. The trusted host passes the provider to `prepare_continuity(...)`; the continuity object stores a strong reference to that exact provider for its entire lifetime. Evaluation captures the provider's exact current snapshot and stores that evaluated-policy revision and canonical digest immutably in continuity state. Every later use-token gate asks the same stored provider object for its **current** snapshot and compares current-vs-evaluated: both revision and digest must exactly equal the stored evaluation-time values. Revalidation never adopts or substitutes the provider's newer policy for the policy under which admission was evaluated. Any policy change therefore invalidates the existing continuity object and requires a new admission evaluation. A caller cannot swap providers between evaluation and use by passing a different provider to revalidation.
 
@@ -218,7 +248,7 @@ The provider is infrastructure, not caller evidence: ordinary request data canno
 
 There is currently no peer-admission revocation store or other authoritative peer-admission revocation source. The existing review store is scoped to review/release records and must not be repurposed as an admission revocation oracle.
 
-Accordingly, **peer-admission revocation is deferred from the initial continuity v1 implementation**. PR 1 must not add a placeholder callback, caller-supplied boolean, or synthetic "not revoked" field. The initial continuity object therefore implements process/connection/binding/policy/freshness invalidation only.
+Accordingly, **peer-admission revocation is absent from continuity v1 by design**. V1 does not add a placeholder callback, caller-supplied boolean, or synthetic "not revoked" field. The continuity object implements process/connection/binding/policy/freshness invalidation only.
 
 Adding revocation later requires a separate contract amendment that names the authoritative store/interface, its lookup key and freshness semantics, and fail-closed behavior. Once such a source exists, it becomes an additional mandatory use-token-gate check; until then, documentation and code must not claim revocation is checked.
 
