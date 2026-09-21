@@ -420,7 +420,13 @@ The inputs are owned as follows:
   `PipePeerAdmissionEvidence` as its pipe-context component plus a distinct
   process-primary AppContainer-classification component. The existing
   `PipePeerAdmissionEvidence` remains the pipe-axis record and is not silently
-  redefined to mean both axes; callers must pass the wrapper to the evaluator;
+  redefined to mean both axes; callers must pass the wrapper to the evaluator.
+  Each axis component must preserve enough structure to distinguish: required
+  evidence/query unavailable (phase 4.1a/5.1a), model-valid raw evidence whose
+  classifier has no unique outcome (phase 4.1b/5.1b), and a successful unique
+  classification that can proceed to the AppContainer denial check. A single
+  undifferentiated classification enum that collapses unavailable and conflict is
+  not sufficient for this interface;
 - `continuity`: the exact live `AdmissionContinuity` object for that same binding;
 - `evaluated_policy`: the exact `PeerAdmissionPolicySnapshot` under which this
   admission evaluation is being performed.
@@ -488,6 +494,11 @@ The stub's job is to force every phase-1-through-6 input to be named, every cove
 terminal to be representable, and module ownership to be concrete. If that exercise
 requires a semantic or interface choice not specified here, implementation stops
 and this contract is amended first.
+
+The test-only `StubReachedPhase7` path is exercised only by the stub meta test.
+Every other stub-backed contract test must terminate within phases 1-6 on the
+specific terminal it is asserting; accidentally falling through to phase 7 is a
+test failure, not an accepted substitute for coverage.
 
 ## Required contract and implementation tests
 
