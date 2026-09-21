@@ -28,15 +28,44 @@ Internal programming/invariant failures are outside the operational terminal tab
 They raise `AdmissionEvaluatorInvariantError`; they are bugs, not peer-admission
 outcomes.
 
+### Reviewed-against-implementation publication
 
 The `Reviewed against implementation` field remains
 `N/A — positive path not yet reachable` through all contract-only and
-producer-only work. It flips only in the evaluator/authority integration PR, and
-only after one exact PR head both makes
-`ADMITTED / ADMISSION_REQUIREMENTS_MET` reachable and passes the complete
-contract gate. The field is then set to that exact CI-validated PR-head SHA, not to
-a later merge commit. The referenced SHA must therefore have directly verifiable
-check-run history for the full enabling matrix.
+producer-only work. It is not set speculatively in the implementation commit.
+
+The evaluator/authority integration PR uses this exact sequence:
+
+1. Push an implementation head `H` that makes
+   `ADMITTED / ADMISSION_REQUIREMENTS_MET` reachable, including the production
+   audit schema, runtime legal-pair update, and complete enabling tests. Leave the
+   reviewed-against field at `N/A` while that head is being validated.
+2. Confirm that the complete enabling gate actually executed and passed for `H`.
+   A docs-only no-op check, skipped enabling tests, a green ancestor, or a green
+   producer-only head is not sufficient. Retain the workflow run ID, run attempt,
+   exact PR-head SHA, base SHA, and tested checkout SHA so the test evidence is
+   traceable even when Actions checks out a synthetic PR merge commit.
+3. Only after that confirmation, create a new documentation-only provenance commit
+   `D` on top of `H`. Set this field to the full SHA of `H` and record the enabling
+   run reference alongside it. `D` changes only provenance metadata, not normative
+   contract text, production code, tests, dependencies, or workflow behavior.
+   The field references `H`, never `D` itself and never a later merge commit.
+4. Let the normal merge gate run on the new current head `D`. The provenance claim
+   remains about the already-validated implementation at `H`; it does not pretend
+   that a new head was tested before it existed. Do not waive current-head checks.
+
+The current #41 workflow classifies the cumulative base-to-PR-head diff, not just
+its last commit. Consequently, `D` on this still-open implementation PR continues
+to select the real Windows suite because the PR still contains implementation
+changes. A cheap docs-only cycle requires a separate documentation-only PR after
+the implementation has merged; it is not the chosen same-PR publication sequence.
+
+If a later change modifies implementation, tests, dependencies, workflow behavior,
+the reviewed normative contract, or the tested base integration, the earlier
+reference is not validation of that new combination. Restore `N/A` in that change,
+obtain a successful complete gate for its replacement implementation head `H2`, and
+publish `H2` in a subsequent provenance-only commit. Do not amend a validated commit
+to insert its own SHA or rewrite a merge commit to manufacture provenance.
 
 ## Scope
 
@@ -203,145 +232,7 @@ general-purpose `Identifier` alias:
 - `APPCONTAINER_SID_INVALID`.
 
 The existing `Identifier` type remains the repository-wide constrained identifier
-string (`^[A-Za-z0-9][A-Za-z0-9_.:@/-]{0,127}# Native Windows Peer Admission Authority v1
-
-Version: 0.1-draft
-Effective date: 2026-09-21
-Frozen by: pre-implementation authority-contract workstream
-Supersedes: none
-Reviewed against implementation: N/A — positive path not yet reachable
-
-## Normative status
-
-This document is the normative specification for the first reachable positive native
-Windows peer-admission result and its live authority object.
-
-**The failure table in this document is the specification of the evaluator's branch
-structure. The implementation must conform to the table; the table is not derived
-from the implementation.**
-
-Any decision that arises during implementation but is not determined by this
-contract is a contract gap. The contract must be amended before code chooses a new
-semantic rule.
-
-The document and the runtime legal-pair sets are independent artifacts. Neither is
-mechanically generated from the other. Any change to this failure table, the bridge
-violation vocabulary, or the evaluator's legal result-pair set requires coordinated
-contract review.
-
-Internal programming/invariant failures are outside the operational terminal table.
-They raise `AdmissionEvaluatorInvariantError`; they are bugs, not peer-admission
-outcomes.
-
-## Scope
-
-V1 introduces the first authoritative positive peer admission while preserving the
-existing separation between durable evidence and live authority.
-
-A successful evaluation may produce:
-
-`ADMITTED / ADMISSION_REQUIREMENTS_MET`
-
-only when every required predicate in this document has passed and a matching live
-continuity object has been adopted into the authoritative admission object.
-
-Admission is not general authorization. The initial positive state means:
-
-- `admission_granted=True`;
-- `authorization_granted=False`;
-- `grants_evaluated=False`;
-- `signing_evaluated=False`.
-
-## Complete positive predicate
-
-Positive admission requires all of the following:
-
-1. the native process lease is the exact required native source and has the exact
-   successful pair `CORRELATED / AUDIT_MATCHED`;
-2. the existing native peer audit has no concrete violation and all existing
-   identity, retained-read, endpoint, descriptor, integrity, token-profile,
-   process-correlation, scope, and freshness checks have passed;
-3. the exact pipe-client token classification proves non-AppContainer;
-4. the correlated process PRIMARY token classification independently proves
-   non-AppContainer;
-5. live admission continuity exists for the same connection/process binding;
-6. the continuity object is bound to the exact policy snapshot under which the
-   admission evaluation is performed;
-7. authority adoption/construction succeeds.
-
-No subset is sufficient.
-
-## Dual AppContainer evidence
-
-The producer must emit two distinct classifications under one live process-lease
-boundary:
-
-- pipe-client token classification;
-- correlated process PRIMARY-token classification.
-
-The two axes answer different questions and must never be collapsed into one
-generic classification.
-
-The pipe classification describes the security context presented by the thread that
-established this specific named-pipe connection. The process-primary classification
-describes the sandbox state of the correlated process instance.
-
-PR #37 established that a non-AppContainer process can connect while carrying an
-AppContainer thread token and that the pipe observes the thread context. Therefore
-process-primary exclusion cannot substitute for pipe-context exclusion.
-
-The inverse case must also be excluded: a process whose PRIMARY token is
-AppContainer does not become admissible merely because its connecting thread
-presents a non-AppContainer impersonation token.
-
-Only:
-
-`pipe = PROVEN_NON_APPCONTAINER AND process_primary = PROVEN_NON_APPCONTAINER`
-
-may proceed beyond the AppContainer phases.
-
-### Producer requirements
-
-Process-primary classification is captured by the producer, not by the evaluator.
-The evaluator performs no native token acquisition.
-
-The producer uses the existing live `OwnedProcessLease` process handle and opens
-the process token with `OpenProcessToken(..., TOKEN_QUERY)`.
-
-The acquisition/classification sequence is fixed:
-
-1. impersonate the named-pipe client;
-2. open the exact pipe-client thread token;
-3. perform the mandatory `RevertToSelf`;
-4. only after successful revert, register the retained pipe-token handle in one
-   post-revert structured cleanup scope and classify it;
-5. open the correlated process PRIMARY token from the live lease process handle;
-6. register that process-primary token in the same cleanup scope, classify it, and
-   build the process-primary axis;
-7. construct the immutable `PeerAdmissionEvidence` wrapper;
-8. close the process-primary token and then the pipe token as the cleanup scope
-   unwinds.
-
-The post-revert cleanup scope uses `contextlib.ExitStack` (or an equivalent single
-structured ownership scope). The lease-owned process handle is not registered
-because the producer does not own it. `RevertToSelf` failure remains the unique
-process-fatal path with exit code `0xE401` and performs no subsequent Python
-cleanup/evidence/classification work. Process-primary acquisition/query failure
-occurs only after successful revert and therefore produces unavailable process-axis
-evidence where explicitly mapped; it is not process-fatal.
-
-It classifies the PRIMARY token while the same process instance is retained and
-correlated, closes the token, and emits both classifications in one immutable
-evidence record bound to:
-
-- `connection_operation_id`;
-- `pipe_lease_id`;
-- `process_lease_operation_id`;
-- `process_pid`;
-- `process_creation_filetime`;
-- the producer capture ordinal.
-
-), but it is intentionally too open
+string (`^[A-Za-z0-9][A-Za-z0-9_.:@/-]{0,127}$`), but it is intentionally too open
 for this failure vocabulary. Native error numbers are stored separately in
 `winerror`; they are not embedded into `failure_reason`.
 
@@ -681,6 +572,22 @@ The runtime evaluator must retain a closed legal result-pair set. Every operatio
 terminal in this table must be legal; illegal combinations such as
 `DENIED / PEER_EVIDENCE_UNAVAILABLE` must be rejected.
 
+The evaluator/authority integration PR must update the production
+`LEGAL_RESULT_PAIRS`, production audit-schema validation, and phase-7.1 evaluator
+branch together in the same enabling implementation commit. That commit must add
+exactly `('ADMITTED', 'ADMISSION_REQUIREMENTS_MET')` as the sole positive pair and
+retire `('INDETERMINATE', 'PEER_ADMISSION_NOT_IMPLEMENTED')` when its placeholder
+branch is replaced. The change is not deferred to the later provenance-only
+commit. All other operational terminals in this table, including
+`INDETERMINATE / AUTHORITY_CONSTRUCTION_FAILED`, must also have legal production
+mappings when their branches become reachable.
+
+The positive-path test must call the real evaluator through successful adoption,
+assert the exact positive pair is in the production set, and assert that the
+matching live authority is returned. A separately constructed audit model or a
+membership-only assertion does not exercise the enabling branch. The retired
+placeholder pair and an `ADMITTED` result with any other reason must be rejected.
+
 The normative table and runtime set are independent. Tests must verify evaluator
 branches produce legal pairs and that representative illegal combinations are
 rejected. The tests must not merely duplicate a second hand-maintained copy of the
@@ -725,7 +632,6 @@ those two independently held references by exact revision and digest. The evalua
 does not pull the evaluation policy from continuity and does not accept continuity's
 policy binding as a self-assertion.
 
-
 The evaluator is a pure admission-composition layer over already-captured inputs.
 It must not import, instantiate, or invoke `PipeContextProducer`,
 `NativeAppContainerProbe`, `NativePipeTokenAPI`, or any other native evidence
@@ -761,7 +667,7 @@ It contains at least these fields:
   pair `(status, reason)` required to be a member of `LEGAL_RESULT_PAIRS`;
 - `terminal_phase: Literal['1', '2.1', '2.2', '2.3', '3.1', '3.2', '3.3',
   '4.1a', '4.1b', '4.2', '5.1a', '5.1b', '5.2', '6.1', '6.2', '6.3', '7.1']`;
-- `admission_granted`, which is true only for
+- `admission_granted: bool`, strictly equal to whether the pair is
   `ADMITTED / ADMISSION_REQUIREMENTS_MET`;
 - `authorization_granted: Literal[False]`;
 - `grants_evaluated: Literal[False]`;
@@ -776,14 +682,45 @@ It contains at least these fields:
   `process_creation_filetime`, and `capture_ordinal`;
 - `evaluated_policy_revision` and `evaluated_policy_digest`.
 
+On this audit type, `admission_granted` is a historical outcome flag: it records
+whether this evaluation completed successful phase-7.1 admission and authority
+construction. It is `True` on the sole `ADMITTED` terminal and `False` on every
+other terminal; the model validator rejects either direction of disagreement.
+Unlike a live authority object, this field does not confer or attest to current
+permission to act. The audit remains inert even with `admission_granted=True`:
+no production admission/use path may accept the audit, its boolean flags, its
+status/reason, or a deserialized copy in place of the exact live authority and its
+continuity gate. Later authority closure or invalidation does not rewrite this
+historical outcome. `authorization_granted`, `grants_evaluated`, and
+`signing_evaluated` remain `False` on every terminal, including `ADMITTED`.
+The old `NativePeerAdmissionResult` was an all-negative evaluator result; its
+fixed-false `admission_granted` field is not the semantics of this new audit type.
+
+`terminal_phase` is the closed string Literal above, not a free-form string or
+numeric phase number. It records the phase that selected the terminal, not the
+latest phase whose facts are represented in the audit. The audit label `'3.3'`
+groups terminal sub-checks 3.3a and 3.3c; sub-check 3.3b is a pass-through and does
+not itself emit a terminal. Only phase `'7.1'` may carry `ADMITTED`.
+
 For a phase-1 `INVALID_ADMISSION_EVIDENCE` terminal, exact input validation has
 not completed. The audit must not partially trust or mix fields from invalid
 inputs. In that one case, both classification projections, all binding fields, and
-the evaluated-policy revision/digest are `None`. For every terminal after phase 1,
-exact input validation has completed and those fields are populated from the exact
-validated `peer_evidence` and `evaluated_policy`, even when an earlier phase
-determines the terminal. This preserves both AppContainer axes in the durable audit
-without allowing later facts to override phase precedence.
+the evaluated-policy revision/digest are `None` as one all-or-nothing projection.
+
+Immediately after all phase-1 input validation succeeds, and before phase 2 begins,
+the evaluator snapshots both axis dispositions and the complete common binding
+from validated `peer_evidence`, plus revision/digest from validated
+`evaluated_policy`. Every operational terminal selected by phases 2 through 7
+carries that same complete immutable projection, regardless of which of those
+phases wins. Fields are not progressively populated by their corresponding policy
+phases. In particular, a phase-2 denial still records both already-captured axes,
+and phase-6.2 policy-binding failure records the supplied validated evaluation
+policy rather than replacing it with continuity's policy.
+
+A validated unavailable axis projects the literal `UNAVAILABLE`, not `None`;
+`None` here means phase-1 validation did not complete. Projection copies validated
+input facts only: it performs no later native acquisition, does not turn those
+facts into passed policy checks, and never overrides first-failure precedence.
 
 The audit record contains no live continuity reference, authority object, use token,
 native handle, callable, or reconstruction capability.
@@ -927,6 +864,16 @@ Before the positive path becomes reachable, the test suite must pin at least:
 
 - durable audit records both AppContainer classifications even when one denial reason
   wins precedence;
+- phase-1 invalid input yields no partial axis, binding, or policy projection;
+- an early phase-2 terminal still retains the complete validated input projection;
+- phase-6.2 mismatch retains the validated evaluated-policy values without adoption;
+- unavailable validated evidence is `UNAVAILABLE`, while unvalidated phase-1 fields
+  are `None`;
+- `admission_granted` is an exact boolean equal to positive-pair membership, and all
+  other audit flags remain false even on successful admission;
+- authority closure does not alter the historical positive audit flag;
+- `terminal_phase` accepts only the closed Literal vocabulary, with `'3.3'`
+  representing its documented terminal sub-checks and `'7.1'` the sole positive phase;
 - durable audit is never accepted as authority;
 - authority/use token cannot be reconstructed from durable audit.
 
@@ -944,12 +891,14 @@ The required sequence is:
 2. add contract tests/stubs for vocabulary, precedence, construction barriers,
    ownership, and deadline semantics;
 3. extend producer/schema with dual AppContainer classification;
-4. implement evaluator/authority integration;
-5. add native/integration tests;
-6. on the exact reviewed head that first makes
-   `ADMITTED / ADMISSION_REQUIREMENTS_MET` reachable and passes the complete gate,
-   update `Reviewed against implementation` to that commit SHA;
-7. only then merge the positive path.
+4. implement evaluator/authority integration, the production audit schema, and the
+   complete runtime legal-pair changes in the same enabling implementation commit;
+5. add native/integration tests and obtain a complete successful enabling gate for
+   the exact implementation head `H`, leaving reviewed-against metadata at `N/A`;
+6. append the provenance-only documentation commit `D` that records `H` and its run
+   reference, as specified in Reviewed-against-implementation publication;
+7. pass the current-head gate on `D`, then merge the positive path. No validated
+   commit is amended to refer to itself and the field does not name the merge commit.
 
 ## Non-goals
 
