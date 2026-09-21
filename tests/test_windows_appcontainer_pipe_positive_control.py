@@ -37,6 +37,7 @@ from _native_harness import (
     TOKEN_QUERY,
     WAIT_OBJECT_0,
     _advapi32,
+    _capability_observation_fields,
     _checked_cleanup,
     _current_user_sid,
     _kernel32,
@@ -202,7 +203,7 @@ def test_appcontainer_client_identification_token_positive_control(emit_observat
             f'oracle_is_appcontainer=True oracle_sid={expected_sid!r} '
             f'is_appcontainer={identification_evidence.token_is_app_container!r} '
             f'appcontainer_sid={identification_evidence.app_container_sid!r} '
-            f'capability_count={len(identification_evidence.capability_sids)} '
+            f'{_capability_observation_fields(identification_evidence)} '
             f'status={identification_result.status} reason={identification_result.reason}'
         )
 

@@ -13,13 +13,21 @@ from tnc.provenance.windows_custody_peer import SID
 
 
 class AppContainerTokenEvidence(Model):
+    """Immutable token evidence with three-valued capability telemetry.
+
+    capability_sids=() means class 30 was queried successfully and the token
+    carried no capability SIDs. A populated tuple records observed capability
+    SIDs. capability_sids=None means class 30 was not successfully queried, so
+    capability state is unknown; None describes query availability, not a peer
+    property.
+    """
     profile: Literal['tnc-appcontainer-token-evidence-v1'] = 'tnc-appcontainer-token-evidence-v1'
     source: Literal['FAKE_TOKEN_API', 'NATIVE_TOKEN_API']
     token_type: Literal['IMPERSONATION', 'PRIMARY']
     level: Literal['IDENTIFICATION', 'IMPERSONATION', 'DELEGATION'] | None = None
     token_is_app_container: bool = Field(strict=True)
     app_container_sid: SID | None = None
-    capability_sids: tuple[SID, ...] = Field(default=(), max_length=256)
+    capability_sids: tuple[SID, ...] | None = Field(default=None, max_length=256)
 
     @model_validator(mode='after')
     def valid(self):
@@ -27,7 +35,8 @@ class AppContainerTokenEvidence(Model):
             raise ValueError('IMPERSONATION_LEVEL_REQUIRED')
         if self.token_type == 'PRIMARY' and self.level is not None:
             raise ValueError('PRIMARY_TOKEN_HAS_NO_IMPERSONATION_LEVEL')
-        if len(set(self.capability_sids)) != len(self.capability_sids):
+        if (self.capability_sids is not None
+                and len(set(self.capability_sids)) != len(self.capability_sids)):
             raise ValueError('DUPLICATE_CAPABILITY_SID')
         return self
 

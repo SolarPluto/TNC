@@ -8,6 +8,18 @@ The short summary is **positive AppContainer evidence travels across the tested 
 negative evidence is usable only at levels where Windows makes it reliable enough to exclude
 AppContainer status.** The table below, not that slogan, is the normative description.
 
+
+### Capability telemetry availability
+
+Class 30 (`TokenCapabilities`) is audit-only and three-valued in the evidence model:
+
+- a populated `capability_sids` tuple means class 30 was queried successfully and capability SIDs were observed;
+- `capability_sids=()` means class 30 was queried successfully and the observed capability set was empty;
+- `capability_sids=None` means class 30 did not yield usable evidence, so the capability set is unknown.
+
+`None` is a fact about query availability, not a fact that the peer has no capabilities. Class-30 unavailability does not alter AppContainer classification status/reason when the required class-29/class-31 evidence is otherwise usable.
+
+
 ## Status truth table
 
 `capability_sids` is omitted from the decision columns because it does not affect status.
@@ -217,3 +229,5 @@ safety invariants held; experimental claims come from the emitted evidence shape
 When additional native poles are added, label them as samples and identify which previously
 unobserved table row or assumption they actually anchor. Do not convert synthetic evaluator
 coverage into claims about Windows behavior.
+
+Capability availability does not add a classification branch: matched evidence records that differ only between `capability_sids=()` and `capability_sids=None` must produce identical classifier status/reason outcomes.

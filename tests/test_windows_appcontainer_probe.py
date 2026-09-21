@@ -5,6 +5,7 @@ import struct
 
 import pytest
 
+import _native_harness as h
 from tnc.provenance.windows_appcontainer_evidence import evaluate_appcontainer_exclusion
 from tnc.provenance import windows_appcontainer_probe as p
 from tnc.provenance.windows_pipe_token import SID_AND_ATTRIBUTES, TOKEN_GROUPS_HEADER
@@ -186,11 +187,43 @@ def test_invalid_token_handles_do_not_dispatch(value):
     assert fake.calls == []
 
 
-def test_variable_query_bound_is_fail_closed():
+def test_class_30_query_bound_is_audit_only():
     fake = FakeSecurity()
     fake.size_override[p.TOKEN_CAPABILITIES] = p.MAX_QUERY + 1
-    with pytest.raises(p.AppContainerProbeError, match='QUERY_30_BOUND'):
-        probe(fake).probe(99, token_type='PRIMARY', level=None)
+    evidence = probe(fake).probe(99, token_type='PRIMARY', level=None)
+    assert evidence.capability_sids is None
+    assert [kind for kind, _, _ in fake.calls] == [29, 30, 31, 31]
+
+
+def test_class_30_query_failure_is_audit_only():
+    fake = FakeSecurity()
+    fake.fail_kind = p.TOKEN_CAPABILITIES
+    evidence = probe(fake).probe(99, token_type='PRIMARY', level=None)
+    assert evidence.capability_sids is None
+    assert [kind for kind, _, _ in fake.calls] == [29, 30, 31, 31]
+
+
+def test_class_30_failure_reaches_classifier_without_changing_disposition():
+    fake = FakeSecurity()
+    fake.fail_kind = p.TOKEN_CAPABILITIES
+    unavailable = probe(fake).probe(99, token_type='IMPERSONATION', level='IMPERSONATION')
+    observed_empty = p.AppContainerTokenEvidence(
+        source=unavailable.source,
+        token_type=unavailable.token_type,
+        level=unavailable.level,
+        token_is_app_container=unavailable.token_is_app_container,
+        app_container_sid=unavailable.app_container_sid,
+        capability_sids=(),
+    )
+    assert unavailable.capability_sids is None
+    assert evaluate_appcontainer_exclusion(unavailable).model_dump() == (
+        evaluate_appcontainer_exclusion(observed_empty).model_dump()
+    )
+    unavailable_observation = h._capability_observation_fields(unavailable)
+    observed_observation = h._capability_observation_fields(observed_empty)
+    assert "capability_count=None" in unavailable_observation
+    assert "capability_query='UNAVAILABLE'" in unavailable_observation
+    assert observed_observation == "capability_count=0 capability_query='OBSERVED'"
 
 
 def test_malformed_appcontainer_sid_pointer_is_rejected():
@@ -201,10 +234,14 @@ def test_malformed_appcontainer_sid_pointer_is_rejected():
         probe(fake).probe(99, token_type='PRIMARY', level=None)
 
 
-def test_query_failure_preserves_information_class_and_error():
+@pytest.mark.parametrize('kind,pattern', [
+    (p.TOKEN_IS_APPCONTAINER, 'QUERY_29_FAILED_5'),
+    (p.TOKEN_APPCONTAINER_SID, 'QUERY_31_SIZE_PROBE'),
+])
+def test_required_query_failure_preserves_information_class(kind, pattern):
     fake = FakeSecurity()
-    fake.fail_kind = p.TOKEN_IS_APPCONTAINER
-    with pytest.raises(p.AppContainerProbeError, match='QUERY_29_FAILED_5'):
+    fake.fail_kind = kind
+    with pytest.raises(p.AppContainerProbeError, match=pattern):
         probe(fake).probe(99, token_type='PRIMARY', level=None)
 
 

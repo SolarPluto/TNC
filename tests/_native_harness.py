@@ -28,6 +28,14 @@ CANCEL_TIMEOUT_MS = 5_000
 PIPE_ACCESS_DUPLEX = 0x00000003
 FILE_FLAG_OVERLAPPED = 0x40000000
 PIPE_REJECT_REMOTE_CLIENTS = 0x00000008
+
+
+def _capability_observation_fields(evidence):
+    """Stable observation fragment; unknown class-30 telemetry never prints as zero."""
+    capabilities = evidence.capability_sids
+    count = len(capabilities) if capabilities is not None else None
+    query = 'OBSERVED' if capabilities is not None else 'UNAVAILABLE'
+    return f'capability_count={count!r} capability_query={query!r}'
 TOKEN_QUERY = 0x0008
 TOKEN_USER = 1
 TOKEN_IS_APPCONTAINER = 29
