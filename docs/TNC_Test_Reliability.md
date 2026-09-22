@@ -4,6 +4,8 @@
 
 This document records intermittent or timing-sensitive Windows test surfaces so that a retry does not erase diagnostic evidence. It is an inventory, not a waiver: strict assertions remain strict until a mechanism is identified.
 
+**CI routing (#41):** [the workflow](../.github/workflows/windows-tests.yml) applies `grep -qvE '^(docs/|.*\.md$)'` to the cumulative PR diff: only `docs/` paths (any extension) and lowercase `.md` files anywhere, including root `README.md`, use the Ubuntu docs-only marker; any other changed path selects the real Windows suite, as does `workflow_dispatch`. This is path-based routing, not validation or execution of embedded examples.
+
 ## Measurement semantics: process handle counts
 
 The native Windows tests use `_NativeChecks.handles()` in `tests/test_windows_pipe_process.py`. The helper is a direct call to `GetProcessHandleCount(GetCurrentProcess(), ...)`. It has no completion drain, synchronization barrier, retry, or wait-for-stability step.
