@@ -6,6 +6,8 @@ This document records intermittent or timing-sensitive Windows test surfaces so 
 
 **CI routing (#41):** [the workflow](../.github/workflows/windows-tests.yml) applies `grep -qvE '^(docs/|.*\.md$)'` to the cumulative PR diff: only `docs/` paths (any extension) and lowercase `.md` files anywhere, including root `README.md`, use the Ubuntu docs-only marker; any other changed path selects the real Windows suite, as does `workflow_dispatch`. This is path-based routing, not validation or execution of embedded examples.
 
+**PR base refresh:** To force a fresh `pull_request` event on the current base without changing branch content, close and reopen the PR. This regenerates `github.event.pull_request.base.sha` and the synthetic merge SHA. Use this when `master` has advanced past a PR's tested base and the tested-tree claim would otherwise become stale.
+
 ## Measurement semantics: process handle counts
 
 The native Windows tests use `_NativeChecks.handles()` in `tests/test_windows_pipe_process.py`. The helper is a direct call to `GetProcessHandleCount(GetCurrentProcess(), ...)`. It has no completion drain, synchronization barrier, retry, or wait-for-stability step.
