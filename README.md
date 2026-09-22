@@ -298,10 +298,9 @@ Input and argument errors return a nonzero exit code. In PowerShell,
 
 ## Acknowledgments
 
-TNC was developed by SolarPluto in collaboration with AI assistants ChatGPT
-(OpenAI), DeepSeek, and Gemini (Google). Their assistance contributed across the
-project's design, implementation, review, testing, and documentation. SolarPluto
-remains the package author and copyright holder.
+Development of TNC was assisted by AI coding tools including ChatGPT (OpenAI),
+DeepSeek, and Gemini (Google). The project's design decisions, review, and
+validation are SolarPluto's responsibility.
 
 ## Development
 
