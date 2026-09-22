@@ -8,6 +8,8 @@ intended for researchers and fact-checkers working with saved news archives.
 TNC does **not** decide whether a news claim is true. It also does not
 automatically determine that two publishers are independent sources.
 
+An unrelated PyPI distribution named `tnc` exists; TNC publishes as `tnc-provenance` to avoid ambiguity.
+
 ## See it work
 
 The included example article first reports three injuries and later updates that
@@ -202,6 +204,8 @@ For a complete CLI-to-Python example using those frozen inputs, see
 ## Historical replay
 
 Historical replay is an advanced, fail-closed workflow.
+
+Historical replay requires a configured review store; the included examples return `MISSING_REVIEW` until one is set up.
 
 The repository currently includes archived ABC captures and machinery that
 checks exact saved body hashes, archive index evidence, capture-time constraints,
