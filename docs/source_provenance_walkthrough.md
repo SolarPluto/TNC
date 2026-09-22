@@ -10,6 +10,13 @@ and static inspection of public interfaces at
 against TNC in that audit environment. The output illustration below is a shape,
 not a captured run. Numerical reproduction and runtime usability remain open.
 
+**Version anchor (static review only):** the documented imports, signatures, and
+return shapes were inspected at
+`d2909c139524c43d083679d0f5cd2e48632ef8f1`, not validated by execution.
+Before relying on this recipe at a different checkout revision, re-verify those
+interfaces and run the example against that revision. Syntax or import checks
+alone do not establish compatibility.
+
 ## 1. Use an actual checkout and locked environment
 
 Start in the repository root, with `pyproject.toml`, `uv.lock`, `src/`, and the
