@@ -233,3 +233,20 @@ A matching aggregate count does not prove semantic equivalence, and a mismatchin
 count is not explained away by inference. Any deviation must be accounted for in
 the retirement record by an identifiable test addition, behavior retirement, or
 scaffolding retirement.
+
+## Historical branch disposition: `native-process-api`
+
+On 2026-09-22, `native-process-api` was reviewed against `master` to resolve
+whether its two ahead commits represented unmerged native-process work. The branch
+was 2 commits ahead and 186 commits behind current `master`, but its two changed
+file contents were already integrated by commit
+`34cc3d6185a8b4b8acfaccd902ed56a8e7fd4123` ("Add native Windows process API
+boundary").
+
+The branch copy of
+`src/tnc/provenance/windows_pipe_process_native.py` has the same blob as that
+integration commit, and the branch copy of
+`tests/test_windows_pipe_process_native.py` is byte-for-byte identical to the
+copy still present on current `master`. The native adapter has evolved on
+`master` after that integration. Treat `native-process-api` as a stale
+historical branch, not as pending unmerged coverage or implementation work.
