@@ -170,6 +170,9 @@ or infer lineage from a wire-service name. The reviewed comparisons are recorded
 in [the casualty provenance review](corpus/tib_run_a/casualty_provenance_review.md)
 and its [pair annotations](corpus/tib_run_a/shared_source_pairs.json).
 
+For a complete CLI-to-Python example using those frozen inputs, see the
+[source-provenance walkthrough](docs/source_provenance_walkthrough.md).
+
 ## Project map
 
 | Location | Purpose |
