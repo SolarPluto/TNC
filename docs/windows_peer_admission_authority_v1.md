@@ -4,7 +4,7 @@ Version: 0.1-draft
 Effective date: 2026-09-21
 Frozen by: pre-implementation authority-contract workstream
 Supersedes: none
-Reviewed against implementation: N/A — positive path not yet reachable
+Reviewed against implementation: 1418e0b2ec20d77c4663dd43f795d6e91a1c59db
 
 ## Normative status
 
@@ -29,6 +29,27 @@ They raise `AdmissionEvaluatorInvariantError`; they are bugs, not peer-admission
 outcomes.
 
 ### Reviewed-against-implementation publication
+
+Published implementation provenance:
+
+- implementation head H:
+  `1418e0b2ec20d77c4663dd43f795d6e91a1c59db`;
+- enabling GitHub Actions run: `35685801085`, attempt `1`;
+- enabling-run PR base SHA:
+  `df7a2ab156d4b3cbc8527697a2eeee6cb58e057a`;
+- tested checkout: GitHub synthetic pull-request merge
+  `ea0891afebb2cc3dff3db8f27568193acd71b901`;
+- synthetic merge parent 1:
+  `df7a2ab156d4b3cbc8527697a2eeee6cb58e057a` (base);
+- synthetic merge parent 2:
+  `1418e0b2ec20d77c4663dd43f795d6e91a1c59db` (H);
+- provenance publication date: `2026-09-22`.
+
+The synthetic merge SHA records the exact checkout exercised by the enabling run,
+but it is not a durable identifier if the PR base later moves. The durable,
+reconstructible inputs are H plus the enabling-run base SHA. The header field and
+migration record intentionally duplicate H/date provenance; any replacement H2
+must update both locations together.
 
 The `Reviewed against implementation` field remains
 `N/A — positive path not yet reachable` through all contract-only and
@@ -971,10 +992,17 @@ Before the positive path becomes reachable, the test suite must pin at least:
 ## Migration and coverage-preservation record
 
 This record explains the #45 transition from the pre-authority gate to the
-production evaluator/authority architecture. The exact validated implementation
-head `H` and its effective publication date are provenance metadata: they remain
-pending until the complete enabling gate passes and are populated by the
-follow-up provenance commit `D` together with `Reviewed against implementation`.
+production evaluator/authority architecture.
+
+Validated implementation head:
+`1418e0b2ec20d77c4663dd43f795d6e91a1c59db`.
+Provenance publication date: `2026-09-22`.
+Enabling run: `35685801085`, attempt `1`.
+The run tested GitHub synthetic merge
+`ea0891afebb2cc3dff3db8f27568193acd71b901`, constructed from event base
+`df7a2ab156d4b3cbc8527697a2eeee6cb58e057a` and H. The synthetic merge SHA
+may become unreachable if the PR base moves; H plus the recorded base SHA remain
+the durable reconstructible pair.
 
 | Behavior group | Disposition | Replacement coverage |
 | --- | --- | --- |
