@@ -289,6 +289,12 @@ def _projection_kwargs(projection):
 
 
 def _build_audit(projection, *, status, reason, terminal_phase):
+    """Build one durable terminal and translate construction bugs to invariants.
+
+    ValueError covers model validation failures, TypeError covers invalid constructor
+    arguments, and AttributeError covers unexpected missing data reached while
+    constructing the projection. None of these are peer-admission outcomes.
+    """
     try:
         return PeerAdmissionAuditRecord(
             status=status,
