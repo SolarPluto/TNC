@@ -1,5 +1,10 @@
 # Storage-only authorization migration (version 3)
 
+> **Historical transition:** version 3 remains a valid storage-only intermediate
+> state, but current activation continues explicitly to version 4 through
+> [`administration_v4.md`](administration_v4.md). The claims below intentionally
+> describe v3 before activation and are preserved as the contract for that stage.
+
 `SqliteReviewStore.migrate_to_v3()` explicitly upgrades a validated version-2
 database. Version 1 requires the existing explicit v2 migration first. Opening a
 database never migrates it. A retry on v3 validates the complete target and returns
