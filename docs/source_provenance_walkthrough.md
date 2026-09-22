@@ -4,11 +4,13 @@ This worked example connects the documented `tnc parse` CLI to the public parser
 and provenance APIs. It compares two existing frozen article versions; it does
 not acquire new articles, establish claim truth, or admit historical replay.
 
-**Validation status:** prepared from an environment-blocked documentation audit
+**Validation history:** prepared from an environment-blocked documentation audit
 and static inspection of public interfaces at
-`d2909c139524c43d083679d0f5cd2e48632ef8f1`. The example has not been executed
-against TNC in that audit environment. The output illustration below is a shape,
-not a captured run. Numerical reproduction and runtime usability remain open.
+`d2909c139524c43d083679d0f5cd2e48632ef8f1`. That original audit environment
+did not execute the example. The output illustration below remains a shape, not
+a captured run. A later Windows execution receipt below records one successful
+run at `f05e1d061452bf347cdd43096c77225ce483342d`; that receipt is scoped to its
+recorded pair, environment, and revision.
 
 **Version anchor (static review only):** the documented imports, signatures, and
 return shapes were inspected at
@@ -266,3 +268,62 @@ bytes, versions, paragraph selection, and actual code revision, not to edit froz
 objects or force the old numbers. Hash, setup, or API failures are valid stopping
 points. This example does not create a historical replay fixture or change an
 admission decision.
+
+## 5. Execution receipt (Windows, 2026-09-22)
+
+The documented route was executed successfully on 2026-09-22 at
+`2026-09-22T12:32:31.986679Z` from a clean working tree at
+`f05e1d061452bf347cdd43096c77225ce483342d`.
+
+Environment:
+
+- Microsoft Windows 11 Pro, version `10.0.26200`, build `26200`, 64-bit;
+- Python `3.12.14`;
+- uv `0.12.10 (3c979abda 2026-09-04 x86_64-pc-windows-msvc)`.
+
+This receipt covers only the ABC correction archive /
+CBS/AP correction comparison documented above, on this environment and
+repository revision. It does not validate other corpus pairs, other
+environments, or later revisions.
+
+The run verified the original body bytes before analysis:
+
+- `abc-archive-20130521155330`:
+  `39eff51df623753297b9f12d7a00bdf6f0b04c0d1164f128cc1a5f1ea1055704`;
+- `cbs-ap-correction`:
+  `78a9a32f42c2adb5f4f9ab978394d4a3eac8c816eb40df73cb279bf83f318438`.
+
+It also recorded the pair-annotation file SHA-256 as
+`8cf21124a06139eb0d6ae05b9b6400b12daa6054427073e4afd808cb1269cbc9`
+and supplied the reviewed shared-source evidence string from
+`casualty_provenance_review.md`.
+
+Observed measurements:
+
+| Direction | Paragraph similarity | Quote overlap | Named-source overlap | Explicit citation | Publication order | Relation |
+| --- | ---: | ---: | ---: | --- | --- | --- |
+| ABC -> CBS/AP | `0.39302673133421223` | `0.0` | `0.04` | `false` | unknown / `null` | `null` |
+| CBS/AP -> ABC | `0.35260045747565233` | `0.0` | `0.04` | `false` | unknown / `null` | `null` |
+
+For both directions, the emitted interpretation was
+`No document-level judgment; not evidence of independence.` The highest-scoring
+paragraph pair was ABC span 18 / CBS span 40 at
+`0.6710963455149501`; the casualty-relevant Amy Elliot/Elliott pair was
+ABC span 2 / CBS span 7 at `0.47863247863247865`.
+
+The walkthrough's documented route therefore reproduced the prior review's
+recorded directional paragraph-similarity values for this exact pair. That is
+evidence of route equivalence for these measurements, not independent
+confirmation of the reporting, copying direction, or claim truth.
+
+The run preserved the same unresolved limits: historical availability and
+publication order of the exact CBS live body remain unresolved, and overlap does
+not establish direct copying or independent confirmation.
+
+This receipt is valid as of
+`f05e1d061452bf347cdd43096c77225ce483342d`. A subsequent change to any
+documented import, signature, return shape, or relied-on behavior requires
+re-execution and a new receipt. The earlier
+`d2909c139524c43d083679d0f5cd2e48632ef8f1` static-review anchor and this
+execution receipt are cumulative evidence, not substitutes for one another.
+
