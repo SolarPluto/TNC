@@ -56,6 +56,9 @@ has a stricter trust model and is described separately below.
 TNC is not yet published to PyPI. The current supported usage is from a source
 checkout.
 
+An unrelated PyPI distribution named `tnc` exists; this project uses the
+distribution name `tnc-provenance` to avoid ambiguity.
+
 Requirements:
 
 - Python 3.12 or newer
@@ -202,6 +205,10 @@ For a complete CLI-to-Python example using those frozen inputs, see
 ## Historical replay
 
 Historical replay is an advanced, fail-closed workflow.
+
+Historical replay requires a trusted review store and transition configuration;
+the included source-hosted examples return `MISSING_REVIEW` until that host
+configuration exists.
 
 The repository currently includes archived ABC captures and machinery that
 checks exact saved body hashes, archive index evidence, capture-time constraints,
