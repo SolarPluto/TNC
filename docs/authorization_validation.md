@@ -1,8 +1,10 @@
 # Pure bootstrap and administration-ledger contracts
 
-This layer defines records and validates historical administrative authority. It
-does not write to SQLite, enable version 4, authenticate an OS operator, verify a
-certificate, expose transport routes or grant real permissions.
+This pure layer defines records and validates historical administrative authority.
+It does not itself write to SQLite, activate version 4, authenticate an OS operator,
+verify a certificate, expose transport routes or grant real permissions. Version-4
+storage and transactional administration are implemented separately by
+`authorization_storage.py` and `AdministrationWriter`; see `administration_v4.md`.
 
 ## Typed records and encoding
 
@@ -83,7 +85,7 @@ does not become corrupt merely because a credential expires today. The caller mu
 still evaluate current authority for new operations. This output is not a live
 AuthorizationStateReader or database authorization writer.
 
-## Verification and remaining work
+## Verification and integration status
 
 61 unit cases cover canonical encoding/decoding, seed semantics (including mutated
 but rehashed seeds), external anchor mismatch, actor/session/revision binding,
@@ -91,9 +93,13 @@ credential rotation, grant independence, terminal lifecycle rules, expected head
 sequence integrity, checkpoint truncation, time boundaries and immutable models.
 Synthetic anchors are explicitly test data, not authenticated provisioning.
 
-These models and the pure validator are not yet installed as a database codec.
-Version-3 closed-write guards remain unchanged. A future version-4 migration/writer
-must validate SQL projections, trusted operator/session evidence, append idempotency,
-atomic bootstrap and transaction-scoped authority. Existing real ABC captures gain
-no approvals. Passing unit tests are evidence for these rules, not a formal proof
-or protection against wholesale replacement of both ledger and trusted checkpoint.
+These models and the pure validator are installed in the version-4 storage path via
+`authorization_storage.py` and `AdministrationWriter`. Version 3 remains the
+closed-write transitional state until explicit v4 activation. The v4
+migration/writer validates SQL projections, trusted provisioning/administrative
+session evidence, append idempotency, atomic bootstrap and transaction-scoped
+authority as documented in `administration_v4.md`.
+
+Existing real ABC captures gain no approvals merely from this integration. Passing
+unit and integration tests are evidence for these rules, not a formal proof or
+protection against wholesale replacement of both ledger and trusted checkpoint.
