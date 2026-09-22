@@ -5,7 +5,11 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class SpanType(StrEnum):
-    """Structural type of a source span."""
+    """Structural type of a source span.
+
+    Public usage: docs/source_provenance_walkthrough.md. Re-verify the recipe
+    when changing this interface or its behavior; follow its upkeep trigger.
+    """
 
     PARAGRAPH = "paragraph"
     HEADING = "heading"

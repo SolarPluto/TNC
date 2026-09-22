@@ -17,6 +17,12 @@ Before relying on this recipe at a different checkout revision, re-verify those
 interfaces and run the example against that revision. Syntax or import checks
 alone do not establish compatibility.
 
+**Upkeep trigger:** whenever a change alters a documented import, signature,
+return shape, or behavior used by this recipe, the change's author must re-verify
+and execute the example against the changed head and record the revision and
+result. If execution is unavailable, explicitly record pending re-verification
+and retain the existing static-review anchor; do not imply runtime validation.
+
 ## 1. Use an actual checkout and locked environment
 
 Start in the repository root, with `pyproject.toml`, `uv.lock`, `src/`, and the

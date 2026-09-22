@@ -63,6 +63,9 @@ def paragraph_similarity(
     Measure deterministic paragraph-level similarity between two documents.
 
     Only paragraph spans are compared.
+
+    Public usage: docs/source_provenance_walkthrough.md. Re-verify the recipe
+    when changing this interface or its behavior; follow its upkeep trigger.
     """
 
     source_paragraphs = [
@@ -225,6 +228,9 @@ def measure_provenance_signals(
     Measurements are returned without making any provenance judgment.
     Classification remains the responsibility of the provenance classifier.
     Shared-source evidence is supplied by review, not inferred from text overlap.
+
+    Public usage: docs/source_provenance_walkthrough.md. Re-verify the recipe
+    when changing this interface or its behavior; follow its upkeep trigger.
     """
 
     return ProvenanceSignals(
