@@ -250,4 +250,3 @@ integration commit, and the branch copy of
 copy still present on current `master`. The native adapter has evolved on
 `master` after that integration. Treat `native-process-api` as a stale
 historical branch, not as pending unmerged coverage or implementation work.
-
