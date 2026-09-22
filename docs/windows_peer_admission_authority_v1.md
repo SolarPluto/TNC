@@ -1,6 +1,6 @@
 # Native Windows Peer Admission Authority v1
 
-Version: 0.1-draft
+Version: 1.0
 Effective date: 2026-09-21
 Frozen by: pre-implementation authority-contract workstream
 Supersedes: none
