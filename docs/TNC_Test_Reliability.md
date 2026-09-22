@@ -1,6 +1,6 @@
 # TNC Windows Test Reliability Inventory
 
-**As of 2026-09-19.** Update this inventory as reliability investigations progress, fixes accumulate validation runs, or new flaky surfaces are observed.
+**As of 2026-09-22.** Update this inventory as reliability investigations progress, fixes accumulate validation runs, or new flaky surfaces are observed.
 
 This document records intermittent or timing-sensitive Windows test surfaces so that a retry does not erase diagnostic evidence. It is an inventory, not a waiver: strict assertions remain strict until a mechanism is identified.
 
@@ -44,6 +44,15 @@ This makes whole-process `delta == 0` a deliberately strong invariant. Do not we
 - **Retry/reproduction:** attempt 1 finished `1 failed, 3279 passed, 1 warning`; attempt 2 of the same run passed the full suite with `3280 passed, 1 warning`.
 - **Status:** **pending investigation**. A code-level comment immediately above the strict assertion in `tests/test_windows_pipe_process.py` points to this inventory; the failure was discovered while validating docstring-only #25 and is unrelated to that diff.
 - **Relationship to handle-count semantics:** because this path exercises cancellation of pending overlapped I/O, its mechanism may differ from `[impersonation]` even though both report `delta=1`. A still-open event/pipe/runtime handle at the sample point is plausible, but must be identified rather than inferred.
+
+### 4. Native junction setup PowerShell timeout
+
+- **Test:** `tests/test_protected_provisioning.py::test_native_junction_is_opened_without_following`.
+- **Observed failure shape:** the fixed setup command `New-Item -ItemType Junction -Path $env:TNC_TEST_LINK -Target $env:TNC_TEST_TARGET -ErrorAction Stop | Out-Null` did not complete within the test's 15-second `subprocess.run(..., timeout=15)` bound and raised `subprocess.TimeoutExpired`. The timeout occurred before `_WindowsFileAPI()` construction and before the junction no-following assertions ran.
+- **First observed:** 2026-09-22, Actions run `35759573700`, run #206, attempt 1, while validating #56 on head `59b9c3cdb06d165c9ee47510242123ed45adb934`. Attempt 1 finished `1 failed, 3445 passed in 934.90s (0:15:34)`.
+- **Retry/reproduction:** did not reproduce when only the failed Windows job was rerun on the unchanged head. Attempt 2 of the same run passed the full suite with `3446 passed in 773.56s (0:12:53)`.
+- **Status:** **pending investigation; first observation preserved on #56 before rerun**. The #56 diff only added README vocabulary markers and their contract test; no protected-provisioning code or junction setup changed.
+- **Relationship to handle-count / timeout instrumentation:** none known to the handle-count surfaces above. This failure occurred in external PowerShell test setup before TNC native inspection began, so the T/+100ms/+1000ms persistence sampler and handle-identity diagnostics do not apply. The 15-second subprocess timeout is a harness guard around junction creation, not evidence that a TNC handle remained open. Preserve future occurrences as timing evidence rather than weakening the timeout or retrying silently until a mechanism is identified.
 
 ## Current handle-count instrumentation
 
