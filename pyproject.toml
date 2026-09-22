@@ -36,6 +36,9 @@ Issues = "https://github.com/SolarPluto/TNC/issues"
 requires = ["uv_build>=0.12.10,<0.13.0"]
 build-backend = "uv_build"
 
+[tool.uv.build-backend]
+module-name = "tnc"
+
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
