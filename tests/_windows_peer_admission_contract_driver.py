@@ -114,6 +114,16 @@ def _axis(kind, status):
             "classification_source": source,
             "reason": "APPCONTAINER_SIGNAL_CONFLICT",
         }
+    if status == "CAPTURE_UNAVAILABLE":
+        if kind != "pipe":
+            raise ValueError("CAPTURE_UNAVAILABLE is pipe-axis only")
+        return {
+            **binding,
+            "status": "CAPTURE_UNAVAILABLE",
+            "failure_scope": "CAPTURE",
+            "failed_stage": "OPEN_THREAD_TOKEN",
+            "winerror": 5,
+        }
     if status == "UNAVAILABLE":
         if kind == "pipe":
             return {

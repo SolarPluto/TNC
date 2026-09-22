@@ -94,6 +94,14 @@ def test_phase_3_1_enforces_peer_audit_contract(changes):
     )
 
 
+def test_phase_1_preserves_semantically_invalid_records_for_later_phases():
+    """Phase-3.1 ownership boundary; see its precedence test for sub-order."""
+    assert pair(evaluate_case(peer=make_peer(audit_only=False))) == (
+        "INDETERMINATE",
+        "PEER_AUDIT_CONTRACT_VIOLATION",
+    )
+
+
 @pytest.mark.parametrize(
     "reason",
     sorted(
@@ -125,6 +133,16 @@ def test_phase_3_3_capture_unavailable_maps_to_peer_evidence_unavailable():
             peer=make_peer(status="INDETERMINATE", reason="CAPTURE_UNAVAILABLE")
         )
     ) == ("INDETERMINATE", "PEER_EVIDENCE_UNAVAILABLE")
+
+
+def test_raw_bridge_handoff_reasons_are_not_evaluator_terminals():
+    from tnc.provenance.windows_peer_admission_gate import LEGAL_RESULT_PAIRS
+
+    assert ("INDETERMINATE", "CAPTURE_UNAVAILABLE") not in LEGAL_RESULT_PAIRS
+    assert (
+        "INDETERMINATE",
+        "APP_CONTAINER_EXCLUSION_UNPROVEN",
+    ) not in LEGAL_RESULT_PAIRS
 
 
 def test_phase_3_3_appcontainer_unproven_hands_off_to_phase_4():
@@ -220,6 +238,23 @@ def test_phase_3_precedes_later_pipe_denial():
         evaluate_case(
             peer=make_peer(status="VIOLATIONS", reason="TOKEN_IDENTITY_MISMATCH"),
             evidence=make_evidence(pipe="APPCONTAINER"),
+        )
+    ) == ("DENIED", "TOKEN_IDENTITY_MISMATCH")
+
+
+def test_pipe_capture_unavailable_reaches_phase_4_1a():
+    assert pair(evaluate_case(evidence=make_evidence(pipe="CAPTURE_UNAVAILABLE"))) == (
+        "INDETERMINATE",
+        "PEER_EVIDENCE_UNAVAILABLE",
+    )
+
+
+def test_phase_3_violation_precedes_pipe_capture_unavailable():
+    """Lock the deliberate reversal from the retired AppContainer-first design."""
+    assert pair(
+        evaluate_case(
+            peer=make_peer(status="VIOLATIONS", reason="TOKEN_IDENTITY_MISMATCH"),
+            evidence=make_evidence(pipe="CAPTURE_UNAVAILABLE"),
         )
     ) == ("DENIED", "TOKEN_IDENTITY_MISMATCH")
 
@@ -332,6 +367,19 @@ def test_phase_1_audit_projection_is_all_none():
         "evaluated_policy_digest",
     ):
         assert getattr(audit, name) is None
+
+
+def test_audit_construction_value_error_is_an_evaluator_invariant(monkeypatch):
+    """The audit-construction boundary intentionally converts caught ValueError."""
+    import tnc.provenance.windows_peer_admission_gate as gate
+
+    class BrokenAudit:
+        def __init__(self, **kwargs):
+            raise ValueError("audit validation failure")
+
+    monkeypatch.setattr(gate, "PeerAdmissionAuditRecord", BrokenAudit)
+    with pytest.raises(AdmissionEvaluatorInvariantError, match="illegal evaluator audit"):
+        evaluate_case(lease=make_lease(source="FAKE_PROCESS_API"))
 
 
 def test_early_phase_2_terminal_keeps_complete_validated_projection():
