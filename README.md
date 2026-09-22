@@ -108,8 +108,9 @@ TNC recognizes these structural types:
 - `correction`
 - `update_notice`
 
-The ordinal printed by `tnc parse` is the coordinate used by extracted
-assertions. For example, `Source spans: 6` means the assertion is supported by
+`tnc parse` prints tab-separated ordinal, structural type, and normalized
+text. The ordinal is the coordinate used by extracted assertions, not an HTML
+line number. For example, `Source spans: 6` means the assertion is supported by
 source-span ordinal 6.
 
 To inspect one span directly:
@@ -151,9 +152,9 @@ The word `said` maps to the `REPORTED` epistemic category while remaining
 An assertion is **admitted** when its source coordinates exist and its recorded
 verbatim support is present in those source spans.
 
-Admission does **not** mean TNC verified that the proposition is true.
-Unsupported or ambiguous wording may be skipped rather than guessed. Only the
-first sentence of each span is considered. Sentence detection has limited
+Admission does **not** mean TNC verified that the proposition is true. Rejected
+candidates are listed with reasons; unsupported or ambiguous wording may be
+skipped rather than guessed. Only the first sentence of each span is considered. Sentence detection has limited
 punctuation rules, including support for common titles and decimal numbers;
 ambiguous initials and dotted abbreviations cause the span to be skipped.
 
