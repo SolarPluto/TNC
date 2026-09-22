@@ -10,7 +10,16 @@ automatically determine that two publishers are independent sources.
 
 An unrelated PyPI distribution named `tnc` exists; TNC publishes as `tnc-provenance` to avoid ambiguity.
 
-For installed use on Windows PowerShell, prefer `tncprov`; PowerShell's NetTCPIP module defines `tnc` as an alias for `Test-NetConnection`, which shadows the installed `tnc.exe`. The package still provides `tnc` for shells where that name is unambiguous, and source checkouts can continue to use `uv run tnc ...`.
+For installed use on Windows PowerShell, prefer the collision-free command:
+
+```powershell
+tncprov assertions article.html
+```
+
+PowerShell's NetTCPIP module defines `tnc` as an alias for `Test-NetConnection`,
+which shadows the installed `tnc.exe`. The package still provides `tnc` for
+shells where that name is unambiguous, and source checkouts can continue to use
+`uv run tnc ...`.
 
 ## See it work
 
