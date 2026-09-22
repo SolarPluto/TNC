@@ -231,4 +231,3 @@ A matching aggregate count does not prove semantic equivalence, and a mismatchin
 count is not explained away by inference. Any deviation must be accounted for in
 the retirement record by an identifiable test addition, behavior retirement, or
 scaffolding retirement.
-
