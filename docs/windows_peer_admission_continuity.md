@@ -2,7 +2,7 @@
 
 ## Scope and decision
 
-This document defines the v1 continuity contract required before `ADMITTED` may become reachable in the native Windows peer-admission gate.
+This document defines the v1 continuity contract that underpins reachable `ADMITTED` results in the native Windows peer-admission gate.
 
 The central decision is:
 
@@ -10,10 +10,7 @@ The central decision is:
 
 The continuity object is a separate runtime artifact with a shorter lifetime than the durable audit records. It exists to bridge the gap between evaluation time and privileged use time without pretending that a frozen record can prove the peer is still the same live process and connection.
 
-The continuity object and use-time revalidation described here are implemented as of PR #40. The remaining implementation sequence is:
-
-1. preserve the continuity invariants and API boundary in this document;
-2. integrate `ADMITTED` only under the separate authority contract after its additional prerequisites and tests are satisfied.
+The continuity object and use-time revalidation described here are implemented as of PR #40. The evaluator/live-authority integration completed in PR #45, where `ADMITTED / ADMISSION_REQUIREMENTS_MET` became reachable under the separately reviewed [`windows_peer_admission_authority_v1.md`](windows_peer_admission_authority_v1.md) contract. There is no remaining positive-admission integration step in this continuity contract; this document continues to own the continuity API, lifecycle, and use-time revalidation invariants.
 
 ## Why a separate continuity object is required
 
