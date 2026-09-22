@@ -14,7 +14,7 @@ recorded pair, environment, and revision.
 
 **Version anchor (static review only):** the documented imports, signatures, and
 return shapes were inspected at
-`d2909c139524c43d083679d0f5cd2e48632ef8f1`, not validated by execution.
+`d2909c139524c43d083679d0f5cd2e48632ef8f1`, not validated by execution at that revision.
 Before relying on this recipe at a different checkout revision, re-verify those
 interfaces and run the example against that revision. Syntax or import checks
 alone do not establish compatibility.
@@ -286,6 +286,23 @@ CBS/AP correction comparison documented above, on this environment and
 repository revision. It does not validate other corpus pairs, other
 environments, or later revisions.
 
+After completing the setup and CLI inspection in sections 1 and 2, this receipt
+used the scratch-file alternative documented in section 3. The Python body
+between `@'` and `'@` was extracted unchanged and then compile-checked before
+execution with this exact PowerShell sequence:
+
+```powershell
+$doc = Get-Content docs/source_provenance_walkthrough.md
+$start = [Array]::IndexOf($doc, "import hashlib")
+$end = [Array]::IndexOf($doc, 'print(json.dumps(record, indent=2, ensure_ascii=True))')
+$doc[$start..$end] | Set-Content -Encoding utf8 $env:TEMP\tnc-provenance-walkthrough.py
+uv run python -m py_compile $env:TEMP\tnc-provenance-walkthrough.py
+uv run python $env:TEMP\tnc-provenance-walkthrough.py
+```
+
+The section 3 here-string remains the equivalent documented direct invocation;
+the temporary file was only an execution convenience.
+
 The run verified the original body bytes before analysis:
 
 - `abc-archive-20130521155330`:
@@ -326,4 +343,3 @@ documented import, signature, return shape, or relied-on behavior requires
 re-execution and a new receipt. The earlier
 `d2909c139524c43d083679d0f5cd2e48632ef8f1` static-review anchor and this
 execution receipt are cumulative evidence, not substitutes for one another.
-
