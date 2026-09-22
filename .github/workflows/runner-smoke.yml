@@ -1,0 +1,20 @@
+name: Runner allocation smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm Ubuntu runner
+        run: echo hello
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Confirm Windows runner
+        run: echo hello
