@@ -296,6 +296,13 @@ uv run tnc historical-replay --help
 Input and argument errors return a nonzero exit code. In PowerShell,
 `$LASTEXITCODE` shows the exit code of the command that just ran.
 
+## Acknowledgments
+
+TNC was developed by SolarPluto in collaboration with AI assistants ChatGPT
+(OpenAI), DeepSeek, and Gemini (Google). Their assistance contributed across the
+project's design, implementation, review, testing, and documentation. SolarPluto
+remains the package author and copyright holder.
+
 ## Development
 
 Run the test suite from the repository root:
