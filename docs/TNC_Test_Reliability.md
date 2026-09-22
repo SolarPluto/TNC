@@ -189,3 +189,46 @@ later real implementation, perform both reviews:
 
 This review is a code-review requirement, not something inferred from pytest's
 aggregate passed/skipped counts.
+
+## Coverage preservation when tests are retired
+
+Deleting tests requires an explicit retirement record. Aggregate pytest counts are
+useful only after the semantic disposition of the deleted coverage is known.
+
+First classify the deleted test as either **production-behavior coverage** or
+**temporary scaffolding**.
+
+For production-behavior coverage, use exactly one of these dispositions:
+
+1. **Explicitly retired behavior.** Name the behavior/type/terminal that no longer
+   exists and the contract or architectural change that retired it.
+2. **Preserved with replacement coverage.** Name the surviving behavior and list
+   the exact replacement test names or parameterized test groups that cover it.
+   "Equivalent coverage exists" without named tests is not a reviewable claim.
+3. **Implicit or changed behavior made explicit.** When an old assertion existed
+   only as a side effect, or the architecture deliberately changes the behavior,
+   state the new rule and name the test that now asserts it directly.
+
+Scaffolding retirement is recorded separately from behavior retirement. The record
+must name the temporary artifact, the condition that made it obsolete, and confirm
+that the artifact tested scaffolding rather than production behavior. Examples
+include temporary contract stubs or meta-tests that are required to disappear when
+the real implementation lands.
+
+Every retirement record must also make the collection arithmetic reconstructible.
+For each affected group, record:
+
+- retired collected test IDs/cases;
+- replacement or newly added collected IDs/cases;
+- the expected net collection delta; and
+- the exact replacement test names when behavior is preserved.
+
+The repository-level composition check is then:
+
+`previous collected count + net additions - net retirements = expected count`.
+
+A matching aggregate count does not prove semantic equivalence, and a mismatching
+count is not explained away by inference. Any deviation must be accounted for in
+the retirement record by an identifiable test addition, behavior retirement, or
+scaffolding retirement.
+

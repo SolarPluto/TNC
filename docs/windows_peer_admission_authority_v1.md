@@ -968,6 +968,40 @@ Before the positive path becomes reachable, the test suite must pin at least:
 - review store is not consulted as a peer-admission revocation oracle;
 - documentation and runtime output do not claim extrinsic revocation support.
 
+## Migration and coverage-preservation record
+
+This record explains the #45 transition from the pre-authority gate to the
+production evaluator/authority architecture. The exact validated implementation
+head `H` and its effective publication date are provenance metadata: they remain
+pending until the complete enabling gate passes and are populated by the
+follow-up provenance commit `D` together with `Reviewed against implementation`.
+
+| Behavior group | Disposition | Replacement coverage |
+| --- | --- | --- |
+| Legacy `NativePeerAdmissionResult` durable result | Retired behavior: the type no longer exists. | `test_legacy_result_type_is_retired`, `test_admitted_audit_is_durable_but_all_grant_flags_are_inert`, and `test_phase_7_1_returns_exact_live_authority_with_inert_audit_flags` cover the replacement durable-audit/live-authority split. |
+| `INDETERMINATE / PEER_ADMISSION_NOT_IMPLEMENTED` | Retired behavior: the placeholder terminal is replaced by reachable phase 7.1 admission. | `test_positive_pair_is_legal_and_placeholder_pairs_are_retired` and `test_phase_7_1_returns_exact_live_authority_with_inert_audit_flags`. |
+| Existing bridge identity/correlation/descriptor/integrity/token semantics | Preserved behavior through phase 3. | `tests/test_windows_pipe_auth_bridge.py` retains source semantics; `test_phase_3_2_preserves_authority_compatible_bridge_violation`, `test_phase_3_3_capture_unavailable_maps_to_peer_evidence_unavailable`, and `test_phase_3_3_other_indeterminate_reasons_propagate` pin evaluator mapping. |
+| Pipe-only AppContainer evidence semantics | Preserved behavior, migrated into the dual-axis producer/evaluator boundary. | `test_phases_4_and_5_dual_classification_matrix`, `test_pipe_capture_unavailable_reaches_phase_4_1a`, `test_dual_classification_quadrants`, and `test_wrapper_schema_preserves_both_discriminated_axes`. |
+| AppContainer-before-peer precedence from the retired gate | Intentionally changed behavior: concrete phase-3 bridge violations now precede phase-4 pipe evidence failure. | `test_phase_3_precedes_later_pipe_denial` and `test_phase_3_violation_precedes_pipe_capture_unavailable`. |
+| Temporary stub-meta test | Scaffolding retirement: the test existed only to prove the temporary stub stopped before phase 7. | Removed when the real evaluator replaced the stub; no production-behavior coverage was carried by this test. |
+
+### Collection composition
+
+The aggregate count is a composition check, not semantic proof. Relative to the
+#44 Windows baseline of **3461** collected/passing tests:
+
+- `tests/test_windows_peer_admission_gate.py`: 46 legacy collected cases became
+  8 focused schema/layering cases: **-38**;
+- permanent authority-contract additions in #45: 12 enabling cases plus 5 explicit
+  coverage-preservation cases: **+17**;
+- continuity lifecycle additions: **+2**;
+- temporary stub-meta scaffolding removal: **-1**.
+
+Expected net change before the enabling gate is therefore
+`-38 + 17 + 2 - 1 = -20`, for an expected **3441** collected/passing tests.
+The provenance commit `D` records the exact validated head `H`, effective date,
+and enabling run after the observed count is confirmed against this composition.
+
 ## Implementation sequence
 
 The required sequence is:
