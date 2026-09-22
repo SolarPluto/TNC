@@ -128,6 +128,15 @@ agreement. No document-level reprint or derivation relation is assigned.
 The exact historical availability of the CBS live body remains unresolved;
 ABC's archive capture time must not be used to date it.
 
+The [source-provenance walkthrough](../../docs/source_provenance_walkthrough.md)
+later exercised the documented CLI-to-public-API route for this exact pair. Its
+Windows execution receipt at
+`f05e1d061452bf347cdd43096c77225ce483342d` reproduced the two directional
+paragraph-similarity values above while preserving unknown publication order and
+classifier abstention. That receipt is route-equivalence evidence for the
+documented measurement path, not independent confirmation of the reporting or
+proof of copying direction.
+
 ## Classifier shared-source guardrail
 
 `shared_source_pairs.json` records the two reviewed comparisons above, tied to
