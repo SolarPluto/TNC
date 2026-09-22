@@ -99,6 +99,8 @@ A source span is an ordered, immutable piece of article text.
 
 TNC recognizes these structural types:
 
+<!-- The vocabulary lists below are machine-checked by tests/test_readme_vocabulary_contract.py. Edit the list and the corresponding runtime definition in the same change. -->
+<!-- vocabulary: span-types -->
 - `paragraph`
 - `heading`
 - `quote`
@@ -107,6 +109,7 @@ TNC recognizes these structural types:
 - `table_cell`
 - `correction`
 - `update_notice`
+<!-- /vocabulary: span-types -->
 
 `tnc parse` prints tab-separated ordinal, structural type, and normalized
 text. The ordinal is the coordinate used by extracted assertions, not an HTML
@@ -138,6 +141,7 @@ The current extractor deliberately recognizes a narrow attribution pattern:
 
 Supported source-text operators are:
 
+<!-- vocabulary: source-operators -->
 - `reported`
 - `confirmed`
 - `denied`
@@ -145,9 +149,13 @@ Supported source-text operators are:
 - `alleged`
 - `expected`
 - `said`
+<!-- /vocabulary: source-operators -->
 
-The word `said` maps to the `REPORTED` epistemic category while remaining
-`said` in the extracted predicate.
+The current source-text mapping is:
+
+<!-- vocabulary: operator-mappings -->
+- `said` → `REPORTED` (the extracted predicate remains `said`)
+<!-- /vocabulary: operator-mappings -->
 
 An assertion is **admitted** when its source coordinates exist and its recorded
 verbatim support is present in those source spans.
@@ -166,9 +174,11 @@ rules; it is not currently exposed as a `tnc provenance` CLI command.
 
 Existing document-level judgments are:
 
+<!-- vocabulary: relation-types -->
 - `explicitly_cites`
 - `likely_derived_from`
 - `reprint_of`
+<!-- /vocabulary: relation-types -->
 
 The classifier may also return no judgment. No judgment does not establish that
 two sources are independent.
