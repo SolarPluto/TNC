@@ -407,9 +407,7 @@ def test_live_artifacts_reject_pickle_copy_and_deepcopy(env):
         kind=ContinuityUseKind.RESERVED_FOR_TESTING,
         operation_deadline=50,
     )
-    from tnc.provenance.windows_peer_admission_continuity import _AuthoritativePeerAdmission
-    positive = _AuthoritativePeerAdmission._from_continuity(continuity)
-    for value in (continuity, token, positive):
+    for value in (continuity, token):
         with pytest.raises(TypeError):
             pickle.dumps(value)
         with pytest.raises(TypeError):
@@ -425,3 +423,38 @@ def test_close_failure_requires_containment(env):
     with pytest.raises(AdmissionContinuityContainment):
         continuity.close()
     assert env[0]._fatal
+
+
+
+def test_close_containment_is_terminal_and_never_retries(env):
+    continuity = finish_and_keep_continuity(env)
+    env[1].close_ok = False
+    with pytest.raises(AdmissionContinuityContainment):
+        continuity.close()
+    first_close_calls = env[1].calls.count(("close", 600))
+    assert first_close_calls == 1
+    assert continuity._contained is True
+    assert continuity._closed is False
+
+    # Containment is checked before the ordinary closed/idempotent state.
+    continuity._closed = True
+    with pytest.raises(AdmissionContinuityContainment):
+        continuity.close()
+    assert env[1].calls.count(("close", 600)) == first_close_calls
+
+
+def test_close_burns_minted_unconsumed_token(env):
+    continuity = finish_and_keep_continuity(env)
+    token = continuity.mint_use_token(
+        operation_id="op",
+        kind=ContinuityUseKind.RESERVED_FOR_TESTING,
+        operation_deadline=50,
+    )
+    assert continuity.close() is True
+    assert token._consumed is True
+    with pytest.raises(AdmissionContinuityError):
+        continuity.consume_use_token(
+            token,
+            operation_id="op",
+            kind=ContinuityUseKind.RESERVED_FOR_TESTING,
+        )

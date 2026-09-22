@@ -9,7 +9,7 @@ from enum import Enum
 from pydantic import Field, TypeAdapter
 
 from tnc.provenance.authorization_models import Digest, Identifier, Model
-from tnc.provenance.windows_pipe_context_producer import PipePeerAdmissionEvidence
+from tnc.provenance.windows_peer_admission_evidence import PipePeerAdmissionEvidence
 from tnc.provenance.windows_pipe_process_native import (
     PROCESS_LEASE_RIGHTS,
     WAIT_TIMEOUT,
@@ -88,6 +88,7 @@ def _binding(value):
         raw["process_lease_operation_id"],
         raw["process_pid"],
         raw["process_creation_filetime"],
+        raw["capture_ordinal"],
     )
 
 
@@ -108,6 +109,7 @@ def _live_lease_binding(lease):
         lease._plan.operation_id,
         lease._pin.pid,
         lease._pin.creation_filetime,
+        1,
     )
 
 
@@ -138,21 +140,18 @@ class ContinuityUseToken:
 
 
 class _AuthoritativePeerAdmission:
-    """Future live positive artifact; intentionally not wired into the evaluator yet."""
+    """Exact live positive artifact; construction is evaluator-internal only."""
 
-    __slots__ = ("_continuity", "_lock")
+    __slots__ = (
+        "_continuity", "_lock", "_allowed_kinds", "_closed",
+        "_contained", "_containment_reason",
+    )
 
     def __init__(self):
         raise TypeError("Authoritative admission is evaluator-produced only")
 
-    @classmethod
-    def _from_continuity(cls, continuity):
-        if type(continuity) is not AdmissionContinuity:
-            raise TypeError("EXACT_CONTINUITY_REQUIRED")
-        value = object.__new__(cls)
-        value._continuity = continuity
-        value._lock = threading.Lock()
-        return value
+    def __init_subclass__(cls, **kwargs):
+        raise TypeError("Authoritative admission cannot be subclassed")
 
     def __reduce__(self):
         raise TypeError("Authoritative admission cannot be serialized")
@@ -163,13 +162,71 @@ class _AuthoritativePeerAdmission:
     def __getstate__(self):
         raise TypeError("Authoritative admission cannot be serialized")
 
+    def __copy__(self):
+        raise TypeError("Authoritative admission cannot be copied")
+
+    def __deepcopy__(self, memo):
+        raise TypeError("Authoritative admission cannot be copied")
+
+    def _raise_containment_locked(self):
+        if self._contained:
+            raise self._containment_reason
+
+    def mint_use_token(self, *, operation_id, kind, operation_deadline):
+        with self._lock:
+            self._raise_containment_locked()
+            if self._closed:
+                raise AdmissionContinuityError("AUTHORITY_CLOSED")
+            try:
+                return self._continuity._mint_use_token_from_authority(
+                    self,
+                    operation_id=operation_id,
+                    kind=kind,
+                    operation_deadline=operation_deadline,
+                )
+            except AdmissionContinuityContainment as exc:
+                self._contained = True
+                self._containment_reason = exc
+                raise
+
+    def consume_use_token(self, token, *, operation_id, kind):
+        with self._lock:
+            self._raise_containment_locked()
+            if self._closed:
+                raise AdmissionContinuityError("AUTHORITY_CLOSED")
+            try:
+                return self._continuity._consume_use_token_from_authority(
+                    self,
+                    token,
+                    operation_id=operation_id,
+                    kind=kind,
+                )
+            except AdmissionContinuityContainment as exc:
+                self._contained = True
+                self._containment_reason = exc
+                raise
+
+    def close(self):
+        with self._lock:
+            self._raise_containment_locked()
+            if self._closed:
+                return False
+            try:
+                result = self._continuity._close_from_authority(self)
+            except AdmissionContinuityContainment as exc:
+                self._contained = True
+                self._containment_reason = exc
+                raise
+            self._closed = True
+            return result
+
 
 class AdmissionContinuity:
     __slots__ = (
         "_endpoint", "_api", "_clock", "_process_handle", "_pipe",
         "_pid", "_creation_filetime", "_binding", "_provider",
         "_policy_snapshot", "_deadline", "_lock", "_closed", "_invalid",
-        "_outstanding",
+        "_contained", "_containment_reason", "_adopted_by", "_outstanding",
     )
 
     def __init__(self):
@@ -186,6 +243,9 @@ class AdmissionContinuity:
 
     def __enter__(self):
         with self._lock:
+            self._raise_containment_locked()
+            if self._adopted_by is not None:
+                raise AdmissionContinuityError("CONTINUITY_ADOPTED")
             if self._closed or self._invalid or self._process_handle is None:
                 raise AdmissionContinuityError("CONTINUITY_INVALID")
         return self
@@ -193,6 +253,16 @@ class AdmissionContinuity:
     def __exit__(self, exc_type, exc, traceback):
         self.close()
         return False
+
+    def _raise_containment_locked(self):
+        if self._contained:
+            raise self._containment_reason
+
+    def _burn_outstanding_locked(self):
+        if self._outstanding is not None:
+            with self._outstanding._lock:
+                self._outstanding._consumed = True
+            self._outstanding = None
 
     def _tick_locked(self):
         value = self._clock()
@@ -209,23 +279,31 @@ class AdmissionContinuity:
                 endpoint._continuity_active = False
 
     def _release_process_locked(self):
+        self._raise_containment_locked()
         if self._process_handle is None:
             return
         handle = self._process_handle
         try:
-            if self._api.close(handle) is not True:
-                raise AdmissionContinuityContainment("CONTINUITY_PROCESS_CLOSE_FAILED")
+            ok = self._api.close(handle)
         except BaseException as exc:
-            self._endpoint._fatal = True
-            raise AdmissionContinuityContainment("CONTINUITY_PROCESS_CLOSE_FAILED") from exc
-        self._process_handle = None
+            cause = exc
+        else:
+            if ok is True:
+                self._process_handle = None
+                return
+            cause = RuntimeError("NATIVE_CLOSE_RETURNED_FALSE")
+
+        self._endpoint._fatal = True
+        self._invalid = True
+        reason = AdmissionContinuityContainment("CONTINUITY_PROCESS_CLOSE_FAILED")
+        self._contained = True
+        self._containment_reason = reason
+        raise reason from cause
 
     def _invalidate_locked(self, reason):
+        self._raise_containment_locked()
         self._invalid = True
-        if self._outstanding is not None:
-            with self._outstanding._lock:
-                self._outstanding._consumed = True
-            self._outstanding = None
+        self._burn_outstanding_locked()
         self._release_endpoint_claim_locked()
         self._release_process_locked()
         raise AdmissionContinuityError(reason)
@@ -246,6 +324,7 @@ class AdmissionContinuity:
             self._invalidate_locked("POLICY_CHANGED")
 
     def _revalidate_locked(self):
+        self._raise_containment_locked()
         if self._closed or self._invalid or self._process_handle is None:
             raise AdmissionContinuityError("CONTINUITY_INVALID")
         tick = self._tick_locked()
@@ -278,7 +357,50 @@ class AdmissionContinuity:
         self._current_policy_locked()
         return tick
 
-    def mint_use_token(self, *, operation_id, kind, operation_deadline):
+    def _evaluation_binding_available(self, binding):
+        with self._lock:
+            self._raise_containment_locked()
+            return self._process_handle is not None and self._binding == binding
+
+    def _evaluation_policy_matches(self, snapshot):
+        if type(snapshot) is not PeerAdmissionPolicySnapshot:
+            return False
+        with self._lock:
+            self._raise_containment_locked()
+            return (
+                self._policy_snapshot.revision == snapshot.revision
+                and self._policy_snapshot.policy_digest == snapshot.policy_digest
+            )
+
+    def _open_at_adoption_start(self):
+        with self._lock:
+            self._raise_containment_locked()
+            return (
+                not self._closed
+                and not self._invalid
+                and self._process_handle is not None
+                and self._adopted_by is None
+            )
+
+    def _adopt(self, authority):
+        with self._lock:
+            self._raise_containment_locked()
+            if type(authority) is not _AuthoritativePeerAdmission:
+                raise TypeError("EXACT_AUTHORITY_REQUIRED")
+            if authority._continuity is not self:
+                raise TypeError("AUTHORITY_CONTINUITY_MISMATCH")
+            if (
+                self._closed
+                or self._invalid
+                or self._process_handle is None
+                or self._adopted_by is not None
+            ):
+                raise AdmissionContinuityError("CONTINUITY_INVALID")
+            self._revalidate_locked()
+            self._adopted_by = authority
+            return authority
+
+    def _mint_use_token_locked(self, *, operation_id, kind, operation_deadline):
         if type(operation_id) is not str or not operation_id:
             raise AdmissionContinuityError("OPERATION_ID_REQUIRED")
         if type(kind) is not ContinuityUseKind:
@@ -290,68 +412,117 @@ class AdmissionContinuity:
             raise AdmissionContinuityError("USE_KIND_NOT_IMPLEMENTED")
         if type(operation_deadline) is not int or not 0 < operation_deadline < 2**63:
             raise AdmissionContinuityError("OPERATION_DEADLINE_REQUIRED")
+        if self._outstanding is not None and not self._outstanding._consumed:
+            raise AdmissionContinuityError("USE_TOKEN_OUTSTANDING")
+        tick = self._revalidate_locked()
+        deadline = min(tick + MAX_CONTINUITY_USE_TOKEN_MS, self._deadline, operation_deadline)
+        if tick >= deadline:
+            self._invalidate_locked("USE_TOKEN_EXPIRED")
+        token = object.__new__(ContinuityUseToken)
+        token._continuity = self
+        token._operation_id = operation_id
+        token._kind = kind
+        token._minted_tick = tick
+        token._use_deadline = deadline
+        token._consumed = False
+        token._lock = threading.Lock()
+        self._outstanding = token
+        return token
+
+    def mint_use_token(self, *, operation_id, kind, operation_deadline):
         with self._lock:
-            if self._outstanding is not None and not self._outstanding._consumed:
-                raise AdmissionContinuityError("USE_TOKEN_OUTSTANDING")
-            tick = self._revalidate_locked()
-            deadline = min(tick + MAX_CONTINUITY_USE_TOKEN_MS, self._deadline, operation_deadline)
-            if tick >= deadline:
-                self._invalidate_locked("USE_TOKEN_EXPIRED")
-            token = object.__new__(ContinuityUseToken)
-            token._continuity = self
-            token._operation_id = operation_id
-            token._kind = kind
-            token._minted_tick = tick
-            token._use_deadline = deadline
-            token._consumed = False
-            token._lock = threading.Lock()
-            self._outstanding = token
-            return token
+            self._raise_containment_locked()
+            if self._adopted_by is not None:
+                raise AdmissionContinuityError("CONTINUITY_ADOPTED")
+            return self._mint_use_token_locked(
+                operation_id=operation_id,
+                kind=kind,
+                operation_deadline=operation_deadline,
+            )
+
+    def _mint_use_token_from_authority(
+        self, authority, *, operation_id, kind, operation_deadline
+    ):
+        with self._lock:
+            self._raise_containment_locked()
+            if self._adopted_by is not authority:
+                raise AdmissionContinuityError("AUTHORITY_OWNERSHIP_REQUIRED")
+            if kind not in authority._allowed_kinds:
+                raise AdmissionContinuityError("USE_KIND_NOT_ALLOWED")
+            return self._mint_use_token_locked(
+                operation_id=operation_id,
+                kind=kind,
+                operation_deadline=operation_deadline,
+            )
+
+    def _consume_use_token_locked(self, token, *, operation_id, kind):
+        if type(token) is not ContinuityUseToken or token is not self._outstanding:
+            raise AdmissionContinuityError("USE_TOKEN_MISMATCH")
+        tick = self._revalidate_locked()
+        with token._lock:
+            if token._consumed:
+                raise AdmissionContinuityError("USE_TOKEN_CONSUMED")
+            token._consumed = True
+            self._outstanding = None
+            if (
+                token._continuity is not self
+                or token._operation_id != operation_id
+                or token._kind is not kind
+                or tick >= token._use_deadline
+                or self._closed
+                or self._invalid
+            ):
+                raise AdmissionContinuityError("USE_TOKEN_INVALID")
+            return True
 
     def consume_use_token(self, token, *, operation_id, kind):
-        """Consume one token after immediate revalidation.
-
-        Any revalidation failure terminally invalidates continuity, clears the
-        outstanding-token slot, and therefore burns this token; retry requires
-        a new admission/continuity path rather than reusing the minted token.
-        """
         with self._lock:
-            if type(token) is not ContinuityUseToken or token is not self._outstanding:
-                raise AdmissionContinuityError("USE_TOKEN_MISMATCH")
+            self._raise_containment_locked()
+            if self._adopted_by is not None:
+                raise AdmissionContinuityError("CONTINUITY_ADOPTED")
+            return self._consume_use_token_locked(
+                token,
+                operation_id=operation_id,
+                kind=kind,
+            )
 
-            # Revalidate immediately before the privileged operation starts.
-            # Mint-time validation bounds the token window; consume-time
-            # validation closes liveness/policy drift inside that window.
-            tick = self._revalidate_locked()
+    def _consume_use_token_from_authority(self, authority, token, *, operation_id, kind):
+        with self._lock:
+            self._raise_containment_locked()
+            if self._adopted_by is not authority:
+                raise AdmissionContinuityError("AUTHORITY_OWNERSHIP_REQUIRED")
+            if kind not in authority._allowed_kinds:
+                raise AdmissionContinuityError("USE_KIND_NOT_ALLOWED")
+            return self._consume_use_token_locked(
+                token,
+                operation_id=operation_id,
+                kind=kind,
+            )
 
-            with token._lock:
-                if token._consumed:
-                    raise AdmissionContinuityError("USE_TOKEN_CONSUMED")
-                token._consumed = True
-                self._outstanding = None
-                if (
-                    token._continuity is not self
-                    or token._operation_id != operation_id
-                    or token._kind is not kind
-                    or tick >= token._use_deadline
-                    or self._closed
-                    or self._invalid
-                ):
-                    raise AdmissionContinuityError("USE_TOKEN_INVALID")
-                return True
+    def _close_locked(self):
+        self._burn_outstanding_locked()
+        self._release_endpoint_claim_locked()
+        self._release_process_locked()
+        self._closed = True
+        return True
 
     def close(self):
         with self._lock:
+            self._raise_containment_locked()
             if self._closed:
                 return False
-            self._closed = True
-            if self._outstanding is not None:
-                with self._outstanding._lock:
-                    self._outstanding._consumed = True
-                self._outstanding = None
-            self._release_endpoint_claim_locked()
-            self._release_process_locked()
-            return True
+            if self._adopted_by is not None:
+                raise AdmissionContinuityError("CONTINUITY_ADOPTED")
+            return self._close_locked()
+
+    def _close_from_authority(self, authority):
+        with self._lock:
+            self._raise_containment_locked()
+            if self._closed:
+                return False
+            if self._adopted_by is not authority:
+                raise AdmissionContinuityError("AUTHORITY_OWNERSHIP_REQUIRED")
+            return self._close_locked()
 
 
 def prepare_continuity_from_live_lease(
@@ -439,6 +610,9 @@ def prepare_continuity_from_live_lease(
         value._lock = threading.Lock()
         value._closed = False
         value._invalid = False
+        value._contained = False
+        value._containment_reason = None
+        value._adopted_by = None
         value._outstanding = None
 
         with endpoint._continuity_claim_lock:
