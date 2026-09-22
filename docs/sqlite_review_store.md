@@ -4,6 +4,13 @@
 resolve, append, history, commit_release and release_history interfaces. The CLI
 still starts with its empty in-memory store. No real ABC reviews are created.
 
+Current adapter layout support spans `PRAGMA user_version` 1 through 4. New
+provisioning still creates version 1; upgrades are explicit: `migrate_to_v2()`
+for v1 -> v2, `migrate_to_v3()` for v2 -> v3, and
+`AdministrationWriter.migrate_to_v4(...)` for authenticated v3 -> v4 activation.
+Version-4 administration semantics are documented in
+[`administration_v4.md`](administration_v4.md).
+
 Version 2 now validates request-journal history as described in `request_journal.md`.
 Public commit_release refuses a journal-reserved release ID. Its internal
 transaction-scoped implementation is shared with journal finalization so the
@@ -31,8 +38,13 @@ inspection; it never deletes or replaces it automatically. The directory must
 already exist with host-managed permissions. open_existing and every subsequent
 operation use SQLite URI mode=rw so a missing file cannot become a new empty store.
 Opening never migrates automatically and no directory is automatically created.
-The explicit `store.migrate_to_v2()` method adds empty request-journal tables in
-one transaction. See `sqlite_migration.md` for its boundaries and validation.
+The explicit `store.migrate_to_v2()` method adds request-journal storage in one
+transaction; `store.migrate_to_v3()` performs the storage-only authorization
+transition. Version 4 is activated separately through
+`AdministrationWriter.migrate_to_v4(...)` with independently supplied bootstrap
+and provisioning authority. See `sqlite_migration.md`,
+`authorization_migration_v3.md`, and `administration_v4.md` for the boundaries of
+each transition.
 
 ## Transaction and semantic rules
 
@@ -44,9 +56,9 @@ triggers and synchronous=FULL. Lock waits have a finite host-configured timeout
 authority. This uses Python's explicit transaction mode described in the
 [sqlite3 documentation](https://docs.python.org/3.12/library/sqlite3.html).
 
-Every operation compares the stored schema with the exact supported version-1 or
-version-2 layout,
-checks its version and checkpoint, reconstructs full canonical records, validates
+Every operation compares the stored schema with the exact supported version-1,
+version-2, version-3, or version-4 layout, checks its version and checkpoint,
+reconstructs full canonical records, validates
 all SQL projections, and verifies the ledger. Release and outbox reads additionally
 validate the complete outbox against its checkpoint and historical review prefixes.
 No max(sequence) shortcut substitutes for chain/checkpoint validation.
@@ -92,8 +104,9 @@ Recover on a new connection with the same candidate; the adapter does not perfor
 automatic retries or fabricate a replacement ID.
 
 The current engine and CLI generate a new release ID for each execution. Therefore
-this adapter does not provide end-to-end CLI retry recovery. A durable operation
-journal and an explicit recovery API remain necessary. release_history is a trusted
+this adapter does not provide end-to-end CLI retry recovery. The durable request
+journal exists as a host-library layer, but it is not wired into that CLI retry
+surface. `release_history` is a trusted
 audit of historical payloads, not renewed authorization or a public retrieval API.
 
 SQLite WAL is intended here for a local database shared by processes on one host,
