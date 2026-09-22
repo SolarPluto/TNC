@@ -1,8 +1,21 @@
 # Native Windows Peer Admission Contract
 
+> **Current status (2026-09-22):** This document is retained as the historical
+> precursor decision contract. Current evaluator and live-authority semantics are
+> normative in [`windows_peer_admission_authority_v1.md`](windows_peer_admission_authority_v1.md),
+> with continuity semantics in [`windows_peer_admission_continuity.md`](windows_peer_admission_continuity.md).
+> PR #45 made `ADMITTED / ADMISSION_REQUIREMENTS_MET` reachable, retired the
+> serializable `NativePeerAdmissionResult` and the
+> `PEER_ADMISSION_NOT_IMPLEMENTED` placeholder, and split the evaluator output
+> into a durable `PeerAdmissionAuditRecord` plus a live non-serializable authority.
+> Sections below preserve the pre-authority contract; unqualified references to
+> "current" describe that historical stage unless explicitly updated.
+
 ## Scope
 
-This document defines the v1 decision contract for native Windows peer admission. It is a policy and schema contract. The pipe-context producer and fail-closed evaluator are implemented; the terminal `ADMITTED` path remains intentionally absent until the separate continuity contract in [`windows_peer_admission_continuity.md`](windows_peer_admission_continuity.md) is implemented.
+This document defined the pre-authority v1 decision contract for native Windows peer
+admission. It remains a policy/schema history and design record; it no longer
+represents the current terminal gate architecture.
 
 The existing AppContainer evidence rules remain normative in
 [`TNC_AppContainer_Evidence_Model.md`](TNC_AppContainer_Evidence_Model.md). This document references that classifier rather than duplicating its truth table.
@@ -11,7 +24,7 @@ V1 keeps authorization, grants, custody, and signing outside the admission decis
 
 ## Result semantics
 
-The coarse status axis represents whether the gate reached a definitive policy decision:
+The following status semantics record the pre-authority gate stage captured by this document:
 
 | Status | Meaning |
 | --- | --- |
@@ -19,7 +32,7 @@ The coarse status axis represents whether the gate reached a definitive policy d
 | `DENIED` | Sufficient evidence establishes a disqualifying fact. |
 | `ADMITTED` | Reserved for the future successful path after every required admission fact has been evaluated and passed. It is not implemented by the current gate. |
 
-Before pipe-context producer integration, the ordinary peer path terminated at `INDETERMINATE / APP_CONTAINER_EXCLUSION_UNPROVEN`. The current evaluator retires that terminal reason: unresolved AppContainer acquisition maps to `PEER_EVIDENCE_UNAVAILABLE`, conflicting AppContainer facts map to `PIPE_CONTEXT_CLASSIFICATION_CONFLICT`, and a proven non-AppContainer pipe context that passes every other implemented check terminates at `PEER_ADMISSION_NOT_IMPLEMENTED` until the continuity-backed `ADMITTED` path exists.
+Before pipe-context producer integration, the ordinary peer path terminated at `INDETERMINATE / APP_CONTAINER_EXCLUSION_UNPROVEN`. At this historical stage, the evaluator retired that terminal reason: unresolved AppContainer acquisition maps to `PEER_EVIDENCE_UNAVAILABLE`, conflicting AppContainer facts map to `PIPE_CONTEXT_CLASSIFICATION_CONFLICT`, and a proven non-AppContainer pipe context that passes every other implemented check terminates at `PEER_ADMISSION_NOT_IMPLEMENTED` until the continuity-backed `ADMITTED` path exists.
 
 ## Closed status/reason relation
 
@@ -42,18 +55,18 @@ The validator error for an illegal pair must include the rejected `(status, reas
 The initial positive pair is reserved as exactly `ADMITTED / ADMISSION_REQUIREMENTS_MET`. It may become reachable only after the continuity contract is implemented. The evaluator is the sole producer of the authoritative positive artifact, and it may synthesize it only after all required facts pass and a live admission-continuity object has been established and bound to the same connection/process instance. The authoritative positive artifact is non-serializable and non-reconstructible; a separate durable audit projection may record that admission occurred but never authorizes later use.
 
 
-### Evaluator input and result shape
+### Historical evaluator input and result shape
 
-The evaluator consumes the producer's frozen `PipePeerAdmissionEvidence` union directly. The `pipe_context` argument is required; omission is not a third evidence state. A failed acquisition attempt is represented explicitly by `CAPTURE_UNAVAILABLE`.
+At the pre-authority stage, the evaluator consumed the producer's frozen `PipePeerAdmissionEvidence` union directly. The `pipe_context` argument is required; omission is not a third evidence state. A failed acquisition attempt is represented explicitly by `CAPTURE_UNAVAILABLE`.
 
-The evaluator's result is a coarse policy projection, not a standalone audit record. `NativePeerAdmissionResult` need not duplicate the producer's detailed failure stage, Win32 error, connection binding, or classification metadata. Audit interpretation therefore requires the result together with the exact evaluator inputs. This permits both `CAPTURE_UNAVAILABLE` and `CAPTURED_CLASSIFICATION_UNAVAILABLE` to map to `INDETERMINATE / PEER_EVIDENCE_UNAVAILABLE` without erasing the operational distinction from the evidence record.
+At that stage, the evaluator's result was a coarse policy projection, not a standalone audit record. `NativePeerAdmissionResult` need not duplicate the producer's detailed failure stage, Win32 error, connection binding, or classification metadata. Audit interpretation therefore requires the result together with the exact evaluator inputs. This permits both `CAPTURE_UNAVAILABLE` and `CAPTURED_CLASSIFICATION_UNAVAILABLE` to map to `INDETERMINATE / PEER_EVIDENCE_UNAVAILABLE` without erasing the operational distinction from the evidence record.
 
 `CAPTURED_CLASSIFICATION_CONFLICT` is not an availability failure. It maps to `INDETERMINATE / PIPE_CONTEXT_CLASSIFICATION_CONFLICT`, while the producer record preserves the underlying classifier reason such as `APPCONTAINER_SIGNAL_CONFLICT`.
 
 
-### Current terminal-state mapping
+### Historical pre-authority terminal-state mapping
 
-The evaluator requires `pipe_context: PipePeerAdmissionEvidence` and maps the producer statuses as follows:
+At that stage, the evaluator required `pipe_context: PipePeerAdmissionEvidence` and mapped the producer statuses as follows:
 
 | Pipe-context status | Evaluator behavior |
 | --- | --- |
@@ -123,7 +136,7 @@ The distinction is operationally significant and must not be collapsed into one 
 
 V1 admission requires all of the following facts to be established:
 
-| Fact | Current evidence source | Current state |
+| Fact | Evidence source at this contract stage | State at this contract stage |
 | --- | --- | --- |
 | Identity and scope binding | Native pipe token capture plus peer-correlation audit | Obtainable |
 | Process-instance/lease correlation | Retained native process handle, PID, creation time, liveness, and pipe-client PID checks | Obtainable |
