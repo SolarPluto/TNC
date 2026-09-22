@@ -85,8 +85,13 @@ To use your own saved article:
 uv run tnc parse "C:\path\to\saved article.html"
 ```
 
-The input must be a local UTF-8 HTML file using a supported article structure.
-URLs, PDFs, screenshots, and plain-text files are not inputs to these commands.
+The included fixture requires no API key or article download. The input must be
+a local UTF-8 HTML file using a supported article structure. URLs, PDFs,
+screenshots, and plain-text files are not inputs to these commands.
+
+For local `parse` and `assertions` runs, TNC records the parsing time as an
+observation time. That does not establish when the article was first published
+or historically available.
 
 ## Source spans
 
@@ -106,6 +111,15 @@ TNC recognizes these structural types:
 The ordinal printed by `tnc parse` is the coordinate used by extracted
 assertions. For example, `Source spans: 6` means the assertion is supported by
 source-span ordinal 6.
+
+To inspect one span directly:
+
+```powershell
+uv run tnc parse tests/fixtures/article_v1.html --span 6
+```
+
+Omit `--span` to show all spans. If the ordinal does not exist, TNC reports an
+error.
 
 ## Assertions
 
@@ -131,16 +145,23 @@ Supported source-text operators are:
 - `expected`
 - `said`
 
+The word `said` maps to the `REPORTED` epistemic category while remaining
+`said` in the extracted predicate.
+
 An assertion is **admitted** when its source coordinates exist and its recorded
 verbatim support is present in those source spans.
 
 Admission does **not** mean TNC verified that the proposition is true.
-Unsupported or ambiguous wording may be skipped rather than guessed.
+Unsupported or ambiguous wording may be skipped rather than guessed. Only the
+first sentence of each span is considered. Sentence detection has limited
+punctuation rules, including support for common titles and decimal numbers;
+ambiguous initials and dotted abbreviations cause the span to be skipped.
 
 ## Source relationships and provenance
 
 TNC also contains a provenance pipeline for examining relationships between
-documents.
+documents. The Python API measures overlap separately from the relationship
+rules; it is not currently exposed as a `tnc provenance` CLI command.
 
 Existing document-level judgments are:
 
@@ -151,11 +172,20 @@ Existing document-level judgments are:
 The classifier may also return no judgment. No judgment does not establish that
 two sources are independent.
 
-Reviewed shared-source evidence can account for common wire-service,
+Reviewed `shared_source_evidence` can account for common wire-service,
 syndication, or underlying-authority material without treating similar wording
-as proof that one publisher copied another.
+as proof that one publisher copied another. When supplied, it prevents overlap
+alone from triggering reprint or derivation labels, even for identical wording;
+an explicit citation still takes priority. Without that annotation, the existing
+overlap rules remain in effect.
 
-For a worked example, see
+Callers must supply reviewed evidence to `infer_source_relation` or
+`measure_provenance_signals`. The API does not automatically load review files
+or infer lineage from a wire-service name. The reviewed comparisons are recorded
+in [the casualty provenance review](corpus/tib_run_a/casualty_provenance_review.md)
+and its [pair annotations](corpus/tib_run_a/shared_source_pairs.json).
+
+For a complete CLI-to-Python example using those frozen inputs, see
 [the source-provenance walkthrough](docs/source_provenance_walkthrough.md).
 
 ## Historical replay
@@ -178,7 +208,8 @@ uv run tnc historical-replay --document abc-early --version abc-early-archive-20
 ```
 
 A real capture without trusted review currently returns an `unverified`
-result.
+result. Passing the synthetic replay tests does not establish that the saved live
+articles were available at a particular historical time.
 
 See [the historical replay CLI documentation](docs/historical_cli.md) for the
 complete trust and release model.
@@ -214,7 +245,9 @@ contains no claims.
 | `corpus/tib_run_a/` | Frozen Moore tornado reporting, archive evidence, and review material |
 
 Frozen corpus objects are evidence and should not be reformatted or modified
-casually. Their hashes identify their exact bytes.
+casually. Their hashes identify their exact bytes. See
+[the corpus guide](corpus/tib_run_a/README.md) for acquisition history,
+availability uncertainty, and review requirements.
 
 ## Help
 
@@ -225,6 +258,18 @@ uv run tnc assertions --help
 uv run tnc historical-replay --help
 ```
 
+| Message or symptom | What to check |
+| --- | --- |
+| `uv` is not recognized | Ensure `uv` is installed and available in the current terminal. |
+| Project configuration cannot be found | Run commands from the checkout containing `pyproject.toml`. |
+| File cannot be opened | Check the path and quote it if it contains spaces. |
+| File cannot be decoded or layout is unsupported | Use UTF-8 HTML with a supported article structure; try an included fixture first. |
+| No source span with that ordinal | Parse without `--span` to see the available ordinals. |
+| `Admitted: 0` | The extractor may not support the wording; inspect the parsed text. |
+
+Input and argument errors return a nonzero exit code. In PowerShell,
+`$LASTEXITCODE` shows the exit code of the command that just ran.
+
 ## Development
 
 Run the test suite from the repository root:
@@ -232,6 +277,10 @@ Run the test suite from the repository root:
 ```powershell
 uv run pytest -q
 ```
+
+Tests cover parsing, CLI behavior, assertions, provenance, temporal behavior,
+replay fixtures, and frozen-body integrity. A passing suite verifies those
+checks, not the truth of the underlying reporting.
 
 Some native Windows tests skip on non-Windows platforms. Non-doc PRs are
 validated by the full Windows CI suite.
