@@ -3,13 +3,13 @@ name = "tnc-provenance"
 version = "0.1.0"
 description = "Trace claims in saved news articles back to source text, with gated historical replay."
 readme = "README.md"
+authors = [{ name = "SolarPluto" }]
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["fact-checking", "osint", "provenance", "journalism", "news"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.12",
     "Topic :: Text Processing",
     "Topic :: Internet :: WWW/HTTP",
@@ -31,6 +31,7 @@ Issues = "https://github.com/SolarPluto/TNC/issues"
 
 [project.scripts]
 tnc = "tnc:main"
+tncprov = "tnc:main"
 
 [build-system]
 requires = ["uv_build>=0.12.10,<0.13.0"]
