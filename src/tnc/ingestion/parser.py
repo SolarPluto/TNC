@@ -53,7 +53,11 @@ def parse_article(
     document_version_id: str,
     available_from: datetime,
 ) -> list[SourceSpan]:
-    """Convert article HTML into ordered immutable SourceSpan records."""
+    """Convert article HTML into ordered immutable SourceSpan records.
+
+    Public usage: docs/source_provenance_walkthrough.md. Re-verify the recipe
+    when changing this interface or its behavior; follow its upkeep trigger.
+    """
 
     tree = LexborHTMLParser(html)
 

@@ -22,6 +22,9 @@ def infer_source_relation(
     This function only orchestrates them. Supply reviewed shared-source evidence
     when common lineage or authority could explain overlap. None results do not
     establish source independence.
+
+    Public usage: docs/source_provenance_walkthrough.md. Re-verify the recipe
+    when changing this interface or its behavior; follow its upkeep trigger.
     """
 
     signals = measure_provenance_signals(
