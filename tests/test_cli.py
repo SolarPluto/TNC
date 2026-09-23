@@ -26,7 +26,7 @@ def test_version_cli(monkeypatch, capsys):
     assert requested == ["tnc-provenance"]
     captured = capsys.readouterr()
     assert captured.err == ""
-    assert captured.out == "tnc 9.8.7\\n"
+    assert captured.out == "tnc 9.8.7\n"
 
 
 def test_parse_cli(monkeypatch, capsys):
