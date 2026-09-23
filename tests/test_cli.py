@@ -9,6 +9,26 @@ from tnc import main
 FIXTURE = Path(__file__).parent / "fixtures" / "article_v1.html"
 
 
+def test_version_cli(monkeypatch, capsys):
+    requested = []
+
+    def fake_version(distribution_name):
+        requested.append(distribution_name)
+        return "9.8.7"
+
+    monkeypatch.setattr("tnc.distribution_version", fake_version)
+    monkeypatch.setattr(sys, "argv", ["tnc", "--version"])
+
+    with pytest.raises(SystemExit) as exc:
+        main()
+
+    assert exc.value.code == 0
+    assert requested == ["tnc-provenance"]
+    captured = capsys.readouterr()
+    assert captured.err == ""
+    assert captured.out == "tnc 9.8.7\n"
+
+
 def test_parse_cli(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["tnc", "parse", str(FIXTURE)])
 
