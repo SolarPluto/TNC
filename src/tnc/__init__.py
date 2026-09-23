@@ -1,4 +1,5 @@
 import argparse
+import sys
 from importlib.metadata import version as distribution_version
 from datetime import datetime, timezone
 from pathlib import Path
@@ -9,7 +10,8 @@ from tnc.historical_cli import aware_time, run_historical
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="tnc", allow_abbrev=False)
+    prog = Path(sys.argv[0]).stem or "tnc"
+    parser = argparse.ArgumentParser(prog=prog, allow_abbrev=False)
     parser.add_argument(
         "--version",
         action="version",

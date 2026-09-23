@@ -1,6 +1,6 @@
 [project]
 name = "tnc-provenance"
-version = "0.1.0"
+version = "0.1.1"
 description = "Trace claims in saved news articles back to source text, with gated historical replay."
 readme = "README.md"
 authors = [{ name = "SolarPluto" }]
