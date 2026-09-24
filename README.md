@@ -8,29 +8,68 @@ intended for researchers and fact-checkers working with saved news archives.
 TNC does **not** decide whether a news claim is true. It also does not
 automatically determine that two publishers are independent sources.
 
-An unrelated PyPI distribution named `tnc` exists; TNC publishes as `tnc-provenance` to avoid ambiguity.
+## Install
 
-For installed use on Windows PowerShell, prefer the collision-free command:
+TNC is published on PyPI as `tnc-provenance`. (The name `tnc` on PyPI belongs to
+an unrelated project; `pip install tnc` installs that project, not this one.)
+
+**Windows (PowerShell):**
 
 ```powershell
-tncprov assertions article.html
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install tnc-provenance
 ```
 
-PowerShell's NetTCPIP module defines `tnc` as an alias for `Test-NetConnection`,
-which shadows the installed `tnc.exe`. The package still provides `tnc` for
-shells where that name is unambiguous, and source checkouts can continue to use
-`uv run tnc ...`.
+**Linux / macOS:**
+
+```bash
+python -m venv .venv
+.venv/bin/pip install tnc-provenance
+```
+
+**With uv (any platform), if you already use uv:**
+
+```bash
+uv venv
+uv pip install tnc-provenance
+```
+
+The venv examples above are the recommended pattern on Windows because pip
+places `tncprov.exe` in a Scripts directory that is not on `PATH` by default.
+Calling the installed executable through the venv path always works. If your
+environment is already managed — Conda, a system Python with a configured PATH,
+an activated venv — a plain `pip install tnc-provenance` will work there too.
+
+### Command name
+
+The package installs two identical console commands: `tnc` and `tncprov`.
+
+**On Windows PowerShell, use `tncprov`.** PowerShell's `NetTCPIP` module defines
+`tnc` as an alias for `Test-NetConnection`, and PowerShell resolves aliases
+before executables on `PATH`. Bare `tnc` in PowerShell runs the networking
+cmdlet, not TNC. `tncprov` has no collision on any platform.
+
+On Linux, macOS, cmd.exe, and any shell without a `tnc` alias, either command
+works.
 
 ## See it work
 
 The included example article first reports three injuries and later updates that
 number to five.
 
+**Windows:**
+
 ```powershell
-uv run tnc assertions tests/fixtures/article_v1.html
+.\.venv\Scripts\tncprov.exe assertions tests\fixtures\article_v1.html
 ```
 
-Output from the current version:
+**Linux / macOS:**
+
+```bash
+.venv/bin/tncprov assertions tests/fixtures/article_v1.html
+```
+
+Output:
 
 ```text
 Admitted: 2
@@ -64,43 +103,18 @@ TNC currently provides three main workflows:
 The first two workflows operate directly on local HTML files. Historical replay
 has a stricter trust model and is described separately below.
 
-## Try it from a source checkout
+## Using your own article
 
-TNC is not yet published to PyPI. The current supported usage is from a source
-checkout.
-
-Requirements:
-
-- Python 3.12 or newer
-- `uv`
-
-From the project root:
+Pass a local file path:
 
 ```powershell
-uv sync --locked
+.\.venv\Scripts\tncprov.exe parse "C:\path\to\saved article.html"
+.\.venv\Scripts\tncprov.exe assertions "C:\path\to\saved article.html"
 ```
 
-Then run:
-
-```powershell
-uv run tnc assertions tests/fixtures/article_v1.html
-```
-
-or parse the article into source spans:
-
-```powershell
-uv run tnc parse tests/fixtures/article_v1.html
-```
-
-To use your own saved article:
-
-```powershell
-uv run tnc parse "C:\path\to\saved article.html"
-```
-
-The included fixture requires no API key or article download. The input must be
-a local UTF-8 HTML file using a supported article structure. URLs, PDFs,
-screenshots, and plain-text files are not inputs to these commands.
+The input must be a local UTF-8 HTML file using a supported article structure.
+URLs, PDFs, screenshots, and plain-text files are not inputs to these commands.
+The examples in this README require no API key or article download.
 
 For local `parse` and `assertions` runs, TNC records the parsing time as an
 observation time. That does not establish when the article was first published
@@ -304,42 +318,29 @@ validation are SolarPluto's responsibility.
 
 ## Development
 
-Run the test suite from the repository root:
+TNC is developed from a source checkout using
+[uv](https://docs.astral.sh/uv/).
+
+Clone and sync the locked environment:
+
+```powershell
+git clone https://github.com/SolarPluto/TNC
+cd TNC
+uv sync --locked
+```
+
+Run any command from the source checkout via `uv run`:
+
+```powershell
+uv run tnc assertions tests/fixtures/article_v1.html
+uv run tnc parse tests/fixtures/article_v1.html
+```
+
+Run the test suite:
 
 ```powershell
 uv run pytest -q
 ```
 
 Tests cover parsing, CLI behavior, assertions, provenance, temporal behavior,
-replay fixtures, and frozen-body integrity. A passing suite verifies those
-checks, not the truth of the underlying reporting.
-
-Some native Windows tests skip on non-Windows platforms. Non-doc PRs are
-validated by the full Windows CI suite.
-
-Install `pre-commit` as a `uv` tool once, then install the repository hook:
-
-```powershell
-uv tool install pre-commit
-pre-commit install
-```
-
-To run the text-hygiene checks manually across the repository:
-
-```powershell
-pre-commit run --all-files
-```
-
-Before committing a change, also inspect the diff:
-
-```powershell
-git diff
-git diff --check
-```
-
-PRs that change only `docs/**` and/or lowercase Markdown files use the
-docs-only CI route; other changes run the full Windows suite. See
-[the Windows test reliability inventory](docs/TNC_Test_Reliability.md) for the
-routing rule and reliability notes.
-
-Do not apply automatic formatting to frozen corpus objects.
+replay fixtures, and frozen-body integrity.
