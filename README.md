@@ -52,31 +52,39 @@ cmdlet, not TNC. `tncprov` has no collision on any platform.
 On Linux, macOS, cmd.exe, and any shell without a `tnc` alias, either command
 works.
 
-## See it work
+## Try it in 30 seconds
 
-The included example article first reports three injuries and later updates that
-number to five.
+TNC includes a small fictional article written for the project, so you can run
+the full parse-and-assertion path without finding or saving an article first.
 
 **Windows:**
 
 ```powershell
-.\.venv\Scripts\tncprov.exe assertions tests\fixtures\article_v1.html
+.\.venv\Scripts\tncprov.exe demo
 ```
 
 **Linux / macOS:**
 
 ```bash
-.venv/bin/tncprov assertions tests/fixtures/article_v1.html
+.venv/bin/tncprov demo
 ```
 
-Output:
+The demo first prints the source spans TNC parsed, then the assertions admitted
+from those exact spans:
 
 ```text
+Parsed spans:
+0	heading	Community center reopens after safety inspection
+1	paragraph	City engineers confirmed the community center passed its final inspection.
+2	paragraph	Residents gathered outside while crews removed temporary barriers.
+3	update_notice	Update: Officials said the center would reopen at nine in the morning.
+
+Assertions:
 Admitted: 2
-  Officials said three people were injured.
-    Source spans: 2
-  Officials said five people were injured.
-    Source spans: 6
+  City engineers confirmed the community center passed its final inspection.
+    Source spans: 1
+  Officials said the center would reopen at nine in the morning.
+    Source spans: 3
 Rejected: 0
 ```
 
@@ -84,8 +92,8 @@ Each number after `Source spans:` is a zero-based source-span ordinal. If an
 assertion references multiple spans, their ordinals are comma-separated; the
 field is not a count.
 
-This preserves both the earlier statement and the later update rather than
-collapsing them into one claim.
+The demo uses the same parser, extractor, and admission pipeline as `parse` and
+`assertions`; it only supplies a known-good bundled input.
 
 ## What TNC does
 
