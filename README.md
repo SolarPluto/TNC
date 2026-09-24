@@ -220,11 +220,11 @@ overlap rules remain in effect.
 Callers must supply reviewed evidence to `infer_source_relation` or
 `measure_provenance_signals`. The API does not automatically load review files
 or infer lineage from a wire-service name. The reviewed comparisons are recorded
-in [the casualty provenance review](corpus/tib_run_a/casualty_provenance_review.md)
-and its [pair annotations](corpus/tib_run_a/shared_source_pairs.json).
+in [the casualty provenance review](https://github.com/SolarPluto/TNC/blob/master/corpus/tib_run_a/casualty_provenance_review.md)
+and its [pair annotations](https://github.com/SolarPluto/TNC/blob/master/corpus/tib_run_a/shared_source_pairs.json).
 
 For a complete CLI-to-Python example using those frozen inputs, see
-[the source-provenance walkthrough](docs/source_provenance_walkthrough.md).
+[the source-provenance walkthrough](https://github.com/SolarPluto/TNC/blob/master/docs/source_provenance_walkthrough.md).
 
 ## Historical replay
 
@@ -251,7 +251,7 @@ A real capture without trusted review currently returns an `unverified`
 result. Passing the synthetic replay tests does not establish that the saved live
 articles were available at a particular historical time.
 
-See [the historical replay CLI documentation](docs/historical_cli.md) for the
+See [the historical replay CLI documentation](https://github.com/SolarPluto/TNC/blob/master/docs/historical_cli.md) for the
 complete trust and release model.
 
 ## Limits
@@ -286,7 +286,7 @@ contains no claims.
 
 Frozen corpus objects are evidence and should not be reformatted or modified
 casually. Their hashes identify their exact bytes. See
-[the corpus guide](corpus/tib_run_a/README.md) for acquisition history,
+[the corpus guide](https://github.com/SolarPluto/TNC/blob/master/corpus/tib_run_a/README.md) for acquisition history,
 availability uncertainty, and review requirements.
 
 ## Help
