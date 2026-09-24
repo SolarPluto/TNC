@@ -1,6 +1,7 @@
 import argparse
 import sys
 from importlib.metadata import version as distribution_version
+from importlib.resources import files
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -34,6 +35,11 @@ def main() -> None:
     )
     assertions_command.add_argument("html_file", type=Path)
 
+    commands.add_parser(
+        "demo",
+        help="Run the bundled example through parsing and assertion extraction",
+    )
+
     historical_command = commands.add_parser(
         "historical-replay", help="Query a host-configured archived version", allow_abbrev=False,
     )
@@ -47,7 +53,15 @@ def main() -> None:
         raise SystemExit(run_historical(document_id=args.document, version_id=args.version, query_time=args.time))
 
     try:
-        html = args.html_file.read_text(encoding="utf-8")
+        if args.command == "demo":
+            html = (
+                files("tnc")
+                .joinpath("fixtures", "demo.html")
+                .read_text(encoding="utf-8")
+            )
+        else:
+            html = args.html_file.read_text(encoding="utf-8")
+
         spans = parse_article(
             html=html,
             document_version_id=f"local:{hash_text(html)}",
@@ -62,12 +76,19 @@ def main() -> None:
             spans = [span for span in spans if span.ordinal == args.span]
             if not spans:
                 parser.error(f"No source span with ordinal {args.span}")
+
+    if args.command in {"parse", "demo"}:
+        if args.command == "demo":
+            print("Parsed spans:")
         for span in spans:
             print(
                 f"{span.ordinal}\t{span.span_type.value}"
                 f"\t{span.normalized_text}"
             )
-        return
+        if args.command == "parse":
+            return
+        print()
+        print("Assertions:")
 
     result = process_assertion_spans(spans)
     span_ordinals = {span.span_id: span.ordinal for span in spans}
