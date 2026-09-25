@@ -36,6 +36,42 @@ def test_version_cli_uses_invoked_program_name(argv0, expected, monkeypatch, cap
     assert captured.out == expected
 
 
+def test_demo_cli(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["tncprov", "demo"])
+
+    main()
+
+    captured = capsys.readouterr()
+    assert captured.err == ""
+    assert captured.out.splitlines() == [
+        "Parsed spans:",
+        "0\theading\tCommunity center reopens after safety inspection",
+        (
+            "1\tparagraph\tCity engineers confirmed the community center "
+            "passed its final inspection."
+        ),
+        (
+            "2\tparagraph\tResidents gathered outside while crews removed "
+            "temporary barriers."
+        ),
+        (
+            "3\tupdate_notice\tUpdate: Officials said the center would "
+            "reopen at nine in the morning."
+        ),
+        "",
+        "Assertions:",
+        "Admitted: 2",
+        (
+            "  City engineers confirmed the community center passed its "
+            "final inspection."
+        ),
+        "    Source spans: 1",
+        "  Officials said the center would reopen at nine in the morning.",
+        "    Source spans: 3",
+        "Rejected: 0",
+    ]
+
+
 def test_parse_cli(monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["tnc", "parse", str(FIXTURE)])
 
