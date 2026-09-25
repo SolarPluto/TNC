@@ -356,6 +356,13 @@ def parse_article(
 
             nodes.extend(filtered_nodes)
 
+    # A single DOM element can match more than one branch of the combined
+    # selector (for example, <p class="update"> matches both "p" and
+    # ".update"). Selectolax may return that element more than once.
+    # Preserve the first occurrence and document order while emitting one
+    # SourceSpan per DOM element.
+    nodes = list(dict.fromkeys(nodes))
+
     spans: list[SourceSpan] = []
 
     for node in nodes:
