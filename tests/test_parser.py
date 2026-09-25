@@ -61,6 +61,32 @@ def test_parser_preserves_update_and_correction_text():
         "the time of the incident."
     )
 
+
+def test_parser_deduplicates_overlapping_selector_matches():
+    html = """
+    <article>
+      <p class="update">Update: Officials said the center reopened.</p>
+      <p class="correction">Correction: The opening time was revised.</p>
+    </article>
+    """
+
+    spans = parse_article(
+        html=html,
+        document_version_id="overlapping-selector-test",
+        available_from=datetime(2026, 1, 1, tzinfo=timezone.utc),
+    )
+
+    assert [span.span_type for span in spans] == [
+        SpanType.UPDATE_NOTICE,
+        SpanType.CORRECTION,
+    ]
+    assert [span.normalized_text for span in spans] == [
+        "Update: Officials said the center reopened.",
+        "Correction: The opening time was revised.",
+    ]
+    assert [span.ordinal for span in spans] == [0, 1]
+
+
 def test_parser_handles_frozen_abc_article():
     abc_fixture = (
         Path(__file__).parent.parent
