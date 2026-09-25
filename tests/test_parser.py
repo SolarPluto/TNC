@@ -87,6 +87,25 @@ def test_parser_deduplicates_overlapping_selector_matches():
     assert [span.ordinal for span in spans] == [0, 1]
 
 
+def test_parser_keeps_distinct_nodes_with_identical_text():
+    html = """
+    <article>
+      <p>Officials said the center reopened.</p>
+      <p>Officials said the center reopened.</p>
+    </article>
+    """
+
+    spans = parse_article(
+        html=html,
+        document_version_id="identical-text-nodes-test",
+        available_from=datetime(2026, 1, 1, tzinfo=timezone.utc),
+    )
+
+    assert len(spans) == 2
+    assert [span.ordinal for span in spans] == [0, 1]
+    assert spans[0].normalized_text == spans[1].normalized_text
+
+
 def test_parser_handles_frozen_abc_article():
     abc_fixture = (
         Path(__file__).parent.parent
