@@ -1,12 +1,12 @@
 [project]
 name = "tnc-provenance"
 version = "0.1.3"
-description = "Trace claims in saved news articles back to source text, with gated historical replay."
+description = "Trace claims in saved news articles back to their source text."
 readme = "README.md"
-authors = [{ name = "SolarPluto" }]
+authors = [{ name = "TNC Provenance Project" }]
 license = "MIT"
 license-files = ["LICENSE"]
-keywords = ["fact-checking", "osint", "provenance", "journalism", "news"]
+keywords = ["fact-checking", "osint", "provenance", "journalism", "news", "claims", "verification"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
