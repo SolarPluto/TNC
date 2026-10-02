@@ -45,7 +45,16 @@ This makes whole-process `delta == 0` a deliberately strong invariant. Do not we
 - **Status:** **pending investigation**. A code-level comment immediately above the strict assertion in `tests/test_windows_pipe_process.py` points to this inventory; the failure was discovered while validating docstring-only #25 and is unrelated to that diff.
 - **Relationship to handle-count semantics:** because this path exercises cancellation of pending overlapped I/O, its mechanism may differ from `[impersonation]` even though both report `delta=1`. A still-open event/pipe/runtime handle at the sample point is plausible, but must be identified rather than inferred.
 
-### 4. Native junction setup PowerShell timeout
+### 4. Fatal-worker replacement handle count `[revert_failure]`
+
+- **Test:** `tests/test_windows_pipe_native_token.py::test_native_impersonation_fault_terminates_worker[revert_failure]`.
+- **Observed failure shape:** the fatal `revert_failure` worker exited with code 78 as expected and emitted no successful audit result, but the fresh replacement idle worker later closed with `{'kind': 'closed', 'delta': 1}` instead of the required `delta == 0`. The failure-path sampler reported `handle persistence (baseline=153): T=1, +100ms=1, +1000ms=1`, so the extra whole-process handle count persisted through the one-second diagnostic window.
+- **First observed:** 2026-09-22, Actions run `35768151602`, run #209, attempt 1, while validating PR #58 on head `f6d4bee10ac0dfc25f80b70a20916568e30ba1ea`. Attempt 1 finished `1 failed, 3445 passed in 891.66s (0:14:51)`.
+- **Retry/reproduction:** did not reproduce when the failed Windows job was rerun on the unchanged head. Attempt 2 of the same run passed the full suite with `3446 passed in 716.09s (0:11:56)`.
+- **Status:** **pending investigation**. PR #58 changed only `LICENSE`, `README.md`, `pyproject.toml`, and `uv.lock`; it did not change the Windows pipe implementation or tests. That diff separation is evidence about what changed, not proof of the handle's owner or mechanism.
+- **Relationship to handle-count semantics:** this is a distinct test path from both the recorded native-token capture `[impersonation]` surface and the pending-I/O `cancel_write` surface. It uses the same strict unsynchronized whole-process count and the same persistence sampler, but matching `delta=1` shapes do not establish a shared cause. Ordinary CI left handle enumeration disabled, so no survivor type/identity evidence exists for this occurrence.
+
+### 5. Native junction setup PowerShell timeout
 
 - **Test:** `tests/test_protected_provisioning.py::test_native_junction_is_opened_without_following`.
 - **Observed failure shape:** the fixed setup command `New-Item -ItemType Junction -Path $env:TNC_TEST_LINK -Target $env:TNC_TEST_TARGET -ErrorAction Stop | Out-Null` did not complete within the test's 15-second `subprocess.run(..., timeout=15)` bound and raised `subprocess.TimeoutExpired`. The timeout occurred before `_WindowsFileAPI()` construction and before the junction no-following assertions ran.
