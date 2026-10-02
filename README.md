@@ -25,11 +25,21 @@ automatically determine that two publishers are independent sources.
 
 The PyPI distribution name is `tnc-provenance`.
 
+Requires Python 3.12 or newer. Confirm your version first:
+
+```powershell
+python --version   # must be 3.12 or newer
+```
+
+If `python --version` shows an older version, `py -0p` lists every installed
+Python on the machine.
+
 **Windows (PowerShell):**
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install tnc-provenance
+python -m venv "$HOME\tnc"
+& "$HOME\tnc\Scripts\python.exe" -m pip install tnc-provenance
+& "$HOME\tnc\Scripts\tncprov.exe" demo
 ```
 
 **Linux / macOS:**
