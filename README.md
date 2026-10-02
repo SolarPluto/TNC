@@ -1,17 +1,29 @@
-# TNC
+# TNC Provenance
 
-TNC is a command-line tool for turning saved news articles into traceable source
-spans and extracting source-attributed assertions from them. It also includes
-tools for comparing source relationships and for gated historical replay. It is
-intended for researchers and fact-checkers working with saved news archives.
+Trace claims in saved news articles back to their source text.
+
+Install the correct package:
+
+```bash
+pip install tnc-provenance
+```
+
+**Do not install `tnc`.** That is an unrelated PyPI project.
+
+---
+
+TNC Provenance is a command-line tool for turning saved news articles into
+traceable source spans and extracting source-attributed assertions from them. It
+also includes tools for comparing source relationships and for gated historical
+replay. It is intended for researchers and fact-checkers working with saved news
+archives.
 
 TNC does **not** decide whether a news claim is true. It also does not
 automatically determine that two publishers are independent sources.
 
 ## Install
 
-TNC is published on PyPI as `tnc-provenance`. (The name `tnc` on PyPI belongs to
-an unrelated project; `pip install tnc` installs that project, not this one.)
+The PyPI distribution name is `tnc-provenance`.
 
 **Windows (PowerShell):**
 
@@ -320,9 +332,9 @@ Input and argument errors return a nonzero exit code. In PowerShell,
 
 ## Acknowledgments
 
-Development of TNC was assisted by AI coding tools including ChatGPT (OpenAI),
-DeepSeek, and Gemini (Google). The project's design decisions, review, and
-validation are SolarPluto's responsibility.
+Development of TNC Provenance was assisted by AI coding tools including ChatGPT
+(OpenAI), DeepSeek, and Gemini (Google). Project design decisions, review, and
+validation remain the maintainer's responsibility.
 
 ## Development
 
