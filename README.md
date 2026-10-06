@@ -146,6 +146,13 @@ The input must be a local UTF-8 HTML file using a supported article structure.
 URLs, PDFs, screenshots, and plain-text files are not inputs to these commands.
 The examples in this README require no API key or article download.
 
+For the generic article path, the current parser requires the article body to be
+inside an `<article>` element. Some browser saves preserve substantive body text
+inside `<main>` instead. In that case, `tncprov parse` can report
+`No supported article content found`. The exact saved HTML structure determines
+whether the input is supported; inspecting the live page does not establish what
+the saved file contains.
+
 For local `parse` and `assertions` runs, TNC records the parsing time as an
 observation time. That does not establish when the article was first published
 or historically available.
